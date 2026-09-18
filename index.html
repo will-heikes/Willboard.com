@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willboard Music Charts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --bg:             #0A0A0A;
+  --surface:        #141414;
+  --surface-2:      #1C1C1C;
+  --border:         #2A2A2A;
+  --ink:            #FFFFFF;
+  --ink-soft:       #CCCCCC;
+  --ink-muted:      #777777;
+  --country:        #C8A96E;
+  --pop:            #7BA7BC;
+  --green:          #3DD68C;
+  --red:            #E05252;
+  --label-red:      #C0392B;
+  --max-w:          980px;
+  --font-display:   'Bebas Neue', sans-serif;
+  --font-body:      'Inter', sans-serif;
+}
+
+/* ── RESET ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ── LAYOUT ──────────────────────────────────────────────────── */
+.wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+/* ── NAV ─────────────────────────────────────────────────────── */
+nav {
+  background: #000;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 0;
+  height: 56px;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  flex-shrink: 0;
+  margin-right: 40px;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-logo-dot {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 2px;
+  flex: 1;
+  list-style: none;
+}
+.nav-links a {
+  display: block;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+.nav-search {
+  background: none; border: none;
+  color: var(--ink-muted); cursor: pointer;
+  padding: 8px; font-size: 18px;
+  transition: color 0.15s;
+  margin-left: auto;
+}
+.nav-search:hover { color: var(--ink); }
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  min-height: 200px;
+}
+.hero-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 40px 24px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+}
+.hero-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--label-red);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.hero-headline {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 600px;
+}
+.hero-sub {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.hero-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-photo-placeholder {
+  width: 140px; height: 140px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--ink-muted);
+}
+
+/* ── CHARTS SECTION ──────────────────────────────────────────── */
+.charts-section {
+  padding: 40px 0 0;
+}
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+}
+.chart-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.chart-panel-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.chart-panel-title {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.chart-panel-title .wb {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.chart-panel-title .chart-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+}
+.chart-panel-title .chart-name.country { color: var(--country); }
+.chart-panel-title .chart-name.pop     { color: var(--pop); }
+.chart-panel-week {
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+.chart-view-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.chart-view-link:hover { color: var(--ink); }
+
+/* Chart rows */
+.chart-col-header {
+  display: grid;
+  grid-template-columns: 28px 44px 1fr 36px 36px;
+  padding: 8px 16px 6px;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.chart-col-header span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.chart-row {
+  display: grid;
+  grid-template-columns: 28px 44px 1fr 36px 36px;
+  align-items: center;
+  padding: 10px 16px;
+  gap: 10px;
+  border-bottom: 1px solid #1E1E1E;
+  transition: background 0.1s;
+  cursor: default;
+}
+.chart-row:last-child { border-bottom: none; }
+.chart-row:hover { background: var(--surface-2); }
+.chart-row.is-new-entry .row-pos { color: var(--green); }
+
+.row-pos {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  text-align: right;
+  line-height: 1;
+}
+.row-pos.top { color: var(--country); }
+.row-pos.top-pop { color: var(--pop); }
+
+.row-art {
+  width: 44px; height: 44px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+.row-art img { width: 100%; height: 100%; object-fit: cover; }
+
+.row-info { min-width: 0; }
+.row-title {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.row-artist {
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.row-lw {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.row-move {
+  display: flex; align-items: center; justify-content: center;
+}
+.move-up   { color: var(--green); font-size: 16px; }
+.move-down { color: var(--red);   font-size: 16px; }
+.move-same { color: var(--ink-muted); font-size: 10px; }
+.move-new  { font-size: 9px; font-weight: 700; color: var(--green); letter-spacing: 0.04em; }
+
+/* Weeks at #1 badge on chart panel */
+.no1-weeks {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* ── FEATURES TILES ──────────────────────────────────────────── */
+.features-section {
+  max-width: var(--max-w); margin: 28px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.feature-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.feature-tile:hover {
+  background: var(--surface-2);
+  border-color: #3A3A3A;
+}
+.feature-tile-bg {
+  position: absolute; top: 0; right: 0;
+  width: 100px; height: 100%;
+  opacity: 0.06;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 80px;
+}
+.feature-tile-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.feature-tile-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.feature-tile-desc {
+  font-size: 12px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  max-width: 220px;
+}
+.feature-tile-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 14px;
+  margin-top: 14px;
+  color: var(--ink-muted);
+  transition: color 0.15s, border-color 0.15s;
+}
+.feature-tile:hover .feature-tile-arrow {
+  color: var(--ink);
+  border-color: #555;
+}
+
+/* ── TIME CAPSULE ────────────────────────────────────────────── */
+.timecapsule-section {
+  max-width: var(--max-w); margin: 32px auto 0;
+  padding: 0 24px 60px;
+}
+.timecapsule-header {
+  margin-bottom: 20px;
+}
+.timecapsule-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.timecapsule-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* Timeline scrubber */
+.timeline-scrubber {
+  display: flex; align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+  position: relative;
+  padding: 8px 0;
+}
+.timeline-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  position: relative;
+  display: flex; align-items: center;
+}
+.timeline-dots {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: absolute;
+}
+.timeline-dot {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; cursor: pointer;
+}
+.timeline-dot-circle {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  border: 2px solid var(--border);
+  transition: background 0.15s, border-color 0.15s;
+}
+.timeline-dot:hover .timeline-dot-circle,
+.timeline-dot.active .timeline-dot-circle {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.timeline-dot-year {
+  font-size: 10px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 10px;
+}
+.timeline-dot.active .timeline-dot-year { color: var(--ink); }
+
+/* Capsule cards */
+.capsule-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.capsule-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.capsule-card-header {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.capsule-card-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.capsule-card-sublabel {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.capsule-card-body {
+  padding: 14px 16px;
+  display: flex; gap: 12px; align-items: center;
+}
+.capsule-art {
+  width: 64px; height: 64px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink-muted);
+}
+.capsule-art img { width: 100%; height: 100%; object-fit: cover; }
+.capsule-info { flex: 1; min-width: 0; }
+.capsule-song {
+  font-weight: 600; font-size: 13px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.3;
+}
+.capsule-artist {
+  font-size: 11px; color: var(--ink-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.capsule-stat {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--ink);
+  margin-top: 8px;
+}
+.capsule-stat-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.capsule-week {
+  padding: 10px 16px;
+  font-size: 10px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── AWARDS PAGE ─────────────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+.page-header {
+  padding: 40px 0 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.page-header-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 24px 32px;
+}
+.page-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--ink-muted); text-transform: uppercase; margin-bottom: 8px;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: 48px; letter-spacing: 0.04em; line-height: 1;
+  margin-bottom: 20px;
+}
+.awards-chart-tabs {
+  display: flex; gap: 0;
+}
+.awards-chart-tab {
+  padding: 8px 20px;
+  font-size: 13px; font-weight: 600;
+  color: var(--ink-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: none;
+}
+.awards-chart-tab:first-child { border-radius: 4px 0 0 4px; }
+.awards-chart-tab:last-child  { border-radius: 0 4px 4px 0; border-left: none; }
+.awards-chart-tab.active {
+  background: var(--surface-2); color: var(--ink); border-color: #555;
+}
+
+.awards-content {
+  max-width: var(--max-w); margin: 0 auto; padding: 32px 24px 60px;
+}
+.awards-year-select {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+}
+.year-btn {
+  padding: 5px 12px;
+  font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: none; color: var(--ink-muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.year-btn:hover { border-color: #555; color: var(--ink); }
+.year-btn.active { background: var(--ink); color: #000; border-color: var(--ink); }
+
+.awards-year-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.awards-category {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.awards-category-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--ink-muted); text-transform: uppercase;
+}
+.awards-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1A1A1A;
+}
+.awards-row:last-child { border-bottom: none; }
+.awards-slot {
+  width: 16px; height: 16px; border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 700;
+}
+.awards-slot.winner { background: var(--country); color: #000; }
+.awards-slot.nominee { background: var(--surface-2); border: 1px solid var(--border); }
+.awards-name { font-size: 13px; font-weight: 500; }
+.awards-sub  { font-size: 11px; color: var(--ink-muted); margin-top: 1px; }
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0;
+}
+.footer-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 20px; color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+.footer-links {
+  display: flex; gap: 24px; list-style: none;
+}
+.footer-links a {
+  font-size: 12px; color: var(--ink-muted);
+  transition: color 0.15s; cursor: pointer;
+}
+.footer-links a:hover { color: var(--ink); }
+.footer-copy {
+  font-size: 11px; color: var(--ink-muted);
+}
+
+/* ── LOADING / ERROR STATES ──────────────────────────────────── */
+#loading-screen {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; z-index: 999;
+}
+.loading-logo {
+  font-family: var(--font-display);
+  font-size: 40px; letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+.loading-bar {
+  width: 120px; height: 2px; background: var(--border); border-radius: 1px; overflow: hidden;
+}
+.loading-bar-fill {
+  height: 100%; width: 0; background: var(--ink);
+  animation: loadbar 1.2s ease forwards;
+}
+@keyframes loadbar { to { width: 100%; } }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .charts-grid       { grid-template-columns: 1fr; }
+  .features-section  { grid-template-columns: 1fr; }
+  .capsule-cards     { grid-template-columns: 1fr; }
+  .awards-year-grid  { grid-template-columns: 1fr; }
+  .hero-headline     { font-size: 28px; }
+  .hero-photo, .hero-photo-placeholder { width: 90px; height: 90px; }
+  .nav-links { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading-screen">
+  <div class="loading-logo">WILLBOARD</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
+      Will<span class="nav-logo-dot" style="background:#3DD68C;margin:0 1px 0 0"></span><span class="nav-logo-dot" style="background:#E05252;margin:0 1px 0 0"></span><span class="nav-logo-dot" style="background:#C8A96E;margin:0 1px 0 0"></span><span class="nav-logo-dot" style="background:#7BA7BC"></span>ard
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')"    id="nav-home">Home</a></li>
+      <li><a onclick="showPage('country')" id="nav-country">Country Hot 20</a></li>
+      <li><a onclick="showPage('pop')"     id="nav-pop">Pop 10</a></li>
+      <li><a onclick="showPage('awards')"  id="nav-awards">Awards</a></li>
+    </ul>
+    <button class="nav-search" title="Search">⌕</button>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-label" id="hero-label">This week on Willboard</div>
+        <h1 class="hero-headline" id="hero-headline">Loading chart…</h1>
+        <div class="hero-sub" id="hero-sub"></div>
+      </div>
+      <div id="hero-art" class="hero-photo-placeholder">♪</div>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section class="charts-section">
+    <div class="charts-grid">
+
+      <!-- Hot 20 -->
+      <div class="chart-panel">
+        <div class="chart-panel-header">
+          <div>
+            <div class="chart-panel-title">
+              <span class="wb">willboard</span>
+              <span class="chart-name country">HOT 20</span>
+            </div>
+            <div class="chart-panel-week" id="wb-week-label"></div>
+          </div>
+          <div class="chart-view-link" onclick="showPage('country')">View full chart ›</div>
+        </div>
+        <div class="chart-col-header">
+          <span style="text-align:right">#</span>
+          <span></span>
+          <span>Song / Artist</span>
+          <span style="text-align:center">LW</span>
+          <span style="text-align:center">Move</span>
+        </div>
+        <div id="wb-rows"></div>
+      </div>
+
+      <!-- Pop 10 -->
+      <div class="chart-panel">
+        <div class="chart-panel-header">
+          <div>
+            <div class="chart-panel-title">
+              <span class="wb">willboard</span>
+              <span class="chart-name pop">POP 10</span>
+            </div>
+            <div class="chart-panel-week" id="pop-week-label"></div>
+          </div>
+          <div class="chart-view-link" onclick="showPage('pop')">View full chart ›</div>
+        </div>
+        <div class="chart-col-header">
+          <span style="text-align:right">#</span>
+          <span></span>
+          <span>Song / Artist</span>
+          <span style="text-align:center">LW</span>
+          <span style="text-align:center">Move</span>
+        </div>
+        <div id="pop-rows"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Feature tiles -->
+  <section class="features-section">
+    <div class="feature-tile" onclick="showPage('awards')">
+      <div class="feature-tile-bg">🏆</div>
+      <div class="feature-tile-label">Annual</div>
+      <div class="feature-tile-title">WILLBOARD AWARDS</div>
+      <div class="feature-tile-desc">Annual awards celebrating achievement on the Willboard charts.</div>
+      <div class="feature-tile-arrow">›</div>
+    </div>
+    <div class="feature-tile" onclick="window.location='../willboard.html'">
+      <div class="feature-tile-bg">📊</div>
+      <div class="feature-tile-label">Deep dive</div>
+      <div class="feature-tile-title">ARTIST & SONG HISTORY</div>
+      <div class="feature-tile-desc">Explore complete chart history, track milestones, and dive deeper into the music.</div>
+      <div class="feature-tile-arrow">›</div>
+    </div>
+    <div class="feature-tile" style="cursor:default;opacity:0.5">
+      <div class="feature-tile-bg">📅</div>
+      <div class="feature-tile-label">Coming soon</div>
+      <div class="feature-tile-title">YEAR-END CHARTS</div>
+      <div class="feature-tile-desc">Relive the biggest songs of every year since 2010.</div>
+      <div class="feature-tile-arrow">›</div>
+    </div>
+  </section>
+
+  <!-- Time Capsule -->
+  <section class="timecapsule-section">
+    <div class="timecapsule-header">
+      <div class="timecapsule-eyebrow">A decade+ of music</div>
+      <div class="timecapsule-title">EXPLORE THE STORY</div>
+    </div>
+
+    <div class="timeline-scrubber">
+      <div class="timeline-track">
+        <div class="timeline-dots" id="timeline-dots"></div>
+      </div>
+    </div>
+
+    <div class="capsule-cards">
+      <div class="capsule-card" id="capsule-wb">
+        <div class="capsule-card-header">
+          <div class="capsule-card-label">10 years ago this week</div>
+          <div class="capsule-card-sublabel" id="capsule-wb-sub">Country Hot 20 · #1</div>
+        </div>
+        <div class="capsule-card-body">
+          <div class="capsule-art" id="capsule-wb-art">♪</div>
+          <div class="capsule-info">
+            <div class="capsule-song"  id="capsule-wb-song">—</div>
+            <div class="capsule-artist" id="capsule-wb-artist">—</div>
+            <div class="capsule-stat"  id="capsule-wb-stat"></div>
+            <div class="capsule-stat-label" id="capsule-wb-stat-label"></div>
+          </div>
+        </div>
+        <div class="capsule-week" id="capsule-wb-week"></div>
+      </div>
+
+      <div class="capsule-card" id="capsule-pop">
+        <div class="capsule-card-header">
+          <div class="capsule-card-label">10 years ago this week</div>
+          <div class="capsule-card-sublabel" id="capsule-pop-sub">Pop 10 · #1</div>
+        </div>
+        <div class="capsule-card-body">
+          <div class="capsule-art" id="capsule-pop-art">♪</div>
+          <div class="capsule-info">
+            <div class="capsule-song"   id="capsule-pop-song">—</div>
+            <div class="capsule-artist" id="capsule-pop-artist">—</div>
+            <div class="capsule-stat"   id="capsule-pop-stat"></div>
+            <div class="capsule-stat-label" id="capsule-pop-stat-label"></div>
+          </div>
+        </div>
+        <div class="capsule-week" id="capsule-pop-week"></div>
+      </div>
+
+      <div class="capsule-card" id="capsule-vault">
+        <div class="capsule-card-header">
+          <div class="capsule-card-label">From the vault</div>
+          <div class="capsule-card-sublabel" id="capsule-vault-sub">Notable chart event</div>
+        </div>
+        <div class="capsule-card-body">
+          <div class="capsule-art" id="capsule-vault-art">♪</div>
+          <div class="capsule-info">
+            <div class="capsule-song"   id="capsule-vault-song">—</div>
+            <div class="capsule-artist" id="capsule-vault-artist">—</div>
+            <div class="capsule-stat"   id="capsule-vault-stat"></div>
+            <div class="capsule-stat-label" id="capsule-vault-stat-label"></div>
+          </div>
+        </div>
+        <div class="capsule-week" id="capsule-vault-week"></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- COUNTRY CHART PAGE -->
+<div class="page" id="page-country">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Willboard</div>
+      <div class="page-title" style="color:var(--country)">HOT 20</div>
+      <div id="country-week-nav" style="display:flex;align-items:center;gap:12px">
+        <button id="country-prev" onclick="changeCountryWeek(-1)" style="background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-body);font-size:13px">‹ Prev</button>
+        <span id="country-week-display" style="font-size:13px;color:var(--ink-muted)"></span>
+        <button id="country-next" onclick="changeCountryWeek(1)" style="background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-body);font-size:13px">Next ›</button>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:var(--max-w);margin:28px auto;padding:0 24px 60px">
+    <div class="chart-panel">
+      <div class="chart-col-header">
+        <span style="text-align:right">#</span><span></span>
+        <span>Song / Artist</span>
+        <span style="text-align:center">LW</span>
+        <span style="text-align:center">Move</span>
+      </div>
+      <div id="country-full-rows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- POP CHART PAGE -->
+<div class="page" id="page-pop">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Willboard</div>
+      <div class="page-title" style="color:var(--pop)">POP 10</div>
+      <div id="pop-week-nav" style="display:flex;align-items:center;gap:12px">
+        <button id="pop-prev" onclick="changePopWeek(-1)" style="background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-body);font-size:13px">‹ Prev</button>
+        <span id="pop-week-display" style="font-size:13px;color:var(--ink-muted)"></span>
+        <button id="pop-next" onclick="changePopWeek(1)" style="background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:var(--font-body);font-size:13px">Next ›</button>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:var(--max-w);margin:28px auto;padding:0 24px 60px">
+    <div class="chart-panel">
+      <div class="chart-col-header">
+        <span style="text-align:right">#</span><span></span>
+        <span>Song / Artist</span>
+        <span style="text-align:center">LW</span>
+        <span style="text-align:center">Move</span>
+      </div>
+      <div id="pop-full-rows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AWARDS PAGE -->
+<div class="page" id="page-awards">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Annual recognition</div>
+      <div class="page-title">WILLBOARD AWARDS</div>
+      <div class="awards-chart-tabs">
+        <button class="awards-chart-tab active" id="awards-tab-country" onclick="setAwardsChart('country')">Country</button>
+        <button class="awards-chart-tab" id="awards-tab-pop" onclick="setAwardsChart('pop')">Pop</button>
+      </div>
+    </div>
+  </div>
+  <div class="awards-content">
+    <div class="awards-year-select" id="awards-years"></div>
+    <div class="awards-year-grid" id="awards-grid"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">WILLBOARD</div>
+    <ul class="footer-links">
+      <li><a onclick="window.location='../willboard.html'">Data Explorer</a></li>
+      <li><a>About</a></li>
+    </ul>
+    <div class="footer-copy" id="footer-year"></div>
+  </div>
+</footer>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────────
+let DATA = null, AWARDS = null;
+let wbWeekIdx = 0, popWeekIdx = 0;
+let awardsChart = 'country', awardsYear = null;
+
+const IMAGES_BASE = 'images/artists/';
+
+// ─── UTILITIES ───────────────────────────────────────────────────
+function fmt(dateStr) {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+function fmtShort(dateStr) {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function slugify(name) {
+  return name.toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function artistImg(artistName) {
+  if (!artistName) return null;
+  // Use first artist name if multi-artist
+  const primary = artistName.split(',')[0].split('&')[0].trim();
+  return IMAGES_BASE + slugify(primary) + '.jpg';
+}
+
+function imgEl(artistName, size = 44, initials = '') {
+  const src = artistImg(artistName);
+  const init = initials || (artistName || '').split(/[\s,&]+/).filter(Boolean)
+    .slice(0, 2).map(w => w[0]).join('').toUpperCase() || '♪';
+  const el = document.createElement('div');
+  el.className = 'row-art';
+  el.style.width = size + 'px';
+  el.style.height = size + 'px';
+  el.style.fontSize = Math.floor(size * 0.32) + 'px';
+  if (src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = artistName;
+    img.onerror = () => { img.remove(); el.textContent = init; };
+    el.appendChild(img);
+  } else {
+    el.textContent = init;
+  }
+  return el;
+}
+
+// ─── WEEK-AT-#1 counter using history summaries ─────────────────
+function weeksAt1UpTo(songId, weekEnding, isWb) {
+  const history = isWb ? DATA.wbHistory : DATA.popHistory;
+  let count = 0;
+  for (const w of history) {
+    if (w.week > weekEnding) break;
+    if (w.no1 && w.no1.songId === songId) count++;
+  }
+  return count;
+}
+
+// ─── CHART ROW BUILDER ───────────────────────────────────────────
+function buildRow(entry, prevPosMap, songMap, weekEnding, isWb) {
+  const s = songMap[entry.songId] || {};
+  const prevPos = prevPosMap[entry.songId];
+  const isNew = prevPos === undefined;
+  const pos = entry.position;
+
+  const row = document.createElement('div');
+  row.className = 'chart-row' + (isNew ? ' is-new-entry' : '');
+
+  // Position
+  const posEl = document.createElement('div');
+  posEl.className = 'row-pos' + (pos === 1 ? (isWb ? ' top' : ' top-pop') : '');
+  posEl.textContent = pos;
+  row.appendChild(posEl);
+
+  // Art
+  row.appendChild(imgEl(s.artistName, 44));
+
+  // Info
+  const info = document.createElement('div');
+  info.className = 'row-info';
+
+  const titleRow = document.createElement('div');
+  titleRow.style.display = 'flex';
+  titleRow.style.alignItems = 'center';
+  titleRow.style.gap = '6px';
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'row-title';
+  titleEl.textContent = s.name || '—';
+  titleRow.appendChild(titleEl);
+
+  // Weeks at #1 badge only for the #1 song
+  if (pos === 1) {
+    const w1 = weeksAt1UpTo(entry.songId, weekEnding, isWb);
+    if (w1 > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'no1-weeks';
+      badge.textContent = w1 + (w1 === 1 ? ' wk' : ' wks') + ' at #1';
+      titleRow.appendChild(badge);
+    }
+  }
+
+  info.appendChild(titleRow);
+  const artistEl = document.createElement('div');
+  artistEl.className = 'row-artist';
+  artistEl.textContent = s.artistName || '—';
+  info.appendChild(artistEl);
+  row.appendChild(info);
+
+  // LW
+  const lwEl = document.createElement('div');
+  lwEl.className = 'row-lw';
+  lwEl.textContent = isNew ? 'NEW' : (prevPos || '—');
+  row.appendChild(lwEl);
+
+  // Move arrow
+  const moveEl = document.createElement('div');
+  moveEl.className = 'row-move';
+  if (isNew) {
+    moveEl.innerHTML = '<span class="move-new">NEW</span>';
+  } else if (prevPos === pos) {
+    moveEl.innerHTML = '<span class="move-same">—</span>';
+  } else if (prevPos > pos) {
+    moveEl.innerHTML = '<span class="move-up">▲</span>';
+  } else {
+    moveEl.innerHTML = '<span class="move-down">▼</span>';
+  }
+  row.appendChild(moveEl);
+
+  return row;
+}
+
+function renderChart(containerId, weekData, prevWeekData, songMap, weekEnding, isWb) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  if (!weekData || !weekData.entries.length) {
+    container.innerHTML = '<div style="padding:20px 16px;color:var(--ink-muted);font-size:13px">No chart data for this week.</div>';
+    return;
+  }
+  const prevPosMap = {};
+  if (prevWeekData) {
+    for (const e of prevWeekData.entries) prevPosMap[e.songId] = e.position;
+  }
+  const limit = isWb ? 5 : 5;
+  const entries = weekData.entries.slice(0, limit);
+  for (const entry of entries) {
+    container.appendChild(buildRow(entry, prevPosMap, songMap, weekEnding, isWb));
+  }
+}
+
+function renderFullChart(containerId, weekData, prevWeekData, songMap, weekEnding, isWb) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  if (!weekData || !weekData.entries.length) {
+    container.innerHTML = '<div style="padding:20px 16px;color:var(--ink-muted);font-size:13px">No chart data for this week.</div>';
+    return;
+  }
+  const prevPosMap = {};
+  if (prevWeekData) {
+    for (const e of prevWeekData.entries) prevPosMap[e.songId] = e.position;
+  }
+  for (const entry of weekData.entries) {
+    container.appendChild(buildRow(entry, prevPosMap, songMap, weekEnding, isWb));
+  }
+}
+
+// ─── HERO ────────────────────────────────────────────────────────
+function renderHero(songMap) {
+  const wbWeeks = DATA.willboard;
+  if (!wbWeeks.length) return;
+  const latest = wbWeeks[wbWeeks.length - 1];
+  const prev   = wbWeeks.length > 1 ? wbWeeks[wbWeeks.length - 2] : null;
+  if (!latest.entries.length) return;
+
+  const no1 = latest.entries[0];
+  const s = songMap[no1.songId] || {};
+  const prevPosMap = {};
+  if (prev) for (const e of prev.entries) prevPosMap[e.songId] = e.position;
+  const prevPos = prevPosMap[no1.songId];
+
+  let verb = 'holds at';
+  if (!prevPos) verb = 'debuts at';
+  else if (prevPos > 1) verb = 'rises to';
+  else verb = 'stays at';
+
+  document.getElementById('hero-headline').textContent =
+    (s.artistName || 'Unknown') + ' ' + verb + ' #1.';
+  document.getElementById('hero-sub').textContent =
+    '"' + (s.name || '') + '" · Week of ' + fmtShort(latest.week);
+
+  const artEl = document.getElementById('hero-art');
+  const src = artistImg(s.artistName);
+  if (src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = s.artistName;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+    img.onerror = () => {
+      artEl.className = 'hero-photo-placeholder';
+      artEl.innerHTML = (s.artistName || '').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || '♪';
+    };
+    artEl.className = 'hero-photo';
+    artEl.innerHTML = '';
+    artEl.appendChild(img);
+  }
+}
+
+// ─── TIME CAPSULE ────────────────────────────────────────────────
+function nearestWeek(history, targetDate) {
+  let best = null, bestDiff = Infinity;
+  for (const w of history) {
+    const diff = Math.abs(new Date(w.week) - targetDate);
+    if (diff < bestDiff) { bestDiff = diff; best = w; }
+  }
+  return best;
+}
+
+// Seeded random — changes weekly, same all week
+function seededRand(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+function renderTimeCapsule(songMap) {
+  const today = new Date();
+  const tenYearsAgo = new Date(today);
+  tenYearsAgo.setFullYear(today.getFullYear() - 10);
+
+  // Card 1: WB #1 ten years ago
+  const wbPast = nearestWeek(DATA.wbHistory, tenYearsAgo);
+  if (wbPast && wbPast.no1) {
+    const s = songMap[wbPast.no1.songId] || {};
+    setCapsule('wb', s.name, s.artistName, wbPast.no1.songId,
+      weeksAt1UpTo(wbPast.no1.songId, wbPast.week, true), 'wks at #1',
+      'Charted the week of ' + fmtShort(wbPast.week));
+  }
+
+  // Card 2: Pop #1 ten years ago
+  const popPast = nearestWeek(DATA.popHistory, tenYearsAgo);
+  if (popPast && popPast.no1) {
+    const s = songMap[popPast.no1.songId] || {};
+    document.getElementById('capsule-pop-sub').textContent = 'Pop 10 · #1';
+    setCapsule('pop', s.name, s.artistName, popPast.no1.songId,
+      weeksAt1UpTo(popPast.no1.songId, popPast.week, false), 'wks at #1',
+      'Charted the week of ' + fmtShort(popPast.week));
+  }
+
+  // Card 3: Random notable event, seeded by current week number
+  const weekSeed = Math.floor(today / (7 * 24 * 60 * 60 * 1000));
+  const rand = seededRand(weekSeed);
+
+  // Collect all notable events from WB history
+  const notable = DATA.wbHistory.filter(w => w.notable);
+  if (notable.length) {
+    const pick = notable[Math.floor(rand() * notable.length)];
+    const ev = pick.notable;
+    const s = songMap[ev.songId] || {};
+    let stat = '', statLabel = '';
+    if (ev.type === 'hotshot') {
+      stat = '#' + ev.position; statLabel = 'Hot Shot Debut';
+    } else if (ev.type === 'mover') {
+      stat = '+' + ev.gain; statLabel = 'Position jump';
+    }
+    document.getElementById('capsule-vault-sub').textContent =
+      ev.type === 'hotshot' ? 'Hot Shot Debut · Country' : 'Greatest Gainer · Country';
+    setCapsule('vault', ev.songName || s.name, ev.artistName || s.artistName, ev.songId,
+      stat, statLabel, 'Charted the week of ' + fmtShort(pick.week));
+  }
+
+  // Build timeline dots
+  buildTimeline();
+}
+
+function setCapsule(id, song, artist, songId, stat, statLabel, weekStr) {
+  document.getElementById('capsule-' + id + '-song').textContent   = song || '—';
+  document.getElementById('capsule-' + id + '-artist').textContent = artist || '—';
+  document.getElementById('capsule-' + id + '-stat').textContent   = stat || '';
+  document.getElementById('capsule-' + id + '-stat-label').textContent = statLabel || '';
+  document.getElementById('capsule-' + id + '-week').textContent   = weekStr || '';
+
+  const artEl = document.getElementById('capsule-' + id + '-art');
+  const src = artistImg(artist);
+  const init = (artist || '').split(/[\s,&]+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase() || '♪';
+  artEl.innerHTML = '';
+  artEl.className = 'capsule-art';
+  if (src) {
+    const img = document.createElement('img');
+    img.src = src; img.alt = artist || '';
+    img.onerror = () => { img.remove(); artEl.textContent = init; };
+    artEl.appendChild(img);
+  } else {
+    artEl.textContent = init;
+  }
+}
+
+function buildTimeline() {
+  const years = [];
+  for (let y = 2010; y <= new Date().getFullYear(); y++) years.push(y);
+  const container = document.getElementById('timeline-dots');
+  container.innerHTML = '';
+  container.style.cssText = 'display:flex;justify-content:space-between;width:100%;align-items:flex-start;';
+  for (const y of years) {
+    const dot = document.createElement('div');
+    dot.className = 'timeline-dot';
+    dot.innerHTML = `<div class="timeline-dot-circle"></div><div class="timeline-dot-year">${y}</div>`;
+    dot.style.alignItems = 'center';
+    container.appendChild(dot);
+  }
+}
+
+// ─── AWARDS ──────────────────────────────────────────────────────
+function setAwardsChart(chart) {
+  awardsChart = chart;
+  document.getElementById('awards-tab-country').classList.toggle('active', chart === 'country');
+  document.getElementById('awards-tab-pop').classList.toggle('active', chart === 'pop');
+  const noms = AWARDS[chart];
+  const years = [...new Set(noms.map(n => n.year))].sort((a,b) => b - a);
+  if (!awardsYear || !years.includes(awardsYear)) awardsYear = years[0];
+  renderAwardsYears(years);
+  renderAwardsGrid();
+}
+
+function renderAwardsYears(years) {
+  const el = document.getElementById('awards-years');
+  el.innerHTML = '';
+  for (const y of years) {
+    const btn = document.createElement('button');
+    btn.className = 'year-btn' + (y === awardsYear ? ' active' : '');
+    btn.textContent = y;
+    btn.onclick = () => { awardsYear = y; renderAwardsYears(years); renderAwardsGrid(); };
+    el.appendChild(btn);
+  }
+}
+
+function renderAwardsGrid() {
+  const noms = AWARDS[awardsChart].filter(n => n.year === awardsYear);
+  const byCategory = {};
+  for (const n of noms) {
+    (byCategory[n.category] = byCategory[n.category] || []).push(n);
+  }
+  const grid = document.getElementById('awards-grid');
+  grid.innerHTML = '';
+  for (const [cat, rows] of Object.entries(byCategory)) {
+    const card = document.createElement('div');
+    card.className = 'awards-category';
+    const header = document.createElement('div');
+    header.className = 'awards-category-header';
+    header.textContent = cat;
+    card.appendChild(header);
+    // Winner first
+    const sorted = [...rows].sort((a,b) => (a.slot === 'Winner' ? -1 : 1));
+    for (const r of sorted) {
+      const row = document.createElement('div');
+      row.className = 'awards-row';
+      const slot = document.createElement('div');
+      slot.className = 'awards-slot ' + (r.slot === 'Winner' ? 'winner' : 'nominee');
+      slot.textContent = r.slot === 'Winner' ? '★' : '';
+      row.appendChild(slot);
+      const info = document.createElement('div');
+      const name = document.createElement('div');
+      name.className = 'awards-name';
+      name.textContent = r.song ? `"${r.song}"` : (r.artist || '—');
+      if (r.slot === 'Winner') name.style.fontWeight = '700';
+      info.appendChild(name);
+      if (r.song && r.artist) {
+        const sub = document.createElement('div');
+        sub.className = 'awards-sub';
+        sub.textContent = r.artist + (r.album ? ' · ' + r.album : '');
+        info.appendChild(sub);
+      } else if (!r.song && r.album) {
+        const sub = document.createElement('div');
+        sub.className = 'awards-sub';
+        sub.textContent = r.album;
+        info.appendChild(sub);
+      }
+      row.appendChild(info);
+      card.appendChild(row);
+    }
+    grid.appendChild(card);
+  }
+}
+
+// ─── CHART PAGE NAV ──────────────────────────────────────────────
+function changeCountryWeek(dir) {
+  const weeks = DATA.willboard;
+  wbWeekIdx = Math.max(0, Math.min(weeks.length - 1, wbWeekIdx + dir));
+  renderCountryPage();
+}
+function changePopWeek(dir) {
+  const weeks = DATA.pop;
+  popWeekIdx = Math.max(0, Math.min(weeks.length - 1, popWeekIdx + dir));
+  renderPopPage();
+}
+
+function renderCountryPage() {
+  const weeks = DATA.willboard;
+  const songMap = buildSongMap();
+  const cur  = weeks[wbWeekIdx];
+  const prev = wbWeekIdx > 0 ? weeks[wbWeekIdx - 1] : null;
+  document.getElementById('country-week-display').textContent = 'Week of ' + fmtShort(cur.week);
+  document.getElementById('country-prev').disabled = wbWeekIdx === 0;
+  document.getElementById('country-next').disabled = wbWeekIdx === weeks.length - 1;
+  renderFullChart('country-full-rows', cur, prev, songMap, cur.week, true);
+}
+function renderPopPage() {
+  const weeks = DATA.pop;
+  const songMap = buildSongMap();
+  const cur  = weeks[popWeekIdx];
+  const prev = popWeekIdx > 0 ? weeks[popWeekIdx - 1] : null;
+  document.getElementById('pop-week-display').textContent = 'Week of ' + fmtShort(cur.week);
+  document.getElementById('pop-prev').disabled = popWeekIdx === 0;
+  document.getElementById('pop-next').disabled = popWeekIdx === weeks.length - 1;
+  renderFullChart('pop-full-rows', cur, prev, songMap, cur.week, false);
+}
+
+function buildSongMap() {
+  const m = {};
+  for (const s of DATA.songs) m[s.id] = s;
+  return m;
+}
+
+// ─── PAGE ROUTING ─────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (name === 'country') renderCountryPage();
+  if (name === 'pop')     renderPopPage();
+  if (name === 'awards')  setAwardsChart(awardsChart);
+}
+
+// ─── MAIN INIT ────────────────────────────────────────────────────
+async function init() {
+  // Footer year
+  document.getElementById('footer-year').textContent =
+    new Date().getFullYear() + ' Willboard. All rights reserved.';
+
+  // Determine base path for data files
+  const base = location.href.includes('/willboard_site/') ? '' : '';
+
+  try {
+    const [dataRes, awardsRes] = await Promise.all([
+      fetch('data.json'),
+      fetch('awards.json'),
+    ]);
+    DATA   = await dataRes.json();
+    AWARDS = await awardsRes.json();
+  } catch (e) {
+    console.error('Failed to load data:', e);
+    document.getElementById('loading-screen').innerHTML =
+      '<div style="color:#E05252;font-family:var(--font-body);font-size:14px">Failed to load chart data.<br>Make sure data.json and awards.json are in the same folder as index.html.</div>';
+    return;
+  }
+
+  const songMap = buildSongMap();
+
+  // Set week defaults to latest
+  wbWeekIdx  = DATA.willboard.length  - 1;
+  popWeekIdx = DATA.pop.length - 1;
+
+  // Render home page
+  renderHero(songMap);
+
+  // Home chart panels
+  const wbLatest  = DATA.willboard[DATA.willboard.length - 1];
+  const wbPrev    = DATA.willboard.length > 1 ? DATA.willboard[DATA.willboard.length - 2] : null;
+  const popLatest = DATA.pop[DATA.pop.length - 1];
+  const popPrev   = DATA.pop.length > 1 ? DATA.pop[DATA.pop.length - 2] : null;
+
+  document.getElementById('wb-week-label').textContent  = 'Week of ' + fmtShort(wbLatest.week);
+  document.getElementById('pop-week-label').textContent = 'Week of ' + fmtShort(popLatest.week);
+
+  const wbPrevMap = {};
+  if (wbPrev) for (const e of wbPrev.entries) wbPrevMap[e.songId] = e.position;
+  const popPrevMap = {};
+  if (popPrev) for (const e of popPrev.entries) popPrevMap[e.songId] = e.position;
+
+  // Render 5 rows on homepage
+  const wbRows  = document.getElementById('wb-rows');
+  const popRows = document.getElementById('pop-rows');
+  wbRows.innerHTML = ''; popRows.innerHTML = '';
+  for (const entry of wbLatest.entries.slice(0, 5))
+    wbRows.appendChild(buildRow(entry, wbPrevMap, songMap, wbLatest.week, true));
+  for (const entry of popLatest.entries.slice(0, 5))
+    popRows.appendChild(buildRow(entry, popPrevMap, songMap, popLatest.week, false));
+
+  // Time capsule
+  renderTimeCapsule(songMap);
+
+  // Hide loading
+  document.getElementById('loading-screen').style.display = 'none';
+}
+
+init();
+</script>
+</body>
+</html>
