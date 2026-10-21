@@ -1202,14 +1202,19 @@ function renderAwards() {
   const chart = ui.awChart, years = awYears(chart);
   pills($('aw-chart'), [['country', 'Country'], ['pop', 'Pop']], chart, v => { ui.awChart = v; renderAwards(); });
   // Lead with the latest year that has winners
-  const leadYear = years.find(y => awWinner(chart, y, AW_TOP[chart])) ?? years[0];
+  // The banner is always the latest show, whether it has winners yet or only nominees
+  const leadYear = years[0];
   const top = awWinner(chart, leadYear, AW_TOP[chart]);
+  const items = top
+    ? AW_KEY[chart].map(c => awWinner(chart, leadYear, c)).filter(Boolean).map(n =>
+        `<li><small>${esc(n.category)}</small>${esc(awName(n))}${n.song || n.album ? ` · ${esc(n.artist || '')}` : ''}</li>`)
+    : AW_KEY[chart].map(c => AWARDS[chart].filter(n => n.year === leadYear && n.category === c)).filter(r => r.length).map(r =>
+        `<li><small>${esc(r[0].category)} nominees</small>${esc(r.map(n => n.song || n.album ? awName(n) : n.artist).join(', '))}</li>`);
   $('aw-lead').innerHTML = `<a class="aw-lead" href="${awHref(chart, leadYear)}">
     <div class="ph">${artTile(awFace(chart, leadYear), true, leadYear)}</div>
     <div class="txt"><div class="kick">${leadYear} ${AW_SHOW[chart]}</div><h2>${esc(awHeadline(chart, leadYear))}</h2>
-      <ul>${AW_KEY[chart].map(c => awWinner(chart, leadYear, c)).filter(Boolean).map(n =>
-        `<li><small>${esc(n.category)}</small>${esc(awName(n))}${n.song || n.album ? ` · ${esc(n.artist || '')}` : ''}</li>`).join('')}</ul>
-      <span class="btn-line">See the ${leadYear} show ${arrow}</span></div></a>`;
+      <ul>${items.join('')}</ul>
+      <span class="btn-line">See the ${leadYear} ${top ? 'show' : 'nominees'} ${arrow}</span></div></a>`;
   $('aw-list').innerHTML = years.filter(y => y !== leadYear).map(y => {
     const w = awWinner(chart, y, AW_TOP[chart]);
     return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(awFace(chart, y), false, y)}<b>${y}</b></div>
