@@ -428,6 +428,8 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .award-row { display: flex; gap: 10px; align-items: flex-start; padding: 5px 0; border-top: 1px solid var(--line-soft); }
 .award-row:first-of-type { border-top: 0; }
 .award-row .mark { width: 16px; flex-shrink: 0; font-size: 12px; color: var(--muted); padding-top: 1px; }
+.award-row.has-art { align-items: center; }
+.award-row .art { width: 36px; height: 36px; border-radius: 0; font-size: 11px; }
 .award-row.win .mark { color: var(--dot-yellow); }
 .award-row.win .nm { font-weight: 700; }
 .award-row .sb { font-size: 11.5px; color: var(--muted); }
@@ -783,7 +785,7 @@ function wordmark(el) {
 const TILE_COLORS = ['#8E4B28', '#5E6870', '#B9764B', '#3F4A52', '#A0592F', '#6E5A44', '#9E2A2B', '#4F6B5A', '#7A6A8A', '#C08A2E'];
 function hash(s) { let h = 0; for (const c of s || '') h = (h * 31 + c.charCodeAt(0)) | 0; return Math.abs(h); }
 // Era photos: <slug>-<year>.jpg next to the main <slug>.jpg, listed in _years.json.
-// For a given year the nearest era photo wins; the main photo counts as this year's.
+// Only the awards pages pass a year. The nearest era photo wins; the main photo counts as this year's.
 let PHOTO_YEARS = {};
 function photoUrl(artistName, year) {
   const p = primaryArtist(artistName);
@@ -796,12 +798,18 @@ function photoUrl(artistName, year) {
   }
   return IMAGES_BASE + slug + '.jpg';
 }
-function artTile(artistName, eager, year) {
+// Album or single cover from images/covers/ (tools/fetch_covers.py); falls back to the artist photo
+function coverUrl(artistName, title) {
+  const p = primaryArtist(artistName);
+  return p && title ? `images/covers/${slugify(p)}--${slugify(title)}.jpg` : '';
+}
+function artTile(artistName, eager, year, title) {
   const p = primaryArtist(artistName);
   const init = p.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '♪';
   const bg = TILE_COLORS[hash(p) % TILE_COLORS.length];
   const src = photoUrl(artistName, year);
-  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${eager ? '' : ' loading="lazy"'} onerror="this.remove()">` : ''}</div>`;
+  const cover = coverUrl(artistName, title), lazy = eager ? '' : ' loading="lazy"';
+  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy} onerror="this.remove()">` : ''}${cover ? `<img src="${cover}" alt=""${lazy} onerror="this.remove()">` : ''}</div>`;
 }
 
 function weeksAt1(songId, hist, upTo) {
@@ -882,7 +890,7 @@ function chartRows(chartId, idx, limit, full) {
     else if (e.songId === gainerId) chip = '<span class="chip gainer">Gainer</span>';
     return `<a class="chart-row${full && e.position === 1 ? ' top' : ''}" href="${href}">
       <span class="pos">${e.position}</span>
-      ${artTile(s.artistName, false, +cur.week.slice(0, 4))}
+      ${artTile(s.artistName)}
       <span><div class="song">${esc(s.name || '—')}${badge}</div><div class="artist">${esc(s.artistName || '')}${chip}</div></span>
       ${full ? `<span class="lw hide-sm">${peakUpTo(e.songId, c, idx)}</span>` : ''}
       <span class="lw">${p ?? '—'}</span>
@@ -1058,7 +1066,7 @@ async function renderArchive(week) {
   $('archive').innerHTML = picks.map(f => {
     const chart = f.chart === 'pop' ? 'Pop 10' : 'Hot 20';
     return `<div class="clip">
-      ${artTile(f.artist || '', false, +f.week.slice(0, 4))}
+      ${artTile(f.artist || '')}
       <div><div class="clip-year">${f.week.slice(0, 4)}</div><div class="clip-week">${chart} · ${ARCH_KICK[f.type]} · ${fmtShort(f.week)}</div>
       <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></div>`;
   }).join('');
@@ -1074,11 +1082,11 @@ function renderExplore() {
   const lastWeek = parseDate(DATA.willboard[DATA.willboard.length - 1].week);
   const yr = lastWeek.getMonth() === 11 && lastWeek.getDate() >= 25 ? lastWeek.getFullYear() : lastWeek.getFullYear() - 1;
   const acts = [...new Set(DATA.wbHistory.filter(w => +w.week.slice(0, 4) === yr).map(w => primaryArtist(w.no1.artistName)))];
-  tile($('tile-ye'), `${yr} and every year since 2010`, 'Year-End<br>Charts', `${acts.length} different acts reached #1 on the Hot 20 in ${yr}.`, acts.slice(0, 4), 'm4', yr);
+  tile($('tile-ye'), `${yr} and every year since 2010`, 'Year-End<br>Charts', `${acts.length} different acts reached #1 on the Hot 20 in ${yr}.`, acts.slice(0, 4), 'm4');
 
   // Awards: the latest Entertainer of the Year
   const ent = AWARDS.country.filter(n => n.category === 'Entertainer of the Year' && n.slot === 'Winner').sort((a, b) => b.year - a.year)[0];
-  if (ent) tile($('tile-aw'), `${ent.year} Entertainer of the Year`, 'Willboard<br>Awards', `${ent.artist} took the top prize. See every winner and nominee.`, [ent.artist], 'm1', ent.year);
+  if (ent) tile($('tile-aw'), `${ent.year} Entertainer of the Year`, 'Willboard<br>Awards', `${ent.artist} took the top prize. See every winner and nominee.`, [ent.artist], 'm1');
 
   // Artists: the biggest acts by career points
   const big = Object.values(artistStats).sort((a, b) => b.points - a.points).slice(0, 6).map(a => a.name);
@@ -1094,7 +1102,7 @@ function renderYears() {
   }
   $('years').innerHTML = Object.entries(byYear).sort((a, b) => b[0] - a[0]).map(([y, songs]) => {
     const r = Object.values(songs).sort((a, b) => b.n - a.n)[0];
-    return `<a class="yr" href="#/story/${y}"><div class="ph">${artTile(r.artistName, true, +y)}<b>${y}</b></div>
+    return `<a class="yr" href="#/story/${y}"><div class="ph">${artTile(r.artistName, true)}<b>${y}</b></div>
       <div class="song">${esc(r.songName)}</div><div class="artist">${esc(r.artistName)}</div>
       <div class="wk">${r.n} week${r.n === 1 ? '' : 's'} at #1</div></a>`;
   }).join('');
@@ -1226,11 +1234,12 @@ function renderAwardYear(chart, year) {
   for (const n of AWARDS[chart]) if (n.year === year) (byCat[n.category] ||= []).push(n);
   $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
-    const head = win ? `<div class="wp">${artTile(win.artist || '', false, year)}<div><div class="nm">${esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
+    const head = win ? `<div class="wp">${artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).map(r => {
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? esc(r.album) : '';
-      return `<div class="award-row"><span class="mark">·</span>
+      const thumb = r.song || r.album ? artTile(r.artist || '', false, year, r.song || r.album) : '<span class="mark">·</span>';
+      return `<div class="award-row${r.song || r.album ? ' has-art' : ''}">${thumb}
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}</div></div>`;
     }).join('') + '</div>';
   }).join('');
