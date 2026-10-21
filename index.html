@@ -157,7 +157,7 @@ button { font: inherit; color: inherit; }
 .view-full:hover { color: var(--accent); }
 .chart-cols, .chart-row {
   display: grid;
-  grid-template-columns: 34px 54px 1fr 44px 50px;
+  grid-template-columns: 34px 54px 1fr 40px 40px 50px;
   align-items: center; column-gap: 12px;
 }
 .chart-cols {
@@ -286,8 +286,8 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .pill.active { background: var(--ink); color: var(--card); border-color: var(--ink); }
 .pills { display: flex; gap: 6px; flex-wrap: wrap; }
 .full-chart .chart-row .art { width: 60px; height: 52px; }
-.full-chart .chart-row { grid-template-columns: 40px 60px 1fr 52px 44px 50px; }
-.full-chart .chart-cols { grid-template-columns: 40px 60px 1fr 52px 44px 50px; }
+.full-chart .chart-row { grid-template-columns: 40px 60px 1fr 52px 44px 44px 50px; }
+.full-chart .chart-cols { grid-template-columns: 40px 60px 1fr 52px 44px 44px 50px; }
 
 .table { width: 100%; border-collapse: collapse; }
 .table th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-bottom: 1px solid var(--line); }
@@ -350,9 +350,9 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .chart-title { gap: 7px; }
   .view-full .vf-text { display: none; }
   .view-full { padding: 6px; }
-  .chart-cols, .chart-row { grid-template-columns: 26px 44px 1fr 30px 34px; column-gap: 9px; padding-left: 12px; padding-right: 12px; }
+  .chart-cols, .chart-row { grid-template-columns: 24px 40px 1fr 26px 28px 30px; column-gap: 8px; padding-left: 12px; padding-right: 12px; }
   .chart-row .art { width: 44px; height: 40px; }
-  .full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 30px 44px 1fr 34px 34px; }
+  .full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 28px 40px 1fr 26px 28px 30px; }
   .full-chart .hide-sm { display: none; }
   .full-chart .chart-row .art { width: 44px; height: 40px; }
   .timeline-years span:nth-child(even), .timeline-dots .tl-dot:nth-child(even) { display: none; }
@@ -405,7 +405,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
           <div class="chart-title"><span class="wm" data-wm>willboard</span><span class="label">HOT 20</span></div>
           <a class="view-full" href="#/hot20"><span class="vf-text">View full chart</span> <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
         </div>
-        <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c">Move</span></div>
+        <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
         <div id="home-hot20"></div>
       </div>
       <div class="card chart-card pop">
@@ -413,7 +413,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
           <div class="chart-title"><span class="wm" data-wm>willboard</span><span class="label">POP 10</span></div>
           <a class="view-full" href="#/pop10"><span class="vf-text">View full chart</span> <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
         </div>
-        <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c">Move</span></div>
+        <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
         <div id="home-pop10"></div>
       </div>
     </div>
@@ -509,7 +509,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       </div>
     </div>
     <div class="card chart-card full-chart" id="chart-card">
-      <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c hide-sm">Peak</span><span class="c">LW</span><span class="c">Move</span></div>
+      <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c hide-sm">Peak</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
       <div id="chart-rows"></div>
     </div>
   </section>
@@ -697,6 +697,7 @@ function chartRows(chartId, idx, limit, full) {
       <span><div class="song">${esc(s.name || '—')}${badge}</div><div class="artist">${esc(s.artistName || '')}</div></span>
       ${full ? `<span class="lw hide-sm">${peakUpTo(e.songId, c, idx)}</span>` : ''}
       <span class="lw">${p ?? '—'}</span>
+      <span class="lw" title="Weeks on chart">${e.weeks ?? '—'}</span>
       <span class="move">${moveCell(p, e.position)}</span>
     </a>`;
   }).join('');
@@ -882,12 +883,12 @@ function renderArtist(id) {
   $('artist-h1').textContent = a.name;
   const songs = DATA.songs.filter(s => s.artistId === id).sort((x, y) => x.debutDate.localeCompare(y.debutDate));
   const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
-  $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [a.points.toLocaleString(), 'Chart points']]
+  $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart'], [a.points.toLocaleString(), 'Chart points']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
-  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num hide-sm">Points</th></tr>` +
+  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num hide-sm">Points</th></tr>` +
     songs.map(s => `<tr><td><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num hide-sm">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num hide-sm">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
 }
 
 // ─── SONGS ──────────────────────────────────────────────────────
@@ -896,11 +897,11 @@ function renderSongs() {
   const all = DATA.songs.filter(s => !q || s.name.toLowerCase().includes(q) || (s.artistName || '').toLowerCase().includes(q));
   const rows = all.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, 150);
   $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 150 of ${DATA.songs.length.toLocaleString()} songs by career chart points. Search to find any song.`;
-  $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Points</th></tr>` +
+  $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Points</th></tr>` +
     rows.map(s => `<tr class="click" onclick="location.hash='#/artist/${s.artistId}'">
       <td><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
+      <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
 }
 
 // ─── STORY (a year of #1s) ──────────────────────────────────────

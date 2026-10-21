@@ -105,7 +105,9 @@ def apply_week(data, when, charts, allow_gap=False):
                 report.append(f'{key}: new song "{s["name"]}" by {s["artistName"]} at #{e["position"]}')
             s['totalPoints'] = (s['totalPoints'] or 0) + points(e['position'])
             s['peakPosition'] = min(s['peakPosition'] or 99, e['position'])
-            entries.append({'songId': s['id'], 'position': e['position'], 'plays': e['plays'], '_s': s})
+            s['weeksOnChart'] = (s.get('weeksOnChart') or 0) + 1
+            entries.append({'songId': s['id'], 'position': e['position'], 'plays': e['plays'],
+                            'weeks': s['weeksOnChart'], '_s': s})
 
         # #1 and the week's notable event: best debut, else biggest climb
         top = entries[0]['_s']
