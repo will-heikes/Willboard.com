@@ -122,6 +122,12 @@ def main():
             for e in w['entries']:
                 if e.get('plays') is not None:
                     running[e['songId']][w['week']] = e['plays']
+        # Will's lists show each song's whole run (peak, weeks at #1, weeks on chart), not just that year
+        def career(sid):
+            v = stats[sid].values()
+            return {'peak': min((x['peak'] for x in v), default=None), 'wks1': sum(x['wks1'] for x in v),
+                    'wc': sum(x['wc'] for x in v)}
+
         window_start = data[key][0]['week']
 
         def plays_in(sid, year):
@@ -151,7 +157,7 @@ def main():
             if lists.get(y):
                 for r in sorted(lists[y], key=lambda r: int(r['rank'])):
                     s = match(by_name, r['song'], r['artist'], y)
-                    st = stats[s['id']][y] if s else {}
+                    st = career(s['id']) if s else {}
                     if not s:
                         unmatched.append(f'{key} {y} #{r["rank"]} {r["song"]} - {r["artist"]}')
                     num = lambda v: int(re.sub(r'\D', '', v)) if re.search(r'\d', v or '') else None
@@ -159,7 +165,7 @@ def main():
                                  'name': s['name'] if s else r['song'].strip(),
                                  'artistName': s['artistName'] if s else r['artist'].strip(),
                                  'peak': num(r['peak']) or (st.get('peak') if st else None),
-                                 'wks1': num(r['wks1']) or 0,
+                                 'wks1': num(r['wks1']) or (st.get('wks1') if st else 0),
                                  'wc': num(r['wc']) or (st.get('wc') if st else None)})
                 src = 'will'
             if len(rows) < 10:
@@ -174,9 +180,9 @@ def main():
                     if len(rows) >= (25 if rows else TOP):
                         break
                     if sid not in listed:
-                        s = by_id[sid]
+                        s, c = by_id[sid], career(sid)
                         rows.append({'rank': len(rows) + 1, 'songId': sid, 'name': s['name'],
-                                     'artistName': s['artistName'], 'peak': t['peak'], 'wks1': t['wks1'], 'wc': t['wc']})
+                                     'artistName': s['artistName'], 'peak': c['peak'], 'wks1': c['wks1'], 'wc': c['wc']})
                 src = 'will+formula' if src == 'will' else 'formula'
             out[key][str(y)] = {'source': src, 'songs': rows}
         print(key, ', '.join(f"{y}{'' if v['source'] == 'will' else '*'}" for y, v in out[key].items()))
