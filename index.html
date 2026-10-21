@@ -182,10 +182,14 @@ button { font: inherit; color: inherit; }
 .artist { font-size: 12.5px; color: var(--ink-soft); }
 .chart-row .lw { font-size: 13px; color: var(--ink-soft); text-align: center; }
 .move { display: flex; justify-content: center; }
-.tri-up   { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 13px solid var(--up); }
-.tri-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid var(--down); }
-.same { width: 14px; height: 2px; background: var(--ink-soft); }
-.new  { font-size: 10px; font-weight: 800; letter-spacing: .06em; color: var(--eyebrow); }
+.mk { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; line-height: 1; }
+.mk svg { fill: currentColor; }
+.mk.up { color: var(--up); }
+.mk.down { color: var(--down); }
+.mk.same { color: var(--muted); font-size: 22px; }
+.mk.new, .mk.re { font-size: 11px; letter-spacing: .06em; padding: 3px 4px 2px; }
+.mk.new { background: var(--dot-yellow); color: #121110; }
+.mk.re { border: 1.5px solid var(--ink); color: var(--ink); padding: 2px 3px 1px; }
 .wks1 {
   display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 10px;
   font-size: 10px; font-weight: 700; vertical-align: 2px;
@@ -355,8 +359,6 @@ button { font: inherit; color: inherit; }
 .full-chart .chart-row .art { width: 76px; height: 76px; font-size: 20px; box-shadow: 0 6px 16px -8px rgb(var(--tint, 0 0 0) / .7); }
 .full-chart .chart-row .pos { font-size: 32px; }
 .full-chart .chart-row .song { font-size: 15.5px; }
-.full-chart .chart-row .move { flex-direction: column; align-items: center; gap: 3px; }
-.full-chart .chart-row .move small { font-size: 10px; font-weight: 700; color: var(--muted); }
 .full-chart .certcol .cert { margin: 0; font-size: 10.5px; padding: 3px 9px 3px 4px; }
 .full-chart .stats { display: grid; gap: 3px; font-size: 12px; font-variant-numeric: tabular-nums; }
 .full-chart .stats div { display: flex; justify-content: space-between; gap: 8px; }
@@ -371,6 +373,39 @@ button { font: inherit; color: inherit; }
 .full-chart .chart-row.top .song { font-family: var(--f-cond); font-size: 34px; font-weight: 700; text-transform: uppercase; line-height: 1.02; }
 .full-chart .chart-row.top .artist { font-size: 15px; margin-top: 4px; }
 .full-chart .cert-inline { display: none; }
+
+/* ── SONG PAGE ──────────────────────────────────────────────── */
+.song-hero { display: grid; grid-template-columns: 280px 1fr; gap: 34px; align-items: end;
+  margin: 22px 0 30px; padding: 30px; position: relative;
+  background: linear-gradient(120deg, rgb(var(--tint) / .55), rgb(var(--tint) / .18) 55%, rgb(var(--tint) / .04)); }
+.song-hero .art { width: 280px; height: 280px; font-size: 64px; box-shadow: 0 24px 48px -20px rgb(var(--tint) / .9); }
+.song-hero .kick { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.song-hero h1 { font-family: var(--f-cond); font-weight: 700; font-size: 64px; line-height: .95; text-transform: uppercase; margin: 8px 0 6px; }
+.song-hero .by { font-size: 18px; }
+.song-hero .by a { border-bottom: 2px solid rgb(var(--tint) / .7); }
+.song-hero .by a:hover { color: var(--accent); }
+.song-hero .cert { margin: 12px 0 0; font-size: 11px; padding: 3px 10px 3px 4px; }
+.song-hero .stat-row { margin: 22px 0 0; gap: 34px; }
+.song-hero .stat-row div b { font-size: 36px; }
+.song-sec { margin-bottom: 30px; }
+.sec-h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px; border-top: 3px solid var(--ink); padding-top: 10px; }
+.sec-h h2 { font-family: var(--f-cond); font-weight: 700; font-size: 28px; text-transform: uppercase; margin: 0; }
+.sec-h .sub { font-size: 12.5px; color: var(--muted); }
+.run-card { padding: 18px 18px 8px; position: relative; }
+.run-card svg { display: block; width: 100%; height: auto; overflow: visible; }
+.run-card .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 11.5px; padding: 5px 8px; white-space: nowrap; transform: translate(-50%, -130%); display: none; }
+.run-card .tip b { font-family: var(--f-cond); font-size: 15px; margin-right: 5px; }
+.run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; margin-top: 12px; }
+.run-grid div { background: var(--card); border: 1px solid var(--line-soft); padding: 6px 4px 5px; text-align: center; }
+.run-grid b { display: block; font-family: var(--f-cond); font-size: 20px; line-height: 1.1; }
+.run-grid small { font-size: 9.5px; color: var(--muted); letter-spacing: .04em; }
+.run-grid .no1 { background: rgb(var(--tint) / .85); border-color: transparent; color: #fff; }
+.run-grid .no1 small { color: rgba(255,255,255,.8); }
+.run-grid .off { opacity: .45; }
+.more-songs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+.more-songs a .art { width: 100%; height: auto; aspect-ratio: 1; margin-bottom: 8px; font-size: 28px; }
+.more-songs a:hover .song { color: var(--accent); }
+.more-songs .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 footer { margin-top: 36px; border-top: 1px solid var(--line); background: var(--card); }
@@ -535,6 +570,12 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .chart-cols, .chart-row { grid-template-columns: 24px 40px 1fr 26px 28px 30px; column-gap: 8px; padding-left: 12px; padding-right: 12px; }
   .chart-row .art { width: 44px; height: 40px; }
   .full-chart .hide-sm { display: none; }
+  .song-hero { grid-template-columns: 1fr; padding: 20px; gap: 18px; margin-top: 14px; }
+  .song-hero .art { width: 100%; height: auto; aspect-ratio: 1; }
+  .song-hero h1 { font-size: 40px; }
+  .song-hero .stat-row { gap: 20px; }
+  .song-hero .stat-row div b { font-size: 28px; }
+  .more-songs { grid-template-columns: repeat(2, 1fr); }
   .full-chart .chart-row { grid-template-columns: 26px 18px 56px 1fr 58px; column-gap: 10px; padding: 12px 12px; }
   .full-chart .chart-row .art { width: 56px; height: 56px; }
   .full-chart .chart-row .pos { font-size: 22px; }
@@ -737,6 +778,20 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
     <div class="card" style="overflow:hidden"><table class="table" id="artist-songs"></table></div>
   </section>
 
+  <!-- ── SONG ── -->
+  <section class="page" id="page-song">
+    <div class="song-hero" id="song-hero"></div>
+    <div class="song-sec">
+      <div class="sec-h"><h2>Chart Run</h2><span class="sub" id="song-run-sub"></span></div>
+      <div class="card run-card"><div id="song-graph"></div></div>
+      <div class="run-grid" id="song-grid"></div>
+    </div>
+    <div class="song-sec" id="song-more-wrap">
+      <div class="sec-h"><h2 id="song-more-h">More from the artist</h2></div>
+      <div class="more-songs" id="song-more"></div>
+    </div>
+  </section>
+
   <!-- ── SONGS ── -->
   <section class="page" id="page-songs">
     <div class="page-head">
@@ -896,10 +951,13 @@ function peakUpTo(songId, c, idx) {
 }
 
 // ─── CHART ROWS ─────────────────────────────────────────────────
-function moveCell(prev, pos) {
-  if (prev === undefined) return '<span class="new">NEW</span>';
-  if (prev === pos) return '<span class="same"></span>';
-  return prev > pos ? '<span class="tri-up" title="Up"></span>' : '<span class="tri-down" title="Down"></span>';
+// Movement: condensed figures with a sharp chevron, the same type and colours as the rest of the site
+const CHEV = d => `<svg viewBox="0 0 12 7" width="16" height="9" aria-hidden="true"><path d="${d === 'up' ? 'M0 7 6 0 12 7 9 7 6 3.5 3 7z' : 'M0 0 6 7 12 0 9 0 6 3.5 3 0z'}"/></svg>`;
+function moveCell(prev, pos, weeks) {
+  if (prev === undefined) return weeks > 1 ? '<span class="mk re">RE</span>' : '<span class="mk new">NEW</span>';
+  if (prev === pos) return '<span class="mk same">=</span>';
+  const up = prev > pos;
+  return `<span class="mk ${up ? 'up' : 'down'}" title="${up ? 'Up' : 'Down'} ${Math.abs(prev - pos)}">${CHEV(up ? 'up' : 'down')}${Math.abs(prev - pos)}</span>`;
 }
 // A colour from each row's picture (cover if there is one, else the artist photo) tints that row.
 // Pixels are weighted by saturation so the tint follows the picture's design, not its greys.
@@ -943,17 +1001,16 @@ function chartRows(chartId, idx, limit, full) {
   return cur.entries.slice(0, limit).map(e => {
     const s = SONGS[e.songId] || {};
     const p = prevMap[e.songId];
-    const href = s.artistId ? `#/artist/${s.artistId}` : '#/';
+    const href = s.id ? `#/song/${s.id}` : '#/';
     let chip = '';
     if (e.weeks === 1 && e.songId === debutId) chip = '<span class="chip debut">Hot Shot Debut</span>';
     else if (e.songId === gainerId) chip = '<span class="chip gainer">Gainer</span>';
     const cert = c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null))
                         : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
     const wks1 = e.position === 1 ? weeksAt1(e.songId, c.hist, cur.week) : 0;
-    const moved = p === undefined ? '' : p > e.position ? `<small>+${p - e.position}</small>` : p < e.position ? `<small>−${e.position - p}</small>` : '';
     return `<a class="chart-row${e.position === 1 ? ' top' : ''}" href="${href}">
       <span class="pos">${e.position}</span>
-      <span class="move">${moveCell(p, e.position)}${moved}</span>
+      <span class="move">${moveCell(p, e.position, e.weeks)}</span>
       ${artTile(s.artistName, e.position <= 3, undefined, s.name)}
       <span><div class="song">${esc(s.name || '—')}${wks1 > 1 ? `<span class="wks1">${wks1} wks at #1</span>` : ''}</div>
         <div class="artist">${esc(s.artistName || '')}${chip}</div>${cert ? `<div class="cert-inline">${cert}</div>` : ''}</span>
@@ -1019,7 +1076,7 @@ function chartStrip(chartId, idx) {
       : p === undefined ? `<div class="mv new">${e.weeks === 1 ? 'New this week' : 'Re-entry'}</div>`
       : p > e.position ? `<div class="mv up">▲ Up from ${p}</div>` : p < e.position ? `<div class="mv down">▼ Down from ${p}</div>` : `<div class="mv">Holds at ${p}</div>`;
     const cert = c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null)) : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
-    return `<a class="cm${e.position === 1 ? ' first' : ''}" href="#/artist/${s.artistId}">
+    return `<a class="cm${e.position === 1 ? ' first' : ''}" href="#/song/${s.id}">
       <div class="ph">${artTile(s.artistName, e.position === 1)}<span class="rk">${e.position}</span></div>
       <div class="song">${esc(s.name || '—')}</div><div class="artist">${esc(s.artistName || '')}</div>${mv}${e.position === 1 ? cert : ''}</a>`;
   }).join('');
@@ -1211,7 +1268,7 @@ async function renderYearEnd() {
   const rows = lists[ui.yeYear]?.songs || [];
   $('ye-mod').className = `cmod ${c.cls}`;
   $('ye-title').textContent = `Top ${rows.length} ${c.isWb ? 'Country' : 'Pop'} Songs of ${ui.yeYear}`;
-  const link = r => SONGS[r.songId]?.artistId ? `#/artist/${SONGS[r.songId].artistId}` : '#/year-end';
+  const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
   const facts = r => [r.wks1 ? `${r.wks1} week${r.wks1 === 1 ? '' : 's'} at No. 1` : r.peak ? `Peaked at No. ${r.peak}` : '',
                       r.wc ? `${r.wc} weeks on chart` : ''].filter(Boolean);
   $('ye-top').innerHTML = rows.slice(0, 5).map(r => `<a class="cm${r.rank === 1 ? ' first' : ''}" href="${link(r)}">
@@ -1355,9 +1412,90 @@ function renderArtist(id) {
   $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    songs.map(s => `<tr><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
+    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+}
+
+// ─── SONG PAGE ──────────────────────────────────────────────────
+// Every week a song spent on its chart comes from runs.json (written by build_data.py and add_week.py)
+let RUNS = null;
+function songRun(s) {
+  const c = RUNS?.[s.chart], r = c?.runs[s.id];
+  if (!r) return [];
+  return r.slice(1).map((p, i) => ({ week: c.weeks[r[0] + i], pos: p || null }));
+}
+function runGraph(run, size, width) {
+  // Drawn at the box's own width so the labels stay a readable size on phones
+  const W = Math.max(320, Math.round(width || 960)), H = W < 600 ? 220 : 300, L = 34, R = 12, T = 14, B = 30, n = run.length;
+  const x = i => L + (n === 1 ? (W - L - R) / 2 : i * (W - L - R) / (n - 1));
+  const y = p => T + (p - 1) * (H - T - B) / (size - 1);
+  const ticks = size === 20 ? [1, 5, 10, 15, 20] : [1, 3, 5, 7, 10];
+  let g = ticks.map(p => `<line x1="${L}" x2="${W - R}" y1="${y(p)}" y2="${y(p)}" stroke="var(--line-soft)"/><text x="${L - 10}" y="${y(p) + 4}" text-anchor="end" class="ax">${p}</text>`).join('');
+  // Top-5 band, the chart's big leagues
+  g = `<rect x="${L}" y="${y(1) - 6}" width="${W - L - R}" height="${y(5) - y(1) + 12}" fill="rgb(var(--tint) / .10)"/>` + g;
+  // Month labels along the bottom, thinned to fit
+  const step = Math.max(1, Math.ceil(n / Math.max(4, Math.floor(W / 80))));
+  run.forEach((w, i) => { if (i % step === 0) g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" class="ax">${fmtShort(w.week).replace(/,? \d{4}$/, '')}</text>`; });
+  // The line breaks wherever the song dropped off the chart
+  let d = '', pen = false;
+  run.forEach((w, i) => { if (w.pos) { d += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(w.pos).toFixed(1)}`; pen = true; } else pen = false; });
+  const area = run.every(w => w.pos) && n > 1 ? `<path d="${d}L${x(n - 1)} ${H - B}L${x(0)} ${H - B}Z" fill="url(#rg)"/>` : '';
+  const dots = run.map((w, i) => w.pos ? `<circle cx="${x(i)}" cy="${y(w.pos)}" r="${w.pos === 1 ? 6 : 4}" class="${w.pos === 1 ? 'd1' : 'd'}" data-i="${i}"/>` : '').join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Chart position by week">
+    <defs><linearGradient id="rg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="rgb(var(--tint))" stop-opacity=".35"/><stop offset="1" stop-color="rgb(var(--tint))" stop-opacity="0"/></linearGradient></defs>
+    <style>.ax{font:600 11px var(--f-body,Inter),sans-serif;fill:var(--muted)}.d{fill:var(--card);stroke:rgb(var(--tint));stroke-width:2.5}.d1{fill:rgb(var(--tint));stroke:var(--card);stroke-width:2}circle{cursor:pointer}</style>
+    ${g}${area}<path d="${d}" fill="none" stroke="rgb(var(--tint))" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${dots}</svg><div class="tip"></div>`;
+}
+async function renderSong(id) {
+  const s = SONGS[id];
+  if (!s) { location.hash = '#/songs'; return; }
+  if (!RUNS) RUNS = await fetch('runs.json').then(r => r.json()).catch(() => ({}));
+  const c = s.chart === 'pop' ? CHARTS.pop10 : CHARTS.hot20, size = s.chart === 'pop' ? 10 : 20;
+  const run = songRun(s), on = run.filter(w => w.pos);
+  const wks1 = on.filter(w => w.pos === 1).length;
+  const debut = on[0];
+  const stats = [[s.peakPosition ?? '—', 'Peak'], [wks1 || '—', 'Weeks at #1'], [s.weeksOnChart ?? on.length, 'Weeks on chart'],
+                 [debut ? `#${debut.pos}` : '—', `Debut · ${fmtShort(s.debutDate)}`]];
+  const hero = $('song-hero');
+  hero.style.removeProperty('--tint');
+  hero.innerHTML = `${artTile(s.artistName, true, undefined, s.name)}
+    <div><div class="kick">${c.isWb ? 'Country Hot 20' : 'Pop 10'}</div>
+      <h1>${esc(s.name)}</h1>
+      <div class="by"><a href="#/artist/${s.artistId}">${esc(s.artistName)}</a></div>
+      ${songCert(s)}
+      <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
+  const page = $('page-song');
+  const tint = () => {
+    const img = [...hero.querySelectorAll('.art img')].filter(i => i.complete && i.naturalWidth).pop();
+    const t = img && pictureTint(img);
+    if (t) page.style.setProperty('--tint', t);
+  };
+  page.style.setProperty('--tint', '120 100 80');
+  hero.querySelectorAll('.art img').forEach(i => i.addEventListener('load', tint));
+  tint();
+
+  const last = on[on.length - 1];
+  $('song-run-sub').textContent = on.length ? `${fmtShort(on[0].week)} to ${fmtShort(last.week)}${run.length > on.length ? ' · gaps are weeks off the chart' : ''}` : '';
+  $('song-graph').innerHTML = run.length ? runGraph(run, size, $('song-graph').clientWidth) : '<p class="hint">No weekly chart history for this song yet.</p>';
+  const tip = $('song-graph').querySelector('.tip');
+  $('song-graph').querySelectorAll('circle').forEach(dot => {
+    dot.onmouseenter = () => {
+      const w = run[+dot.dataset.i], box = $('song-graph').getBoundingClientRect(), b = dot.getBoundingClientRect();
+      tip.innerHTML = `<b>#${w.pos}</b>${fmtShort(w.week)}`;
+      tip.style.left = `${b.left - box.left + b.width / 2 + 18}px`; tip.style.top = `${b.top - box.top + 18}px`; tip.style.display = 'block';
+    };
+    dot.onmouseleave = () => { tip.style.display = 'none'; };
+  });
+  $('song-grid').innerHTML = run.map(w => `<div class="${w.pos === 1 ? 'no1' : w.pos ? '' : 'off'}"><b>${w.pos ?? '—'}</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></div>`).join('');
+
+  const more = DATA.songs.filter(o => o.artistId === s.artistId && o.id !== s.id)
+    .sort((a, b) => (a.peakPosition ?? 99) - (b.peakPosition ?? 99) || b.debutDate.localeCompare(a.debutDate)).slice(0, 6);
+  $('song-more-wrap').hidden = !more.length;
+  $('song-more-h').textContent = `More from ${primaryArtist(s.artistName)}`;
+  $('song-more').innerHTML = more.map(o => `<a href="#/song/${o.id}">${artTile(o.artistName, false, undefined, o.name)}
+    <div class="song">${esc(o.name)}</div><div class="meta">${o.chart === 'pop' ? 'Pop 10' : 'Hot 20'} · Peak #${o.peakPosition ?? '—'} · ${o.debutDate.slice(0, 4)}</div></a>`).join('');
+  window.scrollTo(0, 0);
 }
 
 // ─── SONGS ──────────────────────────────────────────────────────
@@ -1367,7 +1505,7 @@ function renderSongs() {
   const rows = all.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, 150);
   $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `The 150 biggest of ${DATA.songs.length.toLocaleString()} Willboard songs. Search to find any song.`;
   $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    rows.map(s => `<tr class="click" onclick="location.hash='#/artist/${s.artistId}'">
+    rows.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'">
       <td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
@@ -1404,6 +1542,7 @@ function route() {
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
   else if (page === 'artist')   { id = 'artist'; renderArtist(arg); }
   else if (page === 'songs')    { id = 'songs'; renderSongs(); }
+  else if (page === 'song')     { id = 'song'; renderSong(arg); }
   else if (page === 'story')    { id = 'story'; renderStory(+arg); }
   else if (page === 'about')    { id = 'about'; }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));

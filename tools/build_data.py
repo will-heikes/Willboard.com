@@ -18,7 +18,7 @@ import re
 import sys
 from datetime import date, datetime, timedelta
 
-from add_week import norm, points
+from add_week import add_to_runs, norm, points
 
 KEEP_WEEKS = 52
 CHARTS = (  # key, file arg index, history key, id prefix, plays column header, chart size
@@ -184,6 +184,7 @@ def main():
 
     data = {'meta': {}, 'artists': [], 'songs': [], 'facts': []}
     archive = []  # auto-written stories for past weeks, saved to archive.json
+    runs = {}  # every song's full chart run, saved to runs.json for the song pages
     for key, idx, hist, prefix, plays_head, size in CHARTS:
         rows_all = list(csv.reader(open(paths[idx], encoding='utf-8')))
         head, rows = rows_all[1], [r for r in rows_all[2:] if len(r) > 3 and r[1].strip()]
@@ -245,6 +246,9 @@ def main():
             for e in entries:
                 e['plays'] = old_plays.get((d.isoformat(), e['songId']))
         by_id = {s['id']: s for s in songs}
+        for d, entries in zip(dates, weekly):
+            if entries:
+                add_to_runs(runs, key, d.isoformat(), sorted(entries, key=lambda e: e['position']))
         archive += archive_facts(key, dates, weekly, by_id, {a['id']: a['name'] for a in artists.values()})
         history, prev = [], {}
         for d, entries in zip(dates, weekly):
@@ -294,6 +298,7 @@ def main():
     data['facts'].sort(key=lambda f: f['week'])
     out = {k: data[k] for k in ('meta', 'artists', 'songs', 'willboard', 'pop', 'wbHistory', 'popHistory', 'facts')}
     json.dump(out, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    json.dump(runs, open('runs.json', 'w', encoding='utf-8'), separators=(',', ':'))
     archive.sort(key=lambda f: (f['week'], f['chart'], -f['score']))
     json.dump(archive, open('archive.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print(f'archive.json: {len(archive)} stories')

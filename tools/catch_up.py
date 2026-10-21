@@ -15,7 +15,7 @@ import re
 import sys
 from datetime import date, datetime
 
-from add_week import apply_week, norm
+from add_week import apply_week, load_runs, norm
 
 
 def week_columns(path, last_week, known_entries, song_name):
@@ -45,7 +45,7 @@ def label_to_date(label, after):
 
 def main():
     country, pop = [a for a in sys.argv[1:] if not a.startswith('--')]
-    data = json.load(open('data.json', encoding='utf-8'))
+    data, runs = json.load(open('data.json', encoding='utf-8')), load_runs()
     names = {s['id']: s['name'] for s in data['songs']}
     cols = {}
     for key, path in (('willboard', country), ('pop', pop)):
@@ -57,10 +57,12 @@ def main():
     for (label, wb), (_, pp) in zip(cols['willboard'], cols['pop']):
         when = label_to_date(label, after)
         print(f'--- {when}')
-        print('\n'.join(apply_week(data, when, {'willboard': wb, 'pop': pp}, allow_gap=True)))
+        print('\n'.join(apply_week(data, when, {'willboard': wb, 'pop': pp}, allow_gap=True, runs=runs)))
         after = when
     if '--dry-run' not in sys.argv:
         json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+        if runs is not None:
+            json.dump(runs, open('runs.json', 'w', encoding='utf-8'), separators=(',', ':'))
         print(f'data.json updated through {after}.')
 
 

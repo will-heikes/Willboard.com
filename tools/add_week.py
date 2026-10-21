@@ -59,7 +59,28 @@ def parse(path):
     return when, wb, pop
 
 
-def apply_week(data, when, charts, allow_gap=False):
+def load_runs():
+    try:
+        return json.load(open('runs.json', encoding='utf-8'))
+    except FileNotFoundError:
+        return None
+
+
+def add_to_runs(runs, key, week, entries):
+    """runs.json holds every song's full chart run for the song pages:
+    {chart: {'weeks': [dates], 'runs': {songId: [first week index, pos, pos, 0 (off chart), pos, ...]}}}"""
+    c = runs.setdefault(key, {'weeks': [], 'runs': {}})
+    if c['weeks'] and c['weeks'][-1] >= week:
+        return
+    c['weeks'].append(week)
+    i = len(c['weeks']) - 1
+    for e in entries:
+        r = c['runs'].setdefault(e['songId'], [i])
+        r.extend([0] * (i - (r[0] + len(r) - 1)))
+        r.append(e['position'])
+
+
+def apply_week(data, when, charts, allow_gap=False, runs=None):
     """Append one week (charts = {'willboard': [...], 'pop': [...]}) to data. Returns report lines."""
     week = when.isoformat()
     songs = data['songs']
@@ -131,6 +152,8 @@ def apply_week(data, when, charts, allow_gap=False):
         data[hist].append(h)
 
         weeks.append({'week': week, 'entries': [{k: v for k, v in x.items() if k != '_s'} for x in entries]})
+        if runs is not None:
+            add_to_runs(runs, key, week, entries)
         del weeks[:-KEEP_WEEKS]
         report.append(f'{key}: #1 is "{top["name"]}" by {top["artistName"]}')
 
@@ -145,10 +168,12 @@ def main():
     charts = {}
     when, charts['willboard'], charts['pop'] = parse(args[0])
     week = when.isoformat()
-    data = json.load(open('data.json', encoding='utf-8'))
-    print('\n'.join(apply_week(data, when, charts, allow_gap)))
+    data, runs = json.load(open('data.json', encoding='utf-8')), load_runs()
+    print('\n'.join(apply_week(data, when, charts, allow_gap, runs)))
     if not dry:
         json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+        if runs is not None:
+            json.dump(runs, open('runs.json', 'w', encoding='utf-8'), separators=(',', ':'))
         print(f'data.json updated through {week}.')
 
 
