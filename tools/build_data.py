@@ -72,7 +72,7 @@ def main():
             next_art += 1
         return a
 
-    data = {'meta': {}, 'artists': [], 'songs': []}
+    data = {'meta': {}, 'artists': [], 'songs': [], 'facts': []}
     for key, idx, hist, prefix, plays_head, size in CHARTS:
         rows_all = list(csv.reader(open(paths[idx], encoding='utf-8')))
         head, rows = rows_all[1], [r for r in rows_all[2:] if len(r) > 3 and r[1].strip()]
@@ -87,6 +87,12 @@ def main():
         used = set()
         old_ids = {s['id']: s for s in old['songs'] if s['chart'] == key}
         next_id = max(int(s['id'].split('_')[-1]) for s in old['songs'] if s['chart'] == key) + 1
+
+        # Will's written "Chart Fact" lines sit in rows of their own, one cell per week
+        for r in rows:
+            if r[1].strip().startswith('Chart Fact'):
+                data['facts'] += [{'week': d.isoformat(), 'chart': key, 'text': r[c].strip()}
+                                  for d, c in zip(dates, cols) if r[c].strip()]
 
         songs, weekly = [], [[] for _ in cols]
         for r in rows:
@@ -173,7 +179,8 @@ def main():
     old_ids = {a['id'] for a in old['artists']}
     data['artists'] = old['artists'] + [a for a in artists.values() if a['id'] not in old_ids]
     data['meta']['generated'] = datetime.now().isoformat(timespec='seconds')
-    out = {k: data[k] for k in ('meta', 'artists', 'songs', 'willboard', 'pop', 'wbHistory', 'popHistory')}
+    data['facts'].sort(key=lambda f: f['week'])
+    out = {k: data[k] for k in ('meta', 'artists', 'songs', 'willboard', 'pop', 'wbHistory', 'popHistory', 'facts')}
     json.dump(out, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 
 
