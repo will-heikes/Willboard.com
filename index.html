@@ -1183,9 +1183,20 @@ const awYears = chart => [...new Set(AWARDS[chart].map(n => n.year))].sort((a, b
 const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
 const awName = n => n.song ? `“${n.song}”` : n.album || n.artist || '—';
 const awHref = (chart, year) => `#/awards/${chart}/${year}`;
+// Before a show has winners, it's fronted by the act with the most nominations
+function awMostNominated(chart, year) {
+  const n = {};
+  for (const r of AWARDS[chart]) if (r.year === year)
+    for (const a of (r.artist || '').split(/, /)) if (a) n[a] = (n[a] || 0) + 1;
+  const [artist, count] = Object.entries(n).sort((a, b) => b[1] - a[1])[0] || ['', 0];
+  return { artist, count };
+}
+const awFace = (chart, year) => awWinner(chart, year, AW_TOP[chart])?.artist || awMostNominated(chart, year).artist;
 function awHeadline(chart, year) {
   const w = awWinner(chart, year, AW_TOP[chart]);
-  return w ? `${w.artist} wins ${AW_TOP[chart]}` : `Nominations announced`;
+  if (w) return `${w.artist} wins ${AW_TOP[chart]}`;
+  const m = awMostNominated(chart, year);
+  return m.count ? `${m.artist} leads the nominations with ${m.count}` : 'Nominations announced';
 }
 function renderAwards() {
   const chart = ui.awChart, years = awYears(chart);
@@ -1194,14 +1205,14 @@ function renderAwards() {
   const leadYear = years.find(y => awWinner(chart, y, AW_TOP[chart])) ?? years[0];
   const top = awWinner(chart, leadYear, AW_TOP[chart]);
   $('aw-lead').innerHTML = `<a class="aw-lead" href="${awHref(chart, leadYear)}">
-    <div class="ph">${artTile(top?.artist || '', true, leadYear)}</div>
+    <div class="ph">${artTile(awFace(chart, leadYear), true, leadYear)}</div>
     <div class="txt"><div class="kick">${leadYear} ${AW_SHOW[chart]}</div><h2>${esc(awHeadline(chart, leadYear))}</h2>
       <ul>${AW_KEY[chart].map(c => awWinner(chart, leadYear, c)).filter(Boolean).map(n =>
         `<li><small>${esc(n.category)}</small>${esc(awName(n))}${n.song || n.album ? ` · ${esc(n.artist || '')}` : ''}</li>`).join('')}</ul>
       <span class="btn-line">See the ${leadYear} show ${arrow}</span></div></a>`;
   $('aw-list').innerHTML = years.filter(y => y !== leadYear).map(y => {
     const w = awWinner(chart, y, AW_TOP[chart]);
-    return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(w?.artist || '', false, y)}<b>${y}</b></div>
+    return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(awFace(chart, y), false, y)}<b>${y}</b></div>
       <h3>${esc(awHeadline(chart, y))}</h3></a>`;
   }).join('');
 }
@@ -1226,10 +1237,9 @@ function renderAwardYear(chart, year) {
   if (!years.includes(year)) year = years[0];
   ui.awChart = chart;
   const top = awWinner(chart, year, AW_TOP[chart]);
-  // Before the show, the photo spot shows the top category's nominees
-  const noms = AWARDS[chart].filter(n => n.year === year && n.category === AW_TOP[chart]).slice(0, 4).map(n => n.artist);
+  const lead = awMostNominated(chart, year);
   $('ay-photo').innerHTML = top ? artTile(top.artist || '', true, year) + `<figcaption>${esc(AW_TOP[chart])}</figcaption>`
-    : `<div class="mosaic m4">${noms.map(a => artTile(a, true, year)).join('')}</div><figcaption>${esc(AW_TOP[chart])} nominees</figcaption>`;
+    : artTile(lead.artist, true, year) + `<figcaption>Most nominated · ${lead.count} nominations</figcaption>`;
   $('ay-winners-h').textContent = top ? 'The Winners' : 'The Nominees';
   $('ay-title').textContent = `${year} ${AW_SHOW[chart]}`;
   $('ay-head').textContent = awHeadline(chart, year) + '.';
