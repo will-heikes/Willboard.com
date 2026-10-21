@@ -944,31 +944,6 @@ pop	2025	37	Like Jennie	Jennie	2	0	5	25	995
 pop	2025	38	Friend of Mine	Rihanna	4	0	5	38	692
 pop	2025	39	Tit for Tat	Tate McRae	4	0	5	40	581
 pop	2025	40	Call Me When You Break Up	Selena Gomez, Benny Blanco, Gracie Abrams	5	0	7	28	686
-country	2010	1	Consider Me Gone	Reba McEntire				1180	
-country	2010	2	If I Die Young	The Band Perry				947	
-country	2010	3	Turning Home	David Nail				763	
-country	2010	4	Temporary Home	Carrie Underwood				774	
-country	2010	5	Cryin' For Me (Wayman's Song)	Toby Keith				644	
-country	2010	6	Waka Waka (This Time for Africa)	Shakira				732	
-country	2010	7	American Honey	Lady A				705	
-country	2010	8	Stuck Like Glue	Sugarland				706	
-country	2010	9	The House That Built Me	Miranda Lambert				555	
-country	2010	10	TiK ToK	Ke$ha				470	
-country	2010	11	What I Cannot Change	LeAnn Rimes				344	
-country	2010	12	Strangers On A Train	David Nail				564	
-country	2010	13	Only Prettier	Miranda Lambert				437	
-country	2010	14	Looking For A Good Time	David Nail				331	
-country	2010	15	The Boys of Fall	Kenny Chesney				281	
-country	2010	16	Travelin' Soldier	Dixie Chicks				488	
-country	2010	17	The Breath You Take	George Strait				377	
-country	2010	18	Alejandro	Lady Gaga				486	
-country	2010	19	Highway 20 Ride	Zac Brown Band				412	
-country	2010	20	Mama's Song	Carrie Underwood				415	
-country	2010	21	The Man I Want to Be	Chris Young				411	
-country	2010	22	Giddy On Up	Laura Bell Bundy				380	
-country	2010	23	Our Kind Of Love	Lady A				260	
-country	2010	24	Little Miss	Sugarland				634	
-country	2010	25	Today Was a Fairytale	Taylor Swift				521	
 country	2019	1	Neon Church	Tim McGraw				676	
 country	2019	2	More Hearts Than Mine	Ingrid Andress				602	
 country	2019	3	Beautiful Lies	Jana Kramer				531	
@@ -994,3 +969,28 @@ country	2019	22	Every Little Honky Tonk Bar	George Strait				368
 country	2019	23	Even Though I'm Leaving	Luke Combs				337	
 country	2019	24	We Were	Keith Urban				371	
 country	2019	25	Better off Gone	Logan Mize				338	
+country	2010	1	Consider Me Gone	Reba McEntire				1180	
+country	2010	2	If I Die Young	The Band Perry				947	
+country	2010	3	Turning Home	David Nail				763	
+country	2010	4	Temporary Home	Carrie Underwood				774	
+country	2010	5	Cryin' For Me (Wayman's Song)	Toby Keith				644	
+country	2010	6	Red Light	David Nail				1001	
+country	2010	7	Waka Waka (This Time for Africa)	Shakira				732	
+country	2010	8	American Honey	Lady A				705	
+country	2010	9	Stuck Like Glue	Sugarland				706	
+country	2010	10	The House That Built Me	Miranda Lambert				555	
+country	2010	11	TiK ToK	Ke$ha				470	
+country	2010	12	What I Cannot Change	LeAnn Rimes				344	
+country	2010	13	Strangers On A Train	David Nail				564	
+country	2010	14	Only Prettier	Miranda Lambert				437	
+country	2010	15	Looking For A Good Time	David Nail				331	
+country	2010	16	The Boys of Fall	Kenny Chesney				281	
+country	2010	17	Travelin' Soldier	Dixie Chicks				488	
+country	2010	18	The Breath You Take	George Strait				377	
+country	2010	19	Alejandro	Lady Gaga				486	
+country	2010	20	Highway 20 Ride	Zac Brown Band				412	
+country	2010	21	Mama's Song	Carrie Underwood				415	
+country	2010	22	The Man I Want to Be	Chris Young				411	
+country	2010	23	Giddy On Up	Laura Bell Bundy				380	
+country	2010	24	Our Kind Of Love	Lady A				260	
+country	2010	25	Little Miss	Sugarland				634	
