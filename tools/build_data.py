@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild data.json from Will's full-history CSV exports of CS Era Points.
 
-    python3 tools/build_data.py country.csv pop.csv [--consecutive]
+    python3 tools/build_data.py country.csv pop.csv [country_plays.csv] [--consecutive]
 
 Each CSV is the Country or Pop tab as downloaded: headers in row 2, song and
 artist in columns B and C, then one column per chart week labelled like
@@ -58,6 +58,7 @@ def first_year(rows):
 def main():
     paths = [a for a in sys.argv[1:] if not a.startswith('--')]
     consecutive = '--consecutive' in sys.argv
+    plays_csv = paths[2] if len(paths) > 2 else None  # optional "Plays - Country" export (Song, LW, TW columns)
     old = json.load(open('data.json', encoding='utf-8'))
 
     artists = {norm(a['name']): a for a in old['artists']}
@@ -121,6 +122,11 @@ def main():
             for n, (i, p) in enumerate(run, 1):
                 weekly[i].append({'songId': sid, 'position': p, 'plays': None, 'weeks': n})
 
+        # Weekly running play counts aren't in the archive; keep the ones data.json already has
+        old_plays = {(w['week'], e['songId']): e.get('plays') for w in old.get(key, []) for e in w['entries']}
+        for d, entries in zip(dates, weekly):
+            for e in entries:
+                e['plays'] = old_plays.get((d.isoformat(), e['songId']))
         by_id = {s['id']: s for s in songs}
         history, prev = [], {}
         for d, entries in zip(dates, weekly):
@@ -145,6 +151,19 @@ def main():
             history.append(h)
             prev = {e['songId']: e['position'] for e in entries}
 
+        # A song's play count is a running total, so its latest figure is the largest one seen
+        for w in weekly:
+            for e in w:
+                if e['plays'] is not None:
+                    s = by_id[e['songId']]
+                    s['itunesPlays'] = max(s['itunesPlays'] or 0, e['plays'])
+        if key == 'willboard' and plays_csv:
+            totals = {norm(r[0]): int(r[2]) for r in csv.reader(open(plays_csv, encoding='utf-8'))
+                      if len(r) > 2 and r[2].strip().isdigit()}
+            for s in songs:
+                t = totals.get(norm(s['name']))
+                if t:
+                    s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         data['songs'] += songs
         data[hist] = history
         data[key] = [{'week': d.isoformat(), 'entries': e} for d, e in zip(dates, weekly) if e][-KEEP_WEEKS:]

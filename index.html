@@ -190,6 +190,17 @@ button { font: inherit; color: inherit; }
   background: var(--card-2); color: var(--accent);
 }
 
+/* certification by running play count: 300 silver, 400 gold, 500 platinum, +100 per extra platinum */
+.cert {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; padding: 1px 7px 1px 3px;
+  border-radius: 10px; font-size: 9.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+  vertical-align: 2px; white-space: nowrap; border: 1px solid var(--cert-edge); background: var(--cert-bg); color: var(--cert-ink);
+}
+.cert i { width: 10px; height: 10px; border-radius: 50%; background: var(--cert-disc); box-shadow: inset 0 0 0 2px rgba(255,255,255,.55); }
+.cert.silver   { --cert-bg: #EEEFF1; --cert-edge: #C9CCD1; --cert-ink: #4A4F57; --cert-disc: linear-gradient(135deg,#D9DCE0,#9EA3AA); }
+.cert.gold     { --cert-bg: #FBF1D4; --cert-edge: #E2C26A; --cert-ink: #7A5A00; --cert-disc: linear-gradient(135deg,#F6D774,#C3962A); }
+.cert.platinum { --cert-bg: #EEF1F4; --cert-edge: #9AA6B2; --cert-ink: #2F3A46; --cert-disc: linear-gradient(135deg,#F4F6F8,#7E8B98); }
+
 /* ── FEATURE CARDS ──────────────────────────────────────────── */
 .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
 .feature {
@@ -660,6 +671,14 @@ function nearestWeek(hist, target) {
   return best;
 }
 function seeded(seed) { let s = seed; return () => ((s = (s * 1664525 + 1013904223) | 0) >>> 0) / 4294967296; }
+function certBadge(plays) {
+  if (!plays || plays < 300) return '';
+  const [cls, label] = plays < 400 ? ['silver', 'Silver'] : plays < 500 ? ['gold', 'Gold']
+    : plays < 600 ? ['platinum', 'Platinum'] : ['platinum', `${Math.floor((plays - 400) / 100)}× Platinum`];
+  return `<span class="cert ${cls}" title="${label} · ${plays.toLocaleString()} plays"><i></i>${label}</span>`;
+}
+// Country only for now; latest chart week falls back to the song's current total
+function songCert(s, plays) { return s.chart === 'willboard' ? certBadge(plays ?? s.itunesPlays) : ''; }
 const arrow = '<svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg>';
 
 // Peak as of a given week, from the weekly charts plus the #1 history
@@ -690,6 +709,7 @@ function chartRows(chartId, idx, limit, full) {
       const n = weeksAt1(e.songId, c.hist, cur.week);
       if (n > 1) badge = `<span class="wks1">${n} wks at #1</span>`;
     }
+    if (c.isWb) badge += certBadge(e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null));
     const href = s.artistId ? `#/artist/${s.artistId}` : '#/';
     return `<a class="chart-row" href="${href}">
       <span class="pos">${e.position}</span>
@@ -886,7 +906,7 @@ function renderArtist(id) {
   $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart'], [a.points.toLocaleString(), 'Chart points']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num hide-sm">Points</th></tr>` +
-    songs.map(s => `<tr><td><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></td>
+    songs.map(s => `<tr><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num hide-sm">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
 }
@@ -899,7 +919,7 @@ function renderSongs() {
   $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 150 of ${DATA.songs.length.toLocaleString()} songs by career chart points. Search to find any song.`;
   $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Points</th></tr>` +
     rows.map(s => `<tr class="click" onclick="location.hash='#/artist/${s.artistId}'">
-      <td><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></td>
+      <td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
 }
