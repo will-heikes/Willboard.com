@@ -278,6 +278,11 @@ button { font: inherit; color: inherit; }
 .cmod-head .chart-title .label { color: var(--accent); }
 .cmod-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; white-space: nowrap; }
 .cmod-btn:hover { background: var(--accent); }
+.ye-kick { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.ye-table .th { width: 44px; height: 44px; position: relative; overflow: hidden; background: var(--card-2); }
+.ye-table .th .art { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; font-size: 13px; }
+.ye-table .th img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ye-table td.rank { width: 40px; font-weight: 800; font-size: 18px; }
 .cmod-strip { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 14px; }
 .cm { display: flex; flex-direction: column; min-width: 0; }
 .cm .ph { position: relative; aspect-ratio: 1; overflow: hidden; background: #222; }
@@ -641,12 +646,16 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
     <div class="page-head">
       <div>
         <h1>Year-End Charts</h1>
-        <div class="sub">Every #1, and the songs that spent the most weeks on top.</div>
+        <div class="sub">The biggest songs of each year, from the plays they earned and how high they charted.</div>
       </div>
       <div class="pills" id="ye-chart"></div>
     </div>
-    <div class="pills" id="ye-years" style="margin-bottom:16px"></div>
-    <div class="card" style="overflow:hidden"><table class="table" id="ye-table"></table></div>
+    <div class="pills" id="ye-years" style="margin-bottom:22px"></div>
+    <div class="cmod" id="ye-mod">
+      <div class="ye-kick" id="ye-title"></div>
+      <div class="cmod-strip" id="ye-top"></div>
+    </div>
+    <div class="card" style="overflow:hidden"><table class="table ye-table" id="ye-table"></table></div>
   </section>
 
   <!-- ── AWARDS ── -->
@@ -1135,32 +1144,31 @@ function pills(el, items, active, onPick) {
   el.innerHTML = items.map(([v, l]) => `<button class="pill ${v === active ? 'active' : ''}" data-v="${v}">${l}</button>`).join('');
   el.querySelectorAll('button').forEach(b => b.onclick = () => onPick(isNaN(b.dataset.v) ? b.dataset.v : +b.dataset.v));
 }
-function renderYearEnd() {
-  const c = CHARTS[ui.yeChart], hist = DATA[c.hist];
-  // A year's chart appears only once that year is over (after the last chart week of December)
-  const lastWeek = parseDate(DATA[c.key][DATA[c.key].length - 1].week);
-  const doneThrough = lastWeek.getMonth() === 11 && lastWeek.getDate() >= 25 ? lastWeek.getFullYear() : lastWeek.getFullYear() - 1;
-  const years = [...new Set(hist.map(w => +w.week.slice(0, 4)))].filter(y => y <= doneThrough).sort((a, b) => b - a);
+// Will's year-end lists, plus years ranked by his formula (tools/build_yearend.py → yearend.json)
+let YEAREND = null;
+async function renderYearEnd() {
+  if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
+  const c = CHARTS[ui.yeChart], lists = YEAREND[c.key] || {};
+  const years = Object.keys(lists).map(Number).sort((a, b) => b - a);
   if (!years.includes(ui.yeYear)) ui.yeYear = years[0];
   pills($('ye-chart'), [['hot20', 'Hot 20'], ['pop10', 'Pop 10']], ui.yeChart, v => { ui.yeChart = v; renderYearEnd(); });
   pills($('ye-years'), years.map(y => [y, y]), ui.yeYear, v => { ui.yeYear = v; renderYearEnd(); });
-
-  const tally = {};
-  for (const w of hist) {
-    if (!w.no1 || +w.week.slice(0, 4) !== ui.yeYear) continue;
-    const t = tally[w.no1.songId] ||= { n: 0, first: w.week, ...w.no1 };
-    t.n++;
-  }
-  const rows = Object.values(tally).sort((a, b) => b.n - a.n || a.first.localeCompare(b.first));
-  $('ye-table').innerHTML = `<tr><th>#</th><th>Song</th><th class="hide-sm">First week at #1</th><th class="num">Weeks at #1</th></tr>` +
-    rows.map((r, i) => {
-      const s = SONGS[r.songId] || {};
-      return `<tr class="click" onclick="location.hash='#/artist/${s.artistId}'">
-        <td class="rank">${i + 1}</td>
-        <td><div class="song">${esc(r.songName)}</div><div class="artist">${esc(r.artistName)}</div></td>
-        <td class="hide-sm">${fmtShort(r.first)}</td>
-        <td class="num"><b>${r.n}</b></td></tr>`;
-    }).join('');
+  const rows = lists[ui.yeYear]?.songs || [];
+  $('ye-mod').className = `cmod ${c.cls}`;
+  $('ye-title').textContent = `Top ${rows.length} ${c.isWb ? 'Country' : 'Pop'} Songs of ${ui.yeYear}`;
+  const link = r => SONGS[r.songId]?.artistId ? `#/artist/${SONGS[r.songId].artistId}` : '#/year-end';
+  const facts = r => [r.wks1 ? `${r.wks1} week${r.wks1 === 1 ? '' : 's'} at No. 1` : r.peak ? `Peaked at No. ${r.peak}` : '',
+                      r.wc ? `${r.wc} weeks on chart` : ''].filter(Boolean);
+  $('ye-top').innerHTML = rows.slice(0, 5).map(r => `<a class="cm${r.rank === 1 ? ' first' : ''}" href="${link(r)}">
+      <div class="ph">${artTile(r.artistName, r.rank === 1, undefined, r.name)}<span class="rk">${r.rank}</span></div>
+      <div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div>
+      ${facts(r).map(f => `<div class="mv">${f}</div>`).join('')}</a>`).join('');
+  $('ye-table').innerHTML = rows.length <= 5 ? '' : `<tr><th>#</th><th></th><th>Song</th><th class="num">Peak</th><th class="num hide-sm">Wks at #1</th><th class="num">Wks</th></tr>` +
+    rows.slice(5).map(r => `<tr class="click" onclick="location.hash='${link(r)}'">
+        <td class="rank">${r.rank}</td>
+        <td style="width:44px;padding-right:0"><div class="th">${artTile(r.artistName, false, undefined, r.name)}</div></td>
+        <td><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></td>
+        <td class="num">${r.peak ?? '—'}</td><td class="num hide-sm">${r.wks1 || '—'}</td><td class="num">${r.wc ?? '—'}</td></tr>`).join('');
 }
 
 // ─── AWARDS ─────────────────────────────────────────────────────
