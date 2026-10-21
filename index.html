@@ -388,6 +388,40 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .tag.country { background: var(--country); }
 .tag.pop { background: var(--pop); }
 
+/* awards landing: one headline per year */
+.aw-lead { display: grid; grid-template-columns: 420px 1fr; gap: 32px; align-items: center; background: #121110; color: #fff; margin-bottom: 30px; }
+.aw-lead .ph { aspect-ratio: 1; overflow: hidden; }
+.aw-lead .ph .art { width: 100%; height: 100%; border-radius: 0; font-size: 90px; }
+.aw-lead .txt { padding: 24px 32px 24px 0; }
+.aw-lead .kick { color: var(--dot-yellow); }
+.aw-lead h2 { font-family: var(--f-cond); font-weight: 700; font-size: 50px; line-height: .98; text-transform: uppercase; margin: 10px 0 16px; }
+.aw-lead ul { list-style: none; padding: 0; margin: 0 0 22px; border-top: 1px solid rgba(255,255,255,.18); }
+.aw-lead li { padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.18); font-size: 14px; }
+.aw-lead li small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 2px; }
+.aw-years { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px 20px; }
+.aw-yr { display: block; }
+.aw-yr .ph { position: relative; aspect-ratio: 1; overflow: hidden; background: #222; }
+.aw-yr .ph .art { width: 100%; height: 100%; border-radius: 0; font-size: 40px; }
+.aw-yr .ph .art img { transition: transform .4s; }
+.aw-yr:hover .ph .art img { transform: scale(1.04); }
+.aw-yr .ph b { position: absolute; left: 0; bottom: 0; background: var(--ink); color: #fff; font-family: var(--f-cond); font-weight: 700; font-size: 26px; padding: 5px 10px 4px; line-height: 1; }
+.aw-yr h3 { font-family: var(--f-serif); font-weight: 600; font-size: 18px; line-height: 1.25; margin: 10px 0 0; }
+.aw-yr:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
+/* one awards year */
+.ay-hero { display: grid; grid-template-columns: 400px 1fr; gap: 36px; padding: 30px 0 36px; align-items: start; }
+.ay-photo { margin: 0; aspect-ratio: 4/5; overflow: hidden; position: relative; }
+.ay-photo .art { width: 100%; height: 100%; border-radius: 0; font-size: 90px; }
+.ay-photo figcaption { position: absolute; left: 0; bottom: 0; background: var(--dot-yellow); color: #121110; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 7px 12px; }
+.ay-title { font-family: var(--f-cond); font-weight: 700; font-size: 52px; line-height: .98; text-transform: uppercase; margin: 10px 0 10px; }
+.ay-head { font-family: var(--f-serif); font-size: 24px; font-weight: 600; line-height: 1.25; }
+.ay-retro { font-family: var(--f-serif); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin-top: 16px; max-width: 640px; }
+.ay-retro p { margin: 0 0 14px; }
+.ay-nav { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.ay-nav a { border: 1px solid var(--ink); padding: 7px 14px; font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+.ay-nav a:hover { background: var(--ink); color: #fff; }
+.award .wp { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
+.award .wp .art { width: 56px; height: 56px; border-radius: 0; font-size: 16px; }
+.award .wp .nm { font-weight: 800; font-size: 15px; }
 .awards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .award { padding: 14px 16px; }
 .award h4 { font-family: var(--f-cond); font-weight: 600; font-size: 16px; text-transform: uppercase; letter-spacing: .03em; margin: 0 0 8px; }
@@ -406,6 +440,9 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 
 /* ── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  .aw-lead { grid-template-columns: 320px 1fr; }
+  .aw-years { grid-template-columns: repeat(3, 1fr); }
+  .ay-hero { grid-template-columns: 300px 1fr; }
   .nav { gap: 16px; }
   .hero1 .wrap { grid-template-columns: 1fr 300px; gap: 28px; }
   .hero1-song { font-size: 44px; }
@@ -415,6 +452,15 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .explore .tile:last-child { grid-column: span 2; aspect-ratio: 16/9; }
 }
 @media (max-width: 760px) {
+  .aw-lead { grid-template-columns: 1fr; gap: 0; }
+  .aw-lead .txt { padding: 20px; }
+  .aw-lead h2 { font-size: 36px; }
+  .aw-years { grid-template-columns: 1fr 1fr; gap: 20px 14px; }
+  .aw-yr h3 { font-size: 15.5px; }
+  .ay-hero { grid-template-columns: 1fr; gap: 20px; padding-top: 16px; }
+  .ay-photo { aspect-ratio: 1; margin: 0 -20px; }
+  .ay-title { font-size: 38px; }
+  .ay-head { font-size: 20px; }
   .charts { grid-template-columns: 1fr; }
   .cmod-strip { grid-template-columns: 64%; grid-auto-flow: column; grid-auto-columns: 42%; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -20px; padding: 0 20px 6px; scroll-padding: 0 20px; }
   .cm { scroll-snap-align: start; }
@@ -606,11 +652,27 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
     <div class="page-head">
       <div>
         <h1>Willboard Awards</h1>
-        <div class="sub">Winners and nominees, every year.</div>
+        <div class="sub">Every year's big winners. Pick a year for the full show.</div>
       </div>
       <div class="pills" id="aw-chart"></div>
     </div>
-    <div class="pills" id="aw-years" style="margin-bottom:16px"></div>
+    <div id="aw-lead"></div>
+    <div class="aw-years" id="aw-list"></div>
+  </section>
+
+  <!-- ── AWARDS: ONE YEAR ── -->
+  <section class="page" id="page-award-year">
+    <div class="ay-hero">
+      <figure class="ay-photo" id="ay-photo"></figure>
+      <div>
+        <div class="eyebrow"><a id="ay-back" href="#/awards">← All Willboard Awards</a></div>
+        <h1 class="ay-title" id="ay-title"></h1>
+        <div class="ay-head" id="ay-head"></div>
+        <div class="ay-retro" id="ay-retro"></div>
+        <div class="ay-nav" id="ay-nav"></div>
+      </div>
+    </div>
+    <div class="sec-head"><div><h2 id="ay-winners-h">The Winners</h2></div></div>
     <div class="awards-grid" id="aw-grid"></div>
   </section>
 
@@ -748,8 +810,9 @@ const CERT_STEPS = { willboard: [300, 400, 500, 100], pop: [null, 1250, 2500, 12
 function certBadge(chart, n) {
   const c = certLabel(n, CERT_STEPS[chart]);
   if (!c) return '';
-  const unit = chart === 'pop' ? 'points' : 'plays';
-  return `<span class="cert ${c[0]}" title="${c[1]} · ${n.toLocaleString()} ${unit}"><i></i>${c[1]}</span>`;
+  // Pop certifications come from Will's internal points, so only Hot 20 shows the number behind them
+  const title = chart === 'pop' ? c[1] : `${c[1]} · ${n.toLocaleString()} plays`;
+  return `<span class="cert ${c[0]}" title="${title}"><i></i>${c[1]}</span>`;
 }
 // Hot 20 counts plays, Pop 10 counts chart points
 function songCert(s) { return certBadge(s.chart, s.chart === 'pop' ? s.totalPoints : s.itunesPlays); }
@@ -1075,21 +1138,81 @@ function renderYearEnd() {
 }
 
 // ─── AWARDS ─────────────────────────────────────────────────────
+// Landing: each year's headline winner links to that year's show page, which carries
+// Will's retrospective (retrospectives.json) next to the winner photo, then every category.
+const AW_SHOW = { country: 'Willboard Country Awards', pop: 'Willboard Pop Awards' };
+const AW_TOP = { country: 'Entertainer of the Year', pop: 'Artist of the Year' };
+const AW_KEY = { country: ['Single of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'],
+                 pop: ['Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'] };
+let RETROS = {};
+const awYears = chart => [...new Set(AWARDS[chart].map(n => n.year))].sort((a, b) => b - a);
+const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
+const awName = n => n.song ? `“${n.song}”` : n.album || n.artist || '—';
+const awHref = (chart, year) => `#/awards/${chart}/${year}`;
+function awHeadline(chart, year) {
+  const w = awWinner(chart, year, AW_TOP[chart]);
+  return w ? `${w.artist} wins ${AW_TOP[chart]}` : `Nominations announced`;
+}
 function renderAwards() {
-  const list = AWARDS[ui.awChart];
-  const years = [...new Set(list.map(n => n.year))].sort((a, b) => b - a);
-  if (!years.includes(ui.awYear)) ui.awYear = years[0];
-  pills($('aw-chart'), [['country', 'Country'], ['pop', 'Pop']], ui.awChart, v => { ui.awChart = v; renderAwards(); });
-  pills($('aw-years'), years.map(y => [y, y]), ui.awYear, v => { ui.awYear = v; renderAwards(); });
+  const chart = ui.awChart, years = awYears(chart);
+  pills($('aw-chart'), [['country', 'Country'], ['pop', 'Pop']], chart, v => { ui.awChart = v; renderAwards(); });
+  // Lead with the latest year that has winners
+  const leadYear = years.find(y => awWinner(chart, y, AW_TOP[chart])) ?? years[0];
+  const top = awWinner(chart, leadYear, AW_TOP[chart]);
+  $('aw-lead').innerHTML = `<a class="aw-lead" href="${awHref(chart, leadYear)}">
+    <div class="ph">${artTile(top?.artist || '', true)}</div>
+    <div class="txt"><div class="kick">${leadYear} ${AW_SHOW[chart]}</div><h2>${esc(awHeadline(chart, leadYear))}</h2>
+      <ul>${AW_KEY[chart].map(c => awWinner(chart, leadYear, c)).filter(Boolean).map(n =>
+        `<li><small>${esc(n.category)}</small>${esc(awName(n))}${n.song || n.album ? ` · ${esc(n.artist || '')}` : ''}</li>`).join('')}</ul>
+      <span class="btn-line">See the ${leadYear} show ${arrow}</span></div></a>`;
+  $('aw-list').innerHTML = years.filter(y => y !== leadYear).map(y => {
+    const w = awWinner(chart, y, AW_TOP[chart]);
+    return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(w?.artist || '')}<b>${y}</b></div>
+      <h3>${esc(awHeadline(chart, y))}</h3></a>`;
+  }).join('');
+}
+function awRecap(chart, year) {
+  // Stand-in until Will writes this year's retrospective: who won the most, and the key categories
+  const wins = {};
+  for (const n of AWARDS[chart]) if (n.year === year && n.slot === 'Winner' && n.artist) {
+    const a = primaryArtist(n.artist); (wins[a] ||= []).push(n.category);
+  }
+  const [lead, cats] = Object.entries(wins).sort((a, b) => b[1].length - a[1].length)[0] || [];
+  const out = [];
+  if (lead && cats.length > 1) out.push(`${lead} led the night with ${cats.length} wins, including ${cats.slice(0, 2).join(' and ')}.`);
+  const keys = AW_KEY[chart].map(c => awWinner(chart, year, c)).filter(Boolean)
+    .map(n => `${n.category} went to ${awName(n)}${n.song || n.album ? ` by ${n.artist}` : ''}`);
+  if (keys.length) out.push(keys.join('; ') + '.');
+  if (!out.length) out.push(`The nominees for the ${year} ${AW_SHOW[chart]} are below. Winners are still to come.`);
+  return out.map(p => `<p>${esc(p)}</p>`).join('');
+}
+function renderAwardYear(chart, year) {
+  if (!AWARDS[chart]) chart = 'country';
+  const years = awYears(chart);
+  if (!years.includes(year)) year = years[0];
+  ui.awChart = chart;
+  const top = awWinner(chart, year, AW_TOP[chart]);
+  // Before the show, the photo spot shows the top category's nominees
+  const noms = AWARDS[chart].filter(n => n.year === year && n.category === AW_TOP[chart]).slice(0, 4).map(n => n.artist);
+  $('ay-photo').innerHTML = top ? artTile(top.artist || '', true) + `<figcaption>${esc(AW_TOP[chart])}</figcaption>`
+    : `<div class="mosaic m4">${noms.map(a => artTile(a, true)).join('')}</div><figcaption>${esc(AW_TOP[chart])} nominees</figcaption>`;
+  $('ay-winners-h').textContent = top ? 'The Winners' : 'The Nominees';
+  $('ay-title').textContent = `${year} ${AW_SHOW[chart]}`;
+  $('ay-head').textContent = awHeadline(chart, year) + '.';
+  const retro = RETROS[chart]?.[year];
+  $('ay-retro').innerHTML = retro ? retro.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('') : awRecap(chart, year);
+  const i = years.indexOf(year);
+  $('ay-nav').innerHTML = (years[i + 1] ? `<a href="${awHref(chart, years[i + 1])}">← ${years[i + 1]}</a>` : '') +
+    (years[i - 1] ? `<a href="${awHref(chart, years[i - 1])}">${years[i - 1]} →</a>` : '');
   const byCat = {};
-  for (const n of list) if (n.year === ui.awYear) (byCat[n.category] ||= []).push(n);
+  for (const n of AWARDS[chart]) if (n.year === year) (byCat[n.category] ||= []).push(n);
   $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
-    rows.sort((a, b) => (b.slot === 'Winner') - (a.slot === 'Winner'));
-    return `<div class="card award"><h4>${esc(cat)}</h4>` + rows.map(r => {
-      const win = r.slot === 'Winner';
+    const win = rows.find(r => r.slot === 'Winner');
+    const head = win ? `<div class="wp">${artTile(win.artist || '')}<div><div class="nm">${esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
+    return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).map(r => {
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? esc(r.album) : '';
-      return `<div class="award-row ${win ? 'win' : ''}"><span class="mark">${win ? '★' : '·'}</span>
+      return `<div class="award-row"><span class="mark">·</span>
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}</div></div>`;
     }).join('') + '</div>';
   }).join('');
@@ -1111,12 +1234,12 @@ function renderArtists() {
   const rows = Object.values(artistStats)
     .filter(a => !q || a.name.toLowerCase().includes(q))
     .sort((a, b) => b.points - a.points).slice(0, q ? 200 : 100);
-  $('artist-table').innerHTML = `<tr><th>#</th><th>Artist</th><th class="hide-sm">Charts</th><th class="num">Songs</th><th class="num">#1 hits</th><th class="num hide-sm">Points</th></tr>` +
+  $('artist-table').innerHTML = `<tr><th>#</th><th>Artist</th><th class="hide-sm">Charts</th><th class="num">Songs</th><th class="num">#1 hits</th></tr>` +
     rows.map((a, i) => `<tr class="click" onclick="location.hash='#/artist/${a.id}'">
       <td class="rank">${i + 1}</td>
       <td><div class="song">${esc(a.name)}</div></td>
       <td class="hide-sm">${[...a.charts].map(c => `<span class="tag ${c === 'pop' ? 'pop' : 'country'}">${c === 'pop' ? 'Pop' : 'Country'}</span>`).join(' ')}</td>
-      <td class="num">${a.songs}</td><td class="num">${a.no1}</td><td class="num hide-sm">${a.points.toLocaleString()}</td></tr>`).join('');
+      <td class="num">${a.songs}</td><td class="num">${a.no1}</td></tr>`).join('');
 }
 function renderArtist(id) {
   const a = artistStats[id];
@@ -1124,12 +1247,12 @@ function renderArtist(id) {
   $('artist-h1').textContent = a.name;
   const songs = DATA.songs.filter(s => s.artistId === id).sort((x, y) => x.debutDate.localeCompare(y.debutDate));
   const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
-  $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart'], [a.points.toLocaleString(), 'Chart points']]
+  $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
-  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num hide-sm">Points</th></tr>` +
+  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
     songs.map(s => `<tr><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num hide-sm">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
 }
 
 // ─── SONGS ──────────────────────────────────────────────────────
@@ -1137,12 +1260,12 @@ function renderSongs() {
   const q = $('song-q').value.trim().toLowerCase();
   const all = DATA.songs.filter(s => !q || s.name.toLowerCase().includes(q) || (s.artistName || '').toLowerCase().includes(q));
   const rows = all.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, 150);
-  $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 150 of ${DATA.songs.length.toLocaleString()} songs by career chart points. Search to find any song.`;
-  $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Points</th></tr>` +
+  $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `The 150 biggest of ${DATA.songs.length.toLocaleString()} Willboard songs. Search to find any song.`;
+  $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
     rows.map(s => `<tr class="click" onclick="location.hash='#/artist/${s.artistId}'">
       <td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${(s.totalPoints || 0).toLocaleString()}</td></tr>`).join('');
+      <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
 }
 
 // ─── STORY (a year of #1s) ──────────────────────────────────────
@@ -1167,10 +1290,11 @@ function renderStory(year) {
 function route() {
   if (!DATA) return;
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
-  const [page, arg] = path.split('/');
+  const [page, arg, arg2] = path.split('/');
   let id = 'home';
   if (page === 'hot20' || page === 'pop10') { id = 'chart'; renderChartPage(page); }
   else if (page === 'year-end') { id = 'year-end'; renderYearEnd(); }
+  else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
   else if (page === 'artist')   { id = 'artist'; renderArtist(arg); }
@@ -1191,6 +1315,7 @@ async function init() {
     const [d, a] = await Promise.all([fetch('data.json'), fetch('awards.json')]);
     DATA = await d.json();
     AWARDS = await a.json();
+    RETROS = await fetch('retrospectives.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   } catch (e) {
     console.error(e);
     $('loading').textContent = 'Could not load the chart data. Make sure data.json and awards.json sit next to index.html.';

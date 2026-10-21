@@ -121,7 +121,7 @@ def archive_facts(key, dates, weekly, by_id, names, per_week=3):
                 pts[sid] = pts.get(sid, 0) + points(p)
                 after = pop_cert(pts[sid])
                 if after and after != before:
-                    add('cert', 7 if 'Platinum' in after else 5, f'{t} by {a} goes {after.replace("x", "\u00d7")} with {pts[sid]:,} career chart points', s)
+                    add('cert', 7 if 'Platinum' in after else 5, f'{t} by {a} goes {after.replace("x", "\u00d7")}', s)
             if p <= 5:
                 top5_now.setdefault(aid, []).append((p, s))
             best[sid] = min(was, p)
