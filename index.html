@@ -270,9 +270,29 @@ button { font: inherit; color: inherit; }
 .beat-item .art { width: 104px; height: 78px; font-size: 22px; border-radius: 0; }
 .beat-item h4 { font-family: var(--f-serif); font-weight: 600; font-size: 18px; line-height: 1.25; margin: 5px 0 0; }
 
-/* ── CHART PANELS (home) ────────────────────────────────────── */
-.home-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-.home-charts .chart-card { border: 0; border-top: 6px solid var(--accent); box-shadow: none; border-radius: 0; background: var(--card); }
+/* ── CHART MODULES (home): top five as photo cards ──────────── */
+.cmod { --accent: var(--country); margin-bottom: 30px; }
+.cmod.pop { --accent: var(--pop); }
+.cmod-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.cmod-head .chart-title .wm { font-size: 30px; }
+.cmod-head .chart-title .label { color: var(--accent); }
+.cmod-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; white-space: nowrap; }
+.cmod-btn:hover { background: var(--accent); }
+.cmod-strip { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 14px; }
+.cm { display: flex; flex-direction: column; min-width: 0; }
+.cm .ph { position: relative; aspect-ratio: 1; overflow: hidden; background: #222; }
+.cm .ph .art { width: 100%; height: 100%; border-radius: 0; font-size: 30px; }
+.cm .ph .art img { transition: transform .4s; }
+.cm:hover .ph .art img { transform: scale(1.04); }
+.cm .rk { position: absolute; left: 0; bottom: 0; background: var(--accent); color: #fff; font-family: var(--f-cond); font-weight: 700; font-size: 26px; line-height: 1; padding: 6px 10px 5px; min-width: 40px; text-align: center; }
+.cm .song { margin-top: 9px; font-size: 14px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cm .artist { font-size: 12.5px; }
+.cm .mv { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 5px; }
+.cm .mv.up { color: var(--up); } .cm .mv.down { color: var(--down); } .cm .mv.new { color: var(--eyebrow); }
+.cm.first .rk { font-size: 44px; padding: 8px 14px 6px; }
+.cm.first .song { font-family: var(--f-cond); font-size: 24px; font-weight: 700; text-transform: uppercase; line-height: 1.05; }
+.cm.first .artist { font-size: 14px; }
+.cm .cert { margin: 6px 0 0; align-self: flex-start; }
 
 /* ── FROM THE ARCHIVE ───────────────────────────────────────── */
 .archive { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
@@ -316,14 +336,13 @@ button { font: inherit; color: inherit; }
 .chip.debut { background: var(--dot-yellow); color: #121110; }
 .chip.gainer { background: var(--up); color: #fff; }
 .chip.newpeak { background: var(--ink); color: #fff; }
-.spark { display: block; }
 .full-chart .chart-row.top { padding-top: 16px; padding-bottom: 16px; background: linear-gradient(90deg, var(--card-2), var(--card)); }
 .full-chart .chart-row.top .art { width: 112px; height: 112px; font-size: 30px; }
 .full-chart .chart-row.top .pos { font-size: 56px; }
 .full-chart .chart-row.top .song { font-family: var(--f-cond); font-size: 30px; font-weight: 700; text-transform: uppercase; line-height: 1.02; }
 .full-chart .chart-row.top .artist { font-size: 15px; margin-top: 2px; }
-.full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 40px 60px 1fr 84px 52px 44px 44px 50px; }
-.full-chart .chart-row.top { grid-template-columns: 40px 112px 1fr 84px 52px 44px 44px 50px; }
+.full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 40px 60px 1fr 52px 44px 44px 50px; }
+.full-chart .chart-row.top { grid-template-columns: 40px 112px 1fr 52px 44px 44px 50px; }
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 footer { margin-top: 36px; border-top: 1px solid var(--line); background: var(--card); }
@@ -396,7 +415,11 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .explore .tile:last-child { grid-column: span 2; aspect-ratio: 16/9; }
 }
 @media (max-width: 760px) {
-  .charts, .home-charts { grid-template-columns: 1fr; }
+  .charts { grid-template-columns: 1fr; }
+  .cmod-strip { grid-template-columns: 64%; grid-auto-flow: column; grid-auto-columns: 42%; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -20px; padding: 0 20px 6px; scroll-padding: 0 20px; }
+  .cm { scroll-snap-align: start; }
+  .cmod-head .chart-title .wm { font-size: 22px; }
+  .cmod-btn { padding: 8px 10px; font-size: 10px; }
   .hero1 .wrap { grid-template-columns: 1fr; gap: 0; padding-top: 0; padding-bottom: 30px; }
   .hero1 .wrap > div { order: 2; }
   .hero1-photo { order: 1; margin: 0 -20px 6px !important; box-shadow: none; aspect-ratio: 5/4; }
@@ -507,28 +530,24 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 
     <div class="sec">
       <div class="sec-head"><div><h2>The Charts</h2><div class="sub" id="charts-sub"></div></div></div>
-      <div class="home-charts">
-        <div class="card chart-card country">
-          <div class="chart-head">
+        <div class="cmod country">
+          <div class="cmod-head">
             <div class="chart-title"><span class="wm" data-wm>willboard</span><span class="label">HOT 20</span></div>
-            <a class="view-full" href="#/hot20"><span class="vf-text">Full chart</span> <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
+            <a class="cmod-btn" href="#/hot20">See full chart <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
           </div>
-          <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
-          <div id="home-hot20"></div>
+          <div class="cmod-strip" id="home-hot20"></div>
         </div>
-        <div class="card chart-card pop">
-          <div class="chart-head">
+        <div class="cmod pop">
+          <div class="cmod-head">
             <div class="chart-title"><span class="wm" data-wm>willboard</span><span class="label">POP 10</span></div>
-            <a class="view-full" href="#/pop10"><span class="vf-text">Full chart</span> <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
+            <a class="cmod-btn" href="#/pop10">See full chart <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
           </div>
-          <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
-          <div id="home-pop10"></div>
+          <div class="cmod-strip" id="home-pop10"></div>
         </div>
-      </div>
     </div>
 
     <div class="sec" id="archive-sec">
-      <div class="sec-head"><div><h2>From the Archive</h2><div class="sub">This week in Willboard history, in the chart notes as they were written.</div></div></div>
+      <div class="sec-head"><div><h2>From the Archive</h2><div class="sub" id="archive-sub">This week in Willboard history.</div></div></div>
       <div class="archive" id="archive"></div>
     </div>
 
@@ -541,7 +560,8 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       </div>
     </div>
 
-    <div class="sec">
+    <!-- Through the Years: hidden for now (Will, Oct 21). renderYears() still builds it if this comes back. -->
+    <div class="sec" hidden>
       <div class="sec-head">
         <div><h2>Through the Years</h2><div class="sub">The longest-running Hot 20 #1 of every year since 2010.</div></div>
       </div>
@@ -563,7 +583,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       </div>
     </div>
     <div class="card chart-card full-chart" id="chart-card">
-      <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="hide-sm">Last 10 wks</span><span class="c hide-sm">Peak</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
+      <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c hide-sm">Peak</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
       <div id="chart-rows"></div>
     </div>
   </section>
@@ -783,7 +803,7 @@ function chartRows(chartId, idx, limit, full) {
       <span class="pos">${e.position}</span>
       ${artTile(s.artistName)}
       <span><div class="song">${esc(s.name || '—')}${badge}</div><div class="artist">${esc(s.artistName || '')}${chip}</div></span>
-      ${full ? `<span class="hide-sm">${sparkline(e.songId, c, idx, c.isWb ? 20 : 10)}</span><span class="lw hide-sm">${peakUpTo(e.songId, c, idx)}</span>` : ''}
+      ${full ? `<span class="lw hide-sm">${peakUpTo(e.songId, c, idx)}</span>` : ''}
       <span class="lw">${p ?? '—'}</span>
       <span class="lw" title="Weeks on chart">${e.weeks ?? '—'}</span>
       <span class="move">${moveCell(p, e.position)}</span>
@@ -830,12 +850,27 @@ function renderHome() {
   $('ticker').innerHTML = tick + tick;
 
   $('charts-sub').textContent = `Week of ${fmtLong(week)}`;
-  $('home-hot20').innerHTML = chartRows('hot20', last, 10);
-  $('home-pop10').innerHTML = chartRows('pop10', pop.length - 1, 10);
+  $('home-hot20').innerHTML = chartStrip('hot20', last);
+  $('home-pop10').innerHTML = chartStrip('pop10', pop.length - 1);
 
   renderArchive(week);
   renderExplore();
-  renderYears();
+}
+
+// Home chart module: the top five as photo cards, #1 largest
+function chartStrip(chartId, idx) {
+  const c = CHARTS[chartId], weeks = DATA[c.key], prev = prevMapOf(weeks, idx);
+  return weeks[idx].entries.slice(0, 5).map(e => {
+    const s = SONGS[e.songId] || {}, p = prev[e.songId]?.position;
+    const n1 = e.position === 1 ? weeksAt1(e.songId, c.hist, weeks[idx].week) : 0;
+    const mv = n1 > 1 ? `<div class="mv">${n1} weeks at No. 1</div>`
+      : p === undefined ? `<div class="mv new">${e.weeks === 1 ? 'New this week' : 'Re-entry'}</div>`
+      : p > e.position ? `<div class="mv up">▲ Up from ${p}</div>` : p < e.position ? `<div class="mv down">▼ Down from ${p}</div>` : `<div class="mv">Holds at ${p}</div>`;
+    const cert = c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null)) : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
+    return `<a class="cm${e.position === 1 ? ' first' : ''}" href="#/artist/${s.artistId}">
+      <div class="ph">${artTile(s.artistName, e.position === 1)}<span class="rk">${e.position}</span></div>
+      <div class="song">${esc(s.name || '—')}</div><div class="artist">${esc(s.artistName || '')}</div>${mv}${e.position === 1 ? cert : ''}</a>`;
+  }).join('');
 }
 
 // ─── STORIES (written like Will's own chart notes) ──────────────
@@ -899,7 +934,12 @@ function weekStories(wbIdx, popIdx) {
   return out;
 }
 
-// ─── FROM THE ARCHIVE: Will's chart facts from this week in past years ──
+// ─── FROM THE ARCHIVE: this week in past years ──────────────────
+// Will's own written chart notes, plus stories written from the chart data (archive.json):
+// first top fives, certifications, debuts, milestones. #1 stories are played down.
+let ARCHIVE = null;
+const ARCH_KICK = { note: 'Chart note', top5: 'Top five', top10: 'Top ten', cert: 'Certified', debut: 'Debut', leap: 'Big mover', weeks: 'Milestone', double: 'Double up', no1: 'No. 1' };
+const isNo1Text = t => /#1\b|atop|No\. 1|\brises \d+-1\b|number one/i.test(t);
 function factArtist(text) {
   for (const m of text.matchAll(/'([^']{2,60})'/g)) {
     const hit = DATA.songs.find(s => s.chart === 'willboard' && s.name.toLowerCase() === m[1].toLowerCase());
@@ -907,22 +947,40 @@ function factArtist(text) {
   }
   return null;
 }
-function renderArchive(week) {
-  const now = parseDate(week), picks = [];
-  const years = [...new Set((DATA.facts || []).map(f => +f.week.slice(0, 4)))].sort((a, b) => b - a);
-  for (const y of years) {
+async function renderArchive(week) {
+  if (!ARCHIVE) ARCHIVE = await fetch('archive.json').then(r => r.json()).catch(() => []);
+  const now = parseDate(week), thisYear = now.getFullYear();
+  const notes = (DATA.facts || []).map(f => {
+    const no1 = isNo1Text(f.text);
+    return { ...f, type: no1 ? 'no1' : 'note', score: no1 ? 3 : 9, artist: factArtist(f.text), note: true };
+  });
+  const near = f => {
+    const y = +f.week.slice(0, 4);
+    if (y >= thisYear) return false;
     const t = new Date(now); t.setFullYear(y);
-    const near = DATA.facts.filter(f => +f.week.slice(0, 4) === y && Math.abs(parseDate(f.week) - t) < 4 * 864e5);
-    if (!near.length) continue;
-    const f = near.find(f => factArtist(f.text)) || near[0];
-    picks.push(f);
-    if (picks.length === 3) break;
+    return Math.abs(parseDate(f.week) - t) < 4 * 864e5;
+  };
+  const rand = seeded(Math.floor(now / 6048e5));
+  const pool = [...notes, ...ARCHIVE].filter(near)
+    .map(f => ({ ...f, rank: f.score - (f.type === 'no1' ? 4 : 0) + rand() * 3 }))
+    .sort((a, b) => b.rank - a.rank);
+  // Three stories from three different years, no two of the same kind
+  const picks = [], years = new Set(), kinds = new Set();
+  for (const strict of [true, false]) for (const f of pool) {
+    if (picks.length === 3 || picks.includes(f)) continue;
+    const y = f.week.slice(0, 4);
+    if (years.has(y) || (strict && kinds.has(f.type))) continue;
+    picks.push(f); years.add(y); kinds.add(f.type);
   }
+  picks.sort((a, b) => b.week.localeCompare(a.week));
   $('archive-sec').style.display = picks.length ? '' : 'none';
-  $('archive').innerHTML = picks.map(f => `<div class="clip">
-      ${artTile(factArtist(f.text) || '')}
-      <div><div class="clip-year">${f.week.slice(0, 4)}</div><div class="clip-week">Week of ${fmtShort(f.week)}</div>
-      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p><div class="clip-by">From the Willboard chart notes</div></div></div>`).join('');
+  $('archive').innerHTML = picks.map(f => {
+    const chart = f.chart === 'pop' ? 'Pop 10' : 'Hot 20';
+    return `<div class="clip">
+      ${artTile(f.artist || '')}
+      <div><div class="clip-year">${f.week.slice(0, 4)}</div><div class="clip-week">${chart} · ${ARCH_KICK[f.type]} · ${fmtShort(f.week)}</div>
+      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></div>`;
+  }).join('');
 }
 
 // ─── EXPLORE: photo mosaics ─────────────────────────────────────
@@ -961,22 +1019,6 @@ function renderYears() {
   }).join('');
 }
 
-// Sparkline of a song's last 10 chart weeks (higher = better)
-function sparkline(songId, c, idx, size) {
-  const weeks = DATA[c.key], pts = [];
-  for (let i = Math.max(0, idx - 9); i <= idx; i++) {
-    const e = weeks[i].entries.find(x => x.songId === songId);
-    pts.push(e ? e.position : null);
-  }
-  const W = 76, H = 26, step = W / 9;
-  const y = p => 2 + (p - 1) / (size - 1) * (H - 4);
-  let d = '', pen = false;
-  pts.forEach((p, i) => { if (p == null) { pen = false; return; } d += `${pen ? 'L' : 'M'}${(i * step).toFixed(1)} ${y(p).toFixed(1)}`; pen = true; });
-  const lp = pts[pts.length - 1];
-  return `<svg class="spark" width="${W + 4}" height="${H}" viewBox="-2 0 ${W + 4} ${H}" aria-hidden="true">
-    <path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-    ${lp ? `<circle cx="${W}" cy="${y(lp)}" r="2.6" fill="var(--accent)"/>` : ''}</svg>`;
-}
 
 // ─── FULL CHART PAGE ────────────────────────────────────────────
 function renderChartPage(chartId) {
