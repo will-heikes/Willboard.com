@@ -341,13 +341,36 @@ button { font: inherit; color: inherit; }
 .chip.debut { background: var(--dot-yellow); color: #121110; }
 .chip.gainer { background: var(--up); color: #fff; }
 .chip.newpeak { background: var(--ink); color: #fff; }
-.full-chart .chart-row.top { padding-top: 16px; padding-bottom: 16px; background: linear-gradient(90deg, var(--card-2), var(--card)); }
-.full-chart .chart-row.top .art { width: 112px; height: 112px; font-size: 30px; }
-.full-chart .chart-row.top .pos { font-size: 56px; }
-.full-chart .chart-row.top .song { font-family: var(--f-cond); font-size: 30px; font-weight: 700; text-transform: uppercase; line-height: 1.02; }
-.full-chart .chart-row.top .artist { font-size: 15px; margin-top: 2px; }
-.full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 40px 60px 1fr 52px 44px 44px 50px; }
-.full-chart .chart-row.top { grid-template-columns: 40px 112px 1fr 52px 44px 44px 50px; }
+
+/* Full chart: position, movement, photo, song, certification, then stacked LW / Peak / Wks.
+   Each row is tinted with a colour taken from its own picture (tintRows). */
+.full-chart .chart-cols { display: none; }
+.full-chart .chart-row {
+  grid-template-columns: 44px 30px 76px 1fr auto 74px; column-gap: 18px;
+  padding: 14px 22px; position: relative; isolation: isolate;
+  background: linear-gradient(90deg, rgb(var(--tint, 0 0 0) / .26) 0%, rgb(var(--tint, 0 0 0) / .10) 45%, transparent 80%);
+  transition: background .4s;
+}
+.full-chart .chart-row:hover { background-color: var(--card-2); }
+.full-chart .chart-row .art { width: 76px; height: 76px; font-size: 20px; box-shadow: 0 6px 16px -8px rgb(var(--tint, 0 0 0) / .7); }
+.full-chart .chart-row .pos { font-size: 32px; }
+.full-chart .chart-row .song { font-size: 15.5px; }
+.full-chart .chart-row .move { flex-direction: column; align-items: center; gap: 3px; }
+.full-chart .chart-row .move small { font-size: 10px; font-weight: 700; color: var(--muted); }
+.full-chart .certcol .cert { margin: 0; font-size: 10.5px; padding: 3px 9px 3px 4px; }
+.full-chart .stats { display: grid; gap: 3px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.full-chart .stats div { display: flex; justify-content: space-between; gap: 8px; }
+.full-chart .stats small { font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.full-chart .stats b { font-weight: 700; }
+.full-chart .chart-row.top {
+  grid-template-columns: 44px 30px 150px 1fr auto 74px; padding: 26px 22px;
+  background: linear-gradient(90deg, rgb(var(--tint, 0 0 0) / .5) 0%, rgb(var(--tint, 0 0 0) / .2) 50%, rgb(var(--tint, 0 0 0) / .04) 100%);
+}
+.full-chart .chart-row.top .art { width: 150px; height: 150px; font-size: 36px; box-shadow: 0 14px 30px -12px rgb(var(--tint, 0 0 0) / .8); }
+.full-chart .chart-row.top .pos { font-size: 64px; }
+.full-chart .chart-row.top .song { font-family: var(--f-cond); font-size: 34px; font-weight: 700; text-transform: uppercase; line-height: 1.02; }
+.full-chart .chart-row.top .artist { font-size: 15px; margin-top: 4px; }
+.full-chart .cert-inline { display: none; }
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 footer { margin-top: 36px; border-top: 1px solid var(--line); background: var(--card); }
@@ -374,7 +397,6 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .week-nav select { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 6px 10px; font: inherit; font-size: 12.5px; }
 .pill.active { background: var(--ink); color: var(--card); border-color: var(--ink); }
 .pills { display: flex; gap: 6px; flex-wrap: wrap; }
-.full-chart .chart-row .art { width: 60px; height: 52px; }
 
 .table { width: 100%; border-collapse: collapse; }
 .table th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-bottom: 1px solid var(--line); }
@@ -494,10 +516,6 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .explore { grid-template-columns: 1fr; }
   .explore .tile, .explore .tile:last-child { grid-column: auto; aspect-ratio: 4/3; }
   .years { grid-auto-columns: 140px; }
-  .full-chart .chart-row.top { grid-template-columns: 28px 76px 1fr 26px 28px 30px; }
-  .full-chart .chart-row.top .art { width: 76px; height: 76px; }
-  .full-chart .chart-row.top .pos { font-size: 36px; }
-  .full-chart .chart-row.top .song { font-size: 22px; }
   .topbar .wrap { height: 62px; }
   .topbar .wm { font-size: 34px; }
   .menu-btn { display: flex; margin-left: auto; }
@@ -516,9 +534,17 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .view-full { padding: 6px; }
   .chart-cols, .chart-row { grid-template-columns: 24px 40px 1fr 26px 28px 30px; column-gap: 8px; padding-left: 12px; padding-right: 12px; }
   .chart-row .art { width: 44px; height: 40px; }
-  .full-chart .chart-row, .full-chart .chart-cols { grid-template-columns: 28px 40px 1fr 26px 28px 30px; }
   .full-chart .hide-sm { display: none; }
-  .full-chart .chart-row .art { width: 44px; height: 40px; }
+  .full-chart .chart-row { grid-template-columns: 26px 18px 56px 1fr 58px; column-gap: 10px; padding: 12px 12px; }
+  .full-chart .chart-row .art { width: 56px; height: 56px; }
+  .full-chart .chart-row .pos { font-size: 22px; }
+  .full-chart .certcol { display: none; }
+  .full-chart .cert-inline { display: block; margin-top: 4px; }
+  .full-chart .cert-inline .cert { margin: 0; }
+  .full-chart .chart-row.top { grid-template-columns: 26px 18px 92px 1fr 58px; padding: 18px 12px; }
+  .full-chart .chart-row.top .art { width: 92px; height: 92px; }
+  .full-chart .chart-row.top .pos { font-size: 36px; }
+  .full-chart .chart-row.top .song { font-size: 22px; }
   .timeline-years span:nth-child(even), .timeline-dots .tl-dot:nth-child(even) { display: none; }
   footer .wrap { flex-wrap: wrap; }
   .foot-links { margin-left: 0; gap: 20px; }
@@ -875,6 +901,37 @@ function moveCell(prev, pos) {
   if (prev === pos) return '<span class="same"></span>';
   return prev > pos ? '<span class="tri-up" title="Up"></span>' : '<span class="tri-down" title="Down"></span>';
 }
+// A colour from each row's picture (cover if there is one, else the artist photo) tints that row.
+// Pixels are weighted by saturation so the tint follows the picture's design, not its greys.
+const TINTS = {};
+function pictureTint(img) {
+  if (TINTS[img.src] !== undefined) return TINTS[img.src];
+  try {
+    const cv = document.createElement('canvas'); cv.width = cv.height = 16;
+    const cx = cv.getContext('2d', { willReadFrequently: true }); cx.drawImage(img, 0, 0, 16, 16);
+    const px = cx.getImageData(0, 0, 16, 16).data;
+    let r = 0, g = 0, b = 0, w = 0;
+    for (let i = 0; i < px.length; i += 4) {
+      const mx = Math.max(px[i], px[i + 1], px[i + 2]), mn = Math.min(px[i], px[i + 1], px[i + 2]);
+      const wt = (mx - mn) / 255 + .04;
+      r += px[i] * wt; g += px[i + 1] * wt; b += px[i + 2] * wt; w += wt;
+    }
+    // Push the colour away from grey so muted photos still give a clear tint
+    const c = [r / w, g / w, b / w], grey = (c[0] + c[1] + c[2]) / 3;
+    return TINTS[img.src] = c.map(v => Math.round(Math.max(0, Math.min(255, grey + (v - grey) * 2)))).join(' ');
+  } catch { return TINTS[img.src] = null; }
+}
+function tintRows(root) {
+  root.querySelectorAll('.chart-row').forEach(row => {
+    const apply = () => {
+      const img = [...row.querySelectorAll('.art img')].filter(i => i.complete && i.naturalWidth).pop();
+      const tint = img && pictureTint(img);
+      if (tint) row.style.setProperty('--tint', tint);
+    };
+    row.querySelectorAll('.art img').forEach(i => i.addEventListener('load', apply));
+    apply();
+  });
+}
 function chartRows(chartId, idx, limit, full) {
   const c = CHARTS[chartId], weeks = DATA[c.key];
   const cur = weeks[idx], prev = weeks[idx - 1];
@@ -886,25 +943,22 @@ function chartRows(chartId, idx, limit, full) {
   return cur.entries.slice(0, limit).map(e => {
     const s = SONGS[e.songId] || {};
     const p = prevMap[e.songId];
-    let badge = '';
-    if (e.position === 1) {
-      const n = weeksAt1(e.songId, c.hist, cur.week);
-      if (n > 1) badge = `<span class="wks1">${n} wks at #1</span>`;
-    }
-    badge += c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null))
-                    : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
     const href = s.artistId ? `#/artist/${s.artistId}` : '#/';
     let chip = '';
     if (e.weeks === 1 && e.songId === debutId) chip = '<span class="chip debut">Hot Shot Debut</span>';
     else if (e.songId === gainerId) chip = '<span class="chip gainer">Gainer</span>';
-    return `<a class="chart-row${full && e.position === 1 ? ' top' : ''}" href="${href}">
+    const cert = c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null))
+                        : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
+    const wks1 = e.position === 1 ? weeksAt1(e.songId, c.hist, cur.week) : 0;
+    const moved = p === undefined ? '' : p > e.position ? `<small>+${p - e.position}</small>` : p < e.position ? `<small>−${e.position - p}</small>` : '';
+    return `<a class="chart-row${e.position === 1 ? ' top' : ''}" href="${href}">
       <span class="pos">${e.position}</span>
-      ${artTile(s.artistName)}
-      <span><div class="song">${esc(s.name || '—')}${badge}</div><div class="artist">${esc(s.artistName || '')}${chip}</div></span>
-      ${full ? `<span class="lw hide-sm">${peakUpTo(e.songId, c, idx)}</span>` : ''}
-      <span class="lw">${p ?? '—'}</span>
-      <span class="lw" title="Weeks on chart">${e.weeks ?? '—'}</span>
-      <span class="move">${moveCell(p, e.position)}</span>
+      <span class="move">${moveCell(p, e.position)}${moved}</span>
+      ${artTile(s.artistName, e.position <= 3, undefined, s.name)}
+      <span><div class="song">${esc(s.name || '—')}${wks1 > 1 ? `<span class="wks1">${wks1} wks at #1</span>` : ''}</div>
+        <div class="artist">${esc(s.artistName || '')}${chip}</div>${cert ? `<div class="cert-inline">${cert}</div>` : ''}</span>
+      <span class="certcol">${cert}</span>
+      <span class="stats"><div><small>LW</small><b>${p ?? '—'}</b></div><div><small>Peak</small><b>${peakUpTo(e.songId, c, idx)}</b></div><div><small>Wks</small><b>${e.weeks ?? '—'}</b></div></span>
     </a>`;
   }).join('');
 }
@@ -1132,6 +1186,7 @@ function renderChartPage(chartId) {
   $('wk-prev').disabled = idx === 0;
   $('wk-next').disabled = idx === weeks.length - 1;
   $('chart-rows').innerHTML = chartRows(chartId, idx, 99, true);
+  tintRows($('chart-rows'));
 }
 function stepWeek(d) {
   const weeks = DATA[CHARTS[ui.chart].key];
