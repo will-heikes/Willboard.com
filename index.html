@@ -1825,6 +1825,9 @@ const AW_KEY = { country: ['Single of the Year', 'Song of the Year', 'Album of t
                  pop: ['Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'] };
 let RETROS = {};
 const awYears = chart => [...new Set(AWARDS[chart].map(n => n.year))].sort((a, b) => b - a);
+// Nominees in A to Z order by artist ("The Chainsmokers" files under C), winner kept apart (Will)
+const awArtistKey = n => (n.artist || n.album || '').replace(/^the\s+/i, '');
+const byAwArtist = (a, b) => awArtistKey(a).localeCompare(awArtistKey(b), undefined, { sensitivity: 'base' });
 const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
@@ -1881,7 +1884,7 @@ function renderAwards() {
   const items = top
     ? AW_KEY[chart].map(c => awWinner(chart, leadYear, c)).filter(Boolean).map(n =>
         `<li><small>${esc(n.category)}</small>${esc(awName(n))}${n.song || n.album ? ` · ${esc(n.artist || '')}` : ''}</li>`)
-    : AW_KEY[chart].map(c => AWARDS[chart].filter(n => n.year === leadYear && n.category === c)).filter(r => r.length).map(r =>
+    : AW_KEY[chart].map(c => AWARDS[chart].filter(n => n.year === leadYear && n.category === c).sort(byAwArtist)).filter(r => r.length).map(r =>
         `<li><small>${esc(r[0].category)} nominees</small>${esc(r.map(n => n.song || n.album ? awName(n) : n.artist).join(', '))}</li>`);
   $('aw-lead').innerHTML = `<a class="aw-lead" href="${awHref(chart, leadYear)}">
     <div class="ph">${artTile(awFace(chart, leadYear), true, leadYear)}</div>
@@ -1935,7 +1938,7 @@ function renderAwardYear(chart, year) {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
     const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
-    return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).map(r => {
+    return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).sort(byAwArtist).map(r => {
       const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
