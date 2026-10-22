@@ -904,46 +904,6 @@ country	2025	37	Stupid	Kacey Musgraves	10	0	20	248	1742
 country	2025	38	Genevieve	Sugarland	3	0	14	216	1649
 country	2025	39	Can't Say No	Colbie Caillat, Ryan Hurd	12	0	17	212	1462
 country	2025	40	The Tunnel	Lori McKenna, Stephen Wilson Jr	1	2	8	172	1776
-pop	2025	1	Ich Komme	Erika Vikman	1	7	14	255	5485
-pop	2025	2	Zjerm	Shkodra Elektonike	1	3	12	183	4900
-pop	2025	3	Juno	Sabrina Carpenter	1	1	19	168	4788
-pop	2025	4	Swallow My Tears	Gwen Stefani	1	3	19	193	4149
-pop	2025	5	Manchild	Sabrina Carpenter	1	2	14	202	3675
-pop	2025	6	Bite My Tongue	Cassandra Coleman	1	3	14	151	3994
-pop	2025	7	Twilight Zone	Ariana Grande	1	4	11	126	3793
-pop	2025	8	Somebody Else's	Gwen Stefani	1	2	11	120	2582
-pop	2025	9	Pink Pony Club	Chappell Roan	1	4	10	101	2883
-pop	2025	10	Golden	Huntr/x	1	1	10	118	2173
-pop	2025	11	Sweet n' Low	Peach PRC	2	0	10	106	2390
-pop	2025	12	Antidote	Daughtry	1	4	7	81	2594
-pop	2025	13	Let You Go	Demi Lovato	1	2	8	90	2289
-pop	2025	14	The Subway	Chappell Roan	1	3	7	93	2193
-pop	2025	15	Ego	Agnes	1	1	9	81	2283
-pop	2025	16	Ga Dan	Roxy Dekker	1	4	6	53	2394
-pop	2025	17	Tantrum	Jonas Brothers	2	0	7	68	1776
-pop	2025	18	Secret	Peach PRC	1	1	8	71	1583
-pop	2025	19	Red Wine Supernova	Chappell Roan	3	0	11	73	1262
-pop	2025	20	Cry For Me	The Weeknd	5	0	9	82	844
-pop	2025	21	Marriage	Nelly Furtado	1	1	6	41	1694
-pop	2025	22	Superestrella	Aitana	2	0	4	58	1193
-pop	2025	23	Tennis Court	The Chainsmokers	4	0	10	55	1176
-pop	2025	24	All the Love	Katy Perry	4	0	8	62	851
-pop	2025	25	Bara Bada Bastu	Kaj	3	0	5	50	1087
-pop	2025	26	Worth Your Summer	Chloe Tang	5	0	8	60	758
-pop	2025	27	Talking to Yourself	Carly Rae Jepsen	4	0	8	43	960
-pop	2025	28	Fast	Demi Lovato	2	0	4	46	891
-pop	2025	29	True	Kayla Rae	2	0	4	21	1400
-pop	2025	30	Running on Blue	Chloe Tang, Casandra	1	2	3	20	1400
-pop	2025	31	Back to Me	Rudimental, Jess Glynne	2	0	4	53	685
-pop	2025	32	End of the World	Miley Cyrus	3	0	6	42	886
-pop	2025	33	Coming of Age	Cassandra Coleman	4	0	5	45	794
-pop	2025	34	Nobody's Son	Sabrina Carpenter	4	0	6	45	776
-pop	2025	35	Hoe Het Is	Roxy Dekker, Idaly, Ronnie Flex	4	0	5	43	686
-pop	2025	36	Jouw Idee	Roxy Dekker	1	1	4	28	993
-pop	2025	37	Like Jennie	Jennie	2	0	5	25	995
-pop	2025	38	Friend of Mine	Rihanna	4	0	5	38	692
-pop	2025	39	Tit for Tat	Tate McRae	4	0	5	40	581
-pop	2025	40	Call Me When You Break Up	Selena Gomez, Benny Blanco, Gracie Abrams	5	0	7	28	686
 country	2019	1	Neon Church	Tim McGraw				676	
 country	2019	2	More Hearts Than Mine	Ingrid Andress				602	
 country	2019	3	Beautiful Lies	Jana Kramer				531	
@@ -994,3 +954,43 @@ country	2010	22	Giddy On Up	Laura Bell Bundy				380
 country	2010	23	Our Kind Of Love	Lady A				260	
 country	2010	24	Little Miss	Sugarland				634	
 country	2010	25	Today Was a Fairytale	Taylor Swift				521	
+pop	2025	1	Honesty	Nelly Furtado				264	6587
+pop	2025	2	Ich Komme	Erika Vikman	1	7	14	255	5485
+pop	2025	3	Zjerm	Shkodra Elektonike	1	3	12	183	4900
+pop	2025	4	Juno	Sabrina Carpenter	1	1	19	168	4788
+pop	2025	5	Swallow My Tears	Gwen Stefani	1	3	19	193	4149
+pop	2025	6	Manchild	Sabrina Carpenter	1	2	14	202	3675
+pop	2025	7	Bite My Tongue	Cassandra Coleman	1	3	14	151	3994
+pop	2025	8	Twilight Zone	Ariana Grande	1	4	11	126	3793
+pop	2025	9	Somebody Else's	Gwen Stefani	1	2	11	120	2582
+pop	2025	10	Pink Pony Club	Chappell Roan	1	4	10	101	2883
+pop	2025	11	Golden	Huntr/x	1	1	10	118	2173
+pop	2025	12	Sweet n' Low	Peach PRC	2	0	10	106	2390
+pop	2025	13	Antidote	Daughtry	1	4	7	81	2594
+pop	2025	14	Let You Go	Demi Lovato	1	2	8	90	2289
+pop	2025	15	The Subway	Chappell Roan	1	3	7	93	2193
+pop	2025	16	Ego	Agnes	1	1	9	81	2283
+pop	2025	17	Ga Dan	Roxy Dekker	1	4	6	53	2394
+pop	2025	18	Tantrum	Jonas Brothers	2	0	7	68	1776
+pop	2025	19	Secret	Peach PRC	1	1	8	71	1583
+pop	2025	20	Red Wine Supernova	Chappell Roan	3	0	11	73	1262
+pop	2025	21	Cry For Me	The Weeknd	5	0	9	82	844
+pop	2025	22	Marriage	Nelly Furtado	1	1	6	41	1694
+pop	2025	23	Superestrella	Aitana	2	0	4	58	1193
+pop	2025	24	Tennis Court	The Chainsmokers	4	0	10	55	1176
+pop	2025	25	All the Love	Katy Perry	4	0	8	62	851
+pop	2025	26	Bara Bada Bastu	Kaj	3	0	5	50	1087
+pop	2025	27	Worth Your Summer	Chloe Tang	5	0	8	60	758
+pop	2025	28	Fast	Demi Lovato	2	0	4	46	891
+pop	2025	29	Talking to Yourself	Carly Rae Jepsen	4	0	8	43	960
+pop	2025	30	Back to Me	Rudimental, Jess Glynne	2	0	4	53	685
+pop	2025	31	End of the World	Miley Cyrus	3	0	6	42	886
+pop	2025	32	True	Kayla Rae	2	0	4	21	1400
+pop	2025	33	Coming of Age	Cassandra Coleman	4	0	5	45	794
+pop	2025	34	Running on Blue	Chloe Tang, Casandra	1	2	3	20	1400
+pop	2025	35	Nobody's Son	Sabrina Carpenter	4	0	6	45	776
+pop	2025	36	Hoe Het Is	Roxy Dekker, Idaly, Ronnie Flex	4	0	5	43	686
+pop	2025	37	Jouw Idee	Roxy Dekker	1	1	4	28	993
+pop	2025	38	Friend of Mine	Rihanna	4	0	5	38	692
+pop	2025	39	Like Jennie	Jennie	2	0	5	25	995
+pop	2025	40	Tit for Tat	Tate McRae	4	0	5	40	581

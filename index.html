@@ -302,9 +302,9 @@ button { font: inherit; color: inherit; }
 .ye-nav a, .ye-nav span.off { font-family: var(--f-cond); font-weight: 700; font-size: 22px; color: var(--muted); padding: 6px 10px; }
 .ye-nav a:hover { color: var(--ink); }
 .ye-nav span.off { visibility: hidden; }
-.ye-nav select { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
-.ye-nav .yr { position: relative; }
-.ye-nav .yr::after { content: "▾"; font-size: 14px; color: var(--muted); position: absolute; right: -16px; bottom: 10px; }
+.ye-nav .yr { text-align: center; }
+.ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border: 1px solid var(--line); border-radius: 20px; padding: 6px 30px 6px 14px; font: 600 12.5px var(--f-body); cursor: pointer; }
 .ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
   background: linear-gradient(110deg, rgb(var(--tint, 0 0 0) / .45), rgb(var(--tint, 0 0 0) / .12) 60%, var(--card)); }
 .ye-lead .art { width: 150px; height: 150px; font-size: 34px; box-shadow: 0 14px 28px -14px rgb(var(--tint, 0 0 0) / .9); }
@@ -1291,7 +1291,7 @@ async function renderYearEnd(year) {
   ui.yeYear = year;
   const i = years.indexOf(year), prev = years[i - 1], next = years[i + 1];
   $('ye-nav').innerHTML = (prev ? `<a href="#/year-end/${prev}">← ${prev}</a>` : '<span class="off">←</span>') +
-    `<div class="yr"><h2>${year}</h2><select aria-label="Pick a year">${years.slice().reverse().map(y => `<option${y === year ? ' selected' : ''}>${y}</option>`).join('')}</select></div>` +
+    `<div class="yr"><h2>${year}</h2><select aria-label="Jump to a year">${years.slice().reverse().map(y => `<option value="${y}"${y === year ? ' selected' : ''}>${y === year ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
     (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>');
   $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
   const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
