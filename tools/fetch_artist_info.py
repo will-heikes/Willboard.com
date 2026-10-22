@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Look up each Willboard act on Wikidata: a person or a group, and a person's birth date and gender.
 
-Run from the Willboard.com repo folder (next to data.json), or from the "Artist info" Action:
+Run from the Willboard.com repo folder (next to data.json), or from the "Fetch artist photos" Action with "info" ticked:
     python3 tools/fetch_artist_info.py            # acts not yet in artist_info.json
     python3 tools/fetch_artist_info.py --all      # every act again
 
