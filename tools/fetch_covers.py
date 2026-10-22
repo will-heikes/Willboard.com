@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Download album and single covers for the Willboard Awards (and, optionally, every chart song).
+"""Download album and single covers for the Willboard Awards and albums page (and, optionally, every chart song).
 
 Run from the Willboard.com repo folder (next to data.json and awards.json):
-    python3 tools/fetch_covers.py                 # every album and song in awards.json
+    python3 tools/fetch_covers.py                 # every album and song in awards.json, every album in albums.json
     python3 tools/fetch_covers.py --all-songs     # also every song that has charted
     python3 tools/fetch_covers.py --redo "Carly Pearce - Hummingbird"
     python3 tools/fetch_covers.py --tidy-only     # just rename covers you uploaded
@@ -107,6 +107,12 @@ def wanted(all_songs):
                 items[cover_name(artist, n['album'])] = ('album', artist, n['album'])
             if n.get('song'):
                 items.setdefault(cover_name(artist, n['song']), ('song', artist, n['song']))
+    # Every album with a charted song (albums.json, from tools/import_itunes.py)
+    if os.path.exists('albums.json'):
+        for al in json.load(open('albums.json', encoding='utf-8')):
+            artist = primary_artist(al['artist'], acts)
+            if artist:
+                items.setdefault(cover_name(artist, al['name'].strip()), ('album', artist, al['name'].strip()))
     if all_songs:
         for s in data['songs']:
             artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
@@ -119,6 +125,7 @@ def main():
     ap.add_argument('--all-songs', action='store_true')
     ap.add_argument('--redo', default='', help='"Artist - Title" entries to fetch again, comma separated')
     ap.add_argument('--tidy-only', action='store_true')
+    ap.add_argument('--minutes', type=float, default=0, help='stop after this long, so a long run still saves what it got')
     args = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
     tidy()
@@ -127,11 +134,15 @@ def main():
     redo = {cover_name(*e.split(' - ', 1)) for e in args.redo.split(',') if ' - ' in e}
 
     items = wanted(args.all_songs)
-    rows, got = [], 0
-    for i, (fname, (kind, artist, title)) in enumerate(sorted(items.items()), 1):
+    rows, got, start = [], 0, time.time()
+    # Albums first: they're the ones the albums page needs
+    for i, (fname, (kind, artist, title)) in enumerate(sorted(items.items(), key=lambda x: (x[1][0] != 'album', x[0])), 1):
         path = os.path.join(OUT, fname)
         if os.path.exists(path) and fname not in redo:
             continue
+        if args.minutes and time.time() - start > args.minutes * 60:
+            print(f'\nOut of time at {i}/{len(items)}; run again to fetch the rest')
+            break
         hit, status = None, 'not found'
         for source in (from_deezer, from_itunes):
             try:
