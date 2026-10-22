@@ -343,6 +343,7 @@ button { font: inherit; color: inherit; }
 .archive { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 .clip { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: start; }
 .clip .art { width: 64px; height: 64px; font-size: 18px; border-radius: 50%; }
+.clip:hover .clip-year, .clip:hover .clip-week { color: var(--accent); }
 .clip-year { font-family: var(--f-cond); font-weight: 700; font-size: 44px; line-height: .9; color: var(--history); }
 .clip-week { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 4px 0 10px; }
 .clip p { font-family: var(--f-serif); font-size: 16.5px; line-height: 1.5; margin: 0; color: var(--ink-soft); }
@@ -1265,10 +1266,10 @@ async function renderArchive(week) {
   $('archive-sec').style.display = picks.length ? '' : 'none';
   $('archive').innerHTML = picks.map(f => {
     const chart = f.chart === 'pop' ? 'Pop 10' : 'Hot 20';
-    return `<div class="clip">
+    return `<a class="clip" href="#/${f.chart === 'pop' ? 'pop10' : 'hot20'}/${f.week}" title="See the ${chart} for this week">
       ${artTile(f.artist || '')}
       <div><div class="clip-year">${f.week.slice(0, 4)}</div><div class="clip-week">${chart} · ${ARCH_KICK[f.type]} · ${fmtShort(f.week)}</div>
-      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></div>`;
+      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></a>`;
   }).join('');
 }
 
@@ -1589,6 +1590,21 @@ function heroTint(hero, page) {
   hero.querySelectorAll('.art img').forEach(i => i.addEventListener('load', tint));
   tint();
 }
+// data.json keeps the last 52 charts in full; every older chart is rebuilt from runs.json,
+// so the chart page can show any week back to 2010 (older Hot 20 weeks have no play counts)
+function fullHistory(key) {
+  const r = RUNS?.[key];
+  if (!r) return;
+  const weeks = r.weeks.map(week => ({ week, entries: [] }));
+  for (const [songId, run] of Object.entries(r.runs)) {
+    let n = 0;
+    run.slice(1).forEach((p, i) => { if (p) weeks[run[0] + i].entries.push({ songId, position: p, weeks: ++n }); });
+  }
+  const recent = Object.fromEntries(DATA[key].map(w => [w.week, w]));
+  const all = weeks.filter(w => w.entries.length && !recent[w.week]);
+  for (const w of all) w.entries.sort((a, b) => a.position - b.position);
+  DATA[key] = [...all, ...DATA[key]].sort((a, b) => a.week.localeCompare(b.week));
+}
 async function renderSong(id) {
   const s = SONGS[id];
   if (!s) { location.hash = '#/songs'; return; }
@@ -1712,7 +1728,18 @@ function route() {
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
   const [page, arg, arg2] = path.split('/');
   let id = 'home';
-  if (page === 'hot20' || page === 'pop10') { id = 'chart'; renderChartPage(page); }
+  if (page === 'hot20' || page === 'pop10') {
+    id = 'chart';
+    // #/hot20/2014-03-06 opens that week's chart (the nearest one, if that week was skipped)
+    const weeks = DATA[CHARTS[page].key];
+    let best = weeks.length - 1;
+    if (arg) {
+      const t = parseDate(arg);
+      weeks.forEach((w, i) => { if (Math.abs(parseDate(w.week) - t) < Math.abs(parseDate(weeks[best].week) - t)) best = i; });
+    }
+    ui.weekIdx[page] = best;
+    renderChartPage(page);
+  }
   else if (page === 'year-end') { id = 'year-end'; renderYearEnd(+arg); }
   else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
@@ -1740,6 +1767,9 @@ async function init() {
     AWARDS = await a.json();
     RETROS = await fetch('retrospectives.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ALBUMS = await fetch('albums.json').then(r => r.ok ? r.json() : []).catch(() => []);
+    RUNS = await fetch('runs.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    fullHistory('willboard');
+    fullHistory('pop');
     const ids = new Set();
     for (const al of ALBUMS) {
       let id = `${slugify(al.artist.split(/,| & /)[0])}--${slugify(al.name)}` || 'album';
