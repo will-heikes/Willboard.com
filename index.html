@@ -1456,7 +1456,7 @@ function decadeBanner(dec) {
 // and his decade lists (tools/build_decade.py → decade.json).
 // Like Billboard's year-end hub: each year (or decade) opens on a card per chart showing its top 5,
 // and each card opens the full list at #/year-end/<year>/<chart>.
-let YEAREND = null, DECADE = null;
+let YEAREND = null, DECADE = null, YEAR_TOPS = null;
 const DECADES = ['2010s'];
 const n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
 const wks1Text = v => v ? `<b>${v}</b> wk${v === 1 ? '' : 's'} at #1` : '';
@@ -1487,7 +1487,10 @@ function spanCharts(span) {
     add('pop-artists', 'Pop Artists', 'pop', artists(d.pop?.artists || []));
     add('country-albums', 'Country Albums', '', albums(d.willboard?.albums || []));
   } else {
-    const t = yearTops(from);
+    // Will's weighted totals (tools/build_year_tops.py → year_tops.json); points earned that year otherwise
+    const t = yearTops(from), w = YEAR_TOPS?.[span] || {};
+    const ranks = l => l.map((x, i) => ({ ...x, rank: i + 1 }));
+    for (const k of ['willboard', 'pop']) if (w[k]) t[k] = { artists: ranks(w[k].artists), albums: ranks(w[k].albums) };
     add('country-songs', 'Country Songs', '', songs(YEAREND.willboard?.[span]?.songs || []));
     add('pop-songs', 'Pop Songs', 'pop', songs(YEAREND.pop?.[span]?.songs || []));
     add('country-artists', 'Country Artists', '', artists(t.willboard?.artists || []));
@@ -1504,6 +1507,7 @@ const listRow = r => `<a class="lrow" href="${r.href}"><span class="rk">${r.rank
 async function renderYearEnd(span, slug) {
   if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
   if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
+  if (!YEAR_TOPS) YEAR_TOPS = await fetch('year_tops.json').then(r => r.json()).catch(() => ({}));
   for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
   const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
   const spans = [...years.map(String), ...DECADES.filter(d => DECADE[d])];
