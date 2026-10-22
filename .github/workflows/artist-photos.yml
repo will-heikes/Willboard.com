@@ -41,6 +41,8 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history, so the newest of two uploads for one photo wins
       - if: github.event_name == 'workflow_dispatch' && !inputs.covers
         run: python3 tools/fetch_artist_photos.py --redo "$REDO" --wiki "$WIKI"
         env:

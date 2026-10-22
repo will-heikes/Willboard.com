@@ -20,6 +20,7 @@ import csv
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import argparse
@@ -63,22 +64,36 @@ def wiki_photo(name):
 ERA = re.compile(r'^(.*?)[\s_-]+((?:19|20)\d\d)\.(jpe?g|png|webp)$', re.I)
 
 
+def committed(path):
+    """When git last committed this file (0 if never), to tell which upload is newest."""
+    out = subprocess.run(['git', 'log', '-1', '--format=%ct', '--', path], capture_output=True, text=True).stdout.strip()
+    return int(out or 0)
+
+
 def index_eras():
     """Rename uploaded era photos to <slug>-<year>.jpg and list them in _years.json."""
     # Acts with a year in their name (The 1975) are main photos, not era photos
     data = json.load(open('data.json', encoding='utf-8'))
     acts = frozenset(a['name'] for a in data['artists'])
     known = {slugify(primary_artist(s['artistName'], acts)) for s in data['songs']}
-    years = {}
-    for f in sorted(os.listdir(OUT)):
+    found = {}
+    for f in os.listdir(OUT):
         m = ERA.match(f)
-        if not m or slugify(os.path.splitext(f)[0]) in known:
-            continue
-        slug, year = slugify(m.group(1)), int(m.group(2))
+        if m and slugify(os.path.splitext(f)[0]) not in known:
+            found.setdefault((slugify(m.group(1)), int(m.group(2))), []).append(f)
+    years = {}
+    for (slug, year), files in sorted(found.items()):
         target = f'{slug}-{year}.jpg'
-        if f != target:
-            os.replace(os.path.join(OUT, f), os.path.join(OUT, target))
-            print(f'renamed {f} -> {target}')
+        # The same artist and year uploaded more than once (a .jpg and a .webp, say):
+        # the most recently committed file wins, and an upload beats the tidied copy
+        keep = max(files, key=lambda f: (committed(os.path.join(OUT, f)), f != target))
+        for f in files:
+            if f != keep and f != target:
+                os.remove(os.path.join(OUT, f))
+                print(f'dropped {f}, older than {keep}')
+        if keep != target:
+            os.replace(os.path.join(OUT, keep), os.path.join(OUT, target))
+            print(f'renamed {keep} -> {target}')
         years.setdefault(slug, []).append(year)
     with open(os.path.join(OUT, '_years.json'), 'w', encoding='utf-8') as fh:
         json.dump({k: sorted(set(v)) for k, v in sorted(years.items())}, fh, indent=0)
