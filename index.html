@@ -1371,6 +1371,12 @@ function pills(el, items, active, onPick) {
   el.innerHTML = items.map(([v, l]) => `<button class="pill ${v === active ? 'active' : ''}" data-v="${v}">${l}</button>`).join('');
   el.querySelectorAll('button').forEach(b => b.onclick = () => onPick(isNaN(b.dataset.v) ? b.dataset.v : +b.dataset.v));
 }
+// Weeks a song spent on its chart within a span of years (Will: year-end counts that year only)
+function weeksIn(songId, from, to) {
+  const s = SONGS[songId];
+  if (!s || !RUNS?.[s.chart]?.runs[s.id]) return null;
+  return songRun(s).filter(w => w.pos && +w.week.slice(0, 4) >= from && +w.week.slice(0, 4) <= to).length;
+}
 // Will's year-end lists, plus years ranked by his formula (tools/build_yearend.py → yearend.json)
 let YEAREND = null;
 async function renderYearEnd(year) {
@@ -1396,7 +1402,7 @@ async function renderYearEnd(year) {
   const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
   $('ye-split').classList.toggle('solo', solo);
   $('ye-split').innerHTML = (solo ? ['hot20'] : ['hot20', 'pop10']).map(id => {
-    const c = CHARTS[id], rows = YEAREND[c.key]?.[year]?.songs || [];
+    const c = CHARTS[id], rows = (YEAREND[c.key]?.[year]?.songs || []).map(r => ({ ...r, wc: weeksIn(r.songId, year, year) ?? r.wc }));
     const head = `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${rows.length ? `Top ${rows.length} songs of ${year}` : ''}</small></div>`;
     if (!rows.length) return `<div class="col ${c.cls}">${head}<div class="empty">No ${c.isWb ? 'Country' : 'Pop'} year-end chart for ${year}.</div></div>`;
     const [top, ...rest] = rows;
@@ -1427,7 +1433,7 @@ async function renderDecade(dec) {
   const col = (cls, title, sub, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${sub}</small></div>${body}</div>`;
   $('ye-split').classList.remove('solo');
   $('ye-split').innerHTML = [['willboard', 'Country', ''], ['pop', 'Pop', 'pop']].map(([k, name, cls]) => {
-    const rows = d[k]?.songs || [];
+    const rows = (d[k]?.songs || []).map(r => ({ ...r, wc: weeksIn(r.songId, from, from + 9) ?? r.wc }));
     if (!rows.length) return col(cls, name, '', '<div class="empty">No list yet.</div>');
     const [top, ...rest] = rows;
     return col(cls, name, `Top ${rows.length} songs of the ${dec}`, `
