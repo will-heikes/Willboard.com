@@ -583,8 +583,6 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .ay-retro { font-family: var(--f-serif); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin-top: 16px; max-width: 640px; }
 .ay-retro p { margin: 0 0 14px; }
 .ay-nav { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-.ay-nav a { border: 1px solid var(--ink); padding: 7px 14px; font-size: 12px; font-weight: 700; letter-spacing: .06em; }
-.ay-nav a:hover { background: var(--ink); color: #fff; }
 .award .wp { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
 .award .wp .art { width: 56px; height: 56px; border-radius: 0; font-size: 16px; }
 .award .wp .nm { font-weight: 800; font-size: 15px; }
@@ -1630,7 +1628,14 @@ function awMostNominated(chart, year) {
 const awFace = (chart, year) => awWinner(chart, year, AW_TOP[chart])?.artist || awMostNominated(chart, year).artist;
 function renderAwards() {
   const chart = ui.awChart, years = awYears(chart);
-  pills($('aw-chart'), [['country', 'Country'], ['pop', 'Pop']], chart, v => { ui.awChart = v; renderAwards(); });
+  // Show tabs like the year-end ones: each carries its latest headline winner's photo
+  $('aw-chart').className = 'ye-tabs';
+  $('aw-chart').innerHTML = ['country', 'pop'].filter(c => AWARDS[c]).map(c => {
+    const y = awYears(c)[0], w = awWinner(c, y, AW_TOP[c]);
+    return `<a class="ye-tab ${c === 'pop' ? 'pop' : ''} ${c === chart ? 'on' : ''}" href="#/awards" data-v="${c}">${artTile(awFace(c, y), false, y)}
+      <span>${c === 'pop' ? 'Pop' : 'Country'} Awards<small>${w ? `${y} · ${esc(w.artist || awName(w))}` : `${y} nominees`}</small></span></a>`;
+  }).join('');
+  $('aw-chart').querySelectorAll('a').forEach(a => a.onclick = e => { e.preventDefault(); ui.awChart = a.dataset.v; renderAwards(); });
   // Lead with the latest year that has winners
   // The banner is always the latest show, whether it has winners yet or only nominees
   const leadYear = years[0];
@@ -1681,8 +1686,10 @@ function renderAwardYear(chart, year) {
   const retro = RETROS[chart]?.[year];
   $('ay-retro').innerHTML = retro ? retro.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('') : awRecap(chart, year);
   const i = years.indexOf(year);
-  $('ay-nav').innerHTML = (years[i + 1] ? `<a href="${awHref(chart, years[i + 1])}">← ${years[i + 1]}</a>` : '') +
-    (years[i - 1] ? `<a href="${awHref(chart, years[i - 1])}">${years[i - 1]} →</a>` : '');
+  const navTab = (y, label) => `<a class="ye-tab ${chart === 'pop' ? 'pop' : ''}" href="${awHref(chart, y)}">${artTile(awFace(chart, y), false, y)}
+    <span>${label}<small>${esc(awTitle(chart, y))}</small></span></a>`;
+  $('ay-nav').className = 'ye-tabs ay-nav';
+  $('ay-nav').innerHTML = (years[i + 1] ? navTab(years[i + 1], `← ${years[i + 1]}`) : '') + (years[i - 1] ? navTab(years[i - 1], `${years[i - 1]} →`) : '');
   const byCat = {};
   for (const n of AWARDS[chart]) if (n.year === year) (byCat[n.category] ||= []).push(n);
   $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
