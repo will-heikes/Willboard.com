@@ -290,6 +290,7 @@ button { font: inherit; color: inherit; }
 .cmod-btn:hover { background: var(--accent); }
 /* Country and Pop side by side (Year-End, Songs, Artists) */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.split.one { grid-template-columns: 1fr; max-width: 860px; }
 .split .col { --accent: var(--country); }
 .split .col.pop { --accent: var(--pop); }
 .col-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 4px solid var(--accent); padding: 10px 0 12px; }
@@ -645,6 +646,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       <a href="#/year-end" data-nav="year-end">Year-End</a>
       <a href="#/awards" data-nav="awards">Awards</a>
       <a href="#/artists" data-nav="artists">Artists</a>
+      <a href="#/albums" data-nav="albums">Albums</a>
       <a href="#/songs" data-nav="songs">Songs</a>
     </nav>
     <a class="search-btn" href="#/songs?focus=1" aria-label="Search">
@@ -826,6 +828,31 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
     <div class="song-sec" id="song-more-wrap">
       <div class="sec-h"><h2 id="song-more-h">More from the artist</h2></div>
       <div class="more-songs" id="song-more"></div>
+    </div>
+  </section>
+
+  <!-- ── ALBUMS ── -->
+  <section class="page" id="page-albums">
+    <div class="page-head">
+      <div>
+        <h1>Albums</h1>
+        <div class="sub">Every album with a song on the Willboard charts, ranked by plays.</div>
+      </div>
+      <input class="search" id="album-q" placeholder="Search albums or artists…" autocomplete="off">
+    </div>
+    <div class="split one" id="album-split"></div>
+  </section>
+
+  <!-- ── ALBUM ── -->
+  <section class="page" id="page-album">
+    <div class="song-hero" id="album-hero"></div>
+    <div class="song-sec">
+      <div class="sec-h"><h2>Charted Songs</h2><span class="sub" id="album-songs-sub"></span></div>
+      <div class="card" style="overflow:hidden"><table class="table" id="album-songs"></table></div>
+    </div>
+    <div class="song-sec" id="album-more-wrap">
+      <div class="sec-h"><h2 id="album-more-h">More albums</h2></div>
+      <div class="more-songs" id="album-more"></div>
     </div>
   </section>
 
@@ -1347,6 +1374,7 @@ const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year &
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
 const albumCert = a => a ? certBadge('album', a.plays) : '';
+const albumLink = (a, html) => a ? `<a href="#/album/${a.id}">${html}</a>` : html;
 // Any of the album's charted songs may have the cover, so stack them all; ones that don't load drop out
 function albumTile(al) {
   const covers = al.songs.slice(0, 6).map(id => coverUrl(al.artist, SONGS[id]?.name)).filter(Boolean)
@@ -1444,13 +1472,15 @@ function renderAwardYear(chart, year) {
   for (const n of AWARDS[chart]) if (n.year === year) (byCat[n.category] ||= []).push(n);
   $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
-    const head = win ? `<div class="wp">${artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}${win.album ? albumCert(findAlbum(win.album, win.artist)) : ''}</div></div>` : '';
+    const wal = win?.album && findAlbum(win.album, win.artist);
+    const head = win ? `<div class="wp">${artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}${albumCert(wal)}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).map(r => {
+      const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
-      const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? esc(r.album) : '';
+      const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
       const thumb = r.song || r.album ? artTile(r.artist || '', false, year, r.song || r.album) : '<span class="mark">·</span>';
       return `<div class="award-row${r.song || r.album ? ' has-art' : ''}">${thumb}
-        <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}${r.album ? albumCert(findAlbum(r.album, r.artist)) : ''}</div></div>`;
+        <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}${albumCert(al)}</div></div>`;
     }).join('') + '</div>';
   }).join('');
 }
@@ -1499,7 +1529,7 @@ function renderArtist(id) {
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
   const albums = ALBUMS.filter(al => al.artistId === id);
   $('artist-albums-wrap').hidden = !albums.length;
-  $('artist-albums').innerHTML = albums.map(al => `<a href="#/song/${al.songs[0]}">${albumTile(al)}
+  $('artist-albums').innerHTML = albums.map(al => `<a href="#/album/${al.id}">${albumTile(al)}
     <div class="song">${esc(al.name)}</div><div class="meta">${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div>${albumCert(al)}</a>`).join('');
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
     songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
@@ -1537,6 +1567,17 @@ function runGraph(run, size, width) {
     <style>.ax{font:600 11px var(--f-body,Inter),sans-serif;fill:var(--muted)}.d{fill:var(--card);stroke:rgb(var(--tint));stroke-width:2.5}.d1{fill:rgb(var(--tint));stroke:var(--card);stroke-width:2}circle{cursor:pointer}</style>
     ${g}${area}<path d="${d}" fill="none" stroke="rgb(var(--tint))" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${dots}</svg><div class="tip"></div>`;
 }
+// The page takes its colour from whichever picture in the hero loads on top
+function heroTint(hero, page) {
+  const tint = () => {
+    const img = [...hero.querySelectorAll('.art img')].filter(i => i.complete && i.naturalWidth).pop();
+    const t = img && pictureTint(img);
+    if (t) page.style.setProperty('--tint', t);
+  };
+  page.style.setProperty('--tint', '120 100 80');
+  hero.querySelectorAll('.art img').forEach(i => i.addEventListener('load', tint));
+  tint();
+}
 async function renderSong(id) {
   const s = SONGS[id];
   if (!s) { location.hash = '#/songs'; return; }
@@ -1554,17 +1595,9 @@ async function renderSong(id) {
       <h1>${esc(s.name)}</h1>
       <div class="by"><a href="#/artist/${s.artistId}">${esc(s.artistName)}</a></div>
       ${songCert(s)}
-      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <b>${esc(ALBUM_OF[s.id].name)}</b>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
+      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(ALBUM_OF[s.id].name)}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
-  const page = $('page-song');
-  const tint = () => {
-    const img = [...hero.querySelectorAll('.art img')].filter(i => i.complete && i.naturalWidth).pop();
-    const t = img && pictureTint(img);
-    if (t) page.style.setProperty('--tint', t);
-  };
-  page.style.setProperty('--tint', '120 100 80');
-  hero.querySelectorAll('.art img').forEach(i => i.addEventListener('load', tint));
-  tint();
+  heroTint(hero, $('page-song'));
 
   const last = on[on.length - 1];
   $('song-run-sub').textContent = on.length ? `${fmtShort(on[0].week)} to ${fmtShort(last.week)}${run.length > on.length ? ' · gaps are weeks off the chart' : ''}` : '';
@@ -1587,6 +1620,46 @@ async function renderSong(id) {
   $('song-more').innerHTML = more.map(o => `<a href="#/song/${o.id}">${artTile(o.artistName, false, undefined, o.name)}
     <div class="song">${esc(o.name)}</div><div class="meta">${o.chart === 'pop' ? 'Pop 10' : 'Hot 20'} · Peak #${o.peakPosition ?? '—'} · ${o.debutDate.slice(0, 4)}</div></a>`).join('');
   window.scrollTo(0, 0);
+}
+
+// ─── ALBUMS ─────────────────────────────────────────────────────
+// Album plays come from Will's iTunes library, which holds his country collection, so one list
+function renderAlbums() {
+  const q = $('album-q').value.trim().toLowerCase();
+  const all = ALBUMS.filter(al => !q || al.name.toLowerCase().includes(q) || al.artist.toLowerCase().includes(q));
+  const rows = all.slice(0, q ? 150 : 100);
+  $('album-split').innerHTML = `<div class="col country"><div class="col-h"><h2>Top Albums</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 100 of ${ALBUMS.length}`}</small></div>` +
+    (rows.length ? rows.map((al, i) => `<a class="lrow" href="#/album/${al.id}"><span class="rk">${i + 1}</span>${albumTile(al)}
+      <span><div class="song">${esc(al.name)}</div><div class="artist">${esc(al.artist)} · ${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div></span>
+      <span class="meta">${albumCert(al)}</span></a>`).join('') : '<div class="empty">No matches.</div>') + '</div>';
+}
+function renderAlbum(id) {
+  const al = ALBUMS.find(a => a.id === id);
+  if (!al) { location.hash = '#/albums'; return; }
+  const songs = al.songs.map(sid => SONGS[sid]).filter(Boolean);
+  const peak = Math.min(...songs.map(s => s.peakPosition ?? 99));
+  const no1 = songs.filter(s => s.peakPosition === 1).length;
+  const first = songs[0]?.debutDate;
+  const stats = [[songs.length, 'Charted songs'], [no1 || '—', '#1 hits'], [peak < 99 ? `#${peak}` : '—', 'Best peak'],
+                 [al.plays.toLocaleString(), 'Plays'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']];
+  const hero = $('album-hero');
+  hero.innerHTML = `${albumTile(al).replace(/loading="lazy"/g, '')}
+    <div><div class="kick">Album${first ? ` · ${first.slice(0, 4)}` : ''}</div>
+      <h1>${esc(al.name)}</h1>
+      <div class="by"><a href="#/artist/${al.artistId}">${esc(al.artist)}</a></div>
+      ${albumCert(al)}
+      <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
+  heroTint(hero, $('page-album'));
+  $('album-songs-sub').textContent = `${al.tracks} track${al.tracks === 1 ? '' : 's'} in the library`;
+  $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
+    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
+      <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+  const more = ALBUMS.filter(o => o.artistId === al.artistId && o !== al);
+  $('album-more-wrap').hidden = !more.length;
+  $('album-more-h').textContent = `More from ${primaryArtist(al.artist)}`;
+  $('album-more').innerHTML = more.map(o => `<a href="#/album/${o.id}">${albumTile(o)}
+    <div class="song">${esc(o.name)}</div><div class="meta">${o.songs.length} charted song${o.songs.length > 1 ? 's' : ''}</div>${albumCert(o)}</a>`).join('');
 }
 
 // ─── SONGS ──────────────────────────────────────────────────────
@@ -1633,12 +1706,14 @@ function route() {
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
   else if (page === 'artist')   { id = 'artist'; renderArtist(arg); }
+  else if (page === 'albums')   { id = 'albums'; renderAlbums(); }
+  else if (page === 'album')    { id = 'album'; renderAlbum(arg); }
   else if (page === 'songs')    { id = 'songs'; renderSongs(); }
   else if (page === 'song')     { id = 'song'; renderSong(arg); }
   else if (page === 'story')    { id = 'story'; renderStory(+arg); }
   else if (page === 'about')    { id = 'about'; }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
-  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === page || (page === 'artist' && a.dataset.nav === 'artists')));
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === page || a.dataset.nav === page + 's'));
   document.querySelector('.nav').classList.remove('open');
   if (query && query.includes('focus')) setTimeout(() => $('song-q').focus(), 0);
   window.scrollTo(0, 0);
@@ -1653,7 +1728,13 @@ async function init() {
     AWARDS = await a.json();
     RETROS = await fetch('retrospectives.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ALBUMS = await fetch('albums.json').then(r => r.ok ? r.json() : []).catch(() => []);
-    for (const al of ALBUMS) for (const sid of al.songs) ALBUM_OF[sid] = al;
+    const ids = new Set();
+    for (const al of ALBUMS) {
+      let id = `${slugify(al.artist.split(/,| & /)[0])}--${slugify(al.name)}` || 'album';
+      while (ids.has(id)) id += '-2';
+      ids.add(al.id = id);
+      for (const sid of al.songs) ALBUM_OF[sid] = al;
+    }
   } catch (e) {
     console.error(e);
     $('loading').textContent = 'Could not load the chart data. Make sure data.json and awards.json sit next to index.html.';
@@ -1674,6 +1755,7 @@ async function init() {
   $('wk-select').onchange = e => { ui.weekIdx[ui.chart] = +e.target.value; renderChartPage(ui.chart); };
   $('artist-q').oninput = renderArtists;
   $('song-q').oninput = renderSongs;
+  $('album-q').oninput = renderAlbums;
 
   renderHome();
   window.addEventListener('hashchange', route);
