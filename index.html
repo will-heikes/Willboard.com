@@ -290,6 +290,18 @@ button { font: inherit; color: inherit; }
 .beat-item:last-child { border-bottom: 0; }
 .beat-item .art { width: 104px; height: 78px; font-size: 22px; border-radius: 0; }
 .beat-item h4 { font-family: var(--f-serif); font-weight: 600; font-size: 18px; line-height: 1.25; margin: 5px 0 0; }
+/* Chart Beat articles (articles.json) */
+.article { max-width: 720px; margin: 0 auto; padding: 28px 0 40px; }
+.article h1 { font-family: var(--f-serif); font-weight: 700; font-size: 40px; line-height: 1.12; letter-spacing: -.01em; margin: 10px 0 10px; }
+.article .dek { font-family: var(--f-serif); font-size: 21px; line-height: 1.4; color: var(--ink-soft); margin: 0; }
+.article .byline { font-size: 13px; color: var(--muted); margin: 14px 0 20px; }
+.article .ph { aspect-ratio: 16/9; overflow: hidden; margin: 0 0 24px; }
+.article .ph .art { width: 100%; height: 100%; border-radius: 0; font-size: 90px; }
+.article .body { font-family: var(--f-serif); font-size: 19px; line-height: 1.65; }
+.article .body p { margin: 0 0 18px; }
+.article .body a, .article .more { text-decoration: underline; text-underline-offset: 3px; }
+.article .more { font-weight: 700; font-size: 15px; }
+.beat-lead .dek { font-family: var(--f-serif); font-size: 17px; line-height: 1.4; color: var(--ink-soft); margin: 8px 0 0; }
 
 /* ── CHART MODULES (home): top five as photo cards ──────────── */
 .cmod { --accent: var(--country); margin-bottom: 30px; }
@@ -736,6 +748,9 @@ body.on-ask .ask-fab { display: none; }
   .sec { margin-top: 34px; }
   .sec-head h2 { font-size: 28px; }
   .beat-lead h3 { font-size: 24px; }
+  .article h1 { font-size: 30px; }
+  .article .dek { font-size: 18px; }
+  .article .body { font-size: 17.5px; }
   .beat-item { grid-template-columns: 1fr 84px; }
   .beat-item .art { width: 84px; height: 64px; }
   .beat-item h4 { font-size: 16.5px; }
@@ -1045,6 +1060,11 @@ body.on-ask .ask-fab { display: none; }
       <div class="pills" id="story-years"></div>
     </div>
     <div class="card" style="overflow:hidden"><table class="table" id="story-table"></table></div>
+  </section>
+
+  <!-- ── CHART BEAT ARTICLE ── -->
+  <section class="page" id="page-beat">
+    <article class="article" id="article"></article>
   </section>
 
   <!-- ── ASK ── -->
@@ -1446,13 +1466,14 @@ function renderHome() {
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('') + (cert ? `<div>${cert}<small>Certified</small></div>` : '');
   $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at No. 1` : 'New No. 1'}</figcaption>`;
 
-  // Chart Beat: this week's stories, Pop 10 #1 leads
+  // Chart Beat: the newest articles first, then this week's stories (Pop 10 #1 leads those)
   const stories = weekStories(last, pop.length - 1);
-  const [first, ...rest] = stories;
+  const beat = [...ARTICLES.slice(0, 3).map(articleCard), ...stories];
+  const [first, ...rest] = beat;
   $('beat-sub').textContent = `The stories behind the week of ${fmtLong(week)}.`;
   $('beat-lead').innerHTML = first ? `<a class="beat-lead" href="${first.href}">
       <div class="ph">${artTile(first.artist, true)}</div>
-      <div class="kick ${first.chart}">${first.kicker}</div><h3>${esc(first.headline)}</h3></a>` : '';
+      <div class="kick ${first.chart}">${first.kicker}</div><h3>${esc(first.headline)}</h3>${first.dek ? `<p class="dek">${esc(first.dek)}</p>` : ''}</a>` : '';
   $('beat-list').innerHTML = rest.slice(0, 4).map(t => `<a class="beat-item" href="${t.href}">
       <div><div class="kick ${t.chart}">${t.kicker}</div><h4>${esc(t.headline)}</h4></div>${artTile(t.artist)}</a>`).join('');
   const tick = [lead, ...stories].map(t => `<span>${esc(t.headline)}</span>`).join('');
@@ -2861,6 +2882,23 @@ function renderStory(year) {
 }
 
 // ─── ROUTER ─────────────────────────────────────────────────────
+// Chart Beat articles: articles.json, newest first. [[Artist Name]] in the text links to the artist's page.
+let ARTICLES = [];
+const articleCard = a => ({ chart: a.chart === 'pop10' ? 'pop' : '', kicker: a.kicker, headline: a.headline, dek: a.dek, artist: a.artist, href: `#/beat/${a.id}` });
+const articleText = t => t.replace(/\[\[([^\]]+)\]\]/g, (m, n) => ARTIST_ID[n] ? `<a href="#/artist/${ARTIST_ID[n]}">${esc(n)}</a>` : esc(n));
+function renderArticle(id) {
+  const a = ARTICLES.find(x => x.id === id);
+  $('article').innerHTML = !a ? `<div class="eyebrow"><a href="#/">← Home</a></div><h1>Story not found</h1>` : `
+    <div class="eyebrow"><a href="#/">← Home</a></div>
+    <div class="kick ${a.chart === 'pop10' ? 'pop' : ''}" style="margin-top:14px">${esc(a.kicker)}</div>
+    <h1>${esc(a.headline)}</h1>
+    ${a.dek ? `<p class="dek">${esc(a.dek)}</p>` : ''}
+    <div class="byline">${fmtLong(a.date)}</div>
+    <div class="ph">${artTile(a.artist, true)}</div>
+    <div class="body">${a.body.map(p => `<p>${articleText(p)}</p>`).join('')}</div>
+    ${a.link ? `<a class="more" href="${a.link}">${esc(a.linkText || 'Read more')} ${arrow}</a>` : ''}`;
+}
+
 function route() {
   if (!DATA) return;
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
@@ -2888,6 +2926,7 @@ function route() {
   else if (page === 'songs')    { id = 'songs'; renderSongs(); }
   else if (page === 'song')     { id = 'song'; renderSong(arg); }
   else if (page === 'story')    { id = 'story'; renderStory(+arg); }
+  else if (page === 'beat')     { id = 'beat'; renderArticle(arg); }
   else if (page === 'ask')      { id = 'ask'; renderAsk(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'about')    { id = 'about'; }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
@@ -2910,6 +2949,7 @@ async function init() {
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     SONG_LEN = await fetch('song_lengths.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
+    ARTICLES = (await fetch('articles.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => [])).sort((a, b) => b.date.localeCompare(a.date));
     fullHistory('willboard');
     fullHistory('pop');
     const ids = new Set();
