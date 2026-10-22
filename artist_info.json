@@ -108,13 +108,6 @@
 "born": "1997-08-24",
 "sex": "m"
 },
-"Alessa": {
-"type": "person",
-"wd": "Q183087",
-"about": "Italian composer (1660–1725)",
-"born": "1660-05-02",
-"sex": "m"
-},
 "Alessia Cara": {
 "type": "person",
 "wd": "Q20090091",
@@ -209,10 +202,8 @@
 },
 "Ashe": {
 "type": "person",
-"wd": "Q469756",
-"about": "American rapper",
-"born": "1985-08-11",
-"sex": "m"
+"sex": "f",
+"manual": true
 },
 "Ashley Cooke": {
 "type": "person",
@@ -734,13 +725,6 @@
 "born": "1993-07-28",
 "sex": "f"
 },
-"Chloe": {
-"type": "person",
-"wd": "Q107213607",
-"about": "South Korean singer",
-"born": "2001-01-06",
-"sex": "f"
-},
 "Chris Brown": {
 "type": "person",
 "wd": "Q115390006",
@@ -896,13 +880,6 @@
 "type": "group",
 "wd": "Q185828",
 "about": "French electronic duo"
-},
-"Dakota": {
-"type": "person",
-"wd": "Q27973731",
-"about": "British singer",
-"born": "1990-11-28",
-"sex": "f"
 },
 "Daniel Caesar": {
 "type": "person",
@@ -1231,11 +1208,8 @@
 "sex": "f"
 },
 "FLO": {
-"type": "person",
-"wd": "Q2253931",
-"about": "French Esperantist",
-"born": "1956-10-10",
-"sex": "m"
+"type": "group",
+"manual": true
 },
 "Faith Hill": {
 "type": "person",
@@ -1248,13 +1222,6 @@
 "type": "group",
 "wd": "Q485811",
 "about": "American rock band"
-},
-"Felicia": {
-"type": "person",
-"wd": "Q234314",
-"about": "American actress",
-"born": "1979-06-28",
-"sex": "f"
 },
 "Fifth Harmony": {
 "type": "group",
@@ -1448,11 +1415,8 @@
 "sex": "m"
 },
 "Grey": {
-"type": "person",
-"wd": "Q13938",
-"about": "American voice actress and singer-songwriter",
-"born": "1973-08-24",
-"sex": "f"
+"type": "group",
+"manual": true
 },
 "Griff": {
 "type": "person",
@@ -1908,10 +1872,8 @@
 },
 "John K": {
 "type": "person",
-"wd": "Q1685876",
-"about": "American musical theatre composer",
-"born": "1927-03-18",
-"sex": "m"
+"sex": "m",
+"manual": true
 },
 "John Legend": {
 "type": "person",
@@ -2651,11 +2613,8 @@
 "sex": "f"
 },
 "Magic": {
-"type": "person",
-"wd": "Q3843169",
-"about": "rapper from Louisiana",
-"born": "1975-08-16",
-"sex": "m"
+"type": "group",
+"manual": true
 },
 "Major Lazer": {
 "type": "group",
@@ -2787,10 +2746,8 @@
 },
 "Miguel": {
 "type": "person",
-"wd": "Q356762",
-"about": "Spanish-Italian musician, singer and actor",
-"born": "1956-04-03",
-"sex": "m"
+"sex": "m",
+"manual": true
 },
 "Mike Posner": {
 "type": "person",
@@ -2985,13 +2942,6 @@
 "type": "group",
 "wd": "Q21452721",
 "about": "English alt-pop duo"
-},
-"Olivia": {
-"type": "person",
-"wd": "Q185165",
-"about": "British and Australian singer (1948–2022)",
-"born": "1948-09-26",
-"sex": "f"
 },
 "Olivia Dean": {
 "type": "person",
@@ -3360,10 +3310,8 @@
 },
 "Ruth B": {
 "type": "person",
-"wd": "Q144669",
-"about": "American singer-songwriter (1928-2006)",
-"born": "1928-01-12",
-"sex": "f"
+"sex": "f",
+"manual": true
 },
 "Ryan Hurd": {
 "type": "person",

@@ -23,6 +23,13 @@ API = 'https://www.wikidata.org/w/api.php?'
 SEARCH_AS = {'Ariana Grade': 'Ariana Grande', 'Justin Biever': 'Justin Bieber', 'Christina Aguliera': 'Christina Aguilera',
              'Illienum': 'Illenium', 'Nate Reuss': 'Nate Ruess', 'Shkodra Elektonike': 'Shkodra Elektronike',
              'Love & Theft': 'Love and Theft', 'David Nail & the Well Ravens': 'David Nail', 'Kaitlyn Butts': 'Kaitlin Butts'}
+# Acts the search matched to the wrong person (a namesake), set by hand; None leaves the act out
+MANUAL = {
+    'Alessa': None, 'Chloe': None, 'Dakota': None, 'Felicia': None, 'Olivia': None,
+    'Ashe': {'type': 'person', 'sex': 'f'}, 'John K': {'type': 'person', 'sex': 'm'},
+    'Miguel': {'type': 'person', 'sex': 'm'}, 'Ruth B': {'type': 'person', 'sex': 'f'},
+    'FLO': {'type': 'group'}, 'Grey': {'type': 'group'}, 'Magic': {'type': 'group'},
+}
 MUSIC = re.compile(r'singer|musician|rapper|\bband\b|\bduo\b|\btrio\b|\bgroup\b|\bDJ\b|producer|songwriter|vocalist|guitarist|composer|quartet|ensemble', re.I)
 NOT_ACT = re.compile(r'\b(song|single|album|EP|film|episode|television|tour|video game|novel|book)\b', re.I)
 GROUP = re.compile(r'\b(band|duo|trio|group|quartet|quintet|ensemble|collective|boy band|girl group|orchestra|choir)\b', re.I)
@@ -94,7 +101,7 @@ def main():
     missing = []
     for a in sorted(data['artists'], key=lambda a: a['name']):
         name = a['name']
-        if name in have:
+        if name in have or name in MANUAL:
             continue
         info = lookup(name)
         if info:
@@ -102,6 +109,10 @@ def main():
         else:
             missing.append(name)
         time.sleep(0.2)
+    for name, info in MANUAL.items():
+        have.pop(name, None)
+        if info:
+            have[name] = {**info, 'manual': True}
     json.dump(dict(sorted(have.items())), open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     open(MISSING, 'w', encoding='utf-8').write('\n'.join(missing) + '\n')
     people = sum(1 for v in have.values() if v['type'] == 'person')
