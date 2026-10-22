@@ -31,13 +31,17 @@ def square_pos(c, ratio):
 def main():
     redo = '--all' in sys.argv
     focus = {} if redo or not os.path.exists(OUT) else json.load(open(OUT, encoding='utf-8'))
-    checked = set(focus)
+    # File sizes as last checked, so a photo replaced under the same name is looked at again
+    sizes = focus.pop('#sizes', {})
     front = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     side = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
     found = missed = 0
     for name in sorted(os.listdir(DIR)):
-        if not name.endswith('.jpg') or name in checked:
+        size_now = os.path.getsize(os.path.join(DIR, name)) if name.endswith('.jpg') else 0
+        if not name.endswith('.jpg') or sizes.get(name) == size_now:
             continue
+        sizes[name] = size_now
+        focus.pop(name, None)
         img = cv2.imread(os.path.join(DIR, name))  # .webp saved as .jpg reads fine too
         if img is None:
             continue
@@ -67,7 +71,7 @@ def main():
         cx, cy = (x0 + x1) / 2 / k / w, (y0 + y1) / 2 / k / h
         focus[name] = [round(square_pos(cx, w / h) * 100), round(square_pos(cy, h / w) * 100)]
         found += 1
-    json.dump(dict(sorted(focus.items())), open(OUT, 'w', encoding='utf-8'), indent=0)
+    json.dump({**dict(sorted(focus.items())), '#sizes': dict(sorted(sizes.items()))}, open(OUT, 'w', encoding='utf-8'), indent=0)
     print(f'{found} faces found, {missed} photos without one, {len(focus)} in {OUT}')
 
 
