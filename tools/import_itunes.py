@@ -10,7 +10,9 @@ a song keeps its larger figure if the library's is lower (a deleted and re-added
 
 Also writes albums.json: every album holding a charted song (Hot 20 or Pop 10), with
 the plays of all its tracks added together for album certifications. Deluxe and
-Taylor's Version editions count with the original; singles and compilations are left out.
+Taylor's Version editions count with the original, which names the album and gives
+it its cover; a song first released on a Taylor's Version (a vault track) keeps
+that edition's name. Singles and compilations are left out.
 """
 import csv
 import json
@@ -39,6 +41,9 @@ def album_key(t):
     return lead(t.get('Album Artist') or t.get('Artist')), norm(name), name
 
 
+TV = re.compile(r"taylor['’]s version", re.I)
+
+
 def lead(artist):
     return norm(re.split(r',| & | and | ft\.? | feat\.? | featuring | x | with |;', artist or '', flags=re.I)[0])
 
@@ -61,6 +66,7 @@ def main():
     data = json.load(open('data.json', encoding='utf-8'))
     rows, missing, raised = [], [], 0
     album_songs = defaultdict(list)  # album key -> songs from it that charted
+    edition = {}  # vault songs: song id -> "Fearless (Taylor's Version)"
     for s in data['songs']:
         # Will's tell-apart suffix ("Heaven - Niall") names the artist, not the title
         m = re.fullmatch(r'(.+?) - (.+)', s['name'])
@@ -70,8 +76,13 @@ def main():
         if not hits:
             hits = [(p, t) for a, p, t in loose.get(bare(title), []) if who and who[:8] in a]
         on_album = [h for h in hits if is_album(h[1])]
+        # A song re-recorded for a Taylor's Version belongs to the original release
+        on_album = [h for h in on_album if not TV.search(h[1]['Album'])] or on_album
         if on_album:
-            album_songs[album_key(max(on_album, key=lambda h: h[0])[1])[:2]].append(s)
+            t = max(on_album, key=lambda h: h[0])[1]
+            album_songs[album_key(t)[:2]].append(s)
+            if TV.search(t['Album']):
+                edition[s['id']] = re.sub(r'\s*\[[^\]]*\]', '', t['Album']).strip()
         if s['chart'] != 'willboard':
             continue
         if not hits:
@@ -94,12 +105,16 @@ def main():
             a = albums[album_key(t)[:2]]
             a['plays'] += t.get('Play Count', 0)
             a['tracks'] += 1
-            a['names'].append(album_key(t)[2])
+            if not TV.search(t['Album']):
+                a['names'].append(album_key(t)[2])
     out = []
     for k, a in albums.items():
         songs = sorted(album_songs[k], key=lambda s: s['debutDate'])
-        out.append({'name': min(a['names'], key=len), 'artist': songs[0]['artistName'], 'artistId': songs[0]['artistId'],
-                    'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]})
+        al = {'name': min(a['names'] or [k[1]], key=len), 'artist': songs[0]['artistName'], 'artistId': songs[0]['artistId'],
+              'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]}
+        if any(s['id'] in edition for s in songs):
+            al['editions'] = {s['id']: edition[s['id']] for s in songs if s['id'] in edition}
+        out.append(al)
     out.sort(key=lambda a: -a['plays'])
     json.dump(out, open(ALBUMS, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print(f'{len(out)} albums with a charted song; top: ' + ', '.join(f"{a['name']} {a['plays']}" for a in out[:5]))

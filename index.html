@@ -1595,7 +1595,7 @@ async function renderSong(id) {
       <h1>${esc(s.name)}</h1>
       <div class="by"><a href="#/artist/${s.artistId}">${esc(s.artistName)}</a></div>
       ${songCert(s)}
-      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(ALBUM_OF[s.id].name)}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
+      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(ALBUM_OF[s.id].editions?.[s.id] || ALBUM_OF[s.id].name)}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-song'));
 
@@ -1652,7 +1652,7 @@ function renderAlbum(id) {
   heroTint(hero, $('page-album'));
   $('album-songs-sub').textContent = `${al.tracks} track${al.tracks === 1 ? '' : 's'} in the library`;
   $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
+    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${al.editions?.[s.id] ? ` · from ${esc(al.editions[s.id])}` : ''}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
   const more = ALBUMS.filter(o => o.artistId === al.artistId && o !== al);
