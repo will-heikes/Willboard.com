@@ -2109,11 +2109,15 @@ function renderSongs() {
 const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
-  'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?'];
+  'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'What song has the most plays?', 'What is the longest song to chart?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
 const actInfo = name => ARTIST_INFO?.[name];
+// song_lengths.json (tools/import_itunes.py, from Will's iTunes library): song id -> seconds. Hot 20 songs only.
+let SONG_LEN = null;
+const mmss = sec => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
 const KINDS = { group: /\b(group|band|duo|trio)s?\b/, woman: /\b(woman|women|female|girl|lady)\b/, man: /\b(man|men|male|guy|boy)\b/ };
 const kindOf = t => Object.keys(KINDS).find(k => KINDS[k].test(t));
 const isKind = (name, kind) => kind === 'group' ? actInfo(name)?.type === 'group' : actInfo(name)?.type === 'person' && actInfo(name)?.sex === (kind === 'woman' ? 'f' : 'm');
@@ -2138,8 +2142,9 @@ function askStats(key) {
     const now = {};
     for (const e of w.entries) {
       now[e.songId] = e.position;
-      const s = songs[e.songId] ||= { id: e.songId, debut: w.week, debutPos: e.position, weeks: [], no1: [], peak: 99 };
+      const s = songs[e.songId] ||= { id: e.songId, debut: w.week, debutPos: e.position, weeks: [], pos: [], no1: [], peak: 99 };
       s.weeks.push(w.week);
+      s.pos.push(e.position);
       s.peak = Math.min(s.peak, e.position);
       if (e.position === 1) {
         s.no1.push(w.week);
@@ -2309,6 +2314,88 @@ function askAnswer(q, chartId, f) {
   if (f.artist && !songsF.length && !f.songs.length) return null;
   if (f.span && f.span.to < st.weeks[0].week) return { quiet: true, lead: `The ${c.name} began the week of ${fmtLong(st.weeks[0].week)}.` };
   const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 - 20) % 10] || ['th', 'st', 'nd', 'rd'][n % 100] || 'th');
+  const inSpanS = s => s.weeks.some(w => inSpanW(f.span, w));
+  const actQ = (/\b(who|artist|artists|act|acts|singer|band)\b/.test(t) || kind) && !f.artist;
+  // Credit each act on a song with its value (features count in full)
+  const byAct = (list, val) => {
+    const acts = {};
+    for (const s of list) for (const p of creditParts(S(s.id).artistName)) {
+      if (!p.id || (kind && !isKind(p.name, kind))) continue;
+      const a = acts[p.id] ||= { id: p.id, name: p.name, v: 0, n: 0 };
+      a.v += val(s); a.n++;
+    }
+    return Object.values(acts).sort((a, b) => b.v - a.v || a.name.localeCompare(b.name)).filter(ties(10, a => a.v));
+  };
+  const tieLead = (list, val, what, each) => {
+    const n = tiedTop(list, val);
+    return n > 1 ? `${list.slice(0, n).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most ${what} on the ${c.name}${inYear(f.span)}, with ${each(list[0])} each.`
+      : `${esc(list[0].name)} has the most ${what} on the ${c.name}${inYear(f.span)}, with ${each(list[0])}.`;
+  };
+
+  // Song length (Will's iTunes copy), for the longest and shortest songs to chart
+  if (!f.songs.length && /\b(longest|shortest|long|short)(est)?\b.*\bsong\b|\bsong\b.*\b(longest|shortest)\b|\b(length|minutes|runtime|duration)\b/.test(t) && !/\b(weeks|run|charted the|charting)\b/.test(t)) {
+    if (chartId !== 'hot20') return { quiet: true, lead: `I only know song lengths for the Hot 20.` };
+    const short = /\bshort/.test(t);
+    const list = songsF.filter(s => SONG_LEN?.[s.id] && inSpanS(s)).sort((a, b) => short ? SONG_LEN[a.id] - SONG_LEN[b.id] : SONG_LEN[b.id] - SONG_LEN[a.id]).filter(ties(10, s => SONG_LEN[s.id]));
+    if (!list.length) return { lead: `I don't have song lengths for that.` };
+    const x = list[0];
+    return {
+      lead: `The ${short ? 'shortest' : 'longest'} song to chart on the ${c.name}${who}${inYear(f.span)} is ${title(S(x.id))}, at ${mmss(SONG_LEN[x.id])}.`,
+      rows: list.map((s, i) => askRow(rankIn(list, i, s => SONG_LEN[s.id]), S(s.id), `<b>${mmss(SONG_LEN[s.id])}</b><br>Peak ${s.peak}`)).join(''),
+    };
+  }
+
+  // Plays (all-time, from Will's iTunes library)
+  if (/\b(plays|played|listens|streams|spins)\b/.test(t) && /\b(most|top|biggest|highest|least|fewest)\b/.test(t) && !f.songs.length) {
+    if (chartId !== 'hot20') return { quiet: true, lead: `Plays are counted for the Hot 20.` };
+    const plays = s => S(s.id).itunesPlays || 0;
+    const pool = songsF.filter(s => plays(s) && inSpanS(s));
+    if (actQ) {
+      const list = byAct(pool, plays);
+      return { lead: tieLead(list, a => a.v, 'plays', a => `${a.v.toLocaleString()} plays`),
+        rows: list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), { ...a, sub: `${a.n} charted song${a.n === 1 ? '' : 's'}` }, `<b>${a.v.toLocaleString()}</b><br>plays`)).join('') };
+    }
+    const few = /\b(least|fewest)\b/.test(t);
+    const list = pool.sort((a, b) => few ? plays(a) - plays(b) : plays(b) - plays(a)).filter(ties(10, plays));
+    return {
+      lead: `${title(S(list[0].id))} has the ${few ? 'fewest' : 'most'} plays of any song on the ${c.name}${inYear(f.span)}: ${plays(list[0]).toLocaleString()}.`,
+      rows: list.map((s, i) => askRow(rankIn(list, i, plays), S(s.id), `<b>${plays(s).toLocaleString()}</b><br>plays`)).join(''),
+    };
+  }
+
+  // The top 5 / top 10 (or one spot, like #7): most weeks there, or the most hits that reached it
+  const tierM = /\btop[\s-]*(\d{1,2}|five|ten|three|twenty)s?\b/.exec(t), spotM = /(?:#|\bno\.?\s*|\bnumber[\s-]*)(\d{1,2}|two|three|four|five|six|seven|eight|nine|ten)\b/.exec(t);
+  const WORDS = { two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twenty: 20 };
+  const tierN = tierM && (WORDS[tierM[1]] || +tierM[1]), spotN = !tierM && spotM && (WORDS[spotM[1]] || +spotM[1]);
+  if ((tierN || (spotN && spotN > 1)) && !f.songs.length && !f.date) {
+    const max = chartId === 'pop10' ? 10 : 20, n = tierN || spotN;
+    if (n > max) return { quiet: true, lead: `The ${c.name} only goes to No. ${max}.` };
+    const inTier = p => tierN ? p <= n : p === n, place = tierN ? `the top ${n}` : `No. ${n}`, placeIn = tierN ? `in the top ${n}` : `at No. ${n}`;
+    const wksIn = s => s.pos.filter((p, i) => inTier(p) && inSpanW(f.span, s.weeks[i])).length;
+    const hit = s => wksIn(s) > 0 ? 1 : 0;
+    // "Who has the most top 5 hits?" or "How many top 10s does Luke Bryan have?"
+    if ((actQ && /\b(most|hits|songs)\b/.test(t)) || (f.artist && /\b(hits|songs|how many|list|which)\b|\btop[\s-]*\w+s\b/.test(t)) || (!/\bweeks?\b/.test(t) && /\b(hits|songs)\b/.test(t) && /\bmost\b/.test(t))) {
+      if (f.artist) {
+        const list = songsF.filter(hit).sort((a, b) => a.peak - b.peak || a.debut.localeCompare(b.debut));
+        if (!list.length) return { lead: `${esc(f.artist.name)} hasn't reached ${place} on the ${c.name}${inYear(f.span)}.` };
+        return { lead: `${esc(f.artist.name)} has ${list.length} song${list.length === 1 ? '' : 's'} that reached ${place} on the ${c.name}${inYear(f.span)}.`,
+          rows: list.map((s, i) => askRow(i + 1, S(s.id), `Peak <b>${s.peak}</b><br>${wk(wksIn(s))} in ${tierN ? `top ${n}` : `#${n}`}`)).join('') };
+      }
+      const list = byAct(songsF.filter(hit), () => 1);
+      if (!list.length) return { lead: `No songs reached ${place} on the ${c.name}${inYear(f.span)}.` };
+      const unit = tierN ? `top ${n} hits` : `songs at No. ${n}`;
+      return { lead: tieLead(list, a => a.v, unit, a => a.v),
+        rows: list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), a, `<b>${a.v}</b> ${tierN ? `top ${n}` : `at #${n}`}`)).join('') };
+    }
+    const list = songsF.map(s => ({ s, v: wksIn(s) })).filter(x => x.v).sort((a, b) => b.v - a.v || a.s.debut.localeCompare(b.s.debut)).filter(ties(10, x => x.v));
+    if (!list.length) return { lead: `No song${who} reached ${place} on the ${c.name}${inYear(f.span)}.` };
+    const k = tiedTop(list, x => x.v);
+    return {
+      lead: k > 1 ? `${k} songs${who} tie for the most weeks ${placeIn} on the ${c.name}${inYear(f.span)}, with ${wk(list[0].v)} each.`
+        : `${title(S(list[0].s.id))} spent the most weeks ${placeIn} on the ${c.name}${inYear(f.span)}: ${wk(list[0].v)}.`,
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.v), S(x.s.id), `<b>${x.v}</b> wk${x.v === 1 ? '' : 's'}<br>Peak ${x.s.peak}`)).join(''),
+    };
+  }
 
   // A song's own story
   if (f.songs.length) {
@@ -2403,7 +2490,6 @@ function askAnswer(q, chartId, f) {
   }
 
   // Acts with the most #1s, most weeks at #1, or most hits
-  const actQ = (/\b(who|artist|artists|act|acts|singer|band)\b/.test(t) || kind) && !f.artist;
   if ((actQ && /\bmost\b/.test(t)) || /most (#|no\.?\s*|number[\s-]*)(1|one)s\b|most number[\s-]ones\b|most #1 (songs|hits)|most (hits|songs|entries)/.test(t)) {
     const weeksMode = /weeks/.test(t) && NO1.test(t), hitsMode = !NO1.test(t);
     const acts = {};
@@ -2460,7 +2546,7 @@ function askAnswer(q, chartId, f) {
   }
 
   // Longest-charting songs
-  if (/most weeks|longest|weeks on|longest[\s-]charting|longest run|staying power/.test(t)) {
+  if (/most weeks|longest|weeks on|longest[\s-]charting|longest run|staying power|charted the longest/.test(t)) {
     const list = songsF.map(s => ({ s, v: s.weeks.filter(w => inSpanW(f.span, w)).length })).filter(x => x.v).sort((a, b) => b.v - a.v).filter(ties(10, x => x.v));
     if (!list.length) return { lead: `No songs${who} on the ${c.name}${inYear(f.span)}.` };
     return {
@@ -2578,6 +2664,7 @@ async function init() {
     ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
+    SONG_LEN = await fetch('song_lengths.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     fullHistory('willboard');
     fullHistory('pop');
     const ids = new Set();
