@@ -28,6 +28,25 @@ def square_pos(c, ratio):
     return min(1, max(0, (c * ratio - .5) / (ratio - 1)))
 
 
+def find(cascade, grey, size, near):
+    """Faces as (x, y, w, h), also looking with the photo turned a little each way,
+    since the finder misses a tilted head (one leaning on a duo partner, say)."""
+    h, w = grey.shape
+    faces = []
+    for angle in (0, -15, 15):
+        turn = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1)
+        back = cv2.invertAffineTransform(turn)
+        for x, y, fw, fh in cascade.detectMultiScale(cv2.warpAffine(grey, turn, (w, h)) if angle else grey, 1.1, near, minSize=(size, size)):
+            cx, cy = back @ (x + fw / 2, y + fh / 2, 1)
+            # A turned photo throws up stray "faces", so take only a partner for one already found
+            # upright: about the same size and height. The same face found again counts once.
+            if angle and not any(.75 < fw / f[2] < 1.33 and abs(cy - (f[1] + f[3] / 2)) < f[3] for f in faces):
+                continue
+            if all(abs(cx - (f[0] + f[2] / 2)) > fw / 2 or abs(cy - (f[1] + f[3] / 2)) > fh / 2 for f in faces):
+                faces.append((cx - fw / 2, cy - fh / 2, fw, fh))
+    return faces
+
+
 def main():
     redo = '--all' in sys.argv
     focus = {} if redo or not os.path.exists(OUT) else json.load(open(OUT, encoding='utf-8'))
@@ -53,7 +72,7 @@ def main():
         grey = cv2.equalizeHist(cv2.cvtColor(cv2.resize(img, None, fx=k, fy=k) if k < 1 else img, cv2.COLOR_BGR2GRAY))
         k = min(k, 1)
         size = int(min(grey.shape) * 0.06)
-        faces = [*front.detectMultiScale(grey, 1.1, 6, minSize=(size, size))] or [*side.detectMultiScale(grey, 1.1, 5, minSize=(size, size))]
+        faces = find(front, grey, size, 6) or [*side.detectMultiScale(grey, 1.1, 5, minSize=(size, size))]
         if not len(faces):
             missed += 1
             continue
