@@ -1473,12 +1473,12 @@ function renderAwardYear(chart, year) {
   $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
-    const head = win ? `<div class="wp">${artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}${albumCert(wal)}</div></div>` : '';
+    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}${albumCert(wal)}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).map(r => {
       const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
-      const thumb = r.song || r.album ? artTile(r.artist || '', false, year, r.song || r.album) : '<span class="mark">·</span>';
+      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, year, r.song || r.album) : '<span class="mark">·</span>';
       return `<div class="award-row${r.song || r.album ? ' has-art' : ''}">${thumb}
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}${albumCert(al)}</div></div>`;
     }).join('') + '</div>';
