@@ -4,11 +4,13 @@
     python3 tools/build_decade.py "CS Era points - 2010s Decade.xlsx"
 
 Run from the repo folder. Country songs, artists and albums keep the order of Will's
-"Top Songs", "Top Artists" and "Top Albums" tabs. The Pop tabs aren't ranked, so Pop
-songs and artists are ordered by their decade chart points, the way Will ranks Pop.
+"Top Songs", "Top Artists" and "Top Albums" tabs. Pop songs follow Will's own Top 100 in
+decade_lists.tsv; Pop artists (the tab isn't ranked) are ordered by decade chart points.
 Points only set the order; they aren't written out, since the site never shows them.
 """
+import csv
 import json
+import os
 import re
 import sys
 from collections import defaultdict
@@ -19,6 +21,7 @@ from add_week import norm
 from build_yearend import match
 
 DECADE, TOP_SONGS, TOP_OTHER = '2010s', 100, 25
+LISTS = 'decade_lists.tsv'
 RENAMED = {'Lady Antebellum': 'Lady A'}  # the name the rest of the site uses
 
 
@@ -86,13 +89,18 @@ def main():
                         'artists': artist_rows([clean(r['Artist']) for r in rows(wb, 'Top Artists') if r.get('Artist')]),
                         'albums': al_rows}
 
-    # Pop: ordered by decade points
+    # Pop: ordered by decade points, unless Will has ranked the songs himself
     it = wb['Pop'].iter_rows(values_only=True)
     next(it)
     head = [str(h).strip() if h is not None else '' for h in next(it)]
     pop = [dict(zip(head, r)) for r in it]
     pop = sorted((r for r in pop if r.get('Song') and isinstance(r.get('Total'), (int, float))), key=lambda r: -r['Total'])
     pop_songs = song_rows('pop', [(clean(r['Song']), clean(r['Artist']).replace(';', ','), getattr(r['Debut Date'], 'year', 2015)) for r in pop])
+    # Will's own Pop Top 100 (decade_lists.tsv), when there is one, replaces the points order
+    if os.path.exists(LISTS):
+        mine = [r for r in csv.DictReader(open(LISTS, encoding='utf-8'), delimiter='\t') if r['decade'] == DECADE and r['chart'] == 'pop']
+        if mine:
+            pop_songs = song_rows('pop', [(r['song'], r['artist'], 2015) for r in sorted(mine, key=lambda r: int(r['rank']))])
     pop_artists = sorted((r for r in rows(wb, 'Pop Artist Records') if r.get('Artist') and isinstance(r.get('Points'), (int, float))),
                          key=lambda r: -r['Points'])
     out['pop'] = {'songs': pop_songs, 'artists': artist_rows([clean(r['Artist']) for r in pop_artists])}
