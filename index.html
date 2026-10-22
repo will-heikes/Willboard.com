@@ -612,6 +612,10 @@ body.on-ask .ask-fab { display: none; }
 .timeline .tl-pop::before { background: var(--pop); }
 .timeline .tl-era::before { background: var(--dot-yellow); }
 .about-note { font-size: 14px; color: var(--muted); }
+.pts { border-collapse: collapse; margin: 8px 0; font-size: 14px; }
+.pts th, .pts td { text-align: left; padding: 5px 16px 5px 0; border-bottom: 1px solid var(--line-soft); }
+.pts th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.pts td:first-child { font-weight: 700; }
 .timeline .tl-when { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .timeline b { display: block; }
 .timeline li > span:last-child { display: block; color: var(--ink-soft); font-size: 14px; }
@@ -1077,11 +1081,24 @@ body.on-ask .ask-fab { display: none; }
         </ul>
         <p>The Hot 20 has followed these rules from its first week. The Pop 10 has used the same rules since play tracking began in December 2017. Before that, its charts were put together by feel, apart from a stretch in 2014 and 2015 when Spotify's Top Songs for Me set the order.</p>
 
+        <h2>Chart points</h2>
+        <p>Every week on the chart earns a song points, based on its position. The top five spots are worth the most.</p>
+        <table class="pts">
+          <tr><th>Position</th><th>Points</th></tr>
+          <tr><td>#1</td><td>500</td></tr>
+          <tr><td>#2</td><td>400</td></tr>
+          <tr><td>#3</td><td>300</td></tr>
+          <tr><td>#4</td><td>200</td></tr>
+          <tr><td>#5</td><td>100</td></tr>
+          <tr><td>#6 to #20</td><td>95 down to 81, one less per spot</td></tr>
+        </table>
+        <p>So #6 earns 95, #10 earns 91 and #20 earns 81. The Pop 10 uses the same table and stops at #10. A song's points add up over every week it charts.</p>
+
         <h2>Year-End and Decade-End</h2>
-        <p><a href="#/year-end">Year-End</a> charts rank the biggest songs of each year. Most years use a weighted system that combines a song's plays for the year with how it did on the weekly chart: how high it climbed and how long it stayed.</p>
+        <p><a href="#/year-end">Year-End</a> charts rank the biggest songs of each year. Most years use a weighted system: a song's plays for the year as a share of the top song's plays, added to its chart points for the year as a share of the top song's points.</p>
         <ul>
           <li><b>Hot 20.</b> Through 2011, year-end ranks came from plays within the year alone. The weighted system starts in 2012.</li>
-          <li><b>Pop 10.</b> Through 2017, year-end ranks came from chart performance alone, since pop plays weren't tracked yet. The weighted system starts in 2018.</li>
+          <li><b>Pop 10.</b> Through 2017, year-end ranks came from chart points alone, since pop plays weren't tracked yet. The weighted system starts in 2018.</li>
           <li><b>Decade-End.</b> The 2010s lists use the weighted system.</li>
         </ul>
 
@@ -1093,7 +1110,7 @@ body.on-ask .ask-fab { display: none; }
       <div class="card about-card">
         <h2 style="margin-top:0">Timeline</h2>
         <ol class="timeline">
-          <li class="tl-era"><span class="tl-when">2007 to 2009</span><b>The Pre-CS era</b><span>Charts were made now and then, with no set method. These come before the charts on this site.</span></li>
+          <li class="tl-era"><span class="tl-when">2007 to Jan 2010</span><b>The Pre-CS era</b><span>Charts were made now and then, with no set method. The era ends with the first chart of the CS era. These charts come before the ones on this site.</span></li>
           <li class="tl-hot"><span class="tl-when">Jan 28, 2010</span><b>The CS era begins</b><span>The first weekly Hot 20, ordered by plays. CS stands for common sense: a chart every week, with the same rules every week. The transitional era begins.</span></li>
           <li class="tl-pop"><span class="tl-when">Oct 27, 2011</span><b>The Pop 10 launches</b><span>Pop gets its own chart, built in YouTube Music. The transitional era ends.</span></li>
           <li class="tl-pop"><span class="tl-when">Dec 2013</span><b>Pop 10 moves to Spotify</b><span>Charts are built in Spotify playlists.</span></li>
