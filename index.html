@@ -596,6 +596,10 @@ body.on-ask .ask-fab { display: none; }
 .ask-form .search { max-width: none; flex: 1; font-size: 16px; padding: 12px 18px; border-radius: 26px; }
 .ask-form button { font: inherit; font-weight: 700; font-size: 15px; padding: 0 22px; border: 0; border-radius: 26px; background: var(--ink); color: #fff; cursor: pointer; }
 .ask-form button:hover { background: var(--country); }
+.ask-era { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--muted); cursor: pointer; }
+.ask-era input { width: 16px; height: 16px; accent-color: var(--country); margin: 0; }
+.ask-era a { text-decoration: underline; }
+.ask-era-note { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
 .ask-examples { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 22px; max-width: 900px; }
 .ask-chip { font-size: 12.5px; padding: 6px 12px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); color: var(--ink-soft); }
 .ask-chip:hover { border-color: var(--ink-soft); color: var(--ink); }
@@ -1033,6 +1037,7 @@ body.on-ask .ask-fab { display: none; }
       <input class="search" id="ask-q" placeholder="What was #1 on 12/3/2010?" autocomplete="off" enterkeyhint="search">
       <button type="submit">Ask</button>
     </form>
+    <label class="ask-era"><input type="checkbox" id="ask-era"> Leave out the transitional era (Jan 2010 to Oct 2011) <a href="#/about">What's this?</a></label>
     <div class="ask-examples" id="ask-examples"></div>
     <div id="ask-out"></div>
   </section>
@@ -1042,6 +1047,9 @@ body.on-ask .ask-fab { display: none; }
     <div class="page-head"><div><h1>About Willboard</h1></div></div>
     <div class="card" style="padding:20px 22px;max-width:680px">
       <p style="margin-top:0">Willboard is a weekly music chart that has run since January 2010. The <b>Hot 20</b> tracks country, and the <b>Pop 10</b> tracks pop.</p>
+      <h3 style="margin:18px 0 6px">The transitional era</h3>
+      <p>Willboard started with one chart. From the week of January 28, 2010 through October 20, 2011, country and pop songs charted together on the Hot 20. That stretch of 91 weeks is the <b>transitional era</b>. The Pop 10 launched the week of October 27, 2011, and from then on each genre had its own chart.</p>
+      <p>Records from the transitional era count on the Hot 20. On <a href="#/ask" style="text-decoration:underline">Ask Willboard</a> you can leave them out.</p>
       <p>Each year the <a href="#/awards" style="text-decoration:underline">Willboard Awards</a> celebrate the biggest songs, albums and artists on the charts.</p>
       <p style="margin-bottom:0;color:var(--muted)" id="about-updated"></p>
     </div>
@@ -2134,9 +2142,12 @@ function spanText(from, to) {
   return [y && `${y} year${y === 1 ? '' : 's'}`, m && `${m} month${m === 1 ? '' : 's'}`].filter(Boolean).join(', ') || `${days} days`;
 }
 // Every song's weeks, and every week-to-week move, for one chart (built once, on the first question)
-function askStats(key) {
-  if (ASK[key]) return ASK[key];
-  const weeks = DATA[key].filter(w => w.entries?.length), songs = {}, moves = [];
+// The transitional era: the Hot 20's weeks before the Pop 10 began, when country and pop charted together
+const eraEnd = () => DATA.pop.find(w => w.entries?.length).week;
+function askStats(key, skipEra) {
+  const id = key + (skipEra ? ':post' : '');
+  if (ASK[id]) return ASK[id];
+  const weeks = DATA[key].filter(w => w.entries?.length && (!skipEra || w.week >= eraEnd())), songs = {}, moves = [];
   let prev = {};
   weeks.forEach((w, i) => {
     const now = {};
@@ -2157,7 +2168,7 @@ function askStats(key) {
   });
   // Everything on the very first chart "debuted" that week, so those don't count as debuts or climbs
   for (const s of Object.values(songs)) if (s.debut === weeks[0].week) s.onFirst = true;
-  return ASK[key] = { weeks, songs, moves };
+  return ASK[id] = { weeks, songs, moves };
 }
 
 const ASK_MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -2241,7 +2252,8 @@ const inYear = span => span ? ` in ${span.label}` : '';
 
 // One chart's answer: { lead, rows, more }, or null when the question doesn't fit
 function askAnswer(q, chartId, f) {
-  const c = CHARTS[chartId], st = askStats(c.key), S = id => SONGS[id];
+  // A question about one date always reads the full chart
+  const c = CHARTS[chartId], skip = f.skipEra && chartId === 'hot20' && !f.date, st = askStats(c.key, skip), S = id => SONGS[id];
   const t = q.toLowerCase();
   const NO1 = /(#|no\.?\s*|number[\s-]*)(1|one)(?!\d)|top spot|chart[\s-]?topp/;
   const songsF = Object.values(st.songs).filter(s => S(s.id) && byArtist(S(s.id), f.artist));
@@ -2312,7 +2324,7 @@ function askAnswer(q, chartId, f) {
 
   // An act who never made this chart, or a year before it began, leaves the other chart to answer
   if (f.artist && !songsF.length && !f.songs.length) return null;
-  if (f.span && f.span.to < st.weeks[0].week) return { quiet: true, lead: `The ${c.name} began the week of ${fmtLong(st.weeks[0].week)}.` };
+  if (f.span && f.span.to < st.weeks[0].week) return { quiet: true, lead: skip ? `That's all in the transitional era, which is left out.` : `The ${c.name} began the week of ${fmtLong(st.weeks[0].week)}.` };
   const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 - 20) % 10] || ['th', 'st', 'nd', 'rd'][n % 100] || 'th');
   const inSpanS = s => s.weeks.some(w => inSpanW(f.span, w));
   const actQ = (/\b(who|artist|artists|act|acts|singer|band)\b/.test(t) || kind) && !f.artist;
@@ -2579,7 +2591,10 @@ function renderAsk(q) {
   const only = /\bpop\b/.test(t) ? ['pop10'] : /\bhot ?20\b|\bcountry\b/.test(t) ? ['hot20'] : null;
   const charts = only || ['hot20', 'pop10'];
   const date = askDate(q), rest = date ? q.replace(date.text, ' ') : q;
-  const f = { date, span: askSpan(rest), artist: askArtist(rest), songs: date ? [] : askSong(q, charts) };
+  // Leave out the transitional era: the box, or the question itself ("excluding the transitional era")
+  const skipEra = $('ask-era').checked || /\b(without|excluding|exclude|excludes|skip|skipping|not counting|outside|after|post)\b[^.?]*\btransition(al)?\b/.test(t);
+  const askText = q.replace(/\b(without|excluding|exclude|skip|skipping|not counting|outside|after|post)\b[^.?]*\btransition(al)?( era)?\b/i, ' ');
+  const f = { date, span: askSpan(askText.replace(date?.text || '', ' ')), artist: askArtist(rest), songs: date ? [] : askSong(askText, charts), skipEra };
   if (f.songs.length) f.artist = null;
   const answers = charts.map(id => ({ id, a: askAnswer(q, id, f) }));
   // Without a chart named, a chart with nothing to say stays out of the way
@@ -2594,7 +2609,7 @@ function renderAsk(q) {
     return;
   }
   out.innerHTML = `<div class="ask-grid${shown.length > 1 ? ' two' : ''}">` + shown.map(({ id, a }) =>
-    `<div class="card ask-ans ${CHARTS[id].cls}"><div class="ask-chart">${CHARTS[id].name}</div><p class="ask-lead">${a.lead}</p>${a.rows ? `<div class="ask-rows">${a.rows}</div>` : ''}${a.more ? `<div class="ask-foot">${a.more}</div>` : ''}</div>`).join('') + '</div>';
+    `<div class="card ask-ans ${CHARTS[id].cls}"><div class="ask-chart">${CHARTS[id].name}${skipEra && id === 'hot20' && !date ? ' <span class="ask-era-note">· without the transitional era</span>' : ''}</div><p class="ask-lead">${a.lead}</p>${a.rows ? `<div class="ask-rows">${a.rows}</div>` : ''}${a.more ? `<div class="ask-foot">${a.more}</div>` : ''}</div>`).join('') + '</div>';
 }
 
 // ─── STORY (a year of #1s) ──────────────────────────────────────
@@ -2712,6 +2727,11 @@ async function init() {
     if (!v) return;
     $('ask-pop-q').value = ''; $('ask-pop').hidden = true;
     location.hash = askHref(v);
+  };
+  try { $('ask-era').checked = localStorage.getItem('askSkipEra') === '1'; } catch (e) {}
+  $('ask-era').onchange = () => {
+    try { localStorage.setItem('askSkipEra', $('ask-era').checked ? '1' : '0'); } catch (e) {}
+    renderAsk($('ask-q').value.trim());
   };
   $('ask-form').onsubmit = e => { e.preventDefault(); const v = $('ask-q').value.trim(); if (v) location.hash = askHref(v); };
 
