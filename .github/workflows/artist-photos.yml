@@ -55,6 +55,12 @@ jobs:
         run: |
           python3 tools/fetch_artist_photos.py --index-only
           python3 tools/fetch_covers.py --tidy-only
+      - name: Find faces in new photos
+        # So square tiles crop around the face (images/artists/focus.json)
+        if: ${{ !inputs.covers }}
+        run: |
+          pip install -q "opencv-python-headless<5"
+          python3 tools/find_faces.py
       - name: Commit photos
         run: |
           git config user.name "github-actions[bot]"

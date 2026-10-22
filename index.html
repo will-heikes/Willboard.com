@@ -127,7 +127,7 @@ button { font: inherit; color: inherit; }
   color: rgba(255,255,255,.92);
   font-family: var(--f-cond); font-weight: 600; letter-spacing: .02em;
 }
-.art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }  /* tall photos: faces sit high */
 
 /* ── CARDS ──────────────────────────────────────────────────── */
 .card {
@@ -1054,6 +1054,8 @@ function hash(s) { let h = 0; for (const c of s || '') h = (h * 31 + c.charCodeA
 // Era photos: <slug>-<year>.jpg next to the main <slug>.jpg, listed in _years.json.
 // Only the awards pages pass a year. The nearest era photo wins; the main photo counts as this year's.
 let PHOTO_YEARS = {};
+// Where each tall or wide photo's face is (tools/find_faces.py), so square crops centre on it
+let FOCUS = {};
 // Data files are checked with the server on every visit (cheap: unchanged files come back 304), so a new
 // photo list or chart week shows up without the reader clearing their cache
 const FRESH = { cache: 'no-cache' };
@@ -1087,7 +1089,7 @@ function artTile(artistName, eager, year, title) {
   const lazy = eager ? '' : ' loading="lazy"';
   // Will prefers the album cover over the single's: it sits on top when the song is on an album we have art for
   const covers = [...new Set([coverUrl(artistName, title), albumCoverUrl(artistName, title)].filter(Boolean))];
-  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
+  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy}${FOCUS[src.split('/').pop()] ? ` style="object-position:${FOCUS[src.split('/').pop()].join('% ')}%"` : ''} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
 }
 
 function weeksAt1(songId, hist, upTo) {
@@ -2102,7 +2104,7 @@ async function init() {
     const s = SONGS[sid];
     if (s) SONG_ALBUM[`${squash(primaryArtist(s.artistName))}|${squash(s.name)}`] = [al.artist, (al.editions?.[sid] || al.name).trim()];
   }
-  PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  [PHOTO_YEARS, FOCUS] = await Promise.all(['_years.json', 'focus.json'].map(f => fetch(IMAGES_BASE + f, FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
   buildArtistStats();
   $('loading').remove();
   $('foot-copy').textContent = `© ${new Date().getFullYear()} Willboard. All rights reserved.`;
