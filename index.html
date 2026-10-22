@@ -940,7 +940,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   <section class="page" id="page-album">
     <div class="song-hero" id="album-hero"></div>
     <div class="song-sec">
-      <div class="sec-h"><h2>Charted Songs</h2><span class="sub" id="album-songs-sub"></span></div>
+      <div class="sec-h"><h2>Songs</h2><span class="sub" id="album-songs-sub"></span></div>
       <div class="card" style="overflow:hidden"><table class="table" id="album-songs"></table></div>
     </div>
     <div class="song-sec" id="album-more-wrap">
@@ -1511,7 +1511,7 @@ function spanCharts(span) {
     lead: [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean).join(' · ') }));
   const artists = list => list.map(a => {
     const id = a.id || a.artistId;
-    return { rank: a.rank, href: id && artistStats[id] ? `#/artist/${id}` : '#/artists', tile: lead => artTile(a.name, lead, dec ? from + 5 : from),
+    return { rank: a.rank, href: id && artistStats[id] ? `#/artist/${id}` : '#/artists', tile: lead => artTile(a.name, lead),
       name: a.name, sub: a.songs ? n(a.songs, 'charted song') : '', meta: wks1Text(a.no1), lead: a.no1 ? `${n(a.no1, 'wk')} at #1` : '' };
   });
   const albums = list => list.map(b => {
@@ -1995,7 +1995,11 @@ function renderAlbum(id) {
   $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Plays</th></tr>` +
     songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${al.editions?.[s.id] ? ` · from ${esc(al.editions[s.id])}` : ''}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${songPlays(s)}</td></tr>`).join('');
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${songPlays(s)}</td></tr>`).join('') +
+    // Album cuts: tracks that never charted but were played enough to count toward the album's certification.
+    // Country cuts carry the Hot 20's plays-based certification; Pop certifies by chart points, so its cuts show plays only.
+    (al.cuts?.length ? `<tr class="sub-h"><td colspan="6">Album cuts</td></tr>` + al.cuts.map(c => `<tr><td><div class="song">${esc(c.name)}${songs[0]?.chart === 'willboard' ? certBadge('willboard', c.plays) : ''}</div><div class="artist">Didn't chart</div></td>
+      <td class="hide-sm"></td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">${c.plays.toLocaleString()}</td></tr>`).join('') : '');
   const more = ALBUMS.filter(o => o.artistId === al.artistId && o !== al);
   $('album-more-wrap').hidden = !more.length;
   $('album-more-h').textContent = `More from ${primaryArtist(al.artist)}`;
