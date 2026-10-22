@@ -12,6 +12,7 @@ import csv
 import json
 import re
 import sys
+import unicodedata
 from datetime import date, datetime, timedelta
 
 KEEP_WEEKS = 52
@@ -22,7 +23,11 @@ def points(pos):
 
 
 def norm(s):
-    return re.sub(r'[^a-z0-9]', '', (s or '').lower())
+    # Accents fold to plain letters; a title with no Latin letters at all (紅一葉) keeps its own text
+    # rather than collapsing to '' and colliding with every other such title
+    s = (s or '').lower()
+    flat = re.sub(r'[^a-z0-9]', '', unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode())
+    return flat or re.sub(r'\s+', '', s)
 
 
 def num(s):

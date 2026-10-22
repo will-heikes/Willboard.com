@@ -32,6 +32,12 @@ DEEZER = 'https://api.deezer.com/search/{kind}?limit=10&q={q}'
 ITUNES = 'https://itunes.apple.com/search?country=US&limit=10&entity={kind}&term={q}'
 
 
+def display_title(name, artist):
+    """Drop Will's tell-apart suffix ("Heaven - Niall"), as displayTitle() in index.html does."""
+    m = re.fullmatch(r'(.+?) - ([^-]+)', name or '')
+    return m.group(1) if m and norm(m.group(2)) and norm(m.group(2)) in norm(artist) else name
+
+
 def cover_name(artist, title):
     # Must match coverUrl() in index.html
     return f'{slugify(artist)}--{slugify(title)}.jpg'
@@ -103,8 +109,8 @@ def wanted(all_songs):
                 items.setdefault(cover_name(artist, n['song']), ('song', artist, n['song']))
     if all_songs:
         for s in data['songs']:
-            artist = primary_artist(s['artistName'], acts)
-            items.setdefault(cover_name(artist, s['name']), ('song', artist, s['name']))
+            artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
+            items.setdefault(cover_name(artist, title), ('song', artist, title))
     return items
 
 

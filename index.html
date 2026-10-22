@@ -885,6 +885,13 @@ function fmtLong(s)  { return s ? parseDate(s).toLocaleDateString('en-US', { mon
 function slugify(n)  { return n.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 // Lead artist of a credit. Acts with "&" in their name (Maddie & Tae, Big & Rich) stay whole.
 let ACT_NAMES = new Set();
+// Will's sheet tells same-named songs apart with the artist after a dash ("Heaven - Niall").
+// The site shows the plain title; a dash suffix that isn't part of the artist's name ("- Remix") stays.
+const squash = x => (x || '').normalize('NFKD').replace(/[^a-z0-9]/gi, '').toLowerCase();
+function displayTitle(name, artist) {
+  const m = /^(.+?) - ([^-]+)$/.exec(name || '');
+  return m && squash(m[2]) && squash(artist).includes(squash(m[2])) ? m[1] : name;
+}
 function primaryArtist(n) {
   const first = (n || '').split(/,| ft\.? | feat\.? | with /i)[0].trim();
   return ACT_NAMES.has(first) ? first : first.split(/ & | x /i)[0].trim();
@@ -1295,6 +1302,7 @@ async function renderYearEnd(year) {
     (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>');
   $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
   const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
+  for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
   const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
   $('ye-split').innerHTML = ['hot20', 'pop10'].map(id => {
     const c = CHARTS[id], rows = YEAREND[c.key]?.[year]?.songs || [];
@@ -1606,7 +1614,9 @@ async function init() {
     $('loading').textContent = 'Could not load the chart data. Make sure data.json and awards.json sit next to index.html.';
     return;
   }
-  for (const s of DATA.songs) SONGS[s.id] = s;
+  for (const s of DATA.songs) { s.name = displayTitle(s.name, s.artistName); SONGS[s.id] = s; }
+  for (const h of [...DATA.wbHistory, ...DATA.popHistory])
+    for (const e of [h.no1, h.notable]) if (e?.songId && SONGS[e.songId]) e.songName = SONGS[e.songId].name;
   ACT_NAMES = new Set(DATA.artists.map(a => a.name));
   PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   buildArtistStats();
