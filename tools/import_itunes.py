@@ -46,6 +46,9 @@ SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
               ('lukecombs', 'thisonesforyoutoo'): ('lukecombs', 'thisonesforyou'),
               ('coleswindell', 'stereotypebroken'): ('coleswindell', 'stereotype')}
 
+# Tracks filed under the wrong album: Eric Church's Heart and Soul are two albums, not "Heart & Soul" (Will)
+TRACK_ALBUM = {('ericchurch', 'hellofaview'): 'Heart', ('ericchurch', 'stickthatinyourcountrysong'): 'Soul'}
+
 
 def act_key(artist):
     act = lead(artist)
@@ -56,7 +59,9 @@ def album_key(t):
     """One album across its editions: "Red (Taylor's Version)", "Red (Deluxe Edition)" and "Red - EP" are Red."""
     name = re.sub(r'\s*[\(\[][^\)\]]*(deluxe|edition|version|expanded|bonus|collection|encore)[^\)\]]*[\)\]]', '',
                   t['Album'].strip(), flags=re.I).strip()
-    key = act_key(t.get('Album Artist') or t.get('Artist')), norm(re.sub(r'\s+-\s+EP$', '', name, flags=re.I))
+    act = act_key(t.get('Album Artist') or t.get('Artist'))
+    name = TRACK_ALBUM.get((act, bare(t['Name'])), name)
+    key = act, norm(re.sub(r'\s+-\s+EP$', '', name, flags=re.I))
     return (*SAME_ALBUM.get(key, key), name)
 
 
