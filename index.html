@@ -290,6 +290,13 @@ button { font: inherit; color: inherit; }
 .beat-item:last-child { border-bottom: 0; }
 .beat-item .art { width: 104px; height: 78px; font-size: 22px; border-radius: 0; }
 .beat-item h4 { font-family: var(--f-serif); font-weight: 600; font-size: 18px; line-height: 1.25; margin: 5px 0 0; }
+/* The weekly chart recap (recaps.json), under the #1 hero */
+.recap { display: block; max-width: 860px; padding: 26px 0 4px; }
+.recap:empty { display: none; }
+.recap h2 { font-family: var(--f-serif); font-weight: 700; font-size: 26px; line-height: 1.2; margin: 6px 0 8px; text-transform: none; letter-spacing: -.005em; }
+.recap p { font-family: var(--f-serif); font-size: 17.5px; line-height: 1.55; color: var(--ink-soft); margin: 0 0 10px; }
+.recap .more { font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.recap:hover h2 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 /* Chart Beat articles (articles.json) */
 .article { max-width: 720px; margin: 0 auto; padding: 28px 0 40px; }
 .article h1 { font-family: var(--f-serif); font-weight: 700; font-size: 40px; line-height: 1.12; letter-spacing: -.01em; margin: 10px 0 10px; }
@@ -850,6 +857,7 @@ body.on-ask .ask-fab { display: none; }
       </div>
     </div>
     <div class="ticker bleed" aria-label="This week's headlines"><div class="ticker-track" id="ticker"></div></div>
+    <a class="recap" id="recap" href="#/recap"></a>
 
     <div class="sec">
       <div class="sec-head">
@@ -1465,6 +1473,12 @@ function renderHome() {
     [(top.plays ?? s.itunesPlays ?? 0).toLocaleString(), 'Plays'],
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('') + (cert ? `<div>${cert}<small>Certified</small></div>` : '');
   $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at No. 1` : 'New No. 1'}</figcaption>`;
+
+  // This week's recap in Will's style: headline and opening lines, the rest on its own page
+  const rc = RECAPS[0];
+  $('recap').innerHTML = rc ? `<div class="kick">Weekly Recap · Week of ${fmtLong(rc.week)}</div><h2>${esc(rc.headline)}</h2>
+      <p>${esc(plainText(rc.body[0]).split(/(?<=[.’!?])\s+(?=[A-Z‘])/).slice(0, 3).join(' '))}</p><span class="more">Read the full recap ${arrow}</span>` : '';
+  $('recap').href = rc ? `#/recap/${rc.week}` : '#/';
 
   // Chart Beat: Will's articles, newest first
   const stories = weekStories(last, pop.length - 1);
@@ -2890,6 +2904,21 @@ function renderStory(year) {
 let ARTICLES = [];
 const articleCard = a => ({ chart: a.chart === 'pop10' ? 'pop' : '', kicker: a.kicker, headline: a.headline, dek: a.dek, artist: a.artist, href: `#/beat/${a.id}` });
 const articleText = t => t.replace(/\[\[([^\]]+)\]\]/g, (m, n) => ARTIST_ID[n] ? `<a href="#/artist/${ARTIST_ID[n]}">${esc(n)}</a>` : esc(n));
+// Weekly chart recaps: recaps.json, newest first
+let RECAPS = [];
+const plainText = t => t.replace(/\[\[([^\]]+)\]\]/g, '$1');
+function renderRecap(week) {
+  const r = RECAPS.find(x => x.week === week) || (!week && RECAPS[0]);
+  const i = RECAPS.indexOf(r);
+  $('article').innerHTML = !r ? `<div class="eyebrow"><a href="#/">← Home</a></div><h1>Recap not found</h1>` : `
+    <div class="eyebrow"><a href="#/">← Home</a></div>
+    <div class="kick" style="margin-top:14px">Weekly Recap</div>
+    <h1>${esc(r.headline)}</h1>
+    <div class="byline">Week of ${fmtLong(r.week)} · <a href="#/hot20/${r.week}" style="text-decoration:underline">Hot 20</a> · <a href="#/pop10/${r.week}" style="text-decoration:underline">Pop 10</a></div>
+    <div class="body">${r.body.map(p => `<p>${articleText(p)}</p>`).join('')}</div>
+    <div class="ay-nav">${RECAPS[i + 1] ? `<a class="more" href="#/recap/${RECAPS[i + 1].week}">← Week of ${fmtLong(RECAPS[i + 1].week)}</a>` : ''}
+      ${RECAPS[i - 1] ? `<a class="more" href="#/recap/${RECAPS[i - 1].week}">Week of ${fmtLong(RECAPS[i - 1].week)} ${arrow}</a>` : ''}</div>`;
+}
 function renderArticle(id) {
   const a = ARTICLES.find(x => x.id === id);
   $('article').innerHTML = !a ? `<div class="eyebrow"><a href="#/">← Home</a></div><h1>Story not found</h1>` : `
@@ -2931,6 +2960,7 @@ function route() {
   else if (page === 'song')     { id = 'song'; renderSong(arg); }
   else if (page === 'story')    { id = 'story'; renderStory(+arg); }
   else if (page === 'beat')     { id = 'beat'; renderArticle(arg); }
+  else if (page === 'recap')    { id = 'beat'; renderRecap(arg); }
   else if (page === 'ask')      { id = 'ask'; renderAsk(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'about')    { id = 'about'; }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
@@ -2953,6 +2983,7 @@ async function init() {
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     SONG_LEN = await fetch('song_lengths.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
+    RECAPS = (await fetch('recaps.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => [])).sort((a, b) => b.week.localeCompare(a.week));
     ARTICLES = (await fetch('articles.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => [])).sort((a, b) => b.date.localeCompare(a.date));
     fullHistory('willboard');
     fullHistory('pop');
