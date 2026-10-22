@@ -2240,7 +2240,7 @@ function renderSongs() {
 // Questions about the charts in plain English, answered straight from the chart data by
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
 const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
-  'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', 'Which songs debuted at #1?', 'When did Over You hit #1?',
+  'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
   'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'What is the longest song to chart?'];
@@ -2331,14 +2331,15 @@ const inSpanW = (span, week) => !span || (week >= span.from && week <= span.to);
 
 const askNorm = t => ` ${(t || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/['’]s\b/g, ' ').replace(/[’']/g, '').replace(/[^a-z0-9$]+/g, ' ').trim()} `;
 // An act named in the question. Short names that are also everyday words (Pink, Train, Future)
-// only count when written with a capital letter.
+// only count when written with a capital letter, as a possessive ("pinks") or after "by".
 function askArtist(q) {
   const lower = askNorm(q);
   let best = null;
   for (const a of DATA.artists) {
     const n = askNorm(a.name);
-    if (n.length < 4 || !lower.includes(n) || (best && n.length <= best.n.length)) continue;
-    if (n.length <= 8 && !new RegExp(`(^|[^A-Za-z])${a.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^A-Za-z])`).test(q)) continue;
+    if (n.length < 4 || !(lower.includes(n) || lower.includes(n.trimEnd() + 's ')) || (best && n.length <= best.n.length)) continue;
+    if (n.length <= 8 && !new RegExp(`(^|[^A-Za-z])${a.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^A-Za-z])`).test(q)
+      && !new RegExp(`(^|[^a-z])${n.trim()}['’]?s\\b|\\bby ${n.trim()}\\b`, 'i').test(q)) continue;
     best = { id: a.id, name: a.name, n };
   }
   return best;
@@ -2798,8 +2799,11 @@ function askAnswer(q, chartId, f) {
     const list = songsF.filter(s => s.weeks.some(w => inSpanW(f.span, w))).sort((a, b) => a.peak - b.peak || b.no1.length - a.no1.length || b.weeks.length - a.weeks.length);
     if (!list.length) return { lead: `${esc(f.artist.name)} hasn't charted on the ${c.name}${inYear(f.span)}.` };
     const n1 = list.filter(s => s.no1.length).length;
+    // "What's Pink's biggest hit?": name the top song, ranked by peak, then weeks at #1, then weeks on the chart
+    const top = list[0];
+    const hit = /\b(biggest|best|top|greatest|most successful|signature)\b/.test(t) && /\b(hit|song|single|record)\b/.test(t) ? `${esc(f.artist.name)}'s biggest ${c.name} hit${inYear(f.span)} is ${title(S(top.id))}, ${top.no1.length ? `with ${wk(top.no1.length)} at #1` : `peaking at No. ${top.peak}`} and ${wk(top.weeks.length)} on the chart. ` : '';
     return {
-      lead: `${esc(f.artist.name)} has ${list.length} song${list.length === 1 ? '' : 's'} on the ${c.name}${inYear(f.span)}${n1 ? `, ${n1} of them #1s` : ''}.`,
+      lead: `${hit}${esc(f.artist.name)} has ${list.length} song${list.length === 1 ? '' : 's'} on the ${c.name}${inYear(f.span)}${n1 ? `, ${n1} of them #1s` : ''}.`,
       rows: list.map((s, i) => askRow(i + 1, S(s.id), s.no1.length ? `<b>${s.no1.length}</b> wk${s.no1.length === 1 ? '' : 's'} at #1` : `Peak <b>${s.peak}</b>`)).join(''),
       more: `<a class="ask-more" href="#/artist/${f.artist.id}">${esc(f.artist.name)}'s page ${arrow}</a>`,
     };
