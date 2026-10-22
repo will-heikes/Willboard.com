@@ -282,11 +282,37 @@ button { font: inherit; color: inherit; }
 .cmod-head .chart-title .label { color: var(--accent); }
 .cmod-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; white-space: nowrap; }
 .cmod-btn:hover { background: var(--accent); }
-.ye-kick { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-.ye-table .th { width: 44px; height: 44px; position: relative; overflow: hidden; background: var(--card-2); }
-.ye-table .th .art { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; font-size: 13px; }
-.ye-table .th img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.ye-table td.rank { width: 40px; font-weight: 800; font-size: 18px; }
+/* Country and Pop side by side (Year-End, Songs, Artists) */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.split .col { --accent: var(--country); }
+.split .col.pop { --accent: var(--pop); }
+.col-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 4px solid var(--accent); padding: 10px 0 12px; }
+.col-h h2 { font-family: var(--f-cond); font-weight: 700; font-size: 26px; text-transform: uppercase; margin: 0; color: var(--accent); }
+.col-h small { font-size: 11.5px; color: var(--muted); }
+.lrow { display: grid; grid-template-columns: 34px 48px 1fr auto; align-items: center; gap: 12px; padding: 9px 12px;
+  background: var(--card); border-bottom: 1px solid var(--line-soft); }
+.lrow:hover { background: var(--card-2); }
+.lrow .rk { font-family: var(--f-cond); font-weight: 700; font-size: 20px; text-align: center; }
+.lrow .art { width: 48px; height: 48px; font-size: 14px; }
+.lrow .meta { font-size: 11.5px; color: var(--muted); text-align: right; white-space: nowrap; line-height: 1.5; }
+.lrow .meta b { color: var(--ink); font-size: 13px; }
+.lrow.dim { opacity: .55; }
+.ye-nav { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 4px 0 26px; }
+.ye-nav h2 { font-family: var(--f-cond); font-weight: 700; font-size: 64px; line-height: 1; margin: 0; letter-spacing: .01em; }
+.ye-nav a, .ye-nav span.off { font-family: var(--f-cond); font-weight: 700; font-size: 22px; color: var(--muted); padding: 6px 10px; }
+.ye-nav a:hover { color: var(--ink); }
+.ye-nav span.off { visibility: hidden; }
+.ye-nav select { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.ye-nav .yr { position: relative; }
+.ye-nav .yr::after { content: "▾"; font-size: 14px; color: var(--muted); position: absolute; right: -16px; bottom: 10px; }
+.ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
+  background: linear-gradient(110deg, rgb(var(--tint, 0 0 0) / .45), rgb(var(--tint, 0 0 0) / .12) 60%, var(--card)); }
+.ye-lead .art { width: 150px; height: 150px; font-size: 34px; box-shadow: 0 14px 28px -14px rgb(var(--tint, 0 0 0) / .9); }
+.ye-lead .rk { font-family: var(--f-cond); font-weight: 700; font-size: 56px; line-height: .9; color: var(--accent); }
+.ye-lead .song { font-family: var(--f-cond); font-size: 28px; text-transform: uppercase; line-height: 1.02; margin-top: 6px; }
+.ye-lead .artist { font-size: 14px; margin-top: 3px; }
+.ye-lead .meta { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+.split .empty { padding: 30px 12px; color: var(--muted); font-size: 13px; background: var(--card); }
 .cmod-strip { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 14px; }
 .cm { display: flex; flex-direction: column; min-width: 0; }
 .cm .ph { position: relative; aspect-ratio: 1; overflow: hidden; background: #222; }
@@ -570,6 +596,11 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .chart-cols, .chart-row { grid-template-columns: 24px 40px 1fr 26px 28px 30px; column-gap: 8px; padding-left: 12px; padding-right: 12px; }
   .chart-row .art { width: 44px; height: 40px; }
   .full-chart .hide-sm { display: none; }
+  .split { grid-template-columns: 1fr; gap: 22px; }
+  .ye-nav h2 { font-size: 46px; }
+  .ye-lead { grid-template-columns: 110px 1fr; padding: 14px; }
+  .ye-lead .art { width: 110px; height: 110px; }
+  .ye-lead .song { font-size: 22px; }
   .song-hero { grid-template-columns: 1fr; padding: 20px; gap: 18px; margin-top: 14px; }
   .song-hero .art { width: 100%; height: auto; aspect-ratio: 1; }
   .song-hero h1 { font-size: 40px; }
@@ -715,14 +746,9 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
         <h1>Year-End Charts</h1>
         <div class="sub">The biggest songs of each year, from the plays they earned and how high they charted.</div>
       </div>
-      <div class="pills" id="ye-chart"></div>
     </div>
-    <div class="pills" id="ye-years" style="margin-bottom:22px"></div>
-    <div class="cmod" id="ye-mod">
-      <div class="ye-kick" id="ye-title"></div>
-      <div class="cmod-strip" id="ye-top"></div>
-    </div>
-    <div class="card" style="overflow:hidden"><table class="table ye-table" id="ye-table"></table></div>
+    <div class="ye-nav" id="ye-nav"></div>
+    <div class="split" id="ye-split"></div>
   </section>
 
   <!-- ── AWARDS ── -->
@@ -763,7 +789,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       </div>
       <input class="search" id="artist-q" placeholder="Search artists…" autocomplete="off">
     </div>
-    <div class="card" style="overflow:hidden"><table class="table" id="artist-table"></table></div>
+    <div class="split" id="artist-split"></div>
   </section>
 
   <!-- ── ARTIST DETAIL ── -->
@@ -802,7 +828,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
       <input class="search" id="song-q" placeholder="Search songs or artists…" autocomplete="off">
     </div>
     <p class="hint" id="song-hint"></p>
-    <div class="card" style="overflow:hidden"><table class="table" id="song-table"></table></div>
+    <div class="split" id="song-split"></div>
   </section>
 
   <!-- ── STORY YEAR ── -->
@@ -848,7 +874,7 @@ const CHARTS = {
   hot20: { key: 'willboard', hist: 'wbHistory',  label: 'HOT 20', name: 'Country Hot 20', cls: 'country', isWb: true },
   pop10: { key: 'pop',       hist: 'popHistory', label: 'POP 10', name: 'Pop 10',         cls: 'pop',     isWb: false },
 };
-const ui = { chart: 'hot20', weekIdx: {}, yeChart: 'hot20', yeYear: null, awChart: 'country', awYear: null, storyYear: null };
+const ui = { chart: 'hot20', weekIdx: {}, yeYear: null, awChart: 'country', awYear: null, storyYear: null };
 
 // ─── UTILITIES ──────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -979,8 +1005,8 @@ function pictureTint(img) {
     return TINTS[img.src] = c.map(v => Math.round(Math.max(0, Math.min(255, grey + (v - grey) * 2)))).join(' ');
   } catch { return TINTS[img.src] = null; }
 }
-function tintRows(root) {
-  root.querySelectorAll('.chart-row').forEach(row => {
+function tintRows(root, sel = '.chart-row') {
+  root.querySelectorAll(sel).forEach(row => {
     const apply = () => {
       const img = [...row.querySelectorAll('.art img')].filter(i => i.complete && i.naturalWidth).pop();
       const tint = img && pictureTint(img);
@@ -1258,29 +1284,32 @@ function pills(el, items, active, onPick) {
 }
 // Will's year-end lists, plus years ranked by his formula (tools/build_yearend.py → yearend.json)
 let YEAREND = null;
-async function renderYearEnd() {
+async function renderYearEnd(year) {
   if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
-  const c = CHARTS[ui.yeChart], lists = YEAREND[c.key] || {};
-  const years = Object.keys(lists).map(Number).sort((a, b) => b - a);
-  if (!years.includes(ui.yeYear)) ui.yeYear = years[0];
-  pills($('ye-chart'), [['hot20', 'Hot 20'], ['pop10', 'Pop 10']], ui.yeChart, v => { ui.yeChart = v; renderYearEnd(); });
-  pills($('ye-years'), years.map(y => [y, y]), ui.yeYear, v => { ui.yeYear = v; renderYearEnd(); });
-  const rows = lists[ui.yeYear]?.songs || [];
-  $('ye-mod').className = `cmod ${c.cls}`;
-  $('ye-title').textContent = `Top ${rows.length} ${c.isWb ? 'Country' : 'Pop'} Songs of ${ui.yeYear}`;
+  const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
+  if (!years.includes(year)) year = years.includes(ui.yeYear) ? ui.yeYear : years[years.length - 1];
+  ui.yeYear = year;
+  const i = years.indexOf(year), prev = years[i - 1], next = years[i + 1];
+  $('ye-nav').innerHTML = (prev ? `<a href="#/year-end/${prev}">← ${prev}</a>` : '<span class="off">←</span>') +
+    `<div class="yr"><h2>${year}</h2><select aria-label="Pick a year">${years.slice().reverse().map(y => `<option${y === year ? ' selected' : ''}>${y}</option>`).join('')}</select></div>` +
+    (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>');
+  $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
   const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
-  const facts = r => [r.wks1 ? `${r.wks1} week${r.wks1 === 1 ? '' : 's'} at No. 1` : r.peak ? `Peaked at No. ${r.peak}` : '',
-                      r.wc ? `${r.wc} weeks on chart` : ''].filter(Boolean);
-  $('ye-top').innerHTML = rows.slice(0, 5).map(r => `<a class="cm${r.rank === 1 ? ' first' : ''}" href="${link(r)}">
-      <div class="ph">${artTile(r.artistName, r.rank === 1, undefined, r.name)}<span class="rk">${r.rank}</span></div>
-      <div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div>
-      ${facts(r).map(f => `<div class="mv">${f}</div>`).join('')}</a>`).join('');
-  $('ye-table').innerHTML = rows.length <= 5 ? '' : `<tr><th>#</th><th></th><th>Song</th><th class="num">Peak</th><th class="num hide-sm">Wks at #1</th><th class="num">Wks</th></tr>` +
-    rows.slice(5).map(r => `<tr class="click" onclick="location.hash='${link(r)}'">
-        <td class="rank">${r.rank}</td>
-        <td style="width:44px;padding-right:0"><div class="th">${artTile(r.artistName, false, undefined, r.name)}</div></td>
-        <td><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></td>
-        <td class="num">${r.peak ?? '—'}</td><td class="num hide-sm">${r.wks1 || '—'}</td><td class="num">${r.wc ?? '—'}</td></tr>`).join('');
+  const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
+  $('ye-split').innerHTML = ['hot20', 'pop10'].map(id => {
+    const c = CHARTS[id], rows = YEAREND[c.key]?.[year]?.songs || [];
+    const head = `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${rows.length ? `Top ${rows.length} songs of ${year}` : ''}</small></div>`;
+    if (!rows.length) return `<div class="col ${c.cls}">${head}<div class="empty">No ${c.isWb ? 'Country' : 'Pop'} year-end chart for ${year}.</div></div>`;
+    const [top, ...rest] = rows;
+    return `<div class="col ${c.cls}">${head}
+      <a class="ye-lead" href="${link(top)}">${artTile(top.artistName, true, undefined, top.name)}
+        <div><div class="rk">1</div><div class="song">${esc(top.name)}</div><div class="artist">${esc(top.artistName)}</div>
+        <div class="meta">${facts(top).join(' · ')}</div></div></a>
+      ${rest.map(r => `<a class="lrow" href="${link(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
+        <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
+        <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}</div>`;
+  }).join('');
+  tintRows($('ye-split'), '.ye-lead');
 }
 
 // ─── AWARDS ─────────────────────────────────────────────────────
@@ -1381,27 +1410,38 @@ function renderAwardYear(chart, year) {
 }
 
 // ─── ARTISTS ────────────────────────────────────────────────────
-let artistStats = null;
+let artistStats = null, chartArtists = null;
 function buildArtistStats() {
   artistStats = {};
+  chartArtists = { willboard: {}, pop: {} };
   for (const s of DATA.songs) {
     const a = artistStats[s.artistId] ||= { id: s.artistId, name: s.artistName, songs: 0, no1: 0, points: 0, charts: new Set() };
     a.songs++; a.points += s.totalPoints || 0; a.charts.add(s.chart);
     if (s.peakPosition === 1) a.no1++;
+    // The same act ranked separately on each chart
+    const c = chartArtists[s.chart][s.artistId] ||= { id: s.artistId, name: s.artistName, songs: 0, no1: 0, points: 0 };
+    c.songs++; c.points += s.totalPoints || 0;
+    if (s.peakPosition === 1) c.no1++;
   }
-  for (const a of DATA.artists) if (artistStats[a.id]) artistStats[a.id].name = a.name;
+  for (const a of DATA.artists) {
+    if (artistStats[a.id]) artistStats[a.id].name = a.name;
+    for (const k in chartArtists) if (chartArtists[k][a.id]) chartArtists[k][a.id].name = a.name;
+  }
+}
+// Country and Pop side by side; rankings come from Will's internal points, which are never shown
+function splitCols(render) {
+  return ['hot20', 'pop10'].map(id => { const c = CHARTS[id]; return `<div class="col ${c.cls}">${render(c)}</div>`; }).join('');
 }
 function renderArtists() {
   const q = $('artist-q').value.trim().toLowerCase();
-  const rows = Object.values(artistStats)
-    .filter(a => !q || a.name.toLowerCase().includes(q))
-    .sort((a, b) => b.points - a.points).slice(0, q ? 200 : 100);
-  $('artist-table').innerHTML = `<tr><th>#</th><th>Artist</th><th class="hide-sm">Charts</th><th class="num">Songs</th><th class="num">#1 hits</th></tr>` +
-    rows.map((a, i) => `<tr class="click" onclick="location.hash='#/artist/${a.id}'">
-      <td class="rank">${i + 1}</td>
-      <td><div class="song">${esc(a.name)}</div></td>
-      <td class="hide-sm">${[...a.charts].map(c => `<span class="tag ${c === 'pop' ? 'pop' : 'country'}">${c === 'pop' ? 'Pop' : 'Country'}</span>`).join(' ')}</td>
-      <td class="num">${a.songs}</td><td class="num">${a.no1}</td></tr>`).join('');
+  $('artist-split').innerHTML = splitCols(c => {
+    const all = Object.values(chartArtists[c.key]).filter(a => !q || a.name.toLowerCase().includes(q));
+    const rows = all.sort((a, b) => b.points - a.points).slice(0, q ? 150 : 50);
+    return `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 50 of ${Object.keys(chartArtists[c.key]).length} artists`}</small></div>` +
+      (rows.length ? rows.map((a, i) => `<a class="lrow" href="#/artist/${a.id}"><span class="rk">${i + 1}</span>${artTile(a.name)}
+        <span><div class="song">${esc(a.name)}</div><div class="artist">${a.songs} song${a.songs === 1 ? '' : 's'}</div></span>
+        <span class="meta">${a.no1 ? `<b>${a.no1}</b> #1${a.no1 === 1 ? '' : 's'}` : ''}</span></a>`).join('') : '<div class="empty">No matches.</div>');
+  });
 }
 function renderArtist(id) {
   const a = artistStats[id];
@@ -1501,14 +1541,15 @@ async function renderSong(id) {
 // ─── SONGS ──────────────────────────────────────────────────────
 function renderSongs() {
   const q = $('song-q').value.trim().toLowerCase();
-  const all = DATA.songs.filter(s => !q || s.name.toLowerCase().includes(q) || (s.artistName || '').toLowerCase().includes(q));
-  const rows = all.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, 150);
-  $('song-hint').textContent = q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `The 150 biggest of ${DATA.songs.length.toLocaleString()} Willboard songs. Search to find any song.`;
-  $('song-table').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th class="hide-sm">Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    rows.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'">
-      <td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
-      <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td class="hide-sm">${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+  $('song-hint').textContent = q ? '' : `The biggest songs in Willboard history. Search to find any of ${DATA.songs.length.toLocaleString()}.`;
+  $('song-split').innerHTML = splitCols(c => {
+    const all = DATA.songs.filter(s => s.chart === c.key && (!q || s.name.toLowerCase().includes(q) || (s.artistName || '').toLowerCase().includes(q)));
+    const rows = all.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, q ? 150 : 75);
+    return `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 75 of ${DATA.songs.filter(s => s.chart === c.key).length.toLocaleString()}`}</small></div>` +
+      (rows.length ? rows.map((s, i) => `<a class="lrow" href="#/song/${s.id}"><span class="rk">${i + 1}</span>${artTile(s.artistName, false, undefined, s.name)}
+        <span><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></span>
+        <span class="meta">Peak <b>${s.peakPosition ?? '—'}</b><br>${s.debutDate.slice(0, 4)}</span></a>`).join('') : '<div class="empty">No matches.</div>');
+  });
 }
 
 // ─── STORY (a year of #1s) ──────────────────────────────────────
@@ -1536,7 +1577,7 @@ function route() {
   const [page, arg, arg2] = path.split('/');
   let id = 'home';
   if (page === 'hot20' || page === 'pop10') { id = 'chart'; renderChartPage(page); }
-  else if (page === 'year-end') { id = 'year-end'; renderYearEnd(); }
+  else if (page === 'year-end') { id = 'year-end'; renderYearEnd(+arg); }
   else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
