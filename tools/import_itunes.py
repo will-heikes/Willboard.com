@@ -12,7 +12,8 @@ Also writes albums.json: every album holding a charted song (Hot 20 or Pop 10), 
 the plays of all its tracks added together for album certifications. Deluxe and
 Taylor's Version editions count with the original, which names the album and gives
 it its cover; a song first released on a Taylor's Version (a vault track) keeps
-that edition's name. Singles and compilations are left out.
+that edition's name. Singles and compilations are left out. Each album also lists its
+album cuts: tracks that never charted but have CUT_MIN plays or more (all editions together).
 """
 import csv
 import json
@@ -24,6 +25,7 @@ from collections import defaultdict
 from add_week import norm
 
 OUT, ALBUMS = 'itunes_plays.tsv', 'albums.json'
+CUT_MIN = 200  # plays for a non-charting track to show on its album
 # "(feat. X)", "[with X]", "- Single Version" and the like aren't part of the title
 EXTRA = re.compile(r'\s*[\(\[](feat|ft|with|from|radio|single|album|edit|remaster|explicit|clean)[^\)\]]*[\)\]]'
                    r'|\s+-\s+(single|radio|album)\b.*$', re.I)
@@ -99,12 +101,15 @@ def main():
         w.writerows(sorted(rows))
     json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 
-    albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': [], 'years': []})
+    albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': [], 'years': [], 'cuts': defaultdict(lambda: [0, []])})
     for t in lib['Tracks'].values():
         if is_album(t) and album_key(t)[:2] in album_songs:
             a = albums[album_key(t)[:2]]
             a['plays'] += t.get('Play Count', 0)
             a['tracks'] += 1
+            cut = a['cuts'][bare(t['Name'])]
+            cut[0] += t.get('Play Count', 0)
+            cut[1].append(re.sub(r'\s*[\(\[][^\)\]]*(version|vault|remaster)[^\)\]]*[\)\]]', '', EXTRA.sub('', t['Name']), flags=re.I).strip())
             if not TV.search(t['Album']):
                 a['names'].append(album_key(t)[2])
                 if t.get('Year'):
@@ -116,6 +121,10 @@ def main():
               'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]}
         if a['years']:
             al['year'] = min(a['years'])  # release year, for ordering an artist's albums
+        charted = {bare(s['name']) for s in songs}
+        cuts = sorted(((min(n, key=len), p) for b, (p, n) in a['cuts'].items() if b not in charted and p >= CUT_MIN), key=lambda c: -c[1])
+        if cuts:
+            al['cuts'] = [{'name': n, 'plays': p} for n, p in cuts]
         if any(s['id'] in edition for s in songs):
             al['editions'] = {s['id']: edition[s['id']] for s in songs if s['id'] in edition}
         out.append(al)
