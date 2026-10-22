@@ -28,6 +28,7 @@ MANUAL = {
     'Alessa': None, 'Chloe': None, 'Dakota': None, 'Felicia': None, 'Olivia': None,
     'Ashe': {'type': 'person', 'sex': 'f'}, 'Dev': {'type': 'person', 'sex': 'f'}, 'John K': {'type': 'person', 'sex': 'm'},
     'Miguel': {'type': 'person', 'sex': 'm'}, 'Ruth B': {'type': 'person', 'sex': 'f'},
+    'Steve Lacy': {'type': 'person', 'sex': 'm', 'born': '1998-05-23'}, 'Vincent Mason': {'type': 'person', 'sex': 'm'},
     'FLO': {'type': 'group'}, 'Grey': {'type': 'group'}, 'Magic': {'type': 'group'},
 }
 MUSIC = re.compile(r'singer|musician|rapper|\bband\b|\bduo\b|\btrio\b|\bgroup\b|\bDJ\b|producer|songwriter|vocalist|guitarist|composer|quartet|ensemble', re.I)

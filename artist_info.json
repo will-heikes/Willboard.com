@@ -3519,10 +3519,9 @@
 },
 "Steve Lacy": {
 "type": "person",
-"wd": "Q504641",
-"about": "American jazz musician (1934–2004)",
-"born": "1934-07-23",
-"sex": "m"
+"born": "1998-05-23",
+"sex": "m",
+"manual": true
 },
 "Steven Tyler": {
 "type": "person",
@@ -3933,10 +3932,8 @@
 },
 "Vincent Mason": {
 "type": "person",
-"wd": "Q1414286",
-"about": "American rapper and record producer",
-"born": "1970-03-24",
-"sex": "m"
+"sex": "m",
+"manual": true
 },
 "Væb": {
 "type": "group",

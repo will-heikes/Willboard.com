@@ -2243,11 +2243,14 @@ const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most wee
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'What song has the most plays?', 'What is the longest song to chart?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'What is the longest song to chart?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
 const actInfo = name => ARTIST_INFO?.[name];
+// Acts by squashed name, so award credits like "Taylor swift" find the chart's "Taylor Swift"
+let ACT_BY_KEY_CACHE = null;
+const ACT_BY_KEY = new Proxy({}, { get: (_, k) => (ACT_BY_KEY_CACHE ||= Object.fromEntries(DATA.artists.map(a => [squash(a.name), a])))[k] });
 // song_lengths.json (tools/import_itunes.py, from Will's iTunes library): song id -> seconds. Hot 20 songs only.
 let SONG_LEN = null;
 const mmss = sec => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
@@ -2386,6 +2389,104 @@ function askAnswer(q, chartId, f) {
   const title = s => f.artist ? `“${esc(s.name)}”` : songTitle(s);
   const kind = kindOf(t);
   const noInfo = { lead: `I don't have that detail about the artists yet.` };
+
+  // The Willboard Awards: the Country show answers on the Hot 20 card, the Pop show on the Pop 10 card
+  if (/\b(awards?|nominat\w*|nominees?|win rate|winning percentage)\b/.test(t) || (/\b(won|wins|winner|winners)\b/.test(t) && !NO1.test(t))) {
+    const show = chartId === 'hot20' ? 'country' : 'pop', showName = show === 'country' ? 'Country Awards' : 'Pop Awards';
+    if (!AWARDS?.[show]) return null;
+    const ans = awardAnswer();
+    return ans && Object.assign(ans, { label: showName });
+    function awardAnswer() {
+    // A category named in the question ("song of the year", "new artist", "entertainer")
+    const cats = [...new Set(AWARDS[show].map(n => n.category))];
+    const catKey = c => c.toLowerCase().replace(/ of the year$/, '').replace(/^vocal /, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+    const cat = cats.filter(c => new RegExp(`\\b${catKey(c)}\\b`).test(t.replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ')))
+      .sort((a, b) => catKey(b).length - catKey(a).length)[0];
+    // A category only the other show has (Entertainer, Record) leaves this show out
+    const other = AWARDS[show === 'country' ? 'pop' : 'country'] || [];
+    if (!cat && [...new Set(other.map(n => n.category))].some(c => new RegExp(`\\b${catKey(c)}\\b`).test(t.replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ')))) return null;
+    const decided = new Set(AWARDS[show].filter(n => n.slot === 'Winner').map(n => n.year));
+    const rows = AWARDS[show].filter(n => (!cat || n.category === cat) && inSpanW(f.span, String(n.year)));
+    const inWhat = `${cat ? ` for ${esc(cat)}` : ''} at the ${showName}${f.span ? ` in ${f.span.label}` : ''}`;
+    // Each act on a nomination gets the credit, matched to the chart's spelling of their name
+    const acts = {};
+    for (const n of rows) for (const p of creditParts(n.artist)) {
+      const known = ACT_BY_KEY[squash(p.name)], name = known?.name || p.name;
+      if (kind && !isKind(name, kind)) continue;
+      const a = acts[squash(name)] ||= { id: known?.id, name, noms: 0, wins: 0, decided: 0, years: new Set(), first: n.year };
+      a.noms++; a.years.add(n.year); a.first = Math.min(a.first, n.year);
+      if (decided.has(n.year)) a.decided++;
+      if (n.slot === 'Winner') a.wins++;
+    }
+    const all = Object.values(acts);
+    const who2 = kind ? KIND_WORD[kind].replace(/^an? /, '') : 'act';
+    const actRow = (a, i, list, val, meta) => askArtistRow(rankIn(list, i, val), { ...a, id: a.id, sub: `${a.wins} win${a.wins === 1 ? '' : 's'} from ${a.noms} nomination${a.noms === 1 ? '' : 's'}` }, meta);
+    const tieWho = (list, val) => { const n = tiedTop(list, val); return n > 1 ? list.slice(0, n).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ') : esc(list[0].name); };
+    const more = `<a class="ask-more" href="#/awards">The Willboard Awards ${arrow}</a>`;
+    if (!rows.length) return { lead: `No ${showName} nominations${cat ? ` for ${esc(cat)}` : ''}${f.span ? ` in ${f.span.label}` : ''}.` };
+
+    // Who won a category in a given year
+    if (cat && f.span?.year && /\b(who|what|which)\b/.test(t) && /\b(won|win|winner|nominees?|nominated)\b/.test(t)) {
+      const ys = rows.sort((a, b) => (b.slot === 'Winner') - (a.slot === 'Winner') || byAwArtist(a, b));
+      const w = ys.find(n => n.slot === 'Winner');
+      return { lead: w ? `${esc(awName(w))}${w.song || w.album ? ` (${esc(w.artist)})` : ''} won ${esc(cat)} at the ${f.span.year} ${showName}.` : `The ${f.span.year} ${showName} winners haven't been announced. The ${esc(cat)} nominees:`,
+        rows: ys.map((n, i) => askArtistRow(n.slot === 'Winner' ? '★' : '', { id: ACT_BY_KEY[squash(primaryArtist(n.artist))]?.id, name: n.song || n.album ? awName(n) : n.artist, sub: n.song || n.album ? n.artist : '' }, n.slot === 'Winner' ? '<b>Winner</b>' : 'Nominee')).join(''),
+        more: `<a class="ask-more" href="${awHref(show, +f.span.year)}">The ${f.span.year} ${showName} ${arrow}</a>` };
+    }
+    // One act's record
+    if (f.artist) {
+      const a = acts[squash(ACT_BY_KEY[squash(f.artist.name)]?.name || f.artist.name)];
+      if (!a) return { lead: `${esc(f.artist.name)} hasn't been nominated${inWhat}.` };
+      const mine = rows.filter(n => creditParts(n.artist).some(p => squash(ACT_BY_KEY[squash(p.name)]?.name || p.name) === squash(a.name)))
+        .sort((x, y) => x.year - y.year || (y.slot === 'Winner') - (x.slot === 'Winner'));
+      return { lead: `${esc(a.name)} has ${a.wins} win${a.wins === 1 ? '' : 's'} from ${a.noms} nomination${a.noms === 1 ? '' : 's'}${inWhat}.`,
+        rows: mine.map(n => askArtistRow(n.year, { id: a.id, name: n.category, sub: n.song || n.album ? awName(n) : '' }, n.slot === 'Winner' ? '<b>Winner</b>' : 'Nominee')).join(''), more };
+    }
+    // Oldest or youngest nominee (or winner), by age in the year of the show
+    if (/\b(oldest|youngest)\b/.test(t)) {
+      if (!ARTIST_INFO) return noInfo;
+      const young = /young/.test(t), wonOnly = /\b(won|win|winner|winners)\b/.test(t), best = {};
+      for (const n of rows) {
+        if (wonOnly && n.slot !== 'Winner') continue;
+        for (const p of creditParts(n.artist)) {
+          const name = ACT_BY_KEY[squash(p.name)]?.name || p.name, born = actInfo(name)?.born;
+          if (!born || (kind && !isKind(name, kind))) continue;
+          const age = n.year - +born.slice(0, 4), k = squash(name);
+          if (!best[k] || (young ? age < best[k].age : age > best[k].age)) best[k] = { id: ACT_BY_KEY[k]?.id, name, age, n };
+        }
+      }
+      const list = Object.values(best).sort((a, b) => young ? a.age - b.age : b.age - a.age).filter(ties(10, x => x.age));
+      if (!list.length) return { lead: `I don't have birth dates for those ${showName} ${wonOnly ? 'winners' : 'nominees'}.` };
+      const x = list[0];
+      return { lead: `The ${young ? 'youngest' : 'oldest'} ${kind ? who2 : ''}${kind ? ' ' : ''}${wonOnly ? 'winner' : 'nominee'}${inWhat} is ${esc(x.name)}, who turned ${x.age} in ${x.n.year}, the year of their ${esc(x.n.category)} ${x.n.slot === 'Winner' ? 'win' : 'nomination'}.`,
+        rows: list.map((x, i) => askArtistRow(rankIn(list, i, x => x.age), { id: x.id, name: x.name, sub: `${x.n.year} ${x.n.category}` }, `<b>${x.age}</b><br>that year`)).join(''), more };
+    }
+    // Best win rate (at least 5 nominations at shows that have named winners)
+    if (/\b(win rate|winning percentage|success rate|best record|hit rate)\b/.test(t)) {
+      const rate = a => a.wins / a.decided;
+      const list = all.filter(a => a.decided >= 5).sort((a, b) => rate(b) - rate(a) || b.wins - a.wins).filter(ties(10, rate));
+      if (!list.length) return { lead: `No ${who2} has 5 or more nominations${inWhat}.` };
+      const pct = a => `${Math.round(rate(a) * 100)}%`;
+      return { lead: `${tieWho(list, rate)} ${tiedTop(list, rate) > 1 ? 'share' : 'has'} the best win rate${inWhat}: ${pct(list[0])}, ${list[0].wins} of ${list[0].decided}. (Acts with at least 5 nominations.)`,
+        rows: list.map((a, i) => actRow(a, i, list, rate, `<b>${pct(a)}</b><br>won`)).join(''), more };
+    }
+    // Most nominations without a win
+    if (/\b(without|never|no) (a )?(win|winning|won)|\bwinless\b|\bhasn.?t won|\bnever won/.test(t)) {
+      const list = all.filter(a => !a.wins).sort((a, b) => b.noms - a.noms || a.name.localeCompare(b.name)).filter(ties(10, a => a.noms));
+      if (!list.length) return { lead: `Every nominee${inWhat} has won.` };
+      return { lead: `${tieWho(list, a => a.noms)} ${tiedTop(list, a => a.noms) > 1 ? 'share' : 'has'} the most nominations without a win${inWhat}: ${list[0].noms}.`,
+        rows: list.map((a, i) => actRow(a, i, list, a => a.noms, `<b>${a.noms}</b><br>nominations`)).join(''), more };
+    }
+    // Most wins, or most nominations
+    const winsQ = /\b(won|wins|winning|winner|winners)\b/.test(t) && !/\bnominat/.test(t);
+    const val = winsQ ? a => a.wins : a => a.noms;
+    const list = all.filter(val).sort((a, b) => val(b) - val(a) || (winsQ ? b.noms - a.noms : b.wins - a.wins) || a.name.localeCompare(b.name)).filter(ties(10, val));
+    if (!list.length) return { lead: `No ${winsQ ? 'wins' : 'nominations'}${inWhat}.` };
+    const unit = winsQ ? ['win', 'wins'] : ['nomination', 'nominations'];
+    return { lead: `${tieWho(list, val)} ${tiedTop(list, val) > 1 ? 'tie for' : 'has'} the most ${unit[1]}${kind ? ` by ${KIND_WORD[kind]}` : ''}${inWhat}, with ${val(list[0])}${tiedTop(list, val) > 1 ? ' each' : ''}.`,
+      rows: list.map((a, i) => actRow(a, i, list, val, `<b>${val(a)}</b><br>${val(a) === 1 ? unit[0] : unit[1]}`)).join(''), more };
+    }
+  }
 
   // Oldest and youngest acts at #1 (age when each song first reached #1)
   if (/\b(oldest|youngest)\b/.test(t) || (/\b(old|young|age)\b/.test(t) && NO1.test(t))) {
@@ -2734,7 +2835,7 @@ function renderAsk(q) {
     return;
   }
   out.innerHTML = `<div class="ask-grid${shown.length > 1 ? ' two' : ''}">` + shown.map(({ id, a }) =>
-    `<div class="card ask-ans ${CHARTS[id].cls}"><div class="ask-chart">${CHARTS[id].name}${skipEra && id === 'hot20' && !date ? ' <span class="ask-era-note">· without the transitional era</span>' : ''}</div><p class="ask-lead">${a.lead}</p>${a.rows ? `<div class="ask-rows">${a.rows}</div>` : ''}${a.more ? `<div class="ask-foot">${a.more}</div>` : ''}</div>`).join('') + '</div>';
+    `<div class="card ask-ans ${CHARTS[id].cls}"><div class="ask-chart">${a.label || CHARTS[id].name}${skipEra && id === 'hot20' && !date && !a.label ? ' <span class="ask-era-note">· without the transitional era</span>' : ''}</div><p class="ask-lead">${a.lead}</p>${a.rows ? `<div class="ask-rows">${a.rows}</div>` : ''}${a.more ? `<div class="ask-foot">${a.more}</div>` : ''}</div>`).join('') + '</div>';
 }
 
 // ─── STORY (a year of #1s) ──────────────────────────────────────
