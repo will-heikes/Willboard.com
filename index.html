@@ -2394,7 +2394,9 @@ function askAnswer(q, chartId, f) {
     list = highest ? list.sort((a, b) => a.debutPos - b.debutPos || a.debut.localeCompare(b.debut)).filter(ties(10, x => x.debutPos)) : list.sort((a, b) => a.debut.localeCompare(b.debut));
     if (!list.length) return { lead: `No song${who} debuted at #1 on the ${c.name}${inYear(f.span)}.` };
     return {
-      lead: highest ? `The highest debut on the ${c.name}${who}${inYear(f.span)} was ${title(S(list[0].id))}, entering at No. ${list[0].debutPos} the week of ${fmtLong(list[0].debut)}.`
+      lead: highest ? (tiedTop(list, x => x.debutPos) > 1
+          ? `${tiedTop(list, x => x.debutPos)} songs${who} share the highest debut on the ${c.name}${inYear(f.span)}, entering at No. ${list[0].debutPos}.`
+          : `The highest debut on the ${c.name}${who}${inYear(f.span)} was ${title(S(list[0].id))}, entering at No. ${list[0].debutPos} the week of ${fmtLong(list[0].debut)}.`)
         : `${list.length === 1 ? 'One song' : `${list.length} songs`}${who} debuted at #1 on the ${c.name}${inYear(f.span)}${list.length === 1 ? `: ${title(S(list[0].id))}, the week of ${fmtLong(list[0].debut)}.` : '.'}`,
       rows: list.map((s, i) => askRow(highest ? s.debutPos : i + 1, S(s.id), `Debut <b>${s.debutPos}</b><br>${fmtShort(s.debut)}`)).join(''),
     };
