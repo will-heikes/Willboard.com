@@ -108,6 +108,13 @@
 "born": "1997-08-24",
 "sex": "m"
 },
+"Alessa": {
+"type": "person",
+"wd": "Q183087",
+"about": "Italian composer (1660–1725)",
+"born": "1660-05-02",
+"sex": "m"
+},
 "Alessia Cara": {
 "type": "person",
 "wd": "Q20090091",
@@ -135,6 +142,13 @@
 "about": "Romanian singer",
 "born": "1989-06-10",
 "sex": "f"
+},
+"Alis": {
+"type": "person",
+"wd": "Q137502489",
+"about": "Albanian singer (born 2002)",
+"born": "2002-06-29",
+"sex": "m"
 },
 "Aly & AJ": {
 "type": "group",
@@ -191,6 +205,13 @@
 "wd": "Q62617",
 "about": "Dutch DJ and record producer (born 1976)",
 "born": "1976-12-25",
+"sex": "m"
+},
+"Ashe": {
+"type": "person",
+"wd": "Q469756",
+"about": "American rapper",
+"born": "1985-08-11",
 "sex": "m"
 },
 "Ashley Cooke": {
@@ -529,6 +550,13 @@
 "born": "1984-01-17",
 "sex": "m"
 },
+"Cam": {
+"type": "person",
+"wd": "Q20630660",
+"about": "American country music singer and songwriter",
+"born": "1984-11-19",
+"sex": "f"
+},
 "Camila Cabello": {
 "type": "person",
 "wd": "Q18810940",
@@ -748,6 +776,13 @@
 "born": "1985-06-12",
 "sex": "m"
 },
+"Christina Aguliera": {
+"type": "person",
+"wd": "Q41594",
+"about": "American singer, songwriter and actress",
+"born": "1980-12-18",
+"sex": "f"
+},
 "Chvrches": {
 "type": "group",
 "wd": "Q5118436",
@@ -862,6 +897,13 @@
 "wd": "Q185828",
 "about": "French electronic duo"
 },
+"Dakota": {
+"type": "person",
+"wd": "Q27973731",
+"about": "British singer",
+"born": "1990-11-28",
+"sex": "f"
+},
 "Daniel Caesar": {
 "type": "person",
 "wd": "Q29589083",
@@ -915,6 +957,20 @@
 "about": "American country musician",
 "born": "1979-05-18",
 "sex": "m"
+},
+"David Nail & the Well Ravens": {
+"type": "person",
+"wd": "Q1111350",
+"about": "American country musician",
+"born": "1979-05-18",
+"sex": "m"
+},
+"Daya": {
+"type": "person",
+"wd": "Q21005558",
+"about": "American singer",
+"born": "1998-10-24",
+"sex": "f"
 },
 "Dean Lewis": {
 "type": "person",
@@ -1049,6 +1105,11 @@
 "born": "1982-04-12",
 "sex": "m"
 },
+"Echosmith": {
+"type": "group",
+"wd": "Q15044343",
+"about": "American rock and indie pop band"
+},
 "Ed Sheeran": {
 "type": "person",
 "wd": "Q47447",
@@ -1169,6 +1230,13 @@
 "born": "1993-02-20",
 "sex": "f"
 },
+"FLO": {
+"type": "person",
+"wd": "Q2253931",
+"about": "French Esperantist",
+"born": "1956-10-10",
+"sex": "m"
+},
 "Faith Hill": {
 "type": "person",
 "wd": "Q464241",
@@ -1181,10 +1249,22 @@
 "wd": "Q485811",
 "about": "American rock band"
 },
+"Felicia": {
+"type": "person",
+"wd": "Q234314",
+"about": "American actress",
+"born": "1979-06-28",
+"sex": "f"
+},
 "Fifth Harmony": {
 "type": "group",
 "wd": "Q3087893",
 "about": "American girl group"
+},
+"Fifty Fifty": {
+"type": "group",
+"wd": "Q116731010",
+"about": "South Korean girl group"
 },
 "Flatland Cavalry": {
 "type": "group",
@@ -1366,6 +1446,13 @@
 "about": "American country music singer",
 "born": "1987-09-25",
 "sex": "m"
+},
+"Grey": {
+"type": "person",
+"wd": "Q13938",
+"about": "American voice actress and singer-songwriter",
+"born": "1973-08-24",
+"sex": "f"
 },
 "Griff": {
 "type": "person",
@@ -1553,6 +1640,13 @@
 "born": "1990-12-26",
 "sex": "m"
 },
+"Illienum": {
+"type": "person",
+"wd": "Q27662462",
+"about": "American musician, DJ, producer, and songwriter (born 1990)",
+"born": "1990-12-26",
+"sex": "m"
+},
 "Imagine Dragons": {
 "type": "group",
 "wd": "Q391348",
@@ -1658,6 +1752,13 @@
 "wd": "Q195439",
 "about": "American country singer",
 "born": "1977-02-28",
+"sex": "m"
+},
+"Jason Derulo": {
+"type": "person",
+"wd": "Q243639",
+"about": "American singer-songwriter",
+"born": "1989-09-21",
 "sex": "m"
 },
 "Jason Mraz": {
@@ -1803,6 +1904,13 @@
 "wd": "Q777990",
 "about": "American country music artist",
 "born": "1976-11-26",
+"sex": "m"
+},
+"John K": {
+"type": "person",
+"wd": "Q1685876",
+"about": "American musical theatre composer",
+"born": "1927-03-18",
 "sex": "m"
 },
 "John Legend": {
@@ -1956,6 +2064,12 @@
 "about": "musical artist",
 "sex": "f"
 },
+"Kaitlyn Butts": {
+"type": "person",
+"wd": "Q140047375",
+"about": "musical artist",
+"sex": "f"
+},
 "Kaj": {
 "type": "group",
 "wd": "Q28153804",
@@ -2020,6 +2134,12 @@
 "about": "American singer and songwriter (born 1987)",
 "born": "1987-03-01",
 "sex": "f"
+},
+"Kehlani": {
+"type": "person",
+"wd": "Q20657541",
+"about": "American singer-songwriter (born 1995)",
+"born": "1995-04-24"
 },
 "Keith Urban": {
 "type": "person",
@@ -2286,6 +2406,13 @@
 "born": "1997-03-27",
 "sex": "f"
 },
+"Liam Payne": {
+"type": "person",
+"wd": "Q2756349",
+"about": "English singer-songwriter (1993–2024)",
+"born": "1993-08-29",
+"sex": "m"
+},
 "Lifehouse": {
 "type": "group",
 "wd": "Q845790",
@@ -2411,6 +2538,11 @@
 "type": "group",
 "wd": "Q48697885",
 "about": "Canadian musical duo"
+},
+"Love & Theft": {
+"type": "group",
+"wd": "Q1872426",
+"about": "American country duo"
 },
 "Luis Fonsi": {
 "type": "person",
@@ -2648,6 +2780,18 @@
 "about": "American country singer",
 "sex": "f"
 },
+"Midland": {
+"type": "group",
+"wd": "Q30603462",
+"about": "country music group"
+},
+"Miguel": {
+"type": "person",
+"wd": "Q356762",
+"about": "Spanish-Italian musician, singer and actor",
+"born": "1956-04-03",
+"sex": "m"
+},
 "Mike Posner": {
 "type": "person",
 "wd": "Q268284",
@@ -2698,6 +2842,13 @@
 "wd": "Q953918",
 "about": "British folk rock band"
 },
+"MØ": {
+"type": "person",
+"wd": "Q10670047",
+"about": "Danish singer and songwriter",
+"born": "1988-08-13",
+"sex": "f"
+},
 "NF": {
 "type": "person",
 "wd": "Q19571648",
@@ -2718,6 +2869,13 @@
 "about": "English and New Zealand singer-songwriter",
 "born": "1981-11-26",
 "sex": "f"
+},
+"Nate Reuss": {
+"type": "person",
+"wd": "Q2760347",
+"about": "American singer",
+"born": "1982-02-26",
+"sex": "m"
 },
 "Nate Smith": {
 "type": "person",
@@ -2932,6 +3090,13 @@
 "born": "1997-04-02",
 "sex": "f"
 },
+"Perrie": {
+"type": "person",
+"wd": "Q16126719",
+"about": "British singer",
+"born": "1993-07-10",
+"sex": "f"
+},
 "Pete Parkkonen": {
 "type": "person",
 "wd": "Q15304393",
@@ -2991,6 +3156,13 @@
 "wd": "Q21621919",
 "about": "American singer and rapper (born 1995)",
 "born": "1995-07-04",
+"sex": "m"
+},
+"Preme": {
+"type": "person",
+"wd": "Q7117493",
+"about": "Canadian rapper from Montreal",
+"born": "1986-01-08",
 "sex": "m"
 },
 "Priscilla Block": {
@@ -3241,6 +3413,12 @@
 "about": "British singer-songwriter (born 1992)",
 "born": "1992-05-19"
 },
+"Sam Williams": {
+"type": "person",
+"wd": "Q80755409",
+"about": "American composer and vaudeville entertainer",
+"sex": "m"
+},
 "Sara Bareilles": {
 "type": "person",
 "wd": "Q230445",
@@ -3322,6 +3500,11 @@
 "about": "American musician (born 1962)",
 "born": "1962-02-11",
 "sex": "f"
+},
+"Shkodra Elektonike": {
+"type": "group",
+"wd": "Q131540322",
+"about": "Albanian musical duo"
 },
 "Sia": {
 "type": "person",
@@ -3446,6 +3629,13 @@
 "about": "American rapper, actor and record producer (born 1980)",
 "born": "1980-09-25",
 "sex": "m"
+},
+"Tanya Tucker": {
+"type": "person",
+"wd": "Q463983",
+"about": "American country singer (born 1958)",
+"born": "1958-10-10",
+"sex": "f"
 },
 "Tate McRae": {
 "type": "person",
@@ -3700,6 +3890,11 @@
 "type": "group",
 "wd": "Q7857806",
 "about": "American musical duo"
+},
+"Two Friends": {
+"type": "group",
+"wd": "Q48700623",
+"about": "American DJ/producer duo"
 },
 "Ty Dolla $ign": {
 "type": "person",
