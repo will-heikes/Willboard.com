@@ -209,6 +209,9 @@ button { font: inherit; color: inherit; }
 .cert.gold     { --cert-bg: #FBF1D4; --cert-edge: #E2C26A; --cert-ink: #7A5A00; --cert-disc: linear-gradient(135deg,#F6D774,#C3962A); }
 .cert.platinum { --cert-bg: #EEF1F4; --cert-edge: #9AA6B2; --cert-ink: #2F3A46; --cert-disc: linear-gradient(135deg,#F4F6F8,#7E8B98); }
 .cert.diamond  { --cert-bg: #E8F6FC; --cert-edge: #7CC6E4; --cert-ink: #0D4F6B; --cert-disc: conic-gradient(from 45deg,#E9FBFF,#9ADCF2,#FFFFFF,#6BBEDD,#E9FBFF); }
+.show-sm { display: none; }
+.album-link { font-weight: 600; font-size: 13px; }
+.album-link:hover { color: var(--accent); text-decoration: underline; }
 .album-from { margin-top: 10px; font-size: 13px; color: var(--muted); }
 .album-from b { color: var(--ink); font-weight: 700; }
 .album-from .cert { margin: 0 0 0 8px; }
@@ -629,6 +632,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   .foot-links { margin-left: 0; gap: 20px; }
   .foot-copy { margin-left: 0; width: 100%; }
   .table .hide-sm { display: none; }
+  .table .show-sm { display: inline; }
 }
 </style>
 </head>
@@ -1004,6 +1008,8 @@ function certBadge(chart, n) {
   const title = chart === 'pop' ? c[1] : `${c[1]} · ${n.toLocaleString()} plays`;
   return `<span class="cert ${c[0]}" title="${title}"><i></i>${c[1]}</span>`;
 }
+// All-time iTunes plays; Pop 10 songs are measured in chart points, which stay private
+const songPlays = s => s.chart !== 'pop' && s.itunesPlays ? s.itunesPlays.toLocaleString() : '—';
 // Hot 20 counts plays, Pop 10 counts chart points
 function songCert(s) { return certBadge(s.chart, s.chart === 'pop' ? s.totalPoints : s.itunesPlays); }
 // A song's points as of a given chart week: its total minus what it earned in later weeks
@@ -1374,6 +1380,8 @@ const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year &
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
 const albumCert = a => a ? certBadge('album', a.plays) : '';
+// The album a song came from, as released (a vault song names its Taylor's Version)
+const albumName = s => ALBUM_OF[s.id]?.editions?.[s.id] || ALBUM_OF[s.id]?.name || '';
 const albumLink = (a, html) => a ? `<a href="#/album/${a.id}">${html}</a>` : html;
 // The album's own cover sits on top; its songs' covers stand in until it exists. Ones that don't load drop out
 function albumTile(al) {
@@ -1527,12 +1535,15 @@ function renderArtist(id) {
   const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
   $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
-  const albums = ALBUMS.filter(al => al.artistId === id);
+  // Oldest first, by release year, then by the album's first charted song
+  const albums = ALBUMS.filter(al => al.artistId === id).sort((x, y) => (x.year || 9999) - (y.year || 9999) ||
+    (SONGS[x.songs[0]]?.debutDate || '').localeCompare(SONGS[y.songs[0]]?.debutDate || ''));
   $('artist-albums-wrap').hidden = !albums.length;
   $('artist-albums').innerHTML = albums.map(al => `<a href="#/album/${al.id}">${albumTile(al)}
     <div class="song">${esc(al.name)}</div><div class="meta">${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div>${albumCert(al)}</a>`).join('');
-  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></td>
+  $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Album</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
+    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
+      <td class="hide-sm">${ALBUM_OF[s.id] ? `<a class="album-link" href="#/album/${ALBUM_OF[s.id].id}" onclick="event.stopPropagation()">${esc(albumName(s))}</a>` : '<span class="artist">—</span>'}</td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
 }
@@ -1588,6 +1599,7 @@ async function renderSong(id) {
   const debut = on[0];
   const stats = [[s.peakPosition ?? '—', 'Peak'], [wks1 || '—', 'Weeks at #1'], [s.weeksOnChart ?? on.length, 'Weeks on chart'],
                  [debut ? `#${debut.pos}` : '—', `Debut · ${fmtShort(s.debutDate)}`]];
+  if (s.chart !== 'pop' && s.itunesPlays) stats.push([s.itunesPlays.toLocaleString(), 'Plays']);
   const hero = $('song-hero');
   hero.style.removeProperty('--tint');
   hero.innerHTML = `${artTile(s.artistName, true, undefined, s.name)}
@@ -1595,7 +1607,7 @@ async function renderSong(id) {
       <h1>${esc(s.name)}</h1>
       <div class="by"><a href="#/artist/${s.artistId}">${esc(s.artistName)}</a></div>
       ${songCert(s)}
-      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(ALBUM_OF[s.id].editions?.[s.id] || ALBUM_OF[s.id].name)}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
+      ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(albumName(s))}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-song'));
 
@@ -1644,17 +1656,17 @@ function renderAlbum(id) {
                  [al.plays.toLocaleString(), 'Plays'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']];
   const hero = $('album-hero');
   hero.innerHTML = `${albumTile(al).replace(/loading="lazy"/g, '')}
-    <div><div class="kick">Album${first ? ` · ${first.slice(0, 4)}` : ''}</div>
+    <div><div class="kick">Album${al.year || first ? ` · ${al.year || first.slice(0, 4)}` : ''}</div>
       <h1>${esc(al.name)}</h1>
       <div class="by"><a href="#/artist/${al.artistId}">${esc(al.artist)}</a></div>
       ${albumCert(al)}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-album'));
   $('album-songs-sub').textContent = `${al.tracks} track${al.tracks === 1 ? '' : 's'} in the library`;
-  $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
+  $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Plays</th></tr>` +
     songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${al.editions?.[s.id] ? ` · from ${esc(al.editions[s.id])}` : ''}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${songPlays(s)}</td></tr>`).join('');
   const more = ALBUMS.filter(o => o.artistId === al.artistId && o !== al);
   $('album-more-wrap').hidden = !more.length;
   $('album-more-h').textContent = `More from ${primaryArtist(al.artist)}`;
