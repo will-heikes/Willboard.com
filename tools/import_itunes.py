@@ -25,7 +25,7 @@ from collections import defaultdict
 from add_week import norm
 
 OUT, ALBUMS = 'itunes_plays.tsv', 'albums.json'
-CUT_MIN = 200  # plays for a non-charting track to show on its album
+CUT_MIN = 0  # plays for a non-charting track to show on its album (Will: show them all)
 # "(feat. X)", "[with X]", "- Single Version" and the like aren't part of the title
 EXTRA = re.compile(r'\s*[\(\[](feat|ft|with|from|radio|single|album|edit|remaster|explicit|clean)[^\)\]]*[\)\]]'
                    r'|\s+-\s+(single|radio|album)\b.*$', re.I)
