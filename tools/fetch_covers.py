@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Download album and single covers for the Willboard Awards (and, optionally, every chart song).
+"""Download album and single covers for the Willboard Awards and albums page (and, optionally, every chart song).
 
 Run from the Willboard.com repo folder (next to data.json and awards.json):
-    python3 tools/fetch_covers.py                 # every album and song in awards.json
+    python3 tools/fetch_covers.py                 # every album and song in awards.json, every album in albums.json
     python3 tools/fetch_covers.py --all-songs     # also every song that has charted
     python3 tools/fetch_covers.py --redo "Carly Pearce - Hummingbird"
     python3 tools/fetch_covers.py --tidy-only     # just rename covers you uploaded
@@ -107,6 +107,12 @@ def wanted(all_songs):
                 items[cover_name(artist, n['album'])] = ('album', artist, n['album'])
             if n.get('song'):
                 items.setdefault(cover_name(artist, n['song']), ('song', artist, n['song']))
+    # Every album with a charted song (albums.json, from tools/import_itunes.py)
+    if os.path.exists('albums.json'):
+        for al in json.load(open('albums.json', encoding='utf-8')):
+            artist = primary_artist(al['artist'], acts)
+            if artist:
+                items.setdefault(cover_name(artist, al['name'].strip()), ('album', artist, al['name'].strip()))
     if all_songs:
         for s in data['songs']:
             artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
