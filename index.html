@@ -781,7 +781,6 @@ body.on-ask .ask-fab { display: none; }
       <a href="#/artists" data-nav="artists">Artists</a>
       <a href="#/albums" data-nav="albums">Albums</a>
       <a href="#/songs" data-nav="songs">Songs</a>
-      <a href="#/ask" data-nav="ask">Ask</a>
     </nav>
     <a class="search-btn" href="#/songs?focus=1" aria-label="Search">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
@@ -1686,6 +1685,12 @@ const AW_SHOW = { country: 'Willboard Country Awards', pop: 'Willboard Pop Award
 // Will wants plain show titles ("2025 Country Awards") rather than "X wins Entertainer of the Year"
 const awTitle = (chart, year) => `${year} ${chart === 'pop' ? 'Pop' : 'Country'} Awards`;
 const AW_TOP = { country: 'Entertainer of the Year', pop: 'Artist of the Year' };
+// Categories always appear in this order on a show's page (Will)
+const AW_ORDER = {
+  country: ['Entertainer of the Year', 'Male Vocalist of the Year', 'Female Vocalist of the Year', 'Vocal Duo/Group of the Year', 'New Artist of the Year',
+    'Album of the Year', 'Song of the Year', 'Single of the Year', 'Musical Event of the Year', 'Music Video of the Year'],
+  pop: ['Artist of the Year', 'Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year', 'Foreign Language Song of the Year'],
+};
 const AW_KEY = { country: ['Single of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'],
                  pop: ['Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'] };
 let RETROS = {};
@@ -1795,7 +1800,8 @@ function renderAwardYear(chart, year) {
   $('ay-nav').innerHTML = (years[i + 1] ? navTab(years[i + 1], `← ${years[i + 1]}`) : '') + (years[i - 1] ? navTab(years[i - 1], `${years[i - 1]} →`) : '');
   const byCat = {};
   for (const n of AWARDS[chart]) if (n.year === year) (byCat[n.category] ||= []).push(n);
-  $('aw-grid').innerHTML = Object.entries(byCat).map(([cat, rows]) => {
+  const order = c => (AW_ORDER[chart].indexOf(c) + 1) || 99;
+  $('aw-grid').innerHTML = Object.entries(byCat).sort((x, y) => order(x[0]) - order(y[0])).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
     const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
@@ -2222,6 +2228,9 @@ function askArtistRow(rank, a, meta) {
     <span><div class="song">${esc(a.name)}</div><div class="artist">${esc(a.sub || '')}</div></span><span class="meta">${meta}</span></a>`;
 }
 const wk = v => `${v} week${v === 1 ? '' : 's'}`;
+// The top n, plus anything tied with the nth, so a cut-off never splits a tie
+const ties = (n, val) => (x, i, arr) => i < n || val(x) === val(arr[n - 1]);
+const rankIn = (list, i, val) => list.findIndex(x => val(x) === val(list[i])) + 1;
 const tiedTop = (list, val) => list.filter(x => val(x) === val(list[0])).length;
 const inYear = span => span ? ` in ${span.label}` : '';
 
@@ -2250,12 +2259,12 @@ function askAnswer(q, chartId, f) {
         if (!best[p.name] || (young ? v < best[p.name].v : v > best[p.name].v)) best[p.name] = { name: p.name, id: p.id, v, age, s, at };
       }
     }
-    const list = Object.values(best).sort((a, b) => young ? a.v - b.v : b.v - a.v).slice(0, 10);
+    const list = Object.values(best).sort((a, b) => young ? a.v - b.v : b.v - a.v).filter(ties(10, x => x.age.y));
     if (!list.length) return { lead: `I don't have birth dates for the acts with #1s on the ${c.name}${inYear(f.span)}.` };
     const x = list[0];
     return {
       lead: `The ${young ? 'youngest' : 'oldest'} ${kind === 'woman' ? 'woman' : kind === 'man' ? 'man' : 'act'} to reach #1 on the ${c.name}${inYear(f.span)} is ${esc(x.name)}, who was ${x.age.y} years, ${x.age.days} days old when “${esc(x.s.name || S(x.s.id).name)}” hit #1 the week of ${fmtLong(x.at)}.`,
-      rows: list.map((x, i) => askRow(i + 1, S(x.s.id), `<b>${x.age.y}</b> yrs old<br>${esc(x.name)}`)).join(''),
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.age.y), S(x.s.id), `<b>${x.age.y}</b> yrs old<br>${esc(x.name)}`)).join(''),
     };
   }
 
@@ -2356,25 +2365,25 @@ function askAnswer(q, chartId, f) {
     const toNo1 = jump && NO1.test(t);
     const pool = st.moves.filter(m => inSpanW(f.span, m.week) && byArtist(S(m.id), f.artist) && (toNo1 ? m.to === 1 : true));
     const gain = m => fall ? m.to - m.from : m.from - m.to;
-    const list = pool.filter(m => gain(m) > 0).sort((a, b) => gain(b) - gain(a) || a.week.localeCompare(b.week)).slice(0, 8);
+    const list = pool.filter(m => gain(m) > 0).sort((a, b) => gain(b) - gain(a) || a.week.localeCompare(b.week)).filter(ties(10, gain));
     if (!list.length) return { lead: `No ${toNo1 ? 'song climbed to #1' : fall ? 'song fell' : 'song climbed'} on the ${c.name}${who}${inYear(f.span)}.` };
     const m = list[0], n = tiedTop(list, gain);
     const debuts = toNo1 ? songsF.filter(s => !s.onFirst && s.debutPos === 1 && inSpanW(f.span, s.debut)).length : 0;
     return {
       lead: `${n > 1 ? `${n} songs tie for the biggest ${fall ? 'fall' : toNo1 ? 'jump to #1' : 'jump'}${who}${inYear(f.span)}, ${fall ? 'dropping' : 'climbing'} ${gain(m)} spots. The first was` : `The biggest ${fall ? 'fall' : toNo1 ? 'jump to #1' : 'jump'} on the ${c.name}${who}${inYear(f.span)} belongs to`} ${title(S(m.id))}, which went from No. ${m.from} to No. ${m.to} the week of ${fmtLong(m.week)}.`
         + (debuts ? ` (${debuts === 1 ? 'One song' : `${debuts} songs`} skipped the climb and debuted at #1.)` : ''),
-      rows: list.map((m, i) => askRow(i + 1, S(m.id), `<b>${m.from} → ${m.to}</b><br>${fmtShort(m.week)}`, `#/${chartId}/${m.week}`)).join(''),
+      rows: list.map((m, i) => askRow(rankIn(list, i, gain), S(m.id), `<b>${m.from} → ${m.to}</b><br>${fmtShort(m.week)}`, `#/${chartId}/${m.week}`)).join(''),
       more: debuts ? askLink(`Which songs debuted at #1${f.span ? ' in ' + f.span.label : ''} on the ${c.name}?`, 'Songs that debuted at #1') : '',
     };
   }
 
   // Slowest climbs to #1
   if (NO1.test(t) && /longest|slowest|took the most|most weeks to|long climb/.test(t) && /climb|reach|get|took|took|hit/.test(t)) {
-    const list = songsF.filter(s => s.climb && !s.onFirst && inSpanW(f.span, s.no1[0])).sort((a, b) => b.climb - a.climb).slice(0, 8);
+    const list = songsF.filter(s => s.climb && !s.onFirst && inSpanW(f.span, s.no1[0])).sort((a, b) => b.climb - a.climb).filter(ties(10, x => x.climb));
     if (!list.length) return { lead: `No song${who} reached #1 on the ${c.name}${inYear(f.span)}.` };
     return {
       lead: `${title(S(list[0].id))} took the longest to reach #1${who ? '' : ` on the ${c.name}`}${inYear(f.span)}: it got there in its ${ord(list[0].climb)} week on the chart.`,
-      rows: list.map((s, i) => askRow(i + 1, S(s.id), `<b>${ord(s.climb)}</b> week<br>${fmtShort(s.no1[0])}`)).join(''),
+      rows: list.map((s, i) => askRow(rankIn(list, i, x => x.climb), S(s.id), `<b>${ord(s.climb)}</b> week<br>${fmtShort(s.no1[0])}`)).join(''),
     };
   }
 
@@ -2382,12 +2391,12 @@ function askAnswer(q, chartId, f) {
   if (/debut/.test(t)) {
     const highest = !NO1.test(t);
     let list = songsF.filter(s => !s.onFirst && inSpanW(f.span, s.debut) && (highest || s.debutPos === 1));
-    list = highest ? list.sort((a, b) => a.debutPos - b.debutPos || a.debut.localeCompare(b.debut)).slice(0, 10) : list.sort((a, b) => a.debut.localeCompare(b.debut));
+    list = highest ? list.sort((a, b) => a.debutPos - b.debutPos || a.debut.localeCompare(b.debut)).filter(ties(10, x => x.debutPos)) : list.sort((a, b) => a.debut.localeCompare(b.debut));
     if (!list.length) return { lead: `No song${who} debuted at #1 on the ${c.name}${inYear(f.span)}.` };
     return {
       lead: highest ? `The highest debut on the ${c.name}${who}${inYear(f.span)} was ${title(S(list[0].id))}, entering at No. ${list[0].debutPos} the week of ${fmtLong(list[0].debut)}.`
         : `${list.length === 1 ? 'One song' : `${list.length} songs`}${who} debuted at #1 on the ${c.name}${inYear(f.span)}${list.length === 1 ? `: ${title(S(list[0].id))}, the week of ${fmtLong(list[0].debut)}.` : '.'}`,
-      rows: list.slice(0, 40).map((s, i) => askRow(highest ? s.debutPos : i + 1, S(s.id), `Debut <b>${s.debutPos}</b><br>${fmtShort(s.debut)}`)).join(''),
+      rows: list.map((s, i) => askRow(highest ? s.debutPos : i + 1, S(s.id), `Debut <b>${s.debutPos}</b><br>${fmtShort(s.debut)}`)).join(''),
     };
   }
 
@@ -2405,26 +2414,26 @@ function askAnswer(q, chartId, f) {
         (acts[p.id] ||= { id: p.id, name: p.name, v: 0 }).v += v;
       }
     }
-    const list = Object.values(acts).sort((a, b) => b.v - a.v || a.name.localeCompare(b.name)).slice(0, 10);
+    const list = Object.values(acts).sort((a, b) => b.v - a.v || a.name.localeCompare(b.name)).filter(ties(10, a => a.v));
     if (!list.length) return { lead: `No #1s on the ${c.name}${inYear(f.span)}.` };
     const unit = weeksMode ? ['week at #1', 'weeks at #1'] : hitsMode ? ['charted song', 'charted songs'] : ['#1', '#1s'];
     const u = v => `${v} ${v === 1 ? unit[0] : unit[1]}`, n = tiedTop(list, a => a.v);
     return {
       lead: n > 1 ? `${list.slice(0, n).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most ${unit[1]} on the ${c.name}${inYear(f.span)}, with ${list[0].v} each.`
         : `${esc(list[0].name)} has the most ${unit[1]} on the ${c.name}${inYear(f.span)}, with ${list[0].v}.`,
-      rows: list.map((a, i) => askArtistRow(i + 1, a, `<b>${u(a.v)}</b>`)).join(''),
+      rows: list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), a, `<b>${u(a.v)}</b>`)).join(''),
     };
   }
 
   // Songs with the most weeks at #1
   if (NO1.test(t) && /most weeks|longest|longest[\s-]running|weeks at|how long/.test(t) && !/climb|reach|took/.test(t)) {
-    const list = songsF.map(s => ({ s, v: s.no1.filter(w => inSpanW(f.span, w)).length })).filter(x => x.v).sort((a, b) => b.v - a.v || a.s.no1[0].localeCompare(b.s.no1[0])).slice(0, 10);
+    const list = songsF.map(s => ({ s, v: s.no1.filter(w => inSpanW(f.span, w)).length })).filter(x => x.v).sort((a, b) => b.v - a.v || a.s.no1[0].localeCompare(b.s.no1[0])).filter(ties(10, x => x.v));
     if (!list.length) return { lead: `No song${who} reached #1 on the ${c.name}${inYear(f.span)}.` };
     const n = tiedTop(list, x => x.v);
     return {
       lead: n > 1 ? `${n} songs${who} tie for the most weeks at #1 on the ${c.name}${inYear(f.span)}, with ${wk(list[0].v)} each.`
         : `${title(S(list[0].s.id))} spent the most weeks at #1 on the ${c.name}${inYear(f.span)}: ${wk(list[0].v)}.`,
-      rows: list.map((x, i) => askRow(i + 1, S(x.s.id), `<b>${x.v}</b> wk${x.v === 1 ? '' : 's'}<br>at #1`)).join(''),
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.v), S(x.s.id), `<b>${x.v}</b> wk${x.v === 1 ? '' : 's'}<br>at #1`)).join(''),
     };
   }
 
@@ -2442,19 +2451,19 @@ function askAnswer(q, chartId, f) {
     const list = songsF.filter(s => s.no1.some(w => inSpanW(f.span, w))).sort((a, b) => a.no1[0].localeCompare(b.no1[0]));
     if (!list.length) return { lead: `No #1s${who} on the ${c.name}${inYear(f.span)}.` };
     return {
-      lead: `${f.artist ? esc(f.artist.name) + ' has' : 'There were'} ${list.length} #1${list.length === 1 ? '' : 's'} on the ${c.name}${inYear(f.span)}${list.length > 40 ? '. Here are the first 40.' : '.'}`,
-      rows: list.slice(0, 40).map((s, i) => askRow(i + 1, S(s.id), `<b>${s.no1.filter(w => inSpanW(f.span, w)).length}</b> wk${s.no1.filter(w => inSpanW(f.span, w)).length === 1 ? '' : 's'} at #1<br>${fmtShort(s.no1[0])}`)).join(''),
+      lead: `${f.artist ? esc(f.artist.name) + ' has' : 'There were'} ${list.length} #1${list.length === 1 ? '' : 's'} on the ${c.name}${inYear(f.span)}.`,
+      rows: list.map((s, i) => askRow(i + 1, S(s.id), `<b>${s.no1.filter(w => inSpanW(f.span, w)).length}</b> wk${s.no1.filter(w => inSpanW(f.span, w)).length === 1 ? '' : 's'} at #1<br>${fmtShort(s.no1[0])}`)).join(''),
       more: f.span?.year && !f.artist ? `<a class="ask-more" href="#/story/${f.span.year}">Every week's #1 in ${f.span.year} ${arrow}</a>` : '',
     };
   }
 
   // Longest-charting songs
   if (/most weeks|longest|weeks on|longest[\s-]charting|longest run|staying power/.test(t)) {
-    const list = songsF.map(s => ({ s, v: s.weeks.filter(w => inSpanW(f.span, w)).length })).filter(x => x.v).sort((a, b) => b.v - a.v).slice(0, 10);
+    const list = songsF.map(s => ({ s, v: s.weeks.filter(w => inSpanW(f.span, w)).length })).filter(x => x.v).sort((a, b) => b.v - a.v).filter(ties(10, x => x.v));
     if (!list.length) return { lead: `No songs${who} on the ${c.name}${inYear(f.span)}.` };
     return {
       lead: `${title(S(list[0].s.id))} has spent the most weeks on the ${c.name}${inYear(f.span)}: ${wk(list[0].v)}.`,
-      rows: list.map((x, i) => askRow(i + 1, S(x.s.id), `<b>${x.v}</b> wks<br>Peak ${x.s.peak}`)).join(''),
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.v), S(x.s.id), `<b>${x.v}</b> wks<br>Peak ${x.s.peak}`)).join(''),
     };
   }
 
@@ -2465,7 +2474,7 @@ function askAnswer(q, chartId, f) {
     const n1 = list.filter(s => s.no1.length).length;
     return {
       lead: `${esc(f.artist.name)} has ${list.length} song${list.length === 1 ? '' : 's'} on the ${c.name}${inYear(f.span)}${n1 ? `, ${n1} of them #1s` : ''}.`,
-      rows: list.slice(0, 10).map((s, i) => askRow(i + 1, S(s.id), s.no1.length ? `<b>${s.no1.length}</b> wk${s.no1.length === 1 ? '' : 's'} at #1` : `Peak <b>${s.peak}</b>`)).join(''),
+      rows: list.map((s, i) => askRow(i + 1, S(s.id), s.no1.length ? `<b>${s.no1.length}</b> wk${s.no1.length === 1 ? '' : 's'} at #1` : `Peak <b>${s.peak}</b>`)).join(''),
       more: `<a class="ask-more" href="#/artist/${f.artist.id}">${esc(f.artist.name)}'s page ${arrow}</a>`,
     };
   }
