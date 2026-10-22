@@ -599,6 +599,23 @@ body.on-ask .ask-fab { display: none; }
 .ask-era { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--muted); cursor: pointer; }
 .ask-era input { width: 16px; height: 16px; accent-color: var(--country); margin: 0; }
 .ask-era a { text-decoration: underline; }
+.about { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.about-card { padding: 20px 22px; line-height: 1.6; }
+.about-card h2 { font-size: 18px; margin: 22px 0 6px; }
+.about-card a { text-decoration: underline; }
+.about-card ul { padding-left: 20px; margin: 8px 0; }
+.about-card li { margin: 6px 0; }
+.timeline { list-style: none; margin: 10px 0 16px; padding: 0 0 0 18px; border-left: 2px solid var(--line); }
+.timeline li { position: relative; margin: 0 0 16px; padding-left: 6px; }
+.timeline li::before { content: ''; position: absolute; left: -26px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); border: 2px solid var(--card); }
+.timeline .tl-hot::before { background: var(--country); }
+.timeline .tl-pop::before { background: var(--pop); }
+.timeline .tl-era::before { background: var(--dot-yellow); }
+.timeline .tl-skip::before { background: var(--line); border-color: var(--muted); }
+.timeline .tl-when { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.timeline b { display: block; }
+.timeline li > span:last-child { display: block; color: var(--ink-soft); font-size: 14px; }
+@media (max-width: 760px) { .about { grid-template-columns: 1fr; } }
 .ask-era-note { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
 .ask-examples { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 22px; max-width: 900px; }
 .ask-chip { font-size: 12.5px; padding: 6px 12px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); color: var(--ink-soft); }
@@ -1045,13 +1062,41 @@ body.on-ask .ask-fab { display: none; }
   <!-- ── ABOUT ── -->
   <section class="page" id="page-about">
     <div class="page-head"><div><h1>About Willboard</h1></div></div>
-    <div class="card" style="padding:20px 22px;max-width:680px">
-      <p style="margin-top:0">Willboard is a weekly music chart that has run since January 2010. The <b>Hot 20</b> tracks country, and the <b>Pop 10</b> tracks pop.</p>
-      <h3 style="margin:18px 0 6px">The transitional era</h3>
-      <p>Willboard started with one chart. From the week of January 28, 2010 through October 20, 2011, country and pop songs charted together on the Hot 20. That stretch of 91 weeks is the <b>transitional era</b>. The Pop 10 launched the week of October 27, 2011, and from then on each genre had its own chart.</p>
-      <p>Records from the transitional era count on the Hot 20. On <a href="#/ask" style="text-decoration:underline">Ask Willboard</a> you can leave them out.</p>
-      <p>Each year the <a href="#/awards" style="text-decoration:underline">Willboard Awards</a> celebrate the biggest songs, albums and artists on the charts.</p>
-      <p style="margin-bottom:0;color:var(--muted)" id="about-updated"></p>
+    <div class="about">
+      <div class="card about-card">
+        <p style="margin-top:0">Willboard is a weekly music chart that has run since January 2010. The <b>Hot 20</b> tracks country, and the <b>Pop 10</b> tracks pop. A new chart comes out every Thursday.</p>
+        <p>Each year the <a href="#/awards">Willboard Awards</a> celebrate the biggest songs, albums and artists on the charts.</p>
+
+        <h2>How the charts work</h2>
+        <p>Every chart is ordered by plays, counted week by week.</p>
+        <ul>
+          <li><b>Debuts.</b> A new song enters at the highest spot where its plays before charting are more than the plays of the song already there.</li>
+          <li><b>Moving down.</b> A song falls when its plays drop below songs that charted under it the week before.</li>
+          <li><b>Ties.</b> When two songs have the same plays, a song that fell the week before ranks below one that didn't.</li>
+          <li><b>Going recurrent.</b> A song leaves the chart when it fell the week before and its plays are now lower than every other song on the chart. A song with the fewest plays of the week can also be moved to recurrent.</li>
+        </ul>
+        <p>The Hot 20 has followed these rules from its first week. The Pop 10 has used the same rules since play tracking began in December 2017. Before that, its charts were put together by feel, apart from a stretch in 2014 and 2015 when Spotify's Top Songs for Me set the order.</p>
+
+        <h2>The transitional era</h2>
+        <p>Willboard started with one chart. From the week of January 28, 2010 through October 20, 2011, country and pop songs charted together on the Hot 20. That stretch of 91 weeks is the <b>transitional era</b>. The Pop 10 launched the week of October 27, 2011, and from then on each genre had its own chart.</p>
+        <p style="margin-bottom:0">Records from the transitional era count on the Hot 20. On <a href="#/ask">Ask Willboard</a> you can leave them out.</p>
+      </div>
+
+      <div class="card about-card">
+        <h2 style="margin-top:0">Timeline</h2>
+        <ol class="timeline">
+          <li class="tl-era"><span class="tl-when">2007 to 2009</span><b>The Pre-CS era</b><span>Charts were made now and then, with no set method. These come before the charts on this site.</span></li>
+          <li class="tl-hot"><span class="tl-when">Jan 28, 2010</span><b>The CS era begins</b><span>The first weekly Hot 20, ordered by plays. CS stands for common sense: a chart every week, with the same rules every week. The transitional era begins.</span></li>
+          <li class="tl-pop"><span class="tl-when">Oct 27, 2011</span><b>The Pop 10 launches</b><span>Pop gets its own chart, built in YouTube Music. The transitional era ends.</span></li>
+          <li class="tl-pop"><span class="tl-when">Dec 2013</span><b>Pop 10 moves to Spotify</b><span>Charts are built in Spotify playlists.</span></li>
+          <li class="tl-pop"><span class="tl-when">Late 2014</span><b>Top Songs for Me</b><span>Spotify's Top Songs for Me sets the Pop 10 each week, until early 2015.</span></li>
+          <li class="tl-pop"><span class="tl-when">Dec 2017</span><b>Last.fm tracks Pop plays</b><span>Pop plays are counted every week, and the Pop 10 follows the same rules as the Hot 20.</span></li>
+          <li class="tl-pop"><span class="tl-when">2023</span><b>stats.fm replaces Last.fm</b><span>Weekly play tracking for the Pop 10 moves to stats.fm.</span></li>
+          <li class="tl-skip"><span class="tl-when">Aug 22, 2024</span><b>No chart this week</b><span>One of only two skipped weeks.</span></li>
+          <li class="tl-skip"><span class="tl-when">Sep 24, 2026</span><b>No chart this week</b><span>The second skipped week.</span></li>
+        </ol>
+        <p style="margin-bottom:0;color:var(--muted)" id="about-updated"></p>
+      </div>
     </div>
   </section>
 </main>
