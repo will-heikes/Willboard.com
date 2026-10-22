@@ -53,6 +53,8 @@ def pop_cert(pts):
     if pts < plat:
         return 'Gold'
     x = 1 + (pts - plat) // step
+    if x >= 5:  # 5x Platinum is Diamond (Will)
+        return 'Diamond' if x < 10 else f'{x // 5}x Diamond'
     return f'{x}x Platinum' if x > 1 else 'Platinum'
 
 

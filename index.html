@@ -198,7 +198,7 @@ button { font: inherit; color: inherit; }
 
 /* certifications: Hot 20 by running plays (300 silver, 400 gold, 500 platinum, +100 per platinum);
    Pop 10 by running points (1250 gold, 2500 platinum, +1250 per platinum); albums by total plays
-   (500 silver, 750 gold, 1000 platinum, +1000 per platinum, 5000 diamond); Hot 20 songs are diamond at 1000 plays, Pop at 10× platinum */
+   (500 silver, 750 gold, 1000 platinum, +1000 per platinum, 5000 diamond); Hot 20 songs are diamond at 1000 plays, Pop at 5× platinum */
 /* Each badge is a small metal plaque with a record on it, like a framed sales award */
 .cert {
   display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; padding: 1px 7px 1px 2px;
@@ -1122,8 +1122,9 @@ body.on-ask .ask-fab { display: none; }
           <li><b>Nominees</b> are picked from chart points and plays.</li>
           <li><b>Country categories:</b> Entertainer, Male Vocalist, Female Vocalist, Duo/Group, New Artist, Album, Song, Single, Musical Event and Music Video. Each has five nominees. Since 2019, Single, Musical Event and Music Video have three.</li>
           <li><b>Pop categories:</b> Artist, Record, Song, Album and New Artist, plus Foreign Language Song since 2025. Each had five nominees through 2018 and has eight since 2019.</li>
-          <li><b>New Artist</b> means new to music, and nobody wins it twice.</li>
-          <li>A song is only nominated in one year, and an album can't be nominated again after it wins.</li>
+          <li><b>New Artist</b> means new to music. An act can be nominated more than once, but can't win if it has already won any award at an earlier show.</li>
+          <li><b>Albums</b> can be nominated in two different years, but not again after they win.</li>
+          <li><b>Songs</b> are only nominated in one year.</li>
         </ul>
 
         <h2>The transitional era</h2>
@@ -1161,7 +1162,7 @@ body.on-ask .ask-fab { display: none; }
           <tr><th>Award</th><th>Points</th></tr>
           <tr><td>Gold</td><td>1,250</td></tr>
           <tr><td>Platinum</td><td>2,500, then another Platinum every 1,250</td></tr>
-          <tr><td>Diamond</td><td>10× Platinum (13,750)</td></tr>
+          <tr><td>Diamond</td><td>5× Platinum (7,500)</td></tr>
         </table>
         <p><b>Albums</b> certify by the plays of all their tracks added together.</p>
         <table class="pts">
@@ -1319,8 +1320,8 @@ function certLabel(n, steps) {
   return ['platinum', x > 1 ? `${x}× Platinum` : 'Platinum'];
 }
 // Albums count every track's plays added together (Will's ladder: 500 silver, 750 gold, 1000 platinum,
-// +1000 per platinum, and 5,000 is Diamond); Hot 20 songs are Diamond at 1,000 plays, Pop at 10× Platinum
-const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250], album: [500, 750, 1000, 1000, 5] };
+// +1000 per platinum, and 5,000 is Diamond); Hot 20 songs are Diamond at 1,000 plays, Pop at 5× Platinum (Will)
+const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250, 5], album: [500, 750, 1000, 1000, 5] };
 function certBadge(chart, n) {
   const c = certLabel(n, CERT_STEPS[chart]);
   if (!c) return '';
