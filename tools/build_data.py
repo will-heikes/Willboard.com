@@ -288,6 +288,14 @@ def main():
                 t = hist_plays.get(norm(s['name']))
                 if t:
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
+        # All-time counts from Will's iTunes library (itunes_plays.tsv, from tools/import_itunes.py):
+        # songs keep earning plays after they leave the chart
+        if key == 'willboard' and os.path.exists('itunes_plays.tsv'):
+            lib_plays = {(r['song'], r['artist']): int(r['plays']) for r in csv.DictReader(open('itunes_plays.tsv', encoding='utf-8'), delimiter='\t')}
+            for s in songs:
+                t = lib_plays.get((s['name'], s['artistName']))
+                if t:
+                    s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         if key == 'willboard' and plays_csv:
             totals = {norm(r[0]): int(r[2]) for r in csv.reader(open(plays_csv, encoding='utf-8'))
                       if len(r) > 2 and r[2].strip().isdigit()}
