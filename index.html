@@ -1054,6 +1054,9 @@ function hash(s) { let h = 0; for (const c of s || '') h = (h * 31 + c.charCodeA
 // Era photos: <slug>-<year>.jpg next to the main <slug>.jpg, listed in _years.json.
 // Only the awards pages pass a year. The nearest era photo wins; the main photo counts as this year's.
 let PHOTO_YEARS = {};
+// Data files are checked with the server on every visit (cheap: unchanged files come back 304), so a new
+// photo list or chart week shows up without the reader clearing their cache
+const FRESH = { cache: 'no-cache' };
 function photoUrl(artistName, year) {
   const p = primaryArtist(artistName);
   if (!p) return '';
@@ -1346,7 +1349,7 @@ function factArtist(text) {
   return null;
 }
 async function renderArchive(week) {
-  if (!ARCHIVE) ARCHIVE = await fetch('archive.json').then(r => r.json()).catch(() => []);
+  if (!ARCHIVE) ARCHIVE = await fetch('archive.json', FRESH).then(r => r.json()).catch(() => []);
   const now = parseDate(week), thisYear = now.getFullYear();
   const notes = (DATA.facts || []).map(f => {
     const no1 = isNo1Text(f.text);
@@ -1542,9 +1545,9 @@ const leadRow = r => `<a class="ye-lead" href="${r.href}">${r.tile(true)}
 const listRow = r => `<a class="lrow" href="${r.href}"><span class="rk">${r.rank}</span>${r.tile(false)}
   <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></span><span class="meta">${r.meta}</span></a>`;
 async function renderYearEnd(span, slug) {
-  if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
-  if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
-  if (!YEAR_TOPS) YEAR_TOPS = await fetch('year_tops.json').then(r => r.json()).catch(() => ({}));
+  if (!YEAREND) YEAREND = await fetch('yearend.json', FRESH).then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
+  if (!DECADE) DECADE = await fetch('decade.json', FRESH).then(r => r.json()).catch(() => ({}));
+  if (!YEAR_TOPS) YEAR_TOPS = await fetch('year_tops.json', FRESH).then(r => r.json()).catch(() => ({}));
   for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
   const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
   const spans = [...years.map(String), ...DECADES.filter(d => DECADE[d])];
@@ -1916,7 +1919,7 @@ function fullHistory(key) {
 async function renderSong(id) {
   const s = SONGS[id];
   if (!s) { location.hash = '#/songs'; return; }
-  if (!RUNS) RUNS = await fetch('runs.json').then(r => r.json()).catch(() => ({}));
+  if (!RUNS) RUNS = await fetch('runs.json', FRESH).then(r => r.json()).catch(() => ({}));
   const c = s.chart === 'pop' ? CHARTS.pop10 : CHARTS.hot20, size = s.chart === 'pop' ? 10 : 20;
   const run = songRun(s), on = run.filter(w => w.pos);
   const wks1 = on.filter(w => w.pos === 1).length;
@@ -2070,12 +2073,12 @@ function route() {
 async function init() {
   document.querySelectorAll('[data-wm]').forEach(wordmark);
   try {
-    const [d, a] = await Promise.all([fetch('data.json'), fetch('awards.json')]);
+    const [d, a] = await Promise.all([fetch('data.json', FRESH), fetch('awards.json', FRESH)]);
     DATA = await d.json();
     AWARDS = await a.json();
-    RETROS = await fetch('retrospectives.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
-    ALBUMS = await fetch('albums.json').then(r => r.ok ? r.json() : []).catch(() => []);
-    RUNS = await fetch('runs.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    RETROS = await fetch('retrospectives.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
+    RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     fullHistory('willboard');
     fullHistory('pop');
     const ids = new Set();
@@ -2099,7 +2102,7 @@ async function init() {
     const s = SONGS[sid];
     if (s) SONG_ALBUM[`${squash(primaryArtist(s.artistName))}|${squash(s.name)}`] = [al.artist, (al.editions?.[sid] || al.name).trim()];
   }
-  PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   buildArtistStats();
   $('loading').remove();
   $('foot-copy').textContent = `© ${new Date().getFullYear()} Willboard. All rights reserved.`;
