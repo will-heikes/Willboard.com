@@ -31,6 +31,8 @@ import urllib.request
 OUT = os.path.join('images', 'artists')
 API = 'https://api.deezer.com/search/artist?limit=5&q='
 WIKI = 'https://en.wikipedia.org/api/rest_v1/page/summary/'
+# What to search Deezer for when the act goes by a stylized name there (Will spells it Pink)
+SEARCH_AS = {'Pink': 'P!nk'}
 
 
 # Must match primaryArtist() and slugify() in index.html.
@@ -136,12 +138,14 @@ def main():
                 rows.append([name, slug, '', '', f'wikipedia failed: {e}'])
             continue
         try:
-            hits = json.loads(get(API + urllib.parse.quote(name))).get('data', [])
+            query = SEARCH_AS.get(name, name)
+            hits = json.loads(get(API + urllib.parse.quote(query))).get('data', [])
         except Exception as e:
             rows.append([name, slug, '', '', f'lookup failed: {e}'])
             continue
         # Prefer an exact name match (the most-followed one), otherwise Deezer's top result
-        exact = sorted([h for h in hits if norm(h['name']) == norm(name)], key=lambda h: -(h.get('nb_fan') or 0))
+        exact = sorted([h for h in hits if h['name'] == query or norm(h['name']) == norm(name) and name not in SEARCH_AS],
+                       key=lambda h: -(h.get('nb_fan') or 0))
         hit = (exact or hits or [None])[0]
         if not hit or 'artist/' not in (hit.get('picture_xl') or '') or hit['picture_xl'].endswith('//1000x1000-000000-80-0-0.jpg'):
             rows.append([name, slug, hit['name'] if hit else '', '', 'no photo'])
