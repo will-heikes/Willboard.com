@@ -14,11 +14,12 @@ to artist pages keep working.
 """
 import csv
 import json
+import os
 import re
 import sys
 from datetime import date, datetime, timedelta
 
-from add_week import norm, points
+from add_week import add_to_runs, norm, points
 
 KEEP_WEEKS = 52
 CHARTS = (  # key, file arg index, history key, id prefix, plays column header, chart size
@@ -27,6 +28,116 @@ CHARTS = (  # key, file arg index, history key, id prefix, plays column header, 
 )
 MONTHS = {m: i for i, m in enumerate('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(), 1)}
 WEEK_LABEL = re.compile(r'(\d{1,2})-([A-Z][a-z]{2})')
+
+
+ORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth']
+
+
+def ordinal(n):
+    if n < len(ORD):
+        return ORD[n]
+    return f"{n}{'th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def lead_artist(name):
+    return re.split(r',| & | ft\.? | feat\.? | x | with ', name or '', flags=re.I)[0].strip()
+
+
+POP_CERTS = (1250, 2500, 1250)  # gold, platinum, each extra platinum
+
+
+def pop_cert(pts):
+    gold, plat, step = POP_CERTS
+    if pts < gold:
+        return None
+    if pts < plat:
+        return 'Gold'
+    x = 1 + (pts - plat) // step
+    return f'{x}x Platinum' if x > 1 else 'Platinum'
+
+
+def archive_facts(key, dates, weekly, by_id, names, per_week=3):
+    """Write short chart stories for every week: first top fives, certifications, debuts, milestones.
+
+    Returns [{week, chart, type, score, text, artist}], the best few per week."""
+    label = 'Hot 20' if key == 'willboard' else 'Pop 10'
+    best, wks, pts = {}, {}, {}
+    art_top5, art_top10, art_no1, art_seen = {}, {}, {}, set()
+    out, prev, n_week = [], {}, 1
+    for d, entries in zip(dates, weekly):
+        if not entries:
+            continue
+        facts = []
+
+        def add(kind, score, text, s):
+            # In a chart's first year every act is new to it, so "first" stories would mislead
+            if n_week <= 52 and ('first' in text):
+                return
+            facts.append({'week': d.isoformat(), 'chart': key, 'type': kind, 'score': score,
+                          'text': text, 'artist': s['artistName']})
+
+        debuts = [e for e in entries if e['songId'] not in best]
+        top_debut = min(debuts, key=lambda e: e['position'])['songId'] if debuts else None
+        top5_now = {}
+        for e in sorted(entries, key=lambda e: e['position']):
+            s, p, sid = by_id[e['songId']], e['position'], e['songId']
+            aid = s['artistId']
+            a = names.get(aid) or lead_artist(s['artistName'])
+            t = f"\u2018{s['name']}\u2019"
+            lw = prev.get(sid)
+            move = f'rises {lw}-{p}' if lw else (f'debuts at #{p}' if sid not in best else f're-enters at #{p}')
+            was = best.get(sid, 99)
+            if sid not in best and aid not in art_seen:
+                add('debut', 6 if p <= 10 else 4, f'{a} makes a first appearance on the {label} as {t} debuts at #{p}', s)
+            elif sid == top_debut and p <= 10:
+                add('debut', 3, f'{a} enters at #{p} with {t}, the week\'s highest debut', s)
+            if p == 1 and was > 1:
+                art_no1.setdefault(aid, set()).add(sid)
+                k = len(art_no1[aid])
+                if k == 1:
+                    add('no1', 7, f'{a} earns a first {label} #1 as {t} {move}', s)
+                else:
+                    add('no1', 4, f'{t} {move}, giving {a} a {ordinal(k)} #1 hit', s)
+            if p <= 5 and was > 5:
+                art_top5.setdefault(aid, set()).add(sid)
+                k = len(art_top5[aid])
+                if p > 1:
+                    if k == 1:
+                        add('top5', 8, f'{a} earns a first {label} top five hit as {t} {move}', s)
+                    elif k % 5 == 0:
+                        add('top5', 7, f'{a} scores a {ordinal(k)} career top five with {t}, which {move}', s)
+                    else:
+                        add('top5', 3, f'{t} {move}, the {ordinal(k)} top five hit for {a}', s)
+            if key == 'willboard' and p <= 10 and was > 10:
+                art_top10.setdefault(aid, set()).add(sid)
+                if len(art_top10[aid]) == 1 and p > 5:
+                    add('top10', 6, f'{a} reaches the top ten for the first time as {t} {move}', s)
+            if lw and lw - p >= 6:
+                add('leap', 5, f'{t} leaps {lw}-{p} for {a}, one of the biggest climbs of the week', s)
+            wks[sid] = wks.get(sid, 0) + 1
+            if wks[sid] in (20, 30, 40, 50):
+                add('weeks', 4, f'{t} by {a} logs a {ordinal(wks[sid])} week on the chart, now at #{p}', s)
+            if key == 'pop':
+                before = pop_cert(pts.get(sid, 0))
+                pts[sid] = pts.get(sid, 0) + points(p)
+                after = pop_cert(pts[sid])
+                if after and after != before:
+                    add('cert', 7 if 'Platinum' in after else 5, f'{t} by {a} goes {after.replace("x", "\u00d7")}', s)
+            if p <= 5:
+                top5_now.setdefault(aid, []).append((p, s))
+            best[sid] = min(was, p)
+            art_seen.add(aid)
+        for aid, hits in top5_now.items():
+            if len(hits) >= 2 and any(prev.get(s['id'], 99) > 5 for _, s in hits):
+                a = names.get(aid) or lead_artist(hits[0][1]['artistName'])
+                pair = ' and '.join(f"\u2018{s['name']}\u2019 (#{p})" for p, s in hits)
+                add('double', 6, f'{a} holds {len(hits)} of the top five spots this week with {pair}', hits[0][1])
+        facts.sort(key=lambda f: -f['score'])
+        if n_week > 8:  # the opening weeks of a chart are all firsts, so skip them
+            out += facts[:per_week]
+        n_week += 1
+        prev = {e['songId']: e['position'] for e in entries}
+    return out
 
 
 def week_dates(head, cols, first_year, consecutive):
@@ -72,7 +183,9 @@ def main():
             next_art += 1
         return a
 
-    data = {'meta': {}, 'artists': [], 'songs': []}
+    data = {'meta': {}, 'artists': [], 'songs': [], 'facts': []}
+    archive = []  # auto-written stories for past weeks, saved to archive.json
+    runs = {}  # every song's full chart run, saved to runs.json for the song pages
     for key, idx, hist, prefix, plays_head, size in CHARTS:
         rows_all = list(csv.reader(open(paths[idx], encoding='utf-8')))
         head, rows = rows_all[1], [r for r in rows_all[2:] if len(r) > 3 and r[1].strip()]
@@ -87,6 +200,12 @@ def main():
         used = set()
         old_ids = {s['id']: s for s in old['songs'] if s['chart'] == key}
         next_id = max(int(s['id'].split('_')[-1]) for s in old['songs'] if s['chart'] == key) + 1
+
+        # Will's written "Chart Fact" lines sit in rows of their own, one cell per week
+        for r in rows:
+            if r[1].strip().startswith('Chart Fact'):
+                data['facts'] += [{'week': d.isoformat(), 'chart': key, 'text': r[c].strip()}
+                                  for d, c in zip(dates, cols) if r[c].strip()]
 
         songs, weekly = [], [[] for _ in cols]
         for r in rows:
@@ -128,6 +247,10 @@ def main():
             for e in entries:
                 e['plays'] = old_plays.get((d.isoformat(), e['songId']))
         by_id = {s['id']: s for s in songs}
+        for d, entries in zip(dates, weekly):
+            if entries:
+                add_to_runs(runs, key, d.isoformat(), sorted(entries, key=lambda e: e['position']))
+        archive += archive_facts(key, dates, weekly, by_id, {a['id']: a['name'] for a in artists.values()})
         history, prev = [], {}
         for d, entries in zip(dates, weekly):
             if not entries:
@@ -157,6 +280,14 @@ def main():
                 if e['plays'] is not None:
                     s = by_id[e['songId']]
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, e['plays'])
+        # Play counts from Will's year-end sheets (plays_history.tsv), for songs whose plays
+        # the CS Era Points export no longer carries; a count only ever goes up, so keep the largest
+        if key == 'willboard' and os.path.exists('plays_history.tsv'):
+            hist_plays = {norm(r['song']): int(r['plays']) for r in csv.DictReader(open('plays_history.tsv', encoding='utf-8'), delimiter='\t')}
+            for s in songs:
+                t = hist_plays.get(norm(s['name']))
+                if t:
+                    s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         if key == 'willboard' and plays_csv:
             totals = {norm(r[0]): int(r[2]) for r in csv.reader(open(plays_csv, encoding='utf-8'))
                       if len(r) > 2 and r[2].strip().isdigit()}
@@ -173,8 +304,13 @@ def main():
     old_ids = {a['id'] for a in old['artists']}
     data['artists'] = old['artists'] + [a for a in artists.values() if a['id'] not in old_ids]
     data['meta']['generated'] = datetime.now().isoformat(timespec='seconds')
-    out = {k: data[k] for k in ('meta', 'artists', 'songs', 'willboard', 'pop', 'wbHistory', 'popHistory')}
+    data['facts'].sort(key=lambda f: f['week'])
+    out = {k: data[k] for k in ('meta', 'artists', 'songs', 'willboard', 'pop', 'wbHistory', 'popHistory', 'facts')}
     json.dump(out, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    json.dump(runs, open('runs.json', 'w', encoding='utf-8'), separators=(',', ':'))
+    archive.sort(key=lambda f: (f['week'], f['chart'], -f['score']))
+    json.dump(archive, open('archive.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    print(f'archive.json: {len(archive)} stories')
 
 
 if __name__ == '__main__':
