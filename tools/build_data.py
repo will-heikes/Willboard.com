@@ -14,6 +14,7 @@ to artist pages keep working.
 """
 import csv
 import json
+import os
 import re
 import sys
 from datetime import date, datetime, timedelta
@@ -279,6 +280,14 @@ def main():
                 if e['plays'] is not None:
                     s = by_id[e['songId']]
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, e['plays'])
+        # Play counts from Will's year-end sheets (plays_history.tsv), for songs whose plays
+        # the CS Era Points export no longer carries; a count only ever goes up, so keep the largest
+        if key == 'willboard' and os.path.exists('plays_history.tsv'):
+            hist_plays = {norm(r['song']): int(r['plays']) for r in csv.DictReader(open('plays_history.tsv', encoding='utf-8'), delimiter='\t')}
+            for s in songs:
+                t = hist_plays.get(norm(s['name']))
+                if t:
+                    s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         if key == 'willboard' and plays_csv:
             totals = {norm(r[0]): int(r[2]) for r in csv.reader(open(plays_csv, encoding='utf-8'))
                       if len(r) > 2 and r[2].strip().isdigit()}
