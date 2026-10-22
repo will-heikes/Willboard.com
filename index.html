@@ -210,6 +210,10 @@ button { font: inherit; color: inherit; }
 .cert.platinum { --cert-bg: #EEF1F4; --cert-edge: #9AA6B2; --cert-ink: #2F3A46; --cert-disc: linear-gradient(135deg,#F4F6F8,#7E8B98); }
 .cert.diamond  { --cert-bg: #E8F6FC; --cert-edge: #7CC6E4; --cert-ink: #0D4F6B; --cert-disc: conic-gradient(from 45deg,#E9FBFF,#9ADCF2,#FFFFFF,#6BBEDD,#E9FBFF); }
 .show-sm { display: none; }
+.table tr.feat td { background: #FFF6E8; }
+.table tr.feat:hover td { background: #FCEBD0; }
+.feat-tag { display: inline-block; margin-left: 7px; padding: 2px 6px; border-radius: 4px; background: #F3D9AE; color: #7A4B00;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }
 .table tr.sub-h td { background: var(--card-2); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 10px; padding-bottom: 10px; }
 .album-link { font-weight: 600; font-size: 13px; }
 .album-link:hover { color: var(--accent); text-decoration: underline; }
@@ -314,6 +318,11 @@ button { font: inherit; color: inherit; }
 .ye-nav a:hover { color: var(--ink); }
 .ye-nav span.off { visibility: hidden; }
 .ye-nav .yr { text-align: center; }
+.ye-nav { flex-wrap: wrap; }
+.ye-nav a.dec-link { flex-basis: 100%; text-align: center; font-size: 16px; color: var(--accent, var(--ink)); letter-spacing: .04em; padding: 0; }
+.ye-nav a.dec-link:hover { text-decoration: underline; }
+.dec-more { margin-top: 40px; grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .dec-more { grid-template-columns: 1fr; } }
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
   border: 1px solid var(--line); border-radius: 20px; padding: 6px 30px 6px 14px; font: 600 12.5px var(--f-body); cursor: pointer; }
 .ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
@@ -757,12 +766,13 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
   <section class="page" id="page-year-end">
     <div class="page-head">
       <div>
-        <h1>Year-End Charts</h1>
-        <div class="sub">The biggest songs of each year, from the plays they earned and how high they charted.</div>
+        <h1 id="ye-h1">Year-End Charts</h1>
+        <div class="sub" id="ye-sub">The biggest songs of each year, from the plays they earned and how high they charted.</div>
       </div>
     </div>
     <div class="ye-nav" id="ye-nav"></div>
     <div class="split" id="ye-split"></div>
+    <div class="split dec-more" id="dec-more"></div>
   </section>
 
   <!-- ── AWARDS ── -->
@@ -1365,10 +1375,15 @@ async function renderYearEnd(year) {
   const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
   if (!years.includes(year)) year = years.includes(ui.yeYear) ? ui.yeYear : years[years.length - 1];
   ui.yeYear = year;
+  $('ye-h1').textContent = 'Year-End Charts';
+  $('ye-sub').textContent = 'The biggest songs of each year, from the plays they earned and how high they charted.';
+  $('dec-more').innerHTML = '';
   const i = years.indexOf(year), prev = years[i - 1], next = years[i + 1];
+  const dec = `${String(year).slice(0, 3)}0s`;
   $('ye-nav').innerHTML = (prev ? `<a href="#/year-end/${prev}">← ${prev}</a>` : '<span class="off">←</span>') +
     `<div class="yr"><h2>${year}</h2><select aria-label="Jump to a year">${years.slice().reverse().map(y => `<option value="${y}"${y === year ? ' selected' : ''}>${y === year ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
-    (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>');
+    (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>') +
+    (DECADES.includes(dec) ? `<a class="dec-link" href="#/year-end/${dec}">The ${dec} Decade-End chart →</a>` : '');
   $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
   const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
   for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
@@ -1386,6 +1401,43 @@ async function renderYearEnd(year) {
         <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
         <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}</div>`;
   }).join('');
+  tintRows($('ye-split'), '.ye-lead');
+}
+
+// Will's decade lists (tools/build_decade.py → decade.json): songs, artists and, for Country, albums
+const DECADES = ['2010s'];
+let DECADE = null;
+async function renderDecade(dec) {
+  if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
+  const d = DECADE[dec];
+  if (!d) { location.hash = '#/year-end'; return; }
+  const from = +dec.slice(0, 4);
+  $('ye-h1').textContent = 'Decade-End Charts';
+  $('ye-sub').textContent = `The biggest songs, artists and albums of ${from} to ${from + 9}.`;
+  $('ye-nav').innerHTML = `<a href="#/year-end/${from + 9}">← ${from + 9}</a><div class="yr"><h2>The ${dec}</h2></div><a href="#/year-end/${from + 10}">${from + 10} →</a>`;
+  const songLink = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end/' + dec;
+  const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
+  const col = (cls, title, sub, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${sub}</small></div>${body}</div>`;
+  $('ye-split').innerHTML = [['willboard', 'Country', ''], ['pop', 'Pop', 'pop']].map(([k, name, cls]) => {
+    const rows = d[k]?.songs || [];
+    if (!rows.length) return col(cls, name, '', '<div class="empty">No list yet.</div>');
+    const [top, ...rest] = rows;
+    return col(cls, name, `Top ${rows.length} songs of the ${dec}`, `
+      <a class="ye-lead" href="${songLink(top)}">${artTile(top.artistName, true, from + 5, top.name)}
+        <div><div class="rk">1</div><div class="song">${esc(top.name)}</div><div class="artist">${esc(top.artistName)}</div>
+        <div class="meta">${facts(top).join(' · ')}</div></div></a>
+      ${rest.map(r => `<a class="lrow" href="${songLink(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
+        <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
+        <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}`);
+  }).join('');
+  const artistRows = list => list.map(a => `<a class="lrow" href="${a.artistId && artistStats[a.artistId] ? `#/artist/${a.artistId}` : '#/artists'}"><span class="rk">${a.rank}</span>${artTile(a.name, false, from + 5)}
+    <span><div class="song">${esc(a.name)}</div></span></a>`).join('');
+  const albums = (d.willboard?.albums || []).map(r => ({ ...r, al: findAlbum(r.name, r.artist) }));
+  $('dec-more').innerHTML =
+    col('', 'Country Artists', `Top ${d.willboard?.artists?.length || 0} of the ${dec}`, artistRows(d.willboard?.artists || [])) +
+    col('pop', 'Pop Artists', `Top ${d.pop?.artists?.length || 0} of the ${dec}`, artistRows(d.pop?.artists || [])) +
+    (albums.length ? col('', 'Country Albums', `Top ${albums.length} of the ${dec}`, albums.map(r => `<a class="lrow" href="${r.al ? `#/album/${r.al.id}` : '#/albums'}"><span class="rk">${r.rank}</span>${r.al ? albumTile(r.al) : artTile(r.artist)}
+      <span><div class="song">${esc(r.al?.name || r.name)}</div><div class="artist">${esc(r.artist)}</div></span><span class="meta">${r.al?.year || ''}</span></a>`).join('')) : '');
   tintRows($('ye-split'), '.ye-lead');
 }
 
@@ -1550,9 +1602,8 @@ function renderArtist(id) {
   if (!a) { location.hash = '#/artists'; return; }
   $('artist-h1').textContent = a.name;
   const songs = DATA.songs.filter(s => s.artistId === id).sort((x, y) => x.debutDate.localeCompare(y.debutDate));
-  // Songs where they're a featured or second credit, listed after their own
-  const featured = DATA.songs.filter(s => s.artistId !== id && creditParts(s.artistName).some(p => p.id === id))
-    .sort((x, y) => x.debutDate.localeCompare(y.debutDate));
+  // Songs where they're a featured or second credit sit in date order with their own, tinted and tagged
+  const featured = new Set(DATA.songs.filter(s => s.artistId !== id && creditParts(s.artistName).some(p => p.id === id)));
   const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
   $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
@@ -1563,7 +1614,7 @@ function renderArtist(id) {
   $('artist-albums').innerHTML = albums.map(al => `<a href="#/album/${al.id}">${albumTile(al)}
     <div class="song">${esc(al.name)}</div><div class="meta">${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div>${albumCert(al)}</a>`).join('');
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Album</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    [...songs, ...featured].map(s => `${s === featured[0] ? `<tr class="sub-h"><td colspan="6">Featured on</td></tr>` : ''}<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
+    [...songs, ...featured].sort((x, y) => x.debutDate.localeCompare(y.debutDate)).map(s => `<tr class="click${featured.has(s) ? ' feat' : ''}" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${featured.has(s) ? '<span class="feat-tag">Featured</span>' : ''}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
       <td class="hide-sm">${ALBUM_OF[s.id] ? `<a class="album-link" href="#/album/${ALBUM_OF[s.id].id}" onclick="event.stopPropagation()">${esc(albumName(s))}</a>` : '<span class="artist">—</span>'}</td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
@@ -1760,7 +1811,7 @@ function route() {
     ui.weekIdx[page] = best;
     renderChartPage(page);
   }
-  else if (page === 'year-end') { id = 'year-end'; renderYearEnd(+arg); }
+  else if (page === 'year-end') { id = 'year-end'; /^\d{4}s$/.test(arg) ? renderDecade(arg) : renderYearEnd(+arg); }
   else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
