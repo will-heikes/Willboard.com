@@ -9,8 +9,9 @@ merge, and raises itunesPlays in data.json right away. A count only ever goes up
 a song keeps its larger figure if the library's is lower (a deleted and re-added track).
 
 Also writes albums.json: every album holding a charted song (Hot 20 or Pop 10), with
-the plays of all its tracks added together for album certifications. Deluxe and
-Taylor's Version editions count with the original; singles and compilations are left out.
+the plays of all its tracks added together for album certifications. Deluxe editions
+count with the original; a Taylor's Version is its own album, holding only the songs
+that first came out on it (the vault tracks). Singles and compilations are left out.
 """
 import csv
 import json
@@ -34,9 +35,12 @@ def bare(title):
 
 
 def album_key(t):
-    """One album across its editions: "Red (Taylor's Version)" and "Red (Deluxe Edition)" are Red."""
-    name = re.sub(r'\s*[\(\[][^\)\]]*(deluxe|edition|version|expanded|bonus)[^\)\]]*[\)\]]', '', t['Album'], flags=re.I).strip()
+    """One album across its editions: "Red (Deluxe Edition)" is Red, but "Red (Taylor's Version)" stays its own album."""
+    name = re.sub(r"\s*[\(\[](?![^\)\]]*taylor)[^\)\]]*(deluxe|edition|version|expanded|bonus)[^\)\]]*[\)\]]", '', t['Album'], flags=re.I).strip()
     return lead(t.get('Album Artist') or t.get('Artist')), norm(name), name
+
+
+TV = re.compile(r"taylor['’]s version", re.I)
 
 
 def lead(artist):
@@ -70,6 +74,8 @@ def main():
         if not hits:
             hits = [(p, t) for a, p, t in loose.get(bare(title), []) if who and who[:8] in a]
         on_album = [h for h in hits if is_album(h[1])]
+        # A song re-recorded for a Taylor's Version belongs to the original album (Will's call)
+        on_album = [h for h in on_album if not TV.search(h[1]['Album'])] or on_album
         if on_album:
             album_songs[album_key(max(on_album, key=lambda h: h[0])[1])[:2]].append(s)
         if s['chart'] != 'willboard':

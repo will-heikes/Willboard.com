@@ -45,7 +45,8 @@ def cover_name(artist, title):
 
 def clean(title):
     """Title without edition tags, for matching: 'Hummingbird (Deluxe)' -> 'hummingbird'."""
-    t = re.sub(r'\s*[\(\[][^)\]]*(deluxe|edition|version|remaster|expanded|feat\.?|ft\.?|with)[^)\]]*[\)\]]', '', title, flags=re.I)
+    # "(Taylor's Version)" is a different album from the original, so it stays in
+    t = re.sub(r"\s*[\(\[](?![^)\]]*taylor)[^)\]]*(deluxe|edition|version|remaster|expanded|feat\.?|ft\.?|with)[^)\]]*[\)\]]", '', title, flags=re.I)
     t = unicodedata.normalize('NFKD', t).encode('ascii', 'ignore').decode()
     return norm(t)
 
