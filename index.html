@@ -1077,7 +1077,9 @@ function photoUrl(artistName, year) {
   if (year && eras?.length) {
     const now = new Date().getFullYear();
     const best = [...eras, now].sort((a, b) => Math.abs(a - year) - Math.abs(b - year) || a - b)[0];
-    if (best !== now) return `${IMAGES_BASE}${slug}-${best}.jpg`;
+    // ?v= changes when a photo is replaced, so browsers don't keep showing the old one
+    const file = `${slug}-${best}.jpg`, v = FOCUS['#sizes']?.[file];
+    if (best !== now) return IMAGES_BASE + file + (v ? `?v=${v}` : '');
   }
   return IMAGES_BASE + slug + '.jpg';
 }
@@ -1097,10 +1099,10 @@ function artTile(artistName, eager, year, title) {
   const init = p.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '♪';
   const bg = TILE_COLORS[hash(p) % TILE_COLORS.length];
   const src = photoUrl(artistName, year);
-  const lazy = eager ? '' : ' loading="lazy"';
+  const lazy = eager ? '' : ' loading="lazy"', pos = src && FOCUS[src.split('/').pop().split('?')[0]];
   // Will prefers the album cover over the single's: it sits on top when the song is on an album we have art for
   const covers = [...new Set([coverUrl(artistName, title), albumCoverUrl(artistName, title)].filter(Boolean))];
-  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy}${FOCUS[src.split('/').pop()] ? ` style="object-position:${FOCUS[src.split('/').pop()].join('% ')}%"` : ''} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
+  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy}${pos ? ` style="object-position:${pos.join('% ')}%"` : ''} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
 }
 
 function weeksAt1(songId, hist, upTo) {
