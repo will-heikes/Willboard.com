@@ -321,6 +321,9 @@ button { font: inherit; color: inherit; }
 .ye-nav { flex-wrap: wrap; }
 .ye-nav a.dec-link { flex-basis: 100%; text-align: center; font-size: 16px; color: var(--accent, var(--ink)); letter-spacing: .04em; padding: 0; }
 .ye-nav a.dec-link:hover { text-decoration: underline; }
+.split.solo { grid-template-columns: 1fr; }
+.ye-note { grid-column: 1 / -1; margin: 18px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
+.ye-note a { color: var(--ink); font-weight: 700; text-decoration: underline; }
 .dec-more { margin-top: 40px; grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) { .dec-more { grid-template-columns: 1fr; } }
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
@@ -1388,7 +1391,11 @@ async function renderYearEnd(year) {
   const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
   for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
   const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
-  $('ye-split').innerHTML = ['hot20', 'pop10'].map(id => {
+  // Before the Pop 10 launched (October 2011) the page is Country only, with a pointer to Pop's first year
+  const solo = !(YEAREND.pop?.[year]?.songs || []).length;
+  const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
+  $('ye-split').classList.toggle('solo', solo);
+  $('ye-split').innerHTML = (solo ? ['hot20'] : ['hot20', 'pop10']).map(id => {
     const c = CHARTS[id], rows = YEAREND[c.key]?.[year]?.songs || [];
     const head = `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${rows.length ? `Top ${rows.length} songs of ${year}` : ''}</small></div>`;
     if (!rows.length) return `<div class="col ${c.cls}">${head}<div class="empty">No ${c.isWb ? 'Country' : 'Pop'} year-end chart for ${year}.</div></div>`;
@@ -1400,7 +1407,7 @@ async function renderYearEnd(year) {
       ${rest.map(r => `<a class="lrow" href="${link(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
         <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
         <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}</div>`;
-  }).join('');
+  }).join('') + (solo && popFrom > year ? `<p class="ye-note">The Pop 10 began in October ${popFrom}, so there's no Pop year-end chart for ${year}. Pop's year-end charts start with <a href="#/year-end/${popFrom}">${popFrom}</a>.</p>` : '');
   tintRows($('ye-split'), '.ye-lead');
 }
 
@@ -1418,6 +1425,7 @@ async function renderDecade(dec) {
   const songLink = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end/' + dec;
   const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
   const col = (cls, title, sub, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${sub}</small></div>${body}</div>`;
+  $('ye-split').classList.remove('solo');
   $('ye-split').innerHTML = [['willboard', 'Country', ''], ['pop', 'Pop', 'pop']].map(([k, name, cls]) => {
     const rows = d[k]?.songs || [];
     if (!rows.length) return col(cls, name, '', '<div class="empty">No list yet.</div>');

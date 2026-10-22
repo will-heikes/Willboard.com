@@ -30,6 +30,9 @@ from build_data import WEEK_LABEL, first_year, week_dates
 LISTS = 'yearend_lists.tsv'
 SIZE = {'willboard': 20, 'pop': 10}
 TOP = 40
+# Will's own #1 where the formula would say otherwise. Pop 2011: the chart only ran from
+# late October, so he weighs pre-chart factors and puts In The Dark on top.
+FIRST = {('pop', 2011): 'In The Dark'}
 
 
 def chart_runs(path, size):
@@ -186,6 +189,11 @@ def main():
                         rows.append({'rank': len(rows) + 1, 'songId': sid, 'name': s['name'],
                                      'artistName': s['artistName'], 'peak': c['peak'], 'wks1': c['wks1'], 'wc': c['wc']})
                 src = 'will+formula' if src == 'will' else 'formula'
+            if (key, y) in FIRST:
+                # Will's call outranks the formula here
+                rows.sort(key=lambda r: r['name'] != FIRST[key, y])
+                for i, r in enumerate(rows):
+                    r['rank'] = i + 1
             out[key][str(y)] = {'source': src, 'songs': rows}
         print(key, ', '.join(f"{y}{'' if v['source'] == 'will' else '*'}" for y, v in out[key].items()))
 
