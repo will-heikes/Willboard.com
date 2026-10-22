@@ -599,7 +599,8 @@ body.on-ask .ask-fab { display: none; }
 .ask-era { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--muted); cursor: pointer; }
 .ask-era input { width: 16px; height: 16px; accent-color: var(--country); margin: 0; }
 .ask-era a { text-decoration: underline; }
-.about { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.about { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 18px; align-items: start; }
+.about > .card:first-child { grid-row: span 2; }
 .about-card { padding: 20px 22px; line-height: 1.6; }
 .about-card h2 { font-size: 18px; margin: 22px 0 6px; }
 .about-card a { text-decoration: underline; }
@@ -1081,6 +1082,9 @@ body.on-ask .ask-fab { display: none; }
         </ul>
         <p>The Hot 20 has followed these rules from its first week. The Pop 10 has used the same rules since play tracking began in December 2017. Before that, its charts were put together by feel, apart from a stretch in 2014 and 2015 when Spotify's Top Songs for Me set the order.</p>
 
+        <h2>Where the plays come from</h2>
+        <p>Hot 20 plays come from Will's own iTunes library. When a song is in the library more than once, such as a single and an album copy, the copy played most carries the count. A song's play count only ever goes up. Pop 10 plays are tracked week by week, on Last.fm from December 2017 and on stats.fm since 2023.</p>
+
         <h2>Chart points</h2>
         <p>Every week on the chart earns a song points, based on its position. The top five spots are worth the most.</p>
         <table class="pts">
@@ -1102,6 +1106,26 @@ body.on-ask .ask-fab { display: none; }
           <li><b>Decade-End.</b> The 2010s lists use the weighted system.</li>
         </ul>
 
+        <h2>Top Artists and Albums of the year</h2>
+        <p>Each year's top artists and albums add up the year-end scores of their songs, using the same weighted system as the Year-End songs. An artist gets full credit for songs they're featured on, except before 2015, when a featured act got half of a song's chart points (its plays still counted in full).</p>
+
+        <h2>Albums</h2>
+        <ul>
+          <li><b>One album, every edition.</b> Deluxe editions, EPs, reissues and Taylor's Versions count with the original album, which gives the album its name and cover. A song first released on a Taylor's Version, such as a vault track, names that edition.</li>
+          <li><b>Every track counts.</b> An album page lists its charted songs and every other track, and the plays of all of them add up toward the album's certification.</li>
+          <li>Singles and compilations aren't counted as albums.</li>
+        </ul>
+
+        <h2>The Willboard Awards</h2>
+        <p>There are two shows each year. The Country Awards have been held since 2010, and the Pop Awards since 2012.</p>
+        <ul>
+          <li><b>Nominees</b> are picked from chart points and plays.</li>
+          <li><b>Country categories:</b> Entertainer, Male Vocalist, Female Vocalist, Duo/Group, New Artist, Album, Song, Single, Musical Event and Music Video. Each has five nominees. Since 2019, Single, Musical Event and Music Video have three.</li>
+          <li><b>Pop categories:</b> Artist, Record, Song, Album and New Artist, plus Foreign Language Song since 2025. Each had five nominees through 2018 and has eight since 2019.</li>
+          <li><b>New Artist</b> means new to music, and nobody wins it twice.</li>
+          <li>A song is only nominated in one year, and an album can't be nominated again after it wins.</li>
+        </ul>
+
         <h2>The transitional era</h2>
         <p>Willboard started with one chart. From the week of January 28, 2010 through October 20, 2011, country and pop songs charted together on the Hot 20. That stretch of 91 weeks is the <b>transitional era</b>. The Pop 10 launched the week of October 27, 2011, and from then on each genre had its own chart.</p>
         <p style="margin-bottom:0">Records from the transitional era count on the Hot 20. On <a href="#/ask">Ask Willboard</a> you can leave them out.</p>
@@ -1120,6 +1144,34 @@ body.on-ask .ask-fab { display: none; }
         </ol>
         <p class="about-note">Charts have come out every Thursday since 2010, with two exceptions: there was no chart the weeks of August 22, 2024 and September 24, 2026.</p>
         <p style="margin-bottom:0;color:var(--muted)" id="about-updated"></p>
+      </div>
+
+      <div class="card about-card">
+        <h2 style="margin-top:0">Certifications</h2>
+        <p><b>Hot 20 songs</b> certify by plays.</p>
+        <table class="pts">
+          <tr><th>Award</th><th>Plays</th></tr>
+          <tr><td>Silver</td><td>300</td></tr>
+          <tr><td>Gold</td><td>400</td></tr>
+          <tr><td>Platinum</td><td>500, then another Platinum every 100 (2× at 600)</td></tr>
+          <tr><td>Diamond</td><td>1,000</td></tr>
+        </table>
+        <p><b>Pop 10 songs</b> certify by chart points.</p>
+        <table class="pts">
+          <tr><th>Award</th><th>Points</th></tr>
+          <tr><td>Gold</td><td>1,250</td></tr>
+          <tr><td>Platinum</td><td>2,500, then another Platinum every 1,250</td></tr>
+          <tr><td>Diamond</td><td>10× Platinum (13,750)</td></tr>
+        </table>
+        <p><b>Albums</b> certify by the plays of all their tracks added together.</p>
+        <table class="pts">
+          <tr><th>Award</th><th>Plays</th></tr>
+          <tr><td>Silver</td><td>500</td></tr>
+          <tr><td>Gold</td><td>750</td></tr>
+          <tr><td>Platinum</td><td>1,000, then another Platinum every 1,000</td></tr>
+          <tr><td>Diamond</td><td>5,000</td></tr>
+        </table>
+        <p style="margin-bottom:0">On weekly charts, a song shows the certification it had reached by that week. Song, artist and album pages show where it stands now.</p>
       </div>
     </div>
   </section>
