@@ -47,7 +47,8 @@ jobs:
           REDO: ${{ inputs.redo }}
           WIKI: ${{ inputs.wiki }}
       - if: github.event_name == 'workflow_dispatch' && inputs.covers
-        run: python3 tools/fetch_covers.py --redo "$REDO" ${{ inputs.all_songs && '--all-songs' || '' }}
+        # Stops in time to commit what it found; run again for the rest
+        run: python3 tools/fetch_covers.py --minutes 100 --redo "$REDO" ${{ inputs.all_songs && '--all-songs' || '' }}
         env:
           REDO: ${{ inputs.redo }}
       - if: github.event_name == 'push'

@@ -125,6 +125,7 @@ def main():
     ap.add_argument('--all-songs', action='store_true')
     ap.add_argument('--redo', default='', help='"Artist - Title" entries to fetch again, comma separated')
     ap.add_argument('--tidy-only', action='store_true')
+    ap.add_argument('--minutes', type=float, default=0, help='stop after this long, so a long run still saves what it got')
     args = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
     tidy()
@@ -133,11 +134,15 @@ def main():
     redo = {cover_name(*e.split(' - ', 1)) for e in args.redo.split(',') if ' - ' in e}
 
     items = wanted(args.all_songs)
-    rows, got = [], 0
-    for i, (fname, (kind, artist, title)) in enumerate(sorted(items.items()), 1):
+    rows, got, start = [], 0, time.time()
+    # Albums first: they're the ones the albums page needs
+    for i, (fname, (kind, artist, title)) in enumerate(sorted(items.items(), key=lambda x: (x[1][0] != 'album', x[0])), 1):
         path = os.path.join(OUT, fname)
         if os.path.exists(path) and fname not in redo:
             continue
+        if args.minutes and time.time() - start > args.minutes * 60:
+            print(f'\nOut of time at {i}/{len(items)}; run again to fetch the rest')
+            break
         hit, status = None, 'not found'
         for source in (from_deezer, from_itunes):
             try:
