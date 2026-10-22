@@ -983,13 +983,21 @@ function coverUrl(artistName, title) {
   const p = primaryArtist(artistName);
   return p && title ? `images/covers/${slugify(p)}--${slugify(title)}.jpg` : '';
 }
+// The cover of the album a charted song is on (a vault song uses its Taylor's Version)
+let SONG_ALBUM = {};
+function albumCoverUrl(artistName, title) {
+  const al = title && SONG_ALBUM[`${squash(primaryArtist(artistName))}|${squash(title)}`];
+  return al ? coverUrl(al[0], al[1]) : '';
+}
 function artTile(artistName, eager, year, title) {
   const p = primaryArtist(artistName);
   const init = p.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '♪';
   const bg = TILE_COLORS[hash(p) % TILE_COLORS.length];
   const src = photoUrl(artistName, year);
-  const cover = coverUrl(artistName, title), lazy = eager ? '' : ' loading="lazy"';
-  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy} onerror="this.remove()">` : ''}${cover ? `<img src="${cover}" alt=""${lazy} onerror="this.remove()">` : ''}</div>`;
+  const lazy = eager ? '' : ' loading="lazy"';
+  // Will prefers the album cover over the single's: it sits on top when the song is on an album we have art for
+  const covers = [...new Set([coverUrl(artistName, title), albumCoverUrl(artistName, title)].filter(Boolean))];
+  return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
 }
 
 function weeksAt1(songId, hist, upTo) {
@@ -1803,6 +1811,10 @@ async function init() {
     for (const e of [h.no1, h.notable]) if (e?.songId && SONGS[e.songId]) e.songName = SONGS[e.songId].name;
   ACT_NAMES = new Set(DATA.artists.map(a => a.name));
   for (const a of DATA.artists) ARTIST_ID[a.name] ||= a.id;
+  for (const al of ALBUMS) for (const sid of al.songs) {
+    const s = SONGS[sid];
+    if (s) SONG_ALBUM[`${squash(primaryArtist(s.artistName))}|${squash(s.name)}`] = [al.artist, (al.editions?.[sid] || al.name).trim()];
+  }
   PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   buildArtistStats();
   $('loading').remove();
