@@ -7,6 +7,10 @@ Run from the repo folder. Matches each Hot 20 song in data.json to the library b
 title and artist, writes itunes_plays.tsv (song, artist, plays) for build_data.py to
 merge, and raises itunesPlays in data.json right away. A count only ever goes up, so
 a song keeps its larger figure if the library's is lower (a deleted and re-added track).
+
+Also writes albums.json: every album holding a charted song (Hot 20 or Pop 10), with
+the plays of all its tracks added together for album certifications. Deluxe and
+Taylor's Version editions count with the original; singles and compilations are left out.
 """
 import csv
 import json
@@ -17,7 +21,7 @@ from collections import defaultdict
 
 from add_week import norm
 
-OUT = 'itunes_plays.tsv'
+OUT, ALBUMS = 'itunes_plays.tsv', 'albums.json'
 # "(feat. X)", "[with X]", "- Single Version" and the like aren't part of the title
 EXTRA = re.compile(r'\s*[\(\[](feat|ft|with|from|radio|single|album|edit|remaster|explicit|clean)[^\)\]]*[\)\]]'
                    r'|\s+-\s+(single|radio|album)\b.*$', re.I)
@@ -29,8 +33,20 @@ def bare(title):
     return re.sub(r'^(a|the)', '', norm(title))
 
 
+def album_key(t):
+    """One album across its editions: "Red (Taylor's Version)" and "Red (Deluxe Edition)" are Red."""
+    name = re.sub(r'\s*[\(\[][^\)\]]*(deluxe|edition|version|expanded|bonus)[^\)\]]*[\)\]]', '', t['Album'], flags=re.I).strip()
+    return lead(t.get('Album Artist') or t.get('Artist')), norm(name), name
+
+
 def lead(artist):
     return norm(re.split(r',| & | and | ft\.? | feat\.? | featuring | x | with |;', artist or '', flags=re.I)[0])
+
+
+def is_album(t):
+    # iTunes' Compilation flag is set on plenty of ordinary albums, so only Various Artists counts as one
+    return (t.get('Album') and not re.search(r'\s-\s*single$', t['Album'], re.I)
+            and (t.get('Album Artist') or '').lower() != 'various artists')
 
 
 def main():
@@ -38,26 +54,30 @@ def main():
     tracks, loose = defaultdict(list), defaultdict(list)  # title -> [(artist text, plays)]
     for t in lib['Tracks'].values():
         if t.get('Name'):
-            v = (norm(f"{t.get('Artist', '')} {t.get('Album Artist', '')}"), t.get('Play Count', 0))
+            v = (norm(f"{t.get('Artist', '')} {t.get('Album Artist', '')}"), t.get('Play Count', 0), t)
             tracks[norm(EXTRA.sub('', t['Name']))].append(v)
             loose[bare(t['Name'])].append(v)
 
     data = json.load(open('data.json', encoding='utf-8'))
     rows, missing, raised = [], [], 0
+    album_songs = defaultdict(list)  # album key -> songs from it that charted
     for s in data['songs']:
-        if s['chart'] != 'willboard':
-            continue
         # Will's tell-apart suffix ("Heaven - Niall") names the artist, not the title
         m = re.fullmatch(r'(.+?) - (.+)', s['name'])
         title = m.group(1) if m and norm(m.group(2)) in norm(s['artistName']) else s['name']
         who = lead(s['artistName'])
-        hits = [p for a, p in tracks.get(norm(EXTRA.sub('', title)), []) if who and who[:8] in a]
+        hits = [(p, t) for a, p, t in tracks.get(norm(EXTRA.sub('', title)), []) if who and who[:8] in a]
         if not hits:
-            hits = [p for a, p in loose.get(bare(title), []) if who and who[:8] in a]
+            hits = [(p, t) for a, p, t in loose.get(bare(title), []) if who and who[:8] in a]
+        on_album = [h for h in hits if is_album(h[1])]
+        if on_album:
+            album_songs[album_key(max(on_album, key=lambda h: h[0])[1])[:2]].append(s)
+        if s['chart'] != 'willboard':
+            continue
         if not hits:
             missing.append(f"{s['name']} - {s['artistName']}")
             continue
-        plays = max(hits)  # several copies (single + album): the one Will plays carries the count
+        plays = max(p for p, _ in hits)  # several copies (single + album): the one Will plays carries the count
         rows.append((s['name'], s['artistName'], plays))
         if plays > (s['itunesPlays'] or 0):
             s['itunesPlays'], raised = plays, raised + 1
@@ -67,6 +87,22 @@ def main():
         w.writerow(['song', 'artist', 'plays'])
         w.writerows(sorted(rows))
     json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+
+    albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': []})
+    for t in lib['Tracks'].values():
+        if is_album(t) and album_key(t)[:2] in album_songs:
+            a = albums[album_key(t)[:2]]
+            a['plays'] += t.get('Play Count', 0)
+            a['tracks'] += 1
+            a['names'].append(album_key(t)[2])
+    out = []
+    for k, a in albums.items():
+        songs = sorted(album_songs[k], key=lambda s: s['debutDate'])
+        out.append({'name': min(a['names'], key=len), 'artist': songs[0]['artistName'], 'artistId': songs[0]['artistId'],
+                    'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]})
+    out.sort(key=lambda a: -a['plays'])
+    json.dump(out, open(ALBUMS, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    print(f'{len(out)} albums with a charted song; top: ' + ', '.join(f"{a['name']} {a['plays']}" for a in out[:5]))
     print(f'{len(rows)} matched, {raised} raised, {len(missing)} not in the library')
     print('\n'.join(sorted(missing)))
 
