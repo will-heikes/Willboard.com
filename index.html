@@ -528,7 +528,8 @@ button { font: inherit; color: inherit; }
 .run-card .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 11.5px; padding: 5px 8px; white-space: nowrap; transform: translate(-50%, -130%); display: none; }
 .run-card .tip b { font-family: var(--f-cond); font-size: 15px; margin-right: 5px; }
 .run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; margin-top: 12px; }
-.run-grid div { background: var(--card); border: 1px solid var(--line-soft); padding: 6px 4px 5px; text-align: center; }
+.run-grid > * { background: var(--card); border: 1px solid var(--line-soft); padding: 6px 4px 5px; text-align: center; color: inherit; }
+.run-grid a:hover { border-color: var(--ink-soft); }
 .run-grid b { display: block; font-family: var(--f-cond); font-size: 20px; line-height: 1.1; }
 .run-grid small { font-size: 9.5px; color: var(--muted); letter-spacing: .04em; }
 .run-grid .no1 { background: rgb(var(--tint) / .85); border-color: transparent; color: #fff; }
@@ -601,7 +602,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
 .ask-foot { border-top: 1px solid var(--line-soft); padding: 12px 18px; }
 .ask-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--accent); }
 .ask-none { padding: 6px 20px; max-width: 640px; }
-.tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 10px; color: #fff; }
+.tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; color: #fff; }
 .tag.country { background: var(--country); }
 .tag.pop { background: var(--pop); }
 
@@ -1998,8 +1999,13 @@ async function renderSong(id) {
       tip.style.left = `${b.left - box.left + b.width / 2 + 18}px`; tip.style.top = `${b.top - box.top + 18}px`; tip.style.display = 'block';
     };
     dot.onmouseleave = () => { tip.style.display = 'none'; };
+    dot.onclick = () => { location.hash = `#/${s.chart === 'pop' ? 'pop10' : 'hot20'}/${run[+dot.dataset.i].week}`; };
   });
-  $('song-grid').innerHTML = run.map(w => `<div class="${w.pos === 1 ? 'no1' : w.pos ? '' : 'off'}"><b>${w.pos ?? '—'}</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></div>`).join('');
+  // Each charted week opens that week's chart
+  const chartId = s.chart === 'pop' ? 'pop10' : 'hot20';
+  $('song-grid').innerHTML = run.map(w => w.pos
+    ? `<a href="#/${chartId}/${w.week}" class="${w.pos === 1 ? 'no1' : ''}" title="See the chart for ${fmtLong(w.week)}"><b>${w.pos}</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></a>`
+    : `<div class="off"><b>—</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></div>`).join('');
 
   const more = DATA.songs.filter(o => o.artistId === s.artistId && o.id !== s.id)
     .sort((a, b) => (a.peakPosition ?? 99) - (b.peakPosition ?? 99) || b.debutDate.localeCompare(a.debutDate)).slice(0, 6);
@@ -2073,8 +2079,27 @@ function renderSongs() {
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
 const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', 'Which songs debuted at #1?', 'When did Over You hit #1?',
-  'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020'];
+  'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
+  'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?'];
 const ASK = {};
+// artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
+let ARTIST_INFO = null;
+const actInfo = name => ARTIST_INFO?.[name];
+const KINDS = { group: /\b(group|band|duo|trio)s?\b/, woman: /\b(woman|women|female|girl|lady)\b/, man: /\b(man|men|male|guy|boy)\b/ };
+const kindOf = t => Object.keys(KINDS).find(k => KINDS[k].test(t));
+const isKind = (name, kind) => kind === 'group' ? actInfo(name)?.type === 'group' : actInfo(name)?.type === 'person' && actInfo(name)?.sex === (kind === 'woman' ? 'f' : 'm');
+const KIND_WORD = { group: 'a group', woman: 'a woman', man: 'a man' };
+// Whole years (and the rest in days) between two ISO dates
+function ageAt(born, day) {
+  const b = parseDate(born), d = parseDate(day);
+  let y = d.getFullYear() - b.getFullYear();
+  if (d < new Date(d.getFullYear(), b.getMonth(), b.getDate())) y--;
+  return { y, days: Math.round((d - new Date(b.getFullYear() + y, b.getMonth(), b.getDate())) / 864e5) };
+}
+function spanText(from, to) {
+  const days = Math.round((parseDate(to) - parseDate(from)) / 864e5), y = Math.floor(days / 365.25), m = Math.floor((days - y * 365.25) / 30.44);
+  return [y && `${y} year${y === 1 ? '' : 's'}`, m && `${m} month${m === 1 ? '' : 's'}`].filter(Boolean).join(', ') || `${days} days`;
+}
 // Every song's weeks, and every week-to-week move, for one chart (built once, on the first question)
 function askStats(key) {
   if (ASK[key]) return ASK[key];
@@ -2185,6 +2210,69 @@ function askAnswer(q, chartId, f) {
   const songsF = Object.values(st.songs).filter(s => S(s.id) && byArtist(S(s.id), f.artist));
   const who = f.artist ? ` by ${esc(f.artist.name)}` : '';
   const title = s => f.artist ? `“${esc(s.name)}”` : songTitle(s);
+  const kind = kindOf(t);
+  const noInfo = { lead: `I don't have that detail about the artists yet.` };
+
+  // Oldest and youngest acts at #1 (age when each song first reached #1)
+  if (/\b(oldest|youngest)\b/.test(t) || (/\b(old|young|age)\b/.test(t) && NO1.test(t))) {
+    if (!ARTIST_INFO) return noInfo;
+    const young = /young/.test(t), best = {};
+    for (const s of songsF) {
+      const at = s.no1.find(w => inSpanW(f.span, w));
+      if (!at) continue;
+      for (const p of creditParts(S(s.id).artistName)) {
+        const born = actInfo(p.name)?.born;
+        if (!born || (kind && !isKind(p.name, kind))) continue;
+        const age = ageAt(born, at), v = age.y * 400 + age.days;
+        if (!best[p.name] || (young ? v < best[p.name].v : v > best[p.name].v)) best[p.name] = { name: p.name, id: p.id, v, age, s, at };
+      }
+    }
+    const list = Object.values(best).sort((a, b) => young ? a.v - b.v : b.v - a.v).slice(0, 10);
+    if (!list.length) return { lead: `I don't have birth dates for the acts with #1s on the ${c.name}${inYear(f.span)}.` };
+    const x = list[0];
+    return {
+      lead: `The ${young ? 'youngest' : 'oldest'} ${kind === 'woman' ? 'woman' : kind === 'man' ? 'man' : 'act'} to reach #1 on the ${c.name}${inYear(f.span)} is ${esc(x.name)}, who was ${x.age.y} years, ${x.age.days} days old when “${esc(x.s.name || S(x.s.id).name)}” hit #1 the week of ${fmtLong(x.at)}.`,
+      rows: list.map((x, i) => askRow(i + 1, S(x.s.id), `<b>${x.age.y}</b> yrs old<br>${esc(x.name)}`)).join(''),
+    };
+  }
+
+  // The longest gap between one #1 and the next, for an act
+  if (NO1.test(t) && /\b(gap|gaps|between|wait|waited|drought|comeback|return)\b/.test(t)) {
+    const acts = {};
+    for (const w of st.weeks) {
+      if (!inSpanW(f.span, w.week)) continue;
+      const s = S(w.entries[0].songId);
+      for (const p of creditParts(s.artistName)) {
+        if (!p.id || (f.artist && squash(p.name) !== squash(f.artist.name))) continue;
+        const a = acts[p.id] ||= { id: p.id, name: p.name, last: null, lastSong: null, best: null };
+        if (a.last && a.lastSong !== s.id && !(a.seen ||= new Set()).has(s.id)) {
+          const d = parseDate(w.week) - parseDate(a.last);
+          if (!a.best || d > a.best.d) a.best = { d, from: a.last, to: w.week, a: S(a.lastSong), b: s };
+        }
+        (a.seen ||= new Set()).add(s.id);
+        a.last = w.week; a.lastSong = s.id;
+      }
+    }
+    const list = Object.values(acts).filter(a => a.best).sort((a, b) => b.best.d - a.best.d).slice(0, 10);
+    if (!list.length) return { lead: `${f.artist ? esc(f.artist.name) + " hasn't" : 'No act has'} had two different #1s on the ${c.name}${inYear(f.span)}.` };
+    const g = list[0].best;
+    return {
+      lead: `${f.artist ? `${esc(f.artist.name)}'s longest wait` : 'The longest wait'} between #1s on the ${c.name}${inYear(f.span)}${f.artist ? ' was' : ` belongs to ${esc(list[0].name)}:`} ${spanText(g.from, g.to)}, from “${esc(g.a.name)}” (last at #1 the week of ${fmtLong(g.from)}) to “${esc(g.b.name)}” (${fmtLong(g.to)}).`,
+      rows: list.map((a, i) => askArtistRow(i + 1, { ...a, sub: `“${a.best.a.name}” to “${a.best.b.name}”` }, `<b>${spanText(a.best.from, a.best.to)}</b><br>${a.best.to.slice(0, 4)}`)).join(''),
+    };
+  }
+
+  // The first (or latest) #1 by a group, a woman or a man
+  if (kind && NO1.test(t) && /\b(first|earliest|last|latest|most recent)\b/.test(t)) {
+    if (!ARTIST_INFO) return noInfo;
+    const ws = st.weeks.filter(w => inSpanW(f.span, w.week) && creditParts(S(w.entries[0].songId).artistName).some(p => isKind(p.name, kind)));
+    if (!ws.length) return { lead: `No #1 by ${KIND_WORD[kind]} on the ${c.name}${inYear(f.span)}.` };
+    const first = /\b(first|earliest)\b/.test(t), w = first ? ws[0] : ws[ws.length - 1], s = S(w.entries[0].songId);
+    const act = creditParts(s.artistName).find(p => isKind(p.name, kind));
+    return { lead: `The ${first ? 'first' : 'latest'} #1 by ${KIND_WORD[kind]} on the ${c.name}${inYear(f.span) || (first ? ' ever' : '')} was ${songTitle(s)}, the week of ${fmtLong(w.week)}${s.artistName !== act.name ? ` (${esc(act.name)} is the ${kind === 'group' ? 'group' : 'artist'})` : ''}.`,
+      rows: askRow(1, s, fmtShort(w.week), `#/${chartId}/${w.week}`) };
+  }
+
   // An act who never made this chart, or a year before it began, leaves the other chart to answer
   if (f.artist && !songsF.length && !f.songs.length) return null;
   if (f.span && f.span.to < st.weeks[0].week) return { quiet: true, lead: `The ${c.name} began the week of ${fmtLong(st.weeks[0].week)}.` };
@@ -2281,7 +2369,7 @@ function askAnswer(q, chartId, f) {
   }
 
   // Acts with the most #1s, most weeks at #1, or most hits
-  const actQ = /\b(who|artist|artists|act|acts|singer|band)\b/.test(t) && !f.artist;
+  const actQ = (/\b(who|artist|artists|act|acts|singer|band)\b/.test(t) || kind) && !f.artist;
   if ((actQ && /\bmost\b/.test(t)) || /most (#|no\.?\s*|number[\s-]*)(1|one)s\b|most number[\s-]ones\b|most #1 (songs|hits)|most (hits|songs|entries)/.test(t)) {
     const weeksMode = /weeks/.test(t) && NO1.test(t), hitsMode = !NO1.test(t);
     const acts = {};
@@ -2290,7 +2378,7 @@ function askAnswer(q, chartId, f) {
       const v = weeksMode ? n1 : hitsMode ? +s.weeks.some(w => inSpanW(f.span, w)) : +(s.no1.length > 0 && inSpanW(f.span, s.no1[0]));
       if (!v) continue;
       for (const p of creditParts(S(s.id).artistName)) {
-        if (!p.id) continue;
+        if (!p.id || (kind && !isKind(p.name, kind))) continue;
         (acts[p.id] ||= { id: p.id, name: p.name, v: 0 }).v += v;
       }
     }
@@ -2454,6 +2542,7 @@ async function init() {
     RETROS = await fetch('retrospectives.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     fullHistory('willboard');
     fullHistory('pop');
     const ids = new Set();
