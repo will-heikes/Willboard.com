@@ -1466,11 +1466,12 @@ function renderHome() {
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('') + (cert ? `<div>${cert}<small>Certified</small></div>` : '');
   $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at No. 1` : 'New No. 1'}</figcaption>`;
 
-  // Chart Beat: the newest articles first, then this week's stories (Pop 10 #1 leads those)
+  // Chart Beat: Will's articles, newest first
   const stories = weekStories(last, pop.length - 1);
-  // Four items in all, never the same artist's photo twice (Will)
+  // Up to four articles, never the same artist's photo twice (Will). The week's chart stories
+  // stand in only when there are no articles (they still run in the ticker)
   const seen = new Set();
-  const beat = [...ARTICLES.slice(0, 3).map(articleCard), ...stories]
+  const beat = (ARTICLES.length ? ARTICLES.map(articleCard) : stories)
     .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 4);
   const [first, ...rest] = beat;
   $('beat-sub').textContent = `The stories behind the week of ${fmtLong(week)}.`;
