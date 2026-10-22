@@ -1468,13 +1468,16 @@ function renderHome() {
 
   // Chart Beat: the newest articles first, then this week's stories (Pop 10 #1 leads those)
   const stories = weekStories(last, pop.length - 1);
-  const beat = [...ARTICLES.slice(0, 3).map(articleCard), ...stories];
+  // Four items in all, never the same artist's photo twice (Will)
+  const seen = new Set();
+  const beat = [...ARTICLES.slice(0, 3).map(articleCard), ...stories]
+    .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 4);
   const [first, ...rest] = beat;
   $('beat-sub').textContent = `The stories behind the week of ${fmtLong(week)}.`;
   $('beat-lead').innerHTML = first ? `<a class="beat-lead" href="${first.href}">
       <div class="ph">${artTile(first.artist, true)}</div>
       <div class="kick ${first.chart}">${first.kicker}</div><h3>${esc(first.headline)}</h3>${first.dek ? `<p class="dek">${esc(first.dek)}</p>` : ''}</a>` : '';
-  $('beat-list').innerHTML = rest.slice(0, 4).map(t => `<a class="beat-item" href="${t.href}">
+  $('beat-list').innerHTML = rest.map(t => `<a class="beat-item" href="${t.href}">
       <div><div class="kick ${t.chart}">${t.kicker}</div><h4>${esc(t.headline)}</h4></div>${artTile(t.artist)}</a>`).join('');
   const tick = [lead, ...stories].map(t => `<span>${esc(t.headline)}</span>`).join('');
   $('ticker').innerHTML = tick + tick;
