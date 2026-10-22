@@ -99,7 +99,7 @@ def main():
         w.writerows(sorted(rows))
     json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 
-    albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': []})
+    albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': [], 'years': []})
     for t in lib['Tracks'].values():
         if is_album(t) and album_key(t)[:2] in album_songs:
             a = albums[album_key(t)[:2]]
@@ -107,11 +107,15 @@ def main():
             a['tracks'] += 1
             if not TV.search(t['Album']):
                 a['names'].append(album_key(t)[2])
+                if t.get('Year'):
+                    a['years'].append(t['Year'])
     out = []
     for k, a in albums.items():
         songs = sorted(album_songs[k], key=lambda s: s['debutDate'])
         al = {'name': min(a['names'] or [k[1]], key=len), 'artist': songs[0]['artistName'], 'artistId': songs[0]['artistId'],
               'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]}
+        if a['years']:
+            al['year'] = min(a['years'])  # release year, for ordering an artist's albums
         if any(s['id'] in edition for s in songs):
             al['editions'] = {s['id']: edition[s['id']] for s in songs if s['id'] in edition}
         out.append(al)
