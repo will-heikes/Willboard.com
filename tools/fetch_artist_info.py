@@ -20,7 +20,9 @@ import urllib.request
 OUT, MISSING = 'artist_info.json', 'artist_info_missing.txt'
 API = 'https://www.wikidata.org/w/api.php?'
 # What to search for when Will's spelling or the act's name finds the wrong thing
-SEARCH_AS = {'Ariana Grade': 'Ariana Grande', 'Justin Biever': 'Justin Bieber'}
+SEARCH_AS = {'Ariana Grade': 'Ariana Grande', 'Justin Biever': 'Justin Bieber', 'Christina Aguliera': 'Christina Aguilera',
+             'Illienum': 'Illenium', 'Nate Reuss': 'Nate Ruess', 'Shkodra Elektonike': 'Shkodra Elektronike',
+             'Love & Theft': 'Love and Theft', 'David Nail & the Well Ravens': 'David Nail', 'Kaitlyn Butts': 'Kaitlin Butts'}
 MUSIC = re.compile(r'singer|musician|rapper|\bband\b|\bduo\b|\btrio\b|\bgroup\b|\bDJ\b|producer|songwriter|vocalist|guitarist|composer|quartet|ensemble', re.I)
 NOT_ACT = re.compile(r'\b(song|single|album|EP|film|episode|television|tour|video game|novel|book)\b', re.I)
 GROUP = re.compile(r'\b(band|duo|trio|group|quartet|quintet|ensemble|collective|boy band|girl group|orchestra|choir)\b', re.I)
@@ -70,7 +72,7 @@ def describe(e):
 
 
 def lookup(name):
-    found = get({'action': 'wbsearchentities', 'search': SEARCH_AS.get(name, name), 'language': 'en', 'type': 'item', 'limit': 7}).get('search', [])
+    found = get({'action': 'wbsearchentities', 'search': SEARCH_AS.get(name, name), 'language': 'en', 'type': 'item', 'limit': 20}).get('search', [])
     ids = [f['id'] for f in found]
     if not ids:
         return None
