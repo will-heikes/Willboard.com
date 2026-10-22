@@ -69,22 +69,30 @@ def main():
     # Country: Will's own order
     top = [r for r in rows(wb, 'Top Songs') if r.get('Song')]
     country = song_rows('willboard', [(clean(r['Song']), clean(r['Artist']), getattr(r['Debut Date'], 'year', 2015)) for r in top])
-    album_artist = {}
+    # Albums: each album's songs' weighted decade totals ("Total" on Top Songs: points share + plays share)
+    # added up. The Top Albums tab ranks by the album's own iTunes plays, which lifts albums with one
+    # small hit (Shania Twain's Now), so Will's song totals decide the order instead.
+    by_name = defaultdict(list)
+    for s in data['songs']:
+        if s['chart'] == 'willboard':
+            by_name[norm(s['name'])].append(s)
+    album_of = {sid: a for a in albums for sid in a['songs']}
+    totals, counts, names = defaultdict(float), defaultdict(int), {}
     for r in top:
-        album_artist.setdefault(norm(clean(r['Album'])), clean(r['Artist']))
-    al_rows = []
-    for r in rows(wb, 'Top Albums'):
-        name = clean(r.get('Album'))
-        if not name or not r.get('Total Singles'):  # a stray duplicate row with no singles
+        if not isinstance(r.get('Total'), (int, float)):
             continue
-        artist = album_artist.get(norm(name), '')
-        artist = RENAMED.get(artist, artist)
-        hit = next((a for a in albums if norm(a['name']) == norm(name)
-                    and (not artist or norm(a['artist']).startswith(norm(artist)[:6]))), None)
-        al_rows.append({'rank': len(al_rows) + 1, 'name': hit['name'] if hit else name,
-                        'artist': hit['artist'] if hit else artist})
-        if len(al_rows) == TOP_OTHER:
-            break
+        s = match(by_name, clean(r['Song']), clean(r['Artist']), getattr(r['Debut Date'], 'year', 2015))
+        al = album_of.get(s['id']) if s else None
+        if al:
+            key, names[(al['name'], al['artist'])] = (al['name'], al['artist']), True
+        elif clean(r.get('Album')) and not re.search(r'single', clean(r['Album']), re.I):
+            key = (clean(r['Album']), RENAMED.get(clean(r['Artist']), clean(r['Artist'])))
+        else:
+            continue
+        totals[key] += r['Total']
+        counts[key] += 1
+    al_rows = [{'rank': i + 1, 'name': k[0], 'artist': k[1], 'songs': counts[k]}
+               for i, k in enumerate(sorted(totals, key=lambda k: -totals[k])[:TOP_OTHER])]
     out['willboard'] = {'songs': country,
                         'artists': artist_rows([clean(r['Artist']) for r in rows(wb, 'Top Artists') if r.get('Artist')]),
                         'albums': al_rows}

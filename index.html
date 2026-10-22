@@ -332,12 +332,20 @@ button { font: inherit; color: inherit; }
 .split.solo { grid-template-columns: 1fr; }
 .ye-note { grid-column: 1 / -1; margin: 18px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
 .ye-note a { color: var(--ink); font-weight: 700; text-decoration: underline; }
-.ye-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 34px 28px; align-items: start; }
+.ye-hub { display: grid; grid-template-columns: 1fr; gap: 38px; }
+.ye-hub .col-h a.ye-more { padding: 0; background: none; border: 0; font-size: 15px; }
+.ye-hub .col-h a.ye-more:hover { text-decoration: underline; background: none; }
+.ye-five { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.ye-card { min-width: 0; }
+.ye-tile { display: block; min-width: 0; }
+.ye-tile .art { width: 100%; height: auto; aspect-ratio: 1; font-size: 30px; border-radius: 4px; box-shadow: 0 10px 22px -14px rgba(0,0,0,.6); transition: transform .15s; }
+.ye-tile:hover .art { transform: translateY(-3px); }
+.ye-tile .rk { font-family: var(--f-cond); font-weight: 700; font-size: 30px; line-height: 1; margin-top: 10px; color: var(--accent); }
+.ye-tile .song { font-weight: 700; font-size: 14px; margin-top: 4px; line-height: 1.25; }
+.ye-tile .artist { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 760px) { .ye-five { grid-template-columns: repeat(5, 42%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; } .ye-tile { scroll-snap-align: start; } }
 .ye-hub .col, .ye-detail .col { --accent: var(--country); }
 .ye-hub .col.pop, .ye-detail .col.pop { --accent: var(--pop); }
-.ye-hub .ye-lead { grid-template-columns: 120px 1fr; }
-.ye-hub .ye-lead .art { width: 120px; height: 120px; }
-.ye-hub .ye-lead .song { font-size: 24px; }
 .ye-more { display: block; padding: 12px; text-align: center; font-family: var(--f-cond); font-weight: 700; font-size: 16px; letter-spacing: .03em;
   color: var(--accent); background: var(--card); border-top: 1px solid var(--line, rgba(0,0,0,.06)); }
 .ye-more:hover { background: var(--card-2); }
@@ -353,7 +361,7 @@ button { font: inherit; color: inherit; }
 .ye-yr:hover .art { transform: translateY(-3px); }
 .ye-yr span { display: block; margin-top: 6px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; }
 .ye-yr.on .art { outline: 3px solid var(--ink); outline-offset: 2px; }
-@media (max-width: 900px) { .ye-hub { grid-template-columns: 1fr; } }
+
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
   border: 1px solid var(--line); border-radius: 20px; padding: 6px 30px 6px 14px; font: 600 12.5px var(--f-body); cursor: pointer; }
 .ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
@@ -1530,9 +1538,11 @@ async function renderYearEnd(span, slug) {
   } else {
     // The hub: every chart's top 5
     const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
-    split.innerHTML = charts.map(c => `<section class="col ye-card ${c.cls}"><div class="col-h"><h2>${c.title}</h2><small>Top ${c.rows.length}</small></div>
-        ${leadRow(c.rows[0])}${c.rows.slice(1, 5).map(listRow).join('')}
-        <a class="ye-more" href="#/year-end/${span}/${c.slug}">See the full Top ${c.rows.length} →</a></section>`).join('') +
+    // Each chart reads across, like Billboard's: its top 5 side by side
+    split.innerHTML = charts.map(c => `<section class="col ye-card ${c.cls}"><div class="col-h"><h2>${c.title}</h2>
+        <a class="ye-more" href="#/year-end/${span}/${c.slug}">See the full Top ${c.rows.length} →</a></div>
+        <div class="ye-five">${c.rows.slice(0, 5).map(r => `<a class="ye-tile" href="${r.href}">${r.tile(r.rank === 1)}
+          <div class="rk">${r.rank}</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></a>`).join('')}</div></section>`).join('') +
       (!dec && +span < popFrom ? `<p class="ye-note">The Pop 10 began in October ${popFrom}, so there's no Pop year-end chart for ${span}. Pop's year-end charts start with <a href="#/year-end/${popFrom}">${popFrom}</a>.</p>` : '');
   }
   tintRows(split, '.ye-lead');
