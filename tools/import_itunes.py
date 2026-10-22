@@ -43,7 +43,8 @@ SAME_ACT = {'ladyantebellum': 'ladya'}
 # Gaslighter came out as the Dixie Chicks became The Chicks; the rest are reissues (Will, 2026-10-22)
 SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
               ('carlypearce', 'hummingbirdnorainnoflowers'): ('carlypearce', 'hummingbird'),
-              ('lukecombs', 'thisonesforyoutoo'): ('lukecombs', 'thisonesforyou')}
+              ('lukecombs', 'thisonesforyoutoo'): ('lukecombs', 'thisonesforyou'),
+              ('coleswindell', 'stereotypebroken'): ('coleswindell', 'stereotype')}
 
 
 def act_key(artist):
