@@ -332,9 +332,28 @@ button { font: inherit; color: inherit; }
 .split.solo { grid-template-columns: 1fr; }
 .ye-note { grid-column: 1 / -1; margin: 18px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
 .ye-note a { color: var(--ink); font-weight: 700; text-decoration: underline; }
-.dec-more { margin-top: 40px; grid-template-columns: repeat(3, 1fr); }
-.dec-more.ye-tops { grid-template-columns: 1fr 1fr; }
-@media (max-width: 900px) { .dec-more, .dec-more.ye-tops { grid-template-columns: 1fr; } }
+.ye-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 34px 28px; align-items: start; }
+.ye-hub .col, .ye-detail .col { --accent: var(--country); }
+.ye-hub .col.pop, .ye-detail .col.pop { --accent: var(--pop); }
+.ye-hub .ye-lead { grid-template-columns: 120px 1fr; }
+.ye-hub .ye-lead .art { width: 120px; height: 120px; }
+.ye-hub .ye-lead .song { font-size: 24px; }
+.ye-more { display: block; padding: 12px; text-align: center; font-family: var(--f-cond); font-weight: 700; font-size: 16px; letter-spacing: .03em;
+  color: var(--accent); background: var(--card); border-top: 1px solid var(--line, rgba(0,0,0,.06)); }
+.ye-more:hover { background: var(--card-2); }
+.ye-crumbs { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.ye-crumbs > a { font-weight: 700; font-size: 14px; }
+.ye-crumbs > a:hover { text-decoration: underline; }
+.ye-crumbs .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.ye-years { margin-top: 48px; }
+.ye-years h3 { font-family: var(--f-cond); font-weight: 700; font-size: 22px; text-transform: uppercase; margin: 0 0 14px; }
+.ye-yr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+.ye-yr { display: block; text-align: center; }
+.ye-yr .art { width: 100%; height: auto; aspect-ratio: 1; font-size: 22px; border-radius: 4px; transition: transform .15s; }
+.ye-yr:hover .art { transform: translateY(-3px); }
+.ye-yr span { display: block; margin-top: 6px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; }
+.ye-yr.on .art { outline: 3px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 900px) { .ye-hub { grid-template-columns: 1fr; } }
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
   border: 1px solid var(--line); border-radius: 20px; padding: 6px 30px 6px 14px; font: 600 12.5px var(--f-body); cursor: pointer; }
 .ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
@@ -1415,20 +1434,6 @@ function yearTops(year, size = 10) {
   }
   return out;
 }
-function yearTopsHtml(year) {
-  const t = yearTops(year), n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
-  const col = (cls, title, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>Top ${body.length} of ${year}</small></div>${body.join('')}</div>`;
-  const artists = list => list.map(a => `<a class="lrow" href="${a.id && artistStats[a.id] ? `#/artist/${a.id}` : '#/artists'}"><span class="rk">${a.rank}</span>${artTile(a.name, false, year)}
-    <span><div class="song">${esc(a.name)}</div><div class="artist">${n(a.songs, 'charted song')}</div></span><span class="meta">${a.no1 ? `<b>${a.no1}</b> wk${a.no1 === 1 ? '' : 's'} at #1` : ''}</span></a>`);
-  const albums = list => list.map(b => `<a class="lrow" href="#/album/${b.al.id}"><span class="rk">${b.rank}</span>${albumTile(b.al)}
-    <span><div class="song">${esc(b.al.name)}</div><div class="artist">${esc(b.al.artist)}</div></span><span class="meta">${n(b.songs, 'song')}</span></a>`);
-  const cols = [];
-  if (t.willboard?.artists.length) cols.push(col('', 'Country Artists', artists(t.willboard.artists)));
-  if (t.pop?.artists.length) cols.push(col('pop', 'Pop Artists', artists(t.pop.artists)));
-  if (t.willboard?.albums.length >= 3) cols.push(col('', 'Country Albums', albums(t.willboard.albums)));
-  if (t.pop?.albums.length >= 3) cols.push(col('pop', 'Pop Albums', albums(t.pop.albums)));
-  return cols.join('');
-}
 const inSpan = (r, from, to) => ({ ...r, wc: weeksIn(r.songId, from, to) ?? r.wc, wks1: weeksIn(r.songId, from, to, 1) ?? r.wks1 });
 // A banner for each decade-end chart, led by its two #1 songs
 function decadeBanner(dec) {
@@ -1439,86 +1444,106 @@ function decadeBanner(dec) {
     <div class="sub">The top 100 Country and Pop songs of the decade, plus its biggest artists and albums${tops.length ? `, led by ${tops.map(r => `“${esc(r.name)}”`).join(' and ')}` : ''}.</div></div>
     <span class="go">See the chart →</span></a>`;
 }
-// Will's year-end lists, plus years ranked by his formula (tools/build_yearend.py → yearend.json)
-let YEAREND = null;
-async function renderYearEnd(year) {
-  if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
-  const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
-  if (!years.includes(year)) year = years.includes(ui.yeYear) ? ui.yeYear : years[years.length - 1];
-  ui.yeYear = year;
-  $('ye-h1').textContent = 'Year-End Charts';
-  $('ye-sub').textContent = 'The biggest songs of each year, from the plays they earned and how high they charted.';
-  const i = years.indexOf(year), prev = years[i - 1], next = years[i + 1];
-  if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
-  $('dec-more').classList.add('ye-tops');
-  $('dec-more').innerHTML = yearTopsHtml(year);
-  $('ye-banner').innerHTML = DECADES.map(decadeBanner).join('');
-  $('ye-nav').innerHTML = (prev ? `<a href="#/year-end/${prev}">← ${prev}</a>` : '<span class="off">←</span>') +
-    `<div class="yr"><h2>${year}</h2><select aria-label="Jump to a year">${years.slice().reverse().map(y => `<option value="${y}"${y === year ? ' selected' : ''}>${y === year ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
-    (next ? `<a href="#/year-end/${next}">${next} →</a>` : '<span class="off">→</span>') +
-    '';
-  $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
-  const link = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end';
-  for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
-  const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
-  // Before the Pop 10 launched (October 2011) the page is Country only, with a pointer to Pop's first year
-  const solo = !(YEAREND.pop?.[year]?.songs || []).length;
-  const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
-  $('ye-split').classList.toggle('solo', solo);
-  $('ye-split').innerHTML = (solo ? ['hot20'] : ['hot20', 'pop10']).map(id => {
-    const c = CHARTS[id], rows = (YEAREND[c.key]?.[year]?.songs || []).map(r => inSpan(r, year, year));
-    const head = `<div class="col-h"><h2>${c.isWb ? 'Country' : 'Pop'}</h2><small>${rows.length ? `Top ${rows.length} songs of ${year}` : ''}</small></div>`;
-    if (!rows.length) return `<div class="col ${c.cls}">${head}<div class="empty">No ${c.isWb ? 'Country' : 'Pop'} year-end chart for ${year}.</div></div>`;
-    const [top, ...rest] = rows;
-    return `<div class="col ${c.cls}">${head}
-      <a class="ye-lead" href="${link(top)}">${artTile(top.artistName, true, undefined, top.name)}
-        <div><div class="rk">1</div><div class="song">${esc(top.name)}</div><div class="artist">${esc(top.artistName)}</div>
-        <div class="meta">${facts(top).join(' · ')}</div></div></a>
-      ${rest.map(r => `<a class="lrow" href="${link(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
-        <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
-        <span class="meta">${rowFacts(r)}</span></a>`).join('')}</div>`;
-  }).join('') + (solo && popFrom > year ? `<p class="ye-note">The Pop 10 began in October ${popFrom}, so there's no Pop year-end chart for ${year}. Pop's year-end charts start with <a href="#/year-end/${popFrom}">${popFrom}</a>.</p>` : '');
-  tintRows($('ye-split'), '.ye-lead');
-}
-
-// Will's decade lists (tools/build_decade.py → decade.json): songs, artists and, for Country, albums
+// Will's year-end lists, plus years ranked by his formula (tools/build_yearend.py → yearend.json),
+// and his decade lists (tools/build_decade.py → decade.json).
+// Like Billboard's year-end hub: each year (or decade) opens on a card per chart showing its top 5,
+// and each card opens the full list at #/year-end/<year>/<chart>.
+let YEAREND = null, DECADE = null;
 const DECADES = ['2010s'];
-let DECADE = null;
-async function renderDecade(dec) {
+const n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
+const wks1Text = v => v ? `<b>${v}</b> wk${v === 1 ? '' : 's'} at #1` : '';
+// Every chart a year or decade has: [{slug, title, cls, rows}], each row {rank, href, tile, name, sub, meta, lead}
+function spanCharts(span) {
+  const dec = /^\d{4}s$/.test(span), from = dec ? +span.slice(0, 4) : +span, to = dec ? from + 9 : from;
+  const songs = list => list.map(r => inSpan(r, from, to)).map(r => ({
+    rank: r.rank, href: r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : `#/year-end/${span}`,
+    tile: lead => artTile(r.artistName, lead, undefined, r.name), name: r.name, sub: r.artistName, meta: rowFacts(r),
+    lead: [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean).join(' · ') }));
+  const artists = list => list.map(a => {
+    const id = a.id || a.artistId;
+    return { rank: a.rank, href: id && artistStats[id] ? `#/artist/${id}` : '#/artists', tile: lead => artTile(a.name, lead, dec ? from + 5 : from),
+      name: a.name, sub: a.songs ? n(a.songs, 'charted song') : '', meta: wks1Text(a.no1), lead: a.no1 ? `${n(a.no1, 'wk')} at #1` : '' };
+  });
+  const albums = list => list.map(b => {
+    const al = b.al || findAlbum(b.name, b.artist);
+    return { rank: b.rank, href: al ? `#/album/${al.id}` : '#/albums', tile: () => al ? albumTile(al) : artTile(b.artist),
+      name: al?.name || b.name, sub: al?.artist || b.artist, meta: b.songs ? n(b.songs, 'song') : (al?.year || ''), lead: al?.year ? `Released ${al.year}` : '' };
+  });
+  const out = [];
+  const add = (slug, title, cls, rows) => rows.length && out.push({ slug, title, cls, rows });
+  if (dec) {
+    const d = DECADE?.[span] || {};
+    add('country-songs', 'Country Songs', '', songs(d.willboard?.songs || []));
+    add('pop-songs', 'Pop Songs', 'pop', songs(d.pop?.songs || []));
+    add('country-artists', 'Country Artists', '', artists(d.willboard?.artists || []));
+    add('pop-artists', 'Pop Artists', 'pop', artists(d.pop?.artists || []));
+    add('country-albums', 'Country Albums', '', albums(d.willboard?.albums || []));
+  } else {
+    const t = yearTops(from);
+    add('country-songs', 'Country Songs', '', songs(YEAREND.willboard?.[span]?.songs || []));
+    add('pop-songs', 'Pop Songs', 'pop', songs(YEAREND.pop?.[span]?.songs || []));
+    add('country-artists', 'Country Artists', '', artists(t.willboard?.artists || []));
+    add('pop-artists', 'Pop Artists', 'pop', artists(t.pop?.artists || []));
+    if (t.willboard?.albums.length >= 3) add('country-albums', 'Country Albums', '', albums(t.willboard.albums));
+    if (t.pop?.albums.length >= 3) add('pop-albums', 'Pop Albums', 'pop', albums(t.pop.albums));
+  }
+  return out;
+}
+const leadRow = r => `<a class="ye-lead" href="${r.href}">${r.tile(true)}
+  <div><div class="rk">1</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div><div class="meta">${r.lead}</div></div></a>`;
+const listRow = r => `<a class="lrow" href="${r.href}"><span class="rk">${r.rank}</span>${r.tile(false)}
+  <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></span><span class="meta">${r.meta}</span></a>`;
+async function renderYearEnd(span, slug) {
+  if (!YEAREND) YEAREND = await fetch('yearend.json').then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
   if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
-  const d = DECADE[dec];
-  if (!d) { location.hash = '#/year-end'; return; }
-  const from = +dec.slice(0, 4);
-  $('ye-h1').textContent = 'Decade-End Charts';
-  $('ye-sub').textContent = `The biggest songs, artists and albums of ${from} to ${from + 9}.`;
-  $('ye-nav').innerHTML = `<a href="#/year-end/${from + 9}">← ${from + 9}</a><div class="yr"><h2>The ${dec}</h2></div><a href="#/year-end/${from + 10}">${from + 10} →</a>`;
-  const songLink = r => r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : '#/year-end/' + dec;
-  const facts = r => [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean);
-  const col = (cls, title, sub, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${sub}</small></div>${body}</div>`;
-  $('ye-split').classList.remove('solo');
-  $('ye-banner').innerHTML = '';
-  $('dec-more').classList.remove('ye-tops');
-  $('ye-split').innerHTML = [['willboard', 'Country', ''], ['pop', 'Pop', 'pop']].map(([k, name, cls]) => {
-    const rows = (d[k]?.songs || []).map(r => inSpan(r, from, from + 9));
-    if (!rows.length) return col(cls, name, '', '<div class="empty">No list yet.</div>');
-    const [top, ...rest] = rows;
-    return col(cls, name, `Top ${rows.length} songs of the ${dec}`, `
-      <a class="ye-lead" href="${songLink(top)}">${artTile(top.artistName, true, from + 5, top.name)}
-        <div><div class="rk">1</div><div class="song">${esc(top.name)}</div><div class="artist">${esc(top.artistName)}</div>
-        <div class="meta">${facts(top).join(' · ')}</div></div></a>
-      ${rest.map(r => `<a class="lrow" href="${songLink(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
-        <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
-        <span class="meta">${rowFacts(r)}</span></a>`).join('')}`);
-  }).join('');
-  const artistRows = list => list.map(a => `<a class="lrow" href="${a.artistId && artistStats[a.artistId] ? `#/artist/${a.artistId}` : '#/artists'}"><span class="rk">${a.rank}</span>${artTile(a.name, false, from + 5)}
-    <span><div class="song">${esc(a.name)}</div></span></a>`).join('');
-  const albums = (d.willboard?.albums || []).map(r => ({ ...r, al: findAlbum(r.name, r.artist) }));
-  $('dec-more').innerHTML =
-    col('', 'Country Artists', `Top ${d.willboard?.artists?.length || 0} of the ${dec}`, artistRows(d.willboard?.artists || [])) +
-    col('pop', 'Pop Artists', `Top ${d.pop?.artists?.length || 0} of the ${dec}`, artistRows(d.pop?.artists || [])) +
-    (albums.length ? col('', 'Country Albums', `Top ${albums.length} of the ${dec}`, albums.map(r => `<a class="lrow" href="${r.al ? `#/album/${r.al.id}` : '#/albums'}"><span class="rk">${r.rank}</span>${r.al ? albumTile(r.al) : artTile(r.artist)}
-      <span><div class="song">${esc(r.al?.name || r.name)}</div><div class="artist">${esc(r.artist)}</div></span><span class="meta">${r.al?.year || ''}</span></a>`).join('')) : '');
-  tintRows($('ye-split'), '.ye-lead');
+  for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
+  const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
+  const spans = [...years.map(String), ...DECADES.filter(d => DECADE[d])];
+  if (!spans.includes(String(span))) span = spans.includes(String(ui.yeYear)) ? ui.yeYear : String(years[years.length - 1]);
+  span = String(span);
+  ui.yeYear = span;
+  const dec = /^\d{4}s$/.test(span), charts = spanCharts(span);
+  const chart = charts.find(c => c.slug === slug);
+  $('ye-h1').textContent = dec ? 'Decade-End Charts' : 'Year-End Charts';
+  $('ye-sub').textContent = dec ? `The biggest songs, artists and albums of ${span.slice(0, 4)} to ${+span.slice(0, 4) + 9}.`
+    : 'The biggest songs, artists and albums of each year, from the plays they earned and how high they charted.';
+  $('ye-banner').innerHTML = dec || chart ? '' : DECADES.filter(d => DECADE[d]).map(decadeBanner).join('');
+
+  // Year header: arrows step through years; the decade sits beside its last year
+  const yrs = years.map(String), i = yrs.indexOf(span);
+  const prev = dec ? String(+span.slice(0, 4) + 9) : yrs[i - 1], next = dec ? String(+span.slice(0, 4) + 10) : yrs[i + 1];
+  const to = s => `#/year-end/${s}${chart ? '/' + chart.slug : ''}`;
+  $('ye-nav').innerHTML = (prev && spans.includes(prev) ? `<a href="${to(prev)}">← ${prev}</a>` : '<span class="off">←</span>') +
+    `<div class="yr"><h2>${dec ? 'The ' + span : span}</h2><select aria-label="Jump to a year">${spans.slice().reverse().map(y => `<option value="${y}"${y === span ? ' selected' : ''}>${y === span ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
+    (next && spans.includes(next) ? `<a href="${to(next)}">${next} →</a>` : '<span class="off">→</span>');
+  $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
+
+  const split = $('ye-split');
+  split.className = chart ? 'ye-detail' : 'ye-hub';
+  if (chart) {
+    // One chart in full, with the year's other charts a click away
+    const [top, ...rest] = chart.rows;
+    split.innerHTML = `<div class="ye-crumbs"><a href="#/year-end/${span}">← All ${dec ? 'the ' + span : span} charts</a>
+        <div class="pills">${charts.map(c => `<a class="pill ${c.slug === chart.slug ? 'active' : ''}" href="#/year-end/${span}/${c.slug}">${c.title}</a>`).join('')}</div></div>
+      <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></div>
+      ${leadRow(top)}${rest.map(listRow).join('')}</div>`;
+  } else {
+    // The hub: every chart's top 5
+    const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
+    split.innerHTML = charts.map(c => `<section class="col ye-card ${c.cls}"><div class="col-h"><h2>${c.title}</h2><small>Top ${c.rows.length}</small></div>
+        ${leadRow(c.rows[0])}${c.rows.slice(1, 5).map(listRow).join('')}
+        <a class="ye-more" href="#/year-end/${span}/${c.slug}">See the full Top ${c.rows.length} →</a></section>`).join('') +
+      (!dec && +span < popFrom ? `<p class="ye-note">The Pop 10 began in October ${popFrom}, so there's no Pop year-end chart for ${span}. Pop's year-end charts start with <a href="#/year-end/${popFrom}">${popFrom}</a>.</p>` : '');
+  }
+  tintRows(split, '.ye-lead');
+
+  // Buttons to every other year, each showing that year's #1 Country song
+  const art = s => {
+    const top = /s$/.test(s) ? DECADE[s]?.willboard?.songs?.[0] : (YEAREND.willboard?.[s]?.songs?.[0] || YEAREND.pop?.[s]?.songs?.[0]);
+    return top ? artTile(top.artistName, false, undefined, top.name) : '';
+  };
+  $('dec-more').className = 'ye-years';
+  $('dec-more').innerHTML = `<h3>More year-end charts</h3><div class="ye-yr-grid">${spans.map(s => `<a class="ye-yr ${s === span ? 'on' : ''}" href="#/year-end/${s}">${art(s)}<span>${/s$/.test(s) ? 'The ' + s : s}</span></a>`).join('')}</div>`;
 }
 
 // ─── AWARDS ─────────────────────────────────────────────────────
@@ -1891,7 +1916,7 @@ function route() {
     ui.weekIdx[page] = best;
     renderChartPage(page);
   }
-  else if (page === 'year-end') { id = 'year-end'; /^\d{4}s$/.test(arg) ? renderDecade(arg) : renderYearEnd(+arg); }
+  else if (page === 'year-end') { id = 'year-end'; renderYearEnd(arg, arg2); }
   else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
