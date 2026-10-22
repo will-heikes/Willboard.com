@@ -333,7 +333,8 @@ button { font: inherit; color: inherit; }
 .ye-note { grid-column: 1 / -1; margin: 18px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
 .ye-note a { color: var(--ink); font-weight: 700; text-decoration: underline; }
 .dec-more { margin-top: 40px; grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 900px) { .dec-more { grid-template-columns: 1fr; } }
+.dec-more.ye-tops { grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) { .dec-more, .dec-more.ye-tops { grid-template-columns: 1fr; } }
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
   border: 1px solid var(--line); border-radius: 20px; padding: 6px 30px 6px 14px; font: 600 12.5px var(--f-body); cursor: pointer; }
 .ye-lead { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: end; padding: 18px; margin-bottom: 2px; position: relative;
@@ -1386,6 +1387,48 @@ function weeksIn(songId, from, to, at) {
   if (!s || !RUNS?.[s.chart]?.runs[s.id]) return null;
   return songRun(s).filter(w => w.pos && (!at || w.pos === at) && +w.week.slice(0, 4) >= from && +w.week.slice(0, 4) <= to).length;
 }
+// Weeks at #1 lead the row when a song had any; otherwise its peak
+const rowFacts = r => [r.wks1 ? `<b>${r.wks1}</b> wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak <b>${r.peak}</b>` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean).join('<br>');
+// A year's biggest acts and albums, ordered by the chart points their songs earned that year (never shown).
+// Every credited act shares a song's points; an album gets its songs' points.
+const chartPoints = pos => pos <= 5 ? [500, 400, 300, 200, 100][pos - 1] : 101 - pos;
+function yearTops(year, size = 10) {
+  const out = {};
+  for (const key of ['willboard', 'pop']) {
+    const c = RUNS?.[key], acts = {}, albums = {};
+    if (!c) continue;
+    for (const [id, r] of Object.entries(c.runs)) {
+      const s = SONGS[id];
+      if (!s) continue;
+      let pts = 0, no1 = 0;
+      r.slice(1).forEach((pos, i) => { if (pos && +c.weeks[r[0] + i].slice(0, 4) === year) { pts += chartPoints(pos); if (pos === 1) no1++; } });
+      if (!pts) continue;
+      for (const p of creditParts(s.artistName)) {
+        const a = acts[p.name] ||= { name: p.name, id: p.id, pts: 0, songs: 0, no1: 0 };
+        a.pts += pts; a.songs++; a.no1 += no1;
+      }
+      const al = ALBUM_OF[id];
+      if (al) { const b = albums[al.id] ||= { al, pts: 0, songs: 0 }; b.pts += pts; b.songs++; }
+    }
+    const top = o => Object.values(o).sort((a, b) => b.pts - a.pts).slice(0, size).map((x, i) => ({ ...x, rank: i + 1 }));
+    out[key] = { artists: top(acts), albums: top(albums) };
+  }
+  return out;
+}
+function yearTopsHtml(year) {
+  const t = yearTops(year), n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
+  const col = (cls, title, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>Top ${body.length} of ${year}</small></div>${body.join('')}</div>`;
+  const artists = list => list.map(a => `<a class="lrow" href="${a.id && artistStats[a.id] ? `#/artist/${a.id}` : '#/artists'}"><span class="rk">${a.rank}</span>${artTile(a.name, false, year)}
+    <span><div class="song">${esc(a.name)}</div><div class="artist">${n(a.songs, 'charted song')}</div></span><span class="meta">${a.no1 ? `<b>${a.no1}</b> wk${a.no1 === 1 ? '' : 's'} at #1` : ''}</span></a>`);
+  const albums = list => list.map(b => `<a class="lrow" href="#/album/${b.al.id}"><span class="rk">${b.rank}</span>${albumTile(b.al)}
+    <span><div class="song">${esc(b.al.name)}</div><div class="artist">${esc(b.al.artist)}</div></span><span class="meta">${n(b.songs, 'song')}</span></a>`);
+  const cols = [];
+  if (t.willboard?.artists.length) cols.push(col('', 'Country Artists', artists(t.willboard.artists)));
+  if (t.pop?.artists.length) cols.push(col('pop', 'Pop Artists', artists(t.pop.artists)));
+  if (t.willboard?.albums.length >= 3) cols.push(col('', 'Country Albums', albums(t.willboard.albums)));
+  if (t.pop?.albums.length >= 3) cols.push(col('pop', 'Pop Albums', albums(t.pop.albums)));
+  return cols.join('');
+}
 const inSpan = (r, from, to) => ({ ...r, wc: weeksIn(r.songId, from, to) ?? r.wc, wks1: weeksIn(r.songId, from, to, 1) ?? r.wks1 });
 // A banner for each decade-end chart, led by its two #1 songs
 function decadeBanner(dec) {
@@ -1407,7 +1450,8 @@ async function renderYearEnd(year) {
   $('ye-sub').textContent = 'The biggest songs of each year, from the plays they earned and how high they charted.';
   const i = years.indexOf(year), prev = years[i - 1], next = years[i + 1];
   if (!DECADE) DECADE = await fetch('decade.json').then(r => r.json()).catch(() => ({}));
-  $('dec-more').innerHTML = '';
+  $('dec-more').classList.add('ye-tops');
+  $('dec-more').innerHTML = yearTopsHtml(year);
   $('ye-banner').innerHTML = DECADES.map(decadeBanner).join('');
   $('ye-nav').innerHTML = (prev ? `<a href="#/year-end/${prev}">← ${prev}</a>` : '<span class="off">←</span>') +
     `<div class="yr"><h2>${year}</h2><select aria-label="Jump to a year">${years.slice().reverse().map(y => `<option value="${y}"${y === year ? ' selected' : ''}>${y === year ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
@@ -1432,7 +1476,7 @@ async function renderYearEnd(year) {
         <div class="meta">${facts(top).join(' · ')}</div></div></a>
       ${rest.map(r => `<a class="lrow" href="${link(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
         <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
-        <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}</div>`;
+        <span class="meta">${rowFacts(r)}</span></a>`).join('')}</div>`;
   }).join('') + (solo && popFrom > year ? `<p class="ye-note">The Pop 10 began in October ${popFrom}, so there's no Pop year-end chart for ${year}. Pop's year-end charts start with <a href="#/year-end/${popFrom}">${popFrom}</a>.</p>` : '');
   tintRows($('ye-split'), '.ye-lead');
 }
@@ -1453,6 +1497,7 @@ async function renderDecade(dec) {
   const col = (cls, title, sub, body) => `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${sub}</small></div>${body}</div>`;
   $('ye-split').classList.remove('solo');
   $('ye-banner').innerHTML = '';
+  $('dec-more').classList.remove('ye-tops');
   $('ye-split').innerHTML = [['willboard', 'Country', ''], ['pop', 'Pop', 'pop']].map(([k, name, cls]) => {
     const rows = (d[k]?.songs || []).map(r => inSpan(r, from, from + 9));
     if (!rows.length) return col(cls, name, '', '<div class="empty">No list yet.</div>');
@@ -1463,7 +1508,7 @@ async function renderDecade(dec) {
         <div class="meta">${facts(top).join(' · ')}</div></div></a>
       ${rest.map(r => `<a class="lrow" href="${songLink(r)}"><span class="rk">${r.rank}</span>${artTile(r.artistName, false, undefined, r.name)}
         <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.artistName)}</div></span>
-        <span class="meta">${r.peak ? `Peak <b>${r.peak}</b>` : ''}${r.wc ? `<br>${r.wc} wks` : ''}</span></a>`).join('')}`);
+        <span class="meta">${rowFacts(r)}</span></a>`).join('')}`);
   }).join('');
   const artistRows = list => list.map(a => `<a class="lrow" href="${a.artistId && artistStats[a.artistId] ? `#/artist/${a.artistId}` : '#/artists'}"><span class="rk">${a.rank}</span>${artTile(a.name, false, from + 5)}
     <span><div class="song">${esc(a.name)}</div></span></a>`).join('');
