@@ -26,7 +26,7 @@ SEARCH_AS = {'Ariana Grade': 'Ariana Grande', 'Justin Biever': 'Justin Bieber', 
 # Acts the search matched to the wrong person (a namesake), set by hand; None leaves the act out
 MANUAL = {
     'Alessa': None, 'Chloe': None, 'Dakota': None, 'Felicia': None, 'Olivia': None,
-    'Ashe': {'type': 'person', 'sex': 'f'}, 'John K': {'type': 'person', 'sex': 'm'},
+    'Ashe': {'type': 'person', 'sex': 'f'}, 'Dev': {'type': 'person', 'sex': 'f'}, 'John K': {'type': 'person', 'sex': 'm'},
     'Miguel': {'type': 'person', 'sex': 'm'}, 'Ruth B': {'type': 'person', 'sex': 'f'},
     'FLO': {'type': 'group'}, 'Grey': {'type': 'group'}, 'Magic': {'type': 'group'},
 }

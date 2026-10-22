@@ -969,6 +969,11 @@
 "born": "1997-05-03",
 "sex": "m"
 },
+"Dev": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Didi Benami": {
 "type": "person",
 "wd": "Q3949597",
