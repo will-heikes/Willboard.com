@@ -198,7 +198,7 @@ button { font: inherit; color: inherit; }
 
 /* certifications: Hot 20 by running plays (300 silver, 400 gold, 500 platinum, +100 per platinum);
    Pop 10 by running points (1250 gold, 2500 platinum, +1250 per platinum); albums by total plays
-   (500 silver, 750 gold, 1000 platinum, +1000 per platinum, 5000 diamond); 10× platinum is diamond for songs */
+   (500 silver, 750 gold, 1000 platinum, +1000 per platinum, 5000 diamond); Hot 20 songs are diamond at 1000 plays, Pop at 10× platinum */
 .cert {
   display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; padding: 1px 7px 1px 3px;
   border-radius: 10px; font-size: 9.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
@@ -1022,8 +1022,8 @@ function certLabel(n, steps) {
   return ['platinum', x > 1 ? `${x}× Platinum` : 'Platinum'];
 }
 // Albums count every track's plays added together (Will's ladder: 500 silver, 750 gold, 1000 platinum,
-// +1000 per platinum, and 5,000 is Diamond); songs reach Diamond at 10× Platinum
-const CERT_STEPS = { willboard: [300, 400, 500, 100], pop: [null, 1250, 2500, 1250], album: [500, 750, 1000, 1000, 5] };
+// +1000 per platinum, and 5,000 is Diamond); Hot 20 songs are Diamond at 1,000 plays, Pop at 10× Platinum
+const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250], album: [500, 750, 1000, 1000, 5] };
 function certBadge(chart, n) {
   const c = certLabel(n, CERT_STEPS[chart]);
   if (!c) return '';
