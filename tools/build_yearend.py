@@ -70,7 +70,9 @@ def pop_weekly_plays(path):
 
 def match(songs_by_name, title, artist, year):
     """The data.json song for a title on a year's list."""
-    cands = songs_by_name.get(norm(title), [])
+    # Will tells same-named songs apart with a suffix in his sheet: "Heaven - Niall"
+    cands = songs_by_name.get(norm(title), []) + [s for ss in songs_by_name.values() for s in ss
+                                                 if re.fullmatch(re.escape(title.strip()) + r' - .+', s['name'], re.I)]
     if not cands:
         # Lists sometimes carry a credit or note in the title: "Post To Be (Feat. ..."
         base = norm(re.split(r'\s[\(\[]', title)[0])
