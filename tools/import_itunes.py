@@ -37,10 +37,26 @@ def bare(title):
     return re.sub(r'^(a|the)', '', norm(title))
 
 
+# The same act under an old name, so its albums don't split in two (Lady A's Need You Now)
+SAME_ACT = {'ladyantebellum': 'ladya'}
+# Albums whose tracks are filed under two acts or two titles, keyed (act, album) -> (act, album).
+# Gaslighter came out as the Dixie Chicks became The Chicks; the rest are reissues (Will, 2026-10-22)
+SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
+              ('carlypearce', 'hummingbirdnorainnoflowers'): ('carlypearce', 'hummingbird'),
+              ('lukecombs', 'thisonesforyoutoo'): ('lukecombs', 'thisonesforyou')}
+
+
+def act_key(artist):
+    act = lead(artist)
+    return SAME_ACT.get(act, act)
+
+
 def album_key(t):
-    """One album across its editions: "Red (Taylor's Version)" and "Red (Deluxe Edition)" are Red."""
-    name = re.sub(r'\s*[\(\[][^\)\]]*(deluxe|edition|version|expanded|bonus)[^\)\]]*[\)\]]', '', t['Album'], flags=re.I).strip()
-    return lead(t.get('Album Artist') or t.get('Artist')), norm(name), name
+    """One album across its editions: "Red (Taylor's Version)", "Red (Deluxe Edition)" and "Red - EP" are Red."""
+    name = re.sub(r'\s*[\(\[][^\)\]]*(deluxe|edition|version|expanded|bonus|collection|encore)[^\)\]]*[\)\]]', '',
+                  t['Album'].strip(), flags=re.I).strip()
+    key = act_key(t.get('Album Artist') or t.get('Artist')), norm(re.sub(r'\s+-\s+EP$', '', name, flags=re.I))
+    return (*SAME_ALBUM.get(key, key), name)
 
 
 TV = re.compile(r"taylor['’]s version", re.I)
@@ -66,6 +82,7 @@ def main():
             loose[bare(t['Name'])].append(v)
 
     data = json.load(open('data.json', encoding='utf-8'))
+    acts = {a['id']: a['name'] for a in data['artists']}
     rows, missing, raised = [], [], 0
     album_songs = defaultdict(list)  # album key -> songs from it that charted
     edition = {}  # vault songs: song id -> "Fearless (Taylor's Version)"
@@ -117,7 +134,9 @@ def main():
     out = []
     for k, a in albums.items():
         songs = sorted(album_songs[k], key=lambda s: s['debutDate'])
-        al = {'name': min(a['names'] or [k[1]], key=len), 'artist': songs[0]['artistName'], 'artistId': songs[0]['artistId'],
+        # The album's own act, not a duet partner (Cole Swindell for Stereotype, The Chicks for Gaslighter)
+        lead_id = next((s['artistId'] for s in songs if act_key(s['artistName']) == k[0]), songs[0]['artistId'])
+        al = {'name': min(a['names'] or [k[1]], key=len), 'artist': acts[lead_id], 'artistId': lead_id,
               'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]}
         if a['years']:
             al['year'] = min(a['years'])  # release year, for ordering an artist's albums
