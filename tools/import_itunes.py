@@ -24,7 +24,7 @@ from collections import defaultdict
 
 from add_week import norm
 
-OUT, ALBUMS = 'itunes_plays.tsv', 'albums.json'
+OUT, ALBUMS, LENGTHS = 'itunes_plays.tsv', 'albums.json', 'song_lengths.json'
 CUT_MIN = 0  # plays for a non-charting track to show on its album (Will: show them all)
 # "(feat. X)", "[with X]", "- Single Version" and the like aren't part of the title
 EXTRA = re.compile(r'\s*[\(\[](feat|ft|with|from|radio|single|album|edit|remaster|explicit|clean)[^\)\]]*[\)\]]'
@@ -92,6 +92,7 @@ def main():
     rows, missing, raised = [], [], 0
     album_songs = defaultdict(list)  # album key -> songs from it that charted
     edition = {}  # vault songs: song id -> "Fearless (Taylor's Version)"
+    lengths = {}  # song id -> seconds, for Ask's longest and shortest song
     for s in data['songs']:
         # Will's tell-apart suffix ("Heaven - Niall") names the artist, not the title
         m = re.fullmatch(r'(.+?) - (.+)', s['name'])
@@ -108,6 +109,9 @@ def main():
             album_songs[album_key(t)[:2]].append(s)
             if TV.search(t['Album']):
                 edition[s['id']] = re.sub(r'\s*\[[^\]]*\]', '', t['Album']).strip()
+        timed = [(p, t) for p, t in hits if t.get('Total Time')]
+        if timed:
+            lengths[s['id']] = round(max(timed, key=lambda h: h[0])[1]['Total Time'] / 1000)
         if s['chart'] != 'willboard':
             continue
         if not hits:
@@ -123,6 +127,7 @@ def main():
         w.writerow(['song', 'artist', 'plays'])
         w.writerows(sorted(rows))
     json.dump(data, open('data.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    json.dump(dict(sorted(lengths.items())), open(LENGTHS, 'w', encoding='utf-8'), separators=(',', ':'))
 
     albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': [], 'years': [], 'cuts': defaultdict(lambda: [0, []])})
     for t in lib['Tracks'].values():
