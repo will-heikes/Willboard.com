@@ -210,6 +210,7 @@ button { font: inherit; color: inherit; }
 .cert.platinum { --cert-bg: #EEF1F4; --cert-edge: #9AA6B2; --cert-ink: #2F3A46; --cert-disc: linear-gradient(135deg,#F4F6F8,#7E8B98); }
 .cert.diamond  { --cert-bg: #E8F6FC; --cert-edge: #7CC6E4; --cert-ink: #0D4F6B; --cert-disc: conic-gradient(from 45deg,#E9FBFF,#9ADCF2,#FFFFFF,#6BBEDD,#E9FBFF); }
 .show-sm { display: none; }
+.table tr.sub-h td { background: var(--card-2); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 10px; padding-bottom: 10px; }
 .album-link { font-weight: 600; font-size: 13px; }
 .album-link:hover { color: var(--accent); text-decoration: underline; }
 .album-from { margin-top: 10px; font-size: 13px; color: var(--muted); }
@@ -672,7 +673,7 @@ footer .wrap { display: flex; align-items: center; gap: 24px; padding-top: 20px;
           <div class="hero1-kicker"><i></i><span id="h1-kicker"></span></div>
           <div class="hero1-no"><small>No.</small><b>1</b></div>
           <h1 class="hero1-song" id="h1-song"></h1>
-          <div class="hero1-artist"><a id="h1-artist"></a></div>
+          <div class="hero1-artist" id="h1-artist"></div>
           <p class="hero1-dek" id="h1-dek"></p>
           <div class="hero1-stats" id="h1-stats"></div>
           <a class="btn-line" href="#/hot20">See the full Hot 20 <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
@@ -927,7 +928,7 @@ function fmtShort(s) { return s ? parseDate(s).toLocaleDateString('en-US', { mon
 function fmtLong(s)  { return s ? parseDate(s).toLocaleDateString('en-US', { month: 'long',  day: 'numeric', year: 'numeric' }) : ''; }
 function slugify(n)  { return n.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 // Lead artist of a credit. Acts with "&" in their name (Maddie & Tae, Big & Rich) stay whole.
-let ACT_NAMES = new Set();
+let ACT_NAMES = new Set(), ARTIST_ID = {};
 // Will's sheet tells same-named songs apart with the artist after a dash ("Heaven - Niall").
 // The site shows the plain title; a dash suffix that isn't part of the artist's name ("- Remix") stays.
 const squash = x => (x || '').normalize('NFKD').replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -935,6 +936,19 @@ function displayTitle(name, artist) {
   const m = /^(.+?) - ([^-]+)$/.exec(name || '');
   return m && squash(m[2]) && squash(artist).includes(squash(m[2])) ? m[1] : name;
 }
+// Each act in a credit ("Carly Pearce, Chris Stapleton", "Kane Brown & Marshmello"), as artist ids where known.
+// A name that's an act on its own ("Maddie & Tae") is never split.
+function creditParts(credit) {
+  const out = [];
+  for (const part of (credit || '').split(/, | feat\.? | ft\.? | featuring | with /i).map(p => p.trim()).filter(Boolean)) {
+    const bits = part.split(/ & | x /i).map(p => p.trim());
+    if (!ACT_NAMES.has(part) && bits.length > 1 && bits.every(b => ACT_NAMES.has(b))) out.push(...bits);
+    else out.push(part);
+  }
+  return out.map(name => ({ name, id: ARTIST_ID[name] }));
+}
+// A credit with every known act linked to its own page
+const creditLinks = credit => creditParts(credit).map(p => p.id ? `<a href="#/artist/${p.id}">${esc(p.name)}</a>` : esc(p.name)).join(', ');
 function primaryArtist(n) {
   const first = (n || '').split(/,| ft\.? | feat\.? | with /i)[0].trim();
   return ACT_NAMES.has(first) ? first : first.split(/ & | x /i)[0].trim();
@@ -1112,8 +1126,7 @@ function renderHome() {
   $('h1-bg').style.backgroundImage = photo ? `url("${photo}")` : '';
   $('h1-kicker').textContent = `Country Hot 20 · Week of ${fmtLong(week)}`;
   $('h1-song').textContent = s.name || '—';
-  $('h1-artist').textContent = s.artistName || '';
-  $('h1-artist').href = `#/artist/${s.artistId}`;
+  $('h1-artist').innerHTML = creditLinks(s.artistName);
   const lead = no1Story('hot20', last);
   // Dek: the #1 story, plus who it holds off at #2
   const two = wb[last].entries[1], s2 = two && SONGS[two.songId];
@@ -1533,6 +1546,9 @@ function renderArtist(id) {
   if (!a) { location.hash = '#/artists'; return; }
   $('artist-h1').textContent = a.name;
   const songs = DATA.songs.filter(s => s.artistId === id).sort((x, y) => x.debutDate.localeCompare(y.debutDate));
+  // Songs where they're a featured or second credit, listed after their own
+  const featured = DATA.songs.filter(s => s.artistId !== id && creditParts(s.artistName).some(p => p.id === id))
+    .sort((x, y) => x.debutDate.localeCompare(y.debutDate));
   const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
   $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
@@ -1543,7 +1559,7 @@ function renderArtist(id) {
   $('artist-albums').innerHTML = albums.map(al => `<a href="#/album/${al.id}">${albumTile(al)}
     <div class="song">${esc(al.name)}</div><div class="meta">${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div>${albumCert(al)}</a>`).join('');
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Album</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
-    songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
+    [...songs, ...featured].map(s => `${s === featured[0] ? `<tr class="sub-h"><td colspan="6">Featured on</td></tr>` : ''}<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
       <td class="hide-sm">${ALBUM_OF[s.id] ? `<a class="album-link" href="#/album/${ALBUM_OF[s.id].id}" onclick="event.stopPropagation()">${esc(albumName(s))}</a>` : '<span class="artist">—</span>'}</td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
@@ -1621,7 +1637,7 @@ async function renderSong(id) {
   hero.innerHTML = `${artTile(s.artistName, true, undefined, s.name)}
     <div><div class="kick">${c.isWb ? 'Country Hot 20' : 'Pop 10'}</div>
       <h1>${esc(s.name)}</h1>
-      <div class="by"><a href="#/artist/${s.artistId}">${esc(s.artistName)}</a></div>
+      <div class="by">${creditLinks(s.artistName)}</div>
       ${songCert(s)}
       ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(albumName(s))}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
@@ -1674,7 +1690,7 @@ function renderAlbum(id) {
   hero.innerHTML = `${albumTile(al).replace(/loading="lazy"/g, '')}
     <div><div class="kick">Album${al.year || first ? ` · ${al.year || first.slice(0, 4)}` : ''}</div>
       <h1>${esc(al.name)}</h1>
-      <div class="by"><a href="#/artist/${al.artistId}">${esc(al.artist)}</a></div>
+      <div class="by">${creditLinks(al.artist)}</div>
       ${albumCert(al)}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-album'));
@@ -1786,6 +1802,7 @@ async function init() {
   for (const h of [...DATA.wbHistory, ...DATA.popHistory])
     for (const e of [h.no1, h.notable]) if (e?.songId && SONGS[e.songId]) e.songName = SONGS[e.songId].name;
   ACT_NAMES = new Set(DATA.artists.map(a => a.name));
+  for (const a of DATA.artists) ARTIST_ID[a.name] ||= a.id;
   PHOTO_YEARS = await fetch(IMAGES_BASE + '_years.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   buildArtistStats();
   $('loading').remove();
