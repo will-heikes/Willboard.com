@@ -24,8 +24,9 @@ EXTRA = re.compile(r'\s*[\(\[](feat|ft|with|from|radio|single|album|edit|remaste
 
 
 def bare(title):
-    """Looser key: no brackets at all ("Taylor's Version", "Acoustic Version") and no leading article."""
-    return re.sub(r'^(a|the)', '', norm(re.sub(r'\s*[\(\[][^\)\]]*[\)\]]', '', title)))
+    """Looser key: no brackets ("Taylor's Version", "Acoustic Version"), no leading article, "Comin'" = "Coming"."""
+    title = re.sub(r"in['’](?=\s|$)", 'ing', re.sub(r'\s*[\(\[][^\)\]]*[\)\]]', '', title))
+    return re.sub(r'^(a|the)', '', norm(title))
 
 
 def lead(artist):
