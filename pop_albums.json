@@ -1140,6 +1140,21 @@
   "released": 2014
  },
  {
+  "name": "The Truth About Love",
+  "artist": "P!nk",
+  "artistId": "art_134",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_58",
+   "pop_song_79",
+   "pop_song_94"
+  ],
+  "year": 2012,
+  "chart": "pop",
+  "released": 2012
+ },
+ {
   "name": "beerbongs & bentleys",
   "artist": "Post Malone",
   "artistId": "art_400",
@@ -2347,6 +2362,20 @@
   "released": 2017
  },
  {
+  "name": "you seem pretty sad for a girl so in love",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_1009",
+   "pop_song_1056"
+  ],
+  "year": 2026,
+  "chart": "pop",
+  "released": 2026
+ },
+ {
   "name": "FOUR",
   "artist": "One Direction",
   "artistId": "art_279",
@@ -2373,6 +2402,20 @@
   "year": 2015,
   "chart": "pop",
   "released": 2015
+ },
+ {
+  "name": "Beautiful Trauma",
+  "artist": "P!nk",
+  "artistId": "art_134",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_402",
+   "pop_song_481"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Pray for the Wicked",
@@ -3272,6 +3315,19 @@
   "year": 2026,
   "chart": "pop",
   "released": 2026
+ },
+ {
+  "name": "Alice Through the Looking Glass (Original Motion Picture Soundtrack)",
+  "artist": "Danny Elfman",
+  "artistId": null,
+  "plays": null,
+  "tracks": 28,
+  "songs": [
+   "pop_song_306"
+  ],
+  "year": 2016,
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Baptized",
@@ -5493,19 +5549,6 @@
   "released": 2025
  },
  {
-  "name": "you seem pretty sad for a girl so in love",
-  "artist": "Olivia Rodrigo",
-  "artistId": "art_549",
-  "plays": null,
-  "tracks": 13,
-  "songs": [
-   "pop_song_1009"
-  ],
-  "year": 2026,
-  "chart": "pop",
-  "released": 2026
- },
- {
   "name": "24 HRS",
   "artist": "Olly Murs",
   "artistId": "art_311",
@@ -5585,6 +5628,32 @@
    "pop_song_847": "Coco Moon Deluxe"
   },
   "released": null
+ },
+ {
+  "name": "Hurts 2B Human",
+  "artist": "P!nk",
+  "artistId": "art_134",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_535"
+  ],
+  "year": 2019,
+  "chart": "pop",
+  "released": 2019
+ },
+ {
+  "name": "TRUSTFALL",
+  "artist": "P!nk",
+  "artistId": "art_134",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_773"
+  ],
+  "year": 2023,
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Paramore",
