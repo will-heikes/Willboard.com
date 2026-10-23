@@ -453,12 +453,13 @@ button { font: inherit; color: inherit; }
 .ye-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .ye-tab.on small { color: rgba(255,255,255,.8); }
 .ye-years { margin-top: 48px; }
+.lc { text-transform: none; }
 .ye-years h3 { font-family: var(--f-cond); font-weight: 700; font-size: 22px; text-transform: uppercase; margin: 0 0 14px; }
 .ye-yr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
 .ye-yr { display: block; text-align: center; }
 .ye-yr .art { width: 100%; height: auto; aspect-ratio: 1; font-size: 22px; border-radius: 4px; transition: transform .15s; }
 .ye-yr:hover .art { transform: translateY(-3px); }
-.ye-yr span { display: block; margin-top: 6px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; }
+.ye-yr > span { display: block; margin-top: 6px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; }
 .ye-yr.on .art { outline: 3px solid var(--ink); outline-offset: 2px; }
 
 .ye-nav select { margin-top: 8px; appearance: none; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0h10L5 6z' fill='%23777'/%3E%3C/svg%3E") no-repeat right 12px center;
@@ -1888,12 +1889,14 @@ function yearTops(year, size = 10) {
   return out;
 }
 const inSpan = (r, from, to) => ({ ...r, wc: weeksIn(r.songId, from, to) ?? r.wc, wks1: weeksIn(r.songId, from, to, 1) ?? r.wks1 });
+// Keeps the "s" in "2010s" lowercase inside uppercase headings (Will)
+const decLc = d => d.replace(/^(\d{4})s$/, '$1<span class="lc">s</span>');
 // A banner for each decade-end chart, led by its two #1 songs
 function decadeBanner(dec) {
   const d = DECADE?.[dec];
   const tops = d ? ['willboard', 'pop'].map(k => d[k]?.songs?.[0]).filter(Boolean) : [];
   return `<a class="dec-banner" href="#/year-end/${dec}"><div class="dec-art">${tops.map(r => artTile(r.artistName, true, undefined, r.name)).join('')}</div>
-    <div><div class="kick">Decade-End Charts</div><div class="ttl">The ${dec}</div>
+    <div><div class="kick">Decade-End Charts</div><div class="ttl">The ${decLc(dec)}</div>
     <div class="sub">The top 100 Country and Pop songs of the decade, plus its biggest artists and albums${tops.length ? `, led by ${tops.map(r => `“${esc(r.name)}”`).join(' and ')}` : ''}.</div></div>
     <span class="go">See the chart →</span></a>`;
 }
@@ -1971,7 +1974,7 @@ async function renderYearEnd(span, slug) {
   const prev = dec ? String(+span.slice(0, 4) + 9) : yrs[i - 1], next = dec ? String(+span.slice(0, 4) + 10) : yrs[i + 1];
   const to = s => `#/year-end/${s}${chart ? '/' + chart.slug : ''}`;
   $('ye-nav').innerHTML = (prev && spans.includes(prev) ? `<a href="${to(prev)}">← ${prev}</a>` : '<span class="off">←</span>') +
-    `<div class="yr"><h2>${dec ? 'The ' + span : span}</h2><select aria-label="Jump to a year">${spans.slice().reverse().map(y => `<option value="${y}"${y === span ? ' selected' : ''}>${y === span ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
+    `<div class="yr"><h2>${dec ? 'The ' + decLc(span) : span}</h2><select aria-label="Jump to a year">${spans.slice().reverse().map(y => `<option value="${y}"${y === span ? ' selected' : ''}>${y === span ? `Jump to a year · ${y}` : y}</option>`).join('')}</select></div>` +
     (next && spans.includes(next) ? `<a href="${to(next)}">${next} →</a>` : '<span class="off">→</span>');
   $('ye-nav').querySelector('select').onchange = e => { location.hash = `#/year-end/${e.target.value}`; };
 
@@ -2002,7 +2005,7 @@ async function renderYearEnd(span, slug) {
     return top ? artTile(top.artistName, false, undefined, top.name) : '';
   };
   $('dec-more').className = 'ye-years';
-  $('dec-more').innerHTML = `<h3>More year-end charts</h3><div class="ye-yr-grid">${spans.map(s => `<a class="ye-yr ${s === span ? 'on' : ''}" href="#/year-end/${s}">${art(s)}<span>${/s$/.test(s) ? 'The ' + s : s}</span></a>`).join('')}</div>`;
+  $('dec-more').innerHTML = `<h3>More year-end charts</h3><div class="ye-yr-grid">${spans.map(s => `<a class="ye-yr ${s === span ? 'on' : ''}" href="#/year-end/${s}">${art(s)}<span>${/s$/.test(s) ? 'The ' + decLc(s) : s}</span></a>`).join('')}</div>`;
 }
 
 // ─── AWARDS ─────────────────────────────────────────────────────
