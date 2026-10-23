@@ -84,6 +84,12 @@ def index_eras():
     acts = frozenset(a['name'] for a in data['artists'])
     known = {slugify(primary_artist(s['artistName'], acts)) for s in data['songs']}
     found = {}
+    # A main photo uploaded under the artist's name ("Chloe Tang.webp") replaces <slug>.jpg
+    for f in os.listdir(OUT):
+        base, ext = os.path.splitext(f)
+        if ext.lower() in ('.jpg', '.jpeg', '.png', '.webp') and not ERA.match(f) and slugify(base) in known and f != slugify(base) + '.jpg':
+            os.replace(os.path.join(OUT, f), os.path.join(OUT, slugify(base) + '.jpg'))
+            print(f'renamed {f} -> {slugify(base)}.jpg')
     for f in os.listdir(OUT):
         m = ERA.match(f)
         if m and slugify(os.path.splitext(f)[0]) not in known:
