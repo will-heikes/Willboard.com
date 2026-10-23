@@ -1,0 +1,6098 @@
+[
+ {
+  "name": "Sick Boy",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_434",
+   "pop_song_443",
+   "pop_song_448",
+   "pop_song_455",
+   "pop_song_475",
+   "pop_song_486",
+   "pop_song_501",
+   "pop_song_510"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "End Of Your Love",
+  "artist": "Cassandra Coleman",
+  "artistId": "art_588",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_800",
+   "pop_song_945",
+   "pop_song_970",
+   "pop_song_1013",
+   "pop_song_1031",
+   "pop_song_1043",
+   "pop_song_1050"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "The Rise and Fall of a Midwest Princess",
+  "artist": "Chappell Roan",
+  "artistId": "art_226",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_827",
+   "pop_song_853",
+   "pop_song_872",
+   "pop_song_879",
+   "pop_song_893",
+   "pop_song_907"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Future Nostalgia",
+  "artist": "Dua Lipa",
+  "artistId": "art_435",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_572",
+   "pop_song_588",
+   "pop_song_605",
+   "pop_song_633",
+   "pop_song_655",
+   "pop_song_672"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "SOS",
+  "artist": "SZA",
+  "artistId": "art_470",
+  "plays": null,
+  "tracks": 38,
+  "songs": [
+   "pop_song_648",
+   "pop_song_704",
+   "pop_song_758",
+   "pop_song_775",
+   "pop_song_812",
+   "pop_song_867"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "My Everything",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_166",
+   "pop_song_185",
+   "pop_song_186",
+   "pop_song_198",
+   "pop_song_215"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "It’s Not That Deep",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_959",
+   "pop_song_977",
+   "pop_song_987",
+   "pop_song_997",
+   "pop_song_1006"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Planet Her",
+  "artist": "Doja Cat",
+  "artistId": "art_534",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_663",
+   "pop_song_688",
+   "pop_song_692",
+   "pop_song_702",
+   "pop_song_721"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "PRISM",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_124",
+   "pop_song_141",
+   "pop_song_149",
+   "pop_song_170",
+   "pop_song_195"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Red Pill Blues",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_328",
+   "pop_song_357",
+   "pop_song_406",
+   "pop_song_421",
+   "pop_song_465"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "V",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_177",
+   "pop_song_197",
+   "pop_song_210",
+   "pop_song_237",
+   "pop_song_266"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Short n' Sweet",
+  "artist": "Sabrina Carpenter",
+  "artistId": "art_550",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_869",
+   "pop_song_883",
+   "pop_song_896",
+   "pop_song_906",
+   "pop_song_928"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "The Life of a Showgirl",
+  "artist": "Taylor Swift",
+  "artistId": "art_11",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_971",
+   "pop_song_980",
+   "pop_song_991",
+   "pop_song_1007",
+   "pop_song_1052"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Demi",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_96",
+   "pop_song_122",
+   "pop_song_155",
+   "pop_song_188"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Wild Ones",
+  "artist": "Flo Rida",
+  "artistId": "art_259",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_19",
+   "pop_song_35",
+   "pop_song_55",
+   "pop_song_71"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Fine Line",
+  "artist": "Harry Styles",
+  "artistId": "art_454",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_590",
+   "pop_song_599",
+   "pop_song_610",
+   "pop_song_635"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Blue",
+  "artist": "Jonas Blue",
+  "artistId": "art_410",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_294",
+   "pop_song_346",
+   "pop_song_390",
+   "pop_song_495"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "JORDI",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_567",
+   "pop_song_618",
+   "pop_song_659",
+   "pop_song_677"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Overexposed",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_41",
+   "pop_song_65",
+   "pop_song_88",
+   "pop_song_110"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Takin' It Back",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_736",
+   "pop_song_749",
+   "pop_song_754",
+   "pop_song_797"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Timeless",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_857",
+   "pop_song_871",
+   "pop_song_881",
+   "pop_song_892"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Pink Friday 2",
+  "artist": "Nicki Minaj",
+  "artistId": "art_261",
+  "plays": null,
+  "tracks": 25,
+  "songs": [
+   "pop_song_742",
+   "pop_song_816",
+   "pop_song_834",
+   "pop_song_836"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Talk That Talk",
+  "artist": "Rihanna",
+  "artistId": "art_242",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_4",
+   "pop_song_15",
+   "pop_song_37",
+   "pop_song_44"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Unapologetic",
+  "artist": "Rihanna",
+  "artistId": "art_242",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_70",
+   "pop_song_92",
+   "pop_song_104",
+   "pop_song_118"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Man’s Best Friend",
+  "artist": "Sabrina Carpenter",
+  "artistId": "art_550",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_944",
+   "pop_song_966",
+   "pop_song_979",
+   "pop_song_981"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "World War Joy",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_532",
+   "pop_song_543",
+   "pop_song_549",
+   "pop_song_578"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "After Hours",
+  "artist": "The Weeknd",
+  "artistId": "art_366",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_579",
+   "pop_song_586",
+   "pop_song_606",
+   "pop_song_653"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Dangerous Woman",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_290",
+   "pop_song_307",
+   "pop_song_324"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "eternal sunshine",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 38,
+  "songs": [
+   "pop_song_840",
+   "pop_song_870",
+   "pop_song_926"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Positions",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_634",
+   "pop_song_641",
+   "pop_song_671"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Heaven & Hell",
+  "artist": "Ava Max",
+  "artistId": "art_503",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_498",
+   "pop_song_627",
+   "pop_song_660"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Love Sux",
+  "artist": "Avril Lavigne",
+  "artistId": "art_222",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_699",
+   "pop_song_718",
+   "pop_song_764"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "HIT ME HARD AND SOFT",
+  "artist": "Billie Eilish",
+  "artistId": "art_508",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_866",
+   "pop_song_868",
+   "pop_song_902"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Unorthodox Jukebox",
+  "artist": "Bruno Mars",
+  "artistId": "art_248",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_74",
+   "pop_song_109",
+   "pop_song_133"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Romance",
+  "artist": "Camila Cabello",
+  "artistId": "art_456",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_561",
+   "pop_song_575",
+   "pop_song_584"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Nine Track Mind",
+  "artist": "Charlie Puth",
+  "artistId": "art_377",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_248",
+   "pop_song_270",
+   "pop_song_313"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Voicenotes",
+  "artist": "Charlie Puth",
+  "artistId": "art_377",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_391",
+   "pop_song_417",
+   "pop_song_460"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "SHOCK TO THE SYSTEM (PART ONE)",
+  "artist": "Daughtry",
+  "artistId": "art_328",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_851",
+   "pop_song_863",
+   "pop_song_898"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Nothing But the Beat",
+  "artist": "David Guetta",
+  "artistId": "art_237",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_1",
+   "pop_song_21",
+   "pop_song_49"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Confident",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_243",
+   "pop_song_263",
+   "pop_song_292"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Hot Pink",
+  "artist": "Doja Cat",
+  "artistId": "art_534",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_593",
+   "pop_song_623",
+   "pop_song_651"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Radical Optimism",
+  "artist": "Dua Lipa",
+  "artistId": "art_435",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_832",
+   "pop_song_865",
+   "pop_song_908"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "No.6 Collaborations Project",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_534",
+   "pop_song_554",
+   "pop_song_580"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "÷",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_348",
+   "pop_song_350",
+   "pop_song_415"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "The Secret of Us",
+  "artist": "Gracie Abrams",
+  "artistId": "art_625",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_890",
+   "pop_song_910",
+   "pop_song_914"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Manic",
+  "artist": "Halsey",
+  "artistId": "art_416",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_491",
+   "pop_song_565",
+   "pop_song_585"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Kiss All The Time. Disco, Occasionally.",
+  "artist": "Harry Styles",
+  "artistId": "art_454",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_994",
+   "pop_song_1003",
+   "pop_song_1004"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "luck... or something",
+  "artist": "Hilary Duff",
+  "artistId": "art_658",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_992",
+   "pop_song_999",
+   "pop_song_1000"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Evolve",
+  "artist": "Imagine Dragons",
+  "artistId": "art_294",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_383",
+   "pop_song_400",
+   "pop_song_435"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Night Visions",
+  "artist": "Imagine Dragons",
+  "artistId": "art_294",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_73",
+   "pop_song_97",
+   "pop_song_113"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Witness",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_355",
+   "pop_song_387",
+   "pop_song_401"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Meaning of Life",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_427",
+   "pop_song_446",
+   "pop_song_525"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Piece by Piece",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_213",
+   "pop_song_244",
+   "pop_song_285"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Feed The Beast",
+  "artist": "Kim Petras",
+  "artistId": "art_587",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_789",
+   "pop_song_810",
+   "pop_song_819"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "MAYHEM",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_899",
+   "pop_song_901",
+   "pop_song_916"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "The Heist",
+  "artist": "Macklemore",
+  "artistId": "art_302",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_85",
+   "pop_song_99",
+   "pop_song_114"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Thank You",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_286",
+   "pop_song_303",
+   "pop_song_329"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Title",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_199",
+   "pop_song_222",
+   "pop_song_247"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Bangerz",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_115",
+   "pop_song_127",
+   "pop_song_147"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Pink Friday ... Roman Reloaded",
+  "artist": "Nicki Minaj",
+  "artistId": "art_261",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_34",
+   "pop_song_64",
+   "pop_song_75"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Queen",
+  "artist": "Nicki Minaj",
+  "artistId": "art_261",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_452",
+   "pop_song_468",
+   "pop_song_490"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "The Pinkprint",
+  "artist": "Nicki Minaj",
+  "artistId": "art_261",
+  "plays": null,
+  "tracks": 27,
+  "songs": [
+   "pop_song_171",
+   "pop_song_187",
+   "pop_song_242"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "SOUR",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_650",
+   "pop_song_665",
+   "pop_song_673"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Native",
+  "artist": "One Republic",
+  "artistId": "art_333",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_138",
+   "pop_song_181",
+   "pop_song_208"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "beerbongs & bentleys",
+  "artist": "Post Malone",
+  "artistId": "art_400",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_423",
+   "pop_song_451",
+   "pop_song_470"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "ANTI",
+  "artist": "Rihanna",
+  "artistId": "art_242",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_282",
+   "pop_song_300",
+   "pop_song_304"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Gloria",
+  "artist": "Sam Smith",
+  "artistId": "art_354",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_509",
+   "pop_song_550",
+   "pop_song_751"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "In the Lonely Hour",
+  "artist": "Sam Smith",
+  "artistId": "art_354",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_178",
+   "pop_song_179",
+   "pop_song_200"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Revival",
+  "artist": "Selena Gomez",
+  "artistId": "art_56",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_260",
+   "pop_song_276",
+   "pop_song_311"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Shawn Mendes",
+  "artist": "Shawn Mendes",
+  "artistId": "art_393",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_449",
+   "pop_song_533",
+   "pop_song_545"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "So Close To What",
+  "artist": "Tate McRae",
+  "artistId": "art_539",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_887",
+   "pop_song_917",
+   "pop_song_972"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Collage",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_289",
+   "pop_song_316",
+   "pop_song_332"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Memories...Do Not Open",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_349",
+   "pop_song_359",
+   "pop_song_394"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "So Far So Good",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_715",
+   "pop_song_719",
+   "pop_song_729"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Beauty Behind the Madness",
+  "artist": "The Weeknd",
+  "artistId": "art_366",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_221",
+   "pop_song_254",
+   "pop_song_277"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Starboy",
+  "artist": "The Weeknd",
+  "artistId": "art_366",
+  "plays": null,
+  "tracks": 36,
+  "songs": [
+   "pop_song_327",
+   "pop_song_345",
+   "pop_song_776"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "So Good",
+  "artist": "Zara Larsson",
+  "artistId": "art_408",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_293",
+   "pop_song_298",
+   "pop_song_352"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "5 Seconds of Summer",
+  "artist": "5 Seconds of Summer",
+  "artistId": "art_347",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_164",
+   "pop_song_189"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "PRIMA",
+  "artist": "Adela",
+  "artistId": "art_684",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_1041",
+   "pop_song_1054"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "25",
+  "artist": "Adele",
+  "artistId": "art_257",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_262",
+   "pop_song_339"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Know-It-All",
+  "artist": "Alessia Cara",
+  "artistId": "art_397",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_267",
+   "pop_song_331"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "petal",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_1023",
+   "pop_song_1042"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Sweetener",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_454",
+   "pop_song_479"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "thank u, next",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_497",
+   "pop_song_511"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Yours Truly",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_106",
+   "pop_song_119"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Diamonds & Dancefloors",
+  "artist": "Ava Max",
+  "artistId": "art_503",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_726",
+   "pop_song_767"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "True",
+  "artist": "Avicii",
+  "artistId": "art_323",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_123",
+   "pop_song_151"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Avril Lavigne",
+  "artist": "Avril Lavigne",
+  "artistId": "art_222",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_135",
+   "pop_song_165"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Head Above Water",
+  "artist": "Avril Lavigne",
+  "artistId": "art_222",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_488",
+   "pop_song_516"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Expectations",
+  "artist": "Bebe Rexha",
+  "artistId": "art_378",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_426",
+   "pop_song_482"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "RENAISSANCE",
+  "artist": "Beyoncé",
+  "artistId": "art_14",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_735",
+   "pop_song_756"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+  "artist": "Billie Eilish",
+  "artistId": "art_508",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_517",
+   "pop_song_540"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "BORN PINK",
+  "artist": "BlackPink",
+  "artistId": "art_585",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_744",
+   "pop_song_761"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Proof",
+  "artist": "BTS",
+  "artistId": "art_541",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_629",
+   "pop_song_674"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Motion",
+  "artist": "Calvin Harris",
+  "artistId": "art_243",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_163",
+   "pop_song_203"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Camila",
+  "artist": "Camila Cabello",
+  "artistId": "art_456",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_405",
+   "pop_song_437"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "AM I THE DRAMA?",
+  "artist": "Cardi B",
+  "artistId": "art_488",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_619",
+   "pop_song_654"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Dedicated",
+  "artist": "Carly Rae Jepsen",
+  "artistId": "art_275",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_499",
+   "pop_song_522"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Emotion",
+  "artist": "Carly Rae Jepsen",
+  "artistId": "art_275",
+  "plays": null,
+  "tracks": 24,
+  "songs": [
+   "pop_song_219",
+   "pop_song_624"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Kiss",
+  "artist": "Carly Rae Jepsen",
+  "artistId": "art_275",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_36",
+   "pop_song_54"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "The Loneliest Time",
+  "artist": "Carly Rae Jepsen",
+  "artistId": "art_275",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_849",
+   "pop_song_911"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "One Night in Nashville",
+  "artist": "Cheat Codes",
+  "artistId": "art_455",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_716",
+   "pop_song_768"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "What Is Love?",
+  "artist": "Clean Bandit",
+  "artistId": "art_359",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_377",
+   "pop_song_472"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Ghost Stories",
+  "artist": "Coldplay",
+  "artistId": "art_345",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_160",
+   "pop_song_169"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Fifty Shades Freed (Original Motion Picture Soundtrack)",
+  "artist": "Danny Elfman",
+  "artistId": null,
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_436",
+   "pop_song_445"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Sit Still, Look Pretty",
+  "artist": "Daya",
+  "artistId": "art_403",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_280",
+   "pop_song_305"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Dancing With The Devil…The Art of Starting Over",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_587",
+   "pop_song_662"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "HOLY FVCK",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_734",
+   "pop_song_738"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "It's Not That Deep (Unless You Want It To Be)",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_1008",
+   "pop_song_1011"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Tell Me You Love Me",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_398",
+   "pop_song_424"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "DNCE",
+  "artist": "DNCE",
+  "artistId": "art_401",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_274",
+   "pop_song_317"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Scorpion",
+  "artist": "Drake",
+  "artistId": "art_268",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_441",
+   "pop_song_502"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Dua Lipa",
+  "artist": "Dua Lipa",
+  "artistId": "art_435",
+  "plays": null,
+  "tracks": 24,
+  "songs": [
+   "pop_song_407",
+   "pop_song_442"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Talking Dreams",
+  "artist": "Echosmith",
+  "artistId": "art_363",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_193",
+   "pop_song_239"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "+",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_72",
+   "pop_song_116"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "=",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_675",
+   "pop_song_691"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "x",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 24,
+  "songs": [
+   "pop_song_211",
+   "pop_song_245"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Delirium",
+  "artist": "Ellie Goulding",
+  "artistId": "art_371",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_216",
+   "pop_song_275"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "American Beauty / American Psycho",
+  "artist": "Fall Out Boy",
+  "artistId": "art_312",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_204",
+   "pop_song_278"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "7/27",
+  "artist": "Fifth Harmony",
+  "artistId": "art_389",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_299",
+   "pop_song_340"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "My House",
+  "artist": "Flo Rida",
+  "artistId": "art_259",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_226",
+   "pop_song_273"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Some Nights",
+  "artist": "Fun",
+  "artistId": "art_270",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_31",
+   "pop_song_63"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Making Mirrors",
+  "artist": "Gotye",
+  "artistId": "art_271",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_32",
+   "pop_song_56"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "Bouquet",
+  "artist": "Gwen Stefani",
+  "artistId": "art_407",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_909",
+   "pop_song_948"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "hopeless fountain kingdom",
+  "artist": "Halsey",
+  "artistId": "art_416",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_389",
+   "pop_song_416"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Ascend",
+  "artist": "Illenium",
+  "artistId": "art_464",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_559",
+   "pop_song_571"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Origins",
+  "artist": "Imagine Dragons",
+  "artistId": "art_294",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_483",
+   "pop_song_503"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Ruby",
+  "artist": "Jennie",
+  "artistId": "art_618",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_894",
+   "pop_song_920"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Nervous System",
+  "artist": "Julia Michaels",
+  "artistId": "art_440",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_360",
+   "pop_song_411"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Not In Chronological Order",
+  "artist": "Julia Michaels",
+  "artistId": "art_440",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_631",
+   "pop_song_666"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Purpose",
+  "artist": "Justin Bieber",
+  "artistId": "art_386",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_253",
+   "pop_song_264"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "143",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_877",
+   "pop_song_888"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "1432",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_878",
+   "pop_song_962"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Teenage Dream: The Complete Confection",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_28",
+   "pop_song_45"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "The Ones That Got The Plays",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_538",
+   "pop_song_983"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "chemistry",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_790",
+   "pop_song_801"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Golden Hour",
+  "artist": "Kygo",
+  "artistId": "art_480",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_601",
+   "pop_song_638"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "DISCO",
+  "artist": "Kylie Minogue",
+  "artistId": "art_547",
+  "plays": null,
+  "tracks": 26,
+  "songs": [
+   "pop_song_645",
+   "pop_song_712"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "ARTPOP",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_125",
+   "pop_song_159"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Born This Way",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_17",
+   "pop_song_765"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Chromatica",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_595",
+   "pop_song_607"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Joanne",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_323",
+   "pop_song_333"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Divinely Uninspired To A Hellish Extent",
+  "artist": "Lewis Capaldi",
+  "artistId": "art_510",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_523",
+   "pop_song_576"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Cuz I Love You",
+  "artist": "Lizzo",
+  "artistId": "art_515",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_530",
+   "pop_song_563"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Special",
+  "artist": "Lizzo",
+  "artistId": "art_515",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_725",
+   "pop_song_759"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Pure Heroine",
+  "artist": "Lorde",
+  "artistId": "art_327",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_145",
+   "pop_song_156"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Whirlwind",
+  "artist": "Maddie Poppe",
+  "artistId": "art_518",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_537",
+   "pop_song_568"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Toy With Me",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_984",
+   "pop_song_1012"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "TREAT MYSELF",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_444",
+   "pop_song_589"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Endless Summer Vacation",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_770",
+   "pop_song_814"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Plastic Hearts",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_620",
+   "pop_song_642"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Younger Now",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_378",
+   "pop_song_409"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Perception",
+  "artist": "NF",
+  "artistId": "art_473",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_422",
+   "pop_song_480"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Flicker",
+  "artist": "Niall Horan",
+  "artistId": "art_461",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_392",
+   "pop_song_463"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Nick Jonas",
+  "artist": "Nick Jonas",
+  "artistId": "art_367",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_201",
+   "pop_song_218"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "GUTS (spilled)",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_811",
+   "pop_song_841"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "FOUR",
+  "artist": "One Direction",
+  "artistId": "art_279",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_202",
+   "pop_song_212"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Made In The A.M.",
+  "artist": "One Direction",
+  "artistId": "art_279",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_249",
+   "pop_song_261"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Pray for the Wicked",
+  "artist": "Panic! At the Disco",
+  "artistId": "art_504",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_500",
+   "pop_song_551"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Global Warming",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_47",
+   "pop_song_95"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Global Warming: Meltdown",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_82",
+   "pop_song_140"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Hollywood's Bleeding",
+  "artist": "Post Malone",
+  "artistId": "art_400",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_547",
+   "pop_song_562"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "I Said I Love You First",
+  "artist": "Selena Gomez",
+  "artistId": "art_56",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_919",
+   "pop_song_929"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Rare",
+  "artist": "Selena Gomez",
+  "artistId": "art_56",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_569",
+   "pop_song_602"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Illuminate",
+  "artist": "Shawn Mendes",
+  "artistId": "art_393",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_308",
+   "pop_song_336"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "1000 Forms of Fear",
+  "artist": "Sia",
+  "artistId": "art_274",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_180",
+   "pop_song_214"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "This Is Acting",
+  "artist": "Sia",
+  "artistId": "art_274",
+  "plays": null,
+  "tracks": 24,
+  "songs": [
+   "pop_song_297",
+   "pop_song_326"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "THINK LATER",
+  "artist": "Tate McRae",
+  "artistId": "art_539",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_822",
+   "pop_song_833"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Queen of the Clouds",
+  "artist": "Tove Lo",
+  "artistId": "art_364",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_194",
+   "pop_song_223"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "California 37",
+  "artist": "Train",
+  "artistId": "art_280",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_40",
+   "pop_song_59"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Something To Give Each Other",
+  "artist": "Troye Sivan",
+  "artistId": "art_357",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_803",
+   "pop_song_825"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Blurryface",
+  "artist": "Twenty One Pilots",
+  "artistId": "art_404",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_281",
+   "pop_song_312"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Looking 4 Myself",
+  "artist": "Usher",
+  "artistId": "art_238",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_43",
+   "pop_song_46"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Poster Girl",
+  "artist": "Zara Larsson",
+  "artistId": "art_408",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_494",
+   "pop_song_617"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Clarity",
+  "artist": "Zedd",
+  "artistId": "art_320",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_117",
+   "pop_song_144"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "CALM",
+  "artist": "5 Seconds of Summer",
+  "artistId": "art_347",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_542"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Youngblood",
+  "artist": "5 Seconds of Summer",
+  "artistId": "art_347",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_467"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Is There Anybody Out There?",
+  "artist": "A Great Big World",
+  "artistId": "art_335",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_143"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Addison",
+  "artist": "Addison Rae",
+  "artistId": "art_644",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_951"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "21",
+  "artist": "Adele",
+  "artistId": "art_257",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_16"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "30",
+  "artist": "Adele",
+  "artistId": "art_257",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_697"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "CUARTO AZUL",
+  "artist": "Aitana",
+  "artistId": "art_647",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_955"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Love & Hyperbole",
+  "artist": "Alessia Cara",
+  "artistId": "art_397",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_695"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "The Pains of Growing",
+  "artist": "Alessia Cara",
+  "artistId": "art_397",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_546"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "The Lateness Of The Hour",
+  "artist": "Alex Clare",
+  "artistId": "art_288",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_61"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Saxobeats",
+  "artist": "Alexandra Stan",
+  "artistId": "art_252",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_12"
+  ],
+  "year": 2005,
+  "chart": "pop"
+ },
+ {
+  "name": "a touch of the beat gets you up on your feet gets you out and then into the sun",
+  "artist": "Aly & AJ",
+  "artistId": "art_561",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_681"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Oh, What a Life",
+  "artist": "American Authors",
+  "artistId": "art_339",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_150"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Magazines Or Novels",
+  "artist": "Andy Grammer",
+  "artistId": "art_382",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_233"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Speak Your Mind",
+  "artist": "Anne-Marie",
+  "artistId": "art_428",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_341"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Intense",
+  "artist": "Armin van Buuren",
+  "artistId": "art_346",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_162"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "The Girl Of Your Dreams",
+  "artist": "Ashe",
+  "artistId": "art_557",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_1055"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Don't Click Play",
+  "artist": "Ava Max",
+  "artistId": "art_503",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_950"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Vengeance Through My Omnipresence",
+  "artist": "Avery Cochrane",
+  "artistId": "art_683",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_1040"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Let Go",
+  "artist": "Avril Lavigne",
+  "artistId": "art_222",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_732"
+  ],
+  "year": 2002,
+  "chart": "pop"
+ },
+ {
+  "name": "Disobey",
+  "artist": "Bad Wolves",
+  "artistId": "art_484",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_447"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Bad Blood",
+  "artist": "Bastille",
+  "artistId": "art_331",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_136"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "COSMIC",
+  "artist": "Bazzi",
+  "artistId": "art_500",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_493"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Better Mistakes",
+  "artist": "Bebe Rexha",
+  "artistId": "art_378",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_632"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "DIRTY BLONDE",
+  "artist": "Bebe Rexha",
+  "artistId": "art_378",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_1039"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Reverie",
+  "artist": "Ben Platt",
+  "artistId": "art_558",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_678"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Brand New",
+  "artist": "Ben Rector",
+  "artistId": "art_415",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_314"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "FRIENDS KEEP SECRETS",
+  "artist": "Benny Blanco",
+  "artistId": "art_491",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_474"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "American Heart",
+  "artist": "Benson Boone",
+  "artistId": "art_643",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_943"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Happier Than Ever",
+  "artist": "Billie Eilish",
+  "artistId": "art_508",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_622"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "TRANSLATION",
+  "artist": "Black Eyed Peas",
+  "artistId": "art_529",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_582"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "everything means nothing",
+  "artist": "Blackbear",
+  "artistId": "art_526",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_570"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "THE ALBUM",
+  "artist": "Blackpink",
+  "artistId": "art_538",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_615"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Gone Now",
+  "artist": "Bleachers",
+  "artistId": "art_477",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_429"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "ONE MORE TIME... PART-2",
+  "artist": "Blink-182",
+  "artistId": "art_612",
+  "plays": null,
+  "tracks": 27,
+  "songs": [
+   "pop_song_838"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Hell Is What You Make It",
+  "artist": "Breathe Carolina",
+  "artistId": "art_267",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_26"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Femme Fatale",
+  "artist": "Britney Spears",
+  "artistId": "art_300",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_844"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "18 Months",
+  "artist": "Calvin Harris",
+  "artistId": "art_243",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_93"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Familia",
+  "artist": "Camila Cabello",
+  "artistId": "art_456",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_724"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "In A Tidal Wave of Mystery",
+  "artist": "Capital Cities",
+  "artistId": "art_322",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_120"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Invasion of Privacy",
+  "artist": "Cardi B",
+  "artistId": "art_488",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_464"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Dedicated Side B",
+  "artist": "Carly Rae Jepsen",
+  "artistId": "art_275",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_804"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "BRAT",
+  "artist": "Charli xcx",
+  "artistId": "art_622",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_880"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "how i'm feeling now",
+  "artist": "Charli xcx",
+  "artistId": "art_622",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_942"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Sucker",
+  "artist": "Charli XCX",
+  "artistId": "art_356",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_182"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "CHARLIE",
+  "artist": "Charlie Puth",
+  "artistId": "art_377",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_711"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Christmas",
+  "artist": "Cher",
+  "artistId": "art_610",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_830"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Sticks & Stones",
+  "artist": "Cher Lloyd",
+  "artistId": "art_286",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_57"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Change",
+  "artist": "Churchill",
+  "artistId": "art_310",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_100"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Night Shades",
+  "artist": "Cobra Starship",
+  "artistId": "art_240",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_3"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "A Head Full of Dreams",
+  "artist": "Coldplay",
+  "artistId": "art_345",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_318"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Music of the Spheres",
+  "artist": "Coldplay",
+  "artistId": "art_345",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_696"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Dream Crusher",
+  "artist": "Daniel Seavey",
+  "artistId": "art_672",
+  "plays": null,
+  "tracks": 4,
+  "songs": [
+   "pop_song_1024"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Baptized",
+  "artist": "Daughtry",
+  "artistId": "art_328",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_132"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Cage to Rattle",
+  "artist": "Daughtry",
+  "artistId": "art_328",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_487"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Listen",
+  "artist": "David Guetta",
+  "artistId": "art_237",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_230"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "The Difference",
+  "artist": "Daya",
+  "artistId": "art_403",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_698"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Unbroken",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_50"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "The Night the Sun Came Up",
+  "artist": "Dev",
+  "artistId": "art_239",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_2"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Grateful",
+  "artist": "DJ Khaled",
+  "artistId": "art_450",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_376"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Encore",
+  "artist": "DJ Snake",
+  "artistId": "art_392",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_321"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Alligator Bites Never Heal",
+  "artist": "Doechii",
+  "artistId": "art_608",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_912"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Scarlet 2 CLAUDE",
+  "artist": "Doja Cat",
+  "artistId": "art_534",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_824"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Vie",
+  "artist": "Doja Cat",
+  "artistId": "art_534",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_974"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Alchemical: Volume 1",
+  "artist": "Dove Cameron",
+  "artistId": "art_577",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_717"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "More Life",
+  "artist": "Drake",
+  "artistId": "art_268",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_366"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Nothing Was the Same",
+  "artist": "Drake",
+  "artistId": "art_268",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_130"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Take Care",
+  "artist": "Drake",
+  "artistId": "art_268",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_27"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Views",
+  "artist": "Drake",
+  "artistId": "art_268",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_301"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "-",
+  "artist": "Ed Sheeran",
+  "artistId": "art_293",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_783"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "PREGUNTAS A LAS 11:11",
+  "artist": "Ela Taubert",
+  "artistId": "art_653",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_969"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Chapter One",
+  "artist": "Ella Henderson",
+  "artistId": "art_370",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_209"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Love Stuff",
+  "artist": "Elle King",
+  "artistId": "art_131",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_295"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "I Know Too Much",
+  "artist": "Ellie Goulding",
+  "artistId": "art_371",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_1049"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Diamonds",
+  "artist": "Elton John",
+  "artistId": "art_570",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_746"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Egg in the Backseat",
+  "artist": "Em Beihold",
+  "artistId": "art_581",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_739"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "The Marshall Mathers LP2",
+  "artist": "Eminem",
+  "artistId": "art_332",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_137"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Encanto (Original Motion Picture Soundtrack)",
+  "artist": "Encanto Cast",
+  "artistId": "art_571",
+  "plays": null,
+  "tracks": 44,
+  "songs": [
+   "pop_song_707"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "SEX and LOVE",
+  "artist": "Enrique Iglesias",
+  "artistId": "art_362",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_192"
+  ],
+  "year": 1998,
+  "chart": "pop"
+ },
+ {
+  "name": "Official FIFA World Cup 2026™ Album",
+  "artist": "FIFA Sound",
+  "artistId": null,
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_1037"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Fifth Harmony",
+  "artist": "Fifth Harmony",
+  "artistId": "art_389",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_399"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Reflection",
+  "artist": "Fifth Harmony",
+  "artistId": "art_389",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_240"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "The Beginning",
+  "artist": "Fifty Fifty",
+  "artistId": "art_603",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_796"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "In Search Of The Antidote",
+  "artist": "Fletcher",
+  "artistId": "art_617",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_848"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "THERAPY AT THE CLUB",
+  "artist": "FLO",
+  "artistId": "art_673",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_1026"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Torches",
+  "artist": "Foster the People",
+  "artistId": "art_245",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_6"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "Jungle Rules",
+  "artist": "French Montana",
+  "artistId": "art_467",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_404"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Church",
+  "artist": "Galantis",
+  "artistId": "art_527",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_574"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Rx",
+  "artist": "Galantis",
+  "artistId": "art_527",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_859"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Sweeter",
+  "artist": "Gavin DeGraw",
+  "artistId": "art_260",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_20"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Lovesweet",
+  "artist": "girlsweetvoiced",
+  "artistId": "art_679",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_1036"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Dreamland",
+  "artist": "Glass Animals",
+  "artistId": "art_576",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_714"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "us",
+  "artist": "Gnash",
+  "artistId": "art_420",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_330"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Apple Music London Sessions",
+  "artist": "Griff",
+  "artistId": "art_607",
+  "plays": null,
+  "tracks": 3,
+  "songs": [
+   "pop_song_856"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Vertigo",
+  "artist": "Griff",
+  "artistId": "art_607",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_815"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "This Is What the Truth Feels Like",
+  "artist": "Gwen Stefani",
+  "artistId": "art_407",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_291"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "The Papercut Chronicles II",
+  "artist": "Gym Class Heroes",
+  "artistId": "art_277",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_53"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Haiz",
+  "artist": "Hailee Steinfeld",
+  "artistId": "art_395",
+  "plays": null,
+  "tracks": 4,
+  "songs": [
+   "pop_song_255"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "If I Can’t Have Love, I Want Power (Extended)",
+  "artist": "Halsey",
+  "artistId": "art_416",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_536"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Harry Styles",
+  "artist": "Harry Styles",
+  "artistId": "art_454",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_380"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Harry's House",
+  "artist": "Harry Styles",
+  "artistId": "art_454",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_722"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "We Run The Night",
+  "artist": "Havana Brown",
+  "artistId": "art_287",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_60"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Cruel World",
+  "artist": "Holly Humberstone",
+  "artistId": "art_664",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_1005"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Whatever",
+  "artist": "Hot Chelle Rae",
+  "artistId": "art_263",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_23"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "KPop Demon Hunters (Soundtrack from the Netflix Film)",
+  "artist": "Huntr/x",
+  "artistId": "art_649",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_961"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Frozen (Original Motion Picture Soundtrack)",
+  "artist": "Idina Menzel",
+  "artistId": "art_343",
+  "plays": null,
+  "tracks": 32,
+  "songs": [
+   "pop_song_157"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Frozen 2 (Original Motion Picture Soundtrack)",
+  "artist": "Idina Menzel",
+  "artistId": "art_343",
+  "plays": null,
+  "tracks": 27,
+  "songs": [
+   "pop_song_577"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "In My Defense",
+  "artist": "Iggy Azalea",
+  "artistId": "art_348",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_526"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Reclassified",
+  "artist": "Iggy Azalea",
+  "artistId": "art_348",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_207"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "The New Classic",
+  "artist": "Iggy Azalea",
+  "artistId": "art_348",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_184"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Awake",
+  "artist": "Illenium",
+  "artistId": "art_464",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_395"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "ILLENIUM",
+  "artist": "Illenium",
+  "artistId": "art_464",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_788"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Lights Out",
+  "artist": "Ingrid Michaelson",
+  "artistId": "art_353",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_176"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "A Good Friend Is Nice",
+  "artist": "Jack & Jack",
+  "artistId": "art_490",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_473"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Skrillex and Diplo present Jack Ü",
+  "artist": "Jack U",
+  "artistId": "art_385",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_235"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Back from the Edge",
+  "artist": "James Arthur",
+  "artistId": "art_453",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_379"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Everything Is 4",
+  "artist": "Jason Derulo",
+  "artistId": "art_244",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_229"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Future History",
+  "artist": "Jason Derulo",
+  "artistId": "art_244",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_5"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Dear Joe,",
+  "artist": "Jax",
+  "artistId": "art_584",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_743"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Dance Again...The Hits",
+  "artist": "Jennifer Lopez",
+  "artistId": "art_281",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_42"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Late Nights",
+  "artist": "Jeremih",
+  "artistId": "art_365",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_196"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "I Cry When I Laugh",
+  "artist": "Jess Glynne",
+  "artistId": "art_360",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_190"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Who You Are",
+  "artist": "Jessie J",
+  "artistId": "art_262",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_22"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "AMORTAGE",
+  "artist": "Jisoo",
+  "artistId": "art_632",
+  "plays": null,
+  "tracks": 4,
+  "songs": [
+   "pop_song_923"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Into the Unknown",
+  "artist": "JJ",
+  "artistId": "art_642",
+  "plays": null,
+  "tracks": 4,
+  "songs": [
+   "pop_song_941"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "love + everything else",
+  "artist": "John K",
+  "artistId": "art_531",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_583"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Love in the Future",
+  "artist": "John Legend",
+  "artistId": "art_342",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_153"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "SMITHEREENS",
+  "artist": "Joji",
+  "artistId": "art_583",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_741"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Greetings From Your Hometown",
+  "artist": "Jonas Brothers",
+  "artistId": "art_563",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_963"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "The Album",
+  "artist": "Jonas Brothers",
+  "artistId": "art_563",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_785"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "The Family Business",
+  "artist": "Jonas Brothers",
+  "artistId": "art_563",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_683"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Hold It Together",
+  "artist": "JP Saxe",
+  "artistId": "art_535",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_598"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Goodbye & Good Riddance",
+  "artist": "Juice WRLD",
+  "artistId": "art_489",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_466"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Inner Monologue, Pt. 1",
+  "artist": "Julia Michaels",
+  "artistId": "art_440",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_514"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Clumsy Words and Bad Pickup Lines",
+  "artist": "Junior Doctor",
+  "artistId": "art_283",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_51"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Justice",
+  "artist": "Justin Bieber",
+  "artistId": "art_386",
+  "plays": null,
+  "tracks": 25,
+  "songs": [
+   "pop_song_700"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "SWAG II",
+  "artist": "Justin Bieber",
+  "artistId": "art_386",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_953"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Everything I Thought It Was",
+  "artist": "Justin Timberlake",
+  "artistId": "art_304",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_843"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "The 20/20 Experience",
+  "artist": "Justin Timberlake",
+  "artistId": "art_304",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_103"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Hello",
+  "artist": "Karmin",
+  "artistId": "art_282",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_48"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "NO ME ARREPIENTO DE SENTIR TANTO",
+  "artist": "Karol G",
+  "artistId": "art_528",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_1045"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Hounds of Love",
+  "artist": "Kate Bush",
+  "artistId": "art_579",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_730"
+  ],
+  "year": 1985,
+  "chart": "pop"
+ },
+ {
+  "name": "Smile",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_603"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Teenage Dream",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_14"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "Kehlani",
+  "artist": "Kehlani",
+  "artistId": "art_487",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_1025"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Greatest Hits - Chapter One",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_83"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Stronger",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_24"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "The Hamilton Mixtape",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 23,
+  "songs": [
+   "pop_song_334"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "Black Panther: The Album",
+  "artist": "Kendrick Lamar",
+  "artistId": "art_418",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_457"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "DAMN.",
+  "artist": "Kendrick Lamar",
+  "artistId": "art_418",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_375"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "The After Taste",
+  "artist": "Kenya Grace",
+  "artistId": "art_609",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_823"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "American Teen",
+  "artist": "Khalid",
+  "artistId": "art_458",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_414"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Suncity",
+  "artist": "Khalid",
+  "artistId": "art_458",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_506"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Detour",
+  "artist": "Kim Petras",
+  "artistId": "art_587",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_1022"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Problématique",
+  "artist": "Kim Petras",
+  "artistId": "art_587",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_821"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Frozen (Original Motion Picture Soundtrack)",
+  "artist": "Kristen Anderson-Lopez & Robert Lopez, Idina Menzel, Kristen Bell & Christophe Beck",
+  "artistId": null,
+  "plays": null,
+  "tracks": 32,
+  "songs": [
+   "pop_song_148"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "KYGO",
+  "artist": "Kygo",
+  "artistId": "art_480",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_875"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Stargazing EP",
+  "artist": "Kygo",
+  "artistId": "art_480",
+  "plays": null,
+  "tracks": 3,
+  "songs": [
+   "pop_song_433"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Extension (The Extended Mixes)",
+  "artist": "Kylie Minogue",
+  "artistId": "art_547",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_794"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Tension",
+  "artist": "Kylie Minogue",
+  "artistId": "art_547",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_828"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Cha Cha Cha Mixtape",
+  "artist": "Käärijä",
+  "artistId": "art_600",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_792"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "A Star Is Born Soundtrack",
+  "artist": "Lady Gaga",
+  "artistId": "art_37",
+  "plays": null,
+  "tracks": 34,
+  "songs": [
+   "pop_song_520"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Look Up Child",
+  "artist": "Lauren Daigle",
+  "artistId": "art_498",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_484"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "~How I'm Feeling~",
+  "artist": "Lauv",
+  "artistId": "art_507",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_513"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Broken By Desire To Be Heavenly Sent",
+  "artist": "Lewis Capaldi",
+  "artistId": "art_510",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_748"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "LP1",
+  "artist": "Liam Payne",
+  "artistId": "art_462",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_393"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Almeria",
+  "artist": "Lifehouse",
+  "artistId": "art_301",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_84"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "MONTERO",
+  "artist": "Lil Nas X",
+  "artistId": "art_552",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_684"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Luv Is Rage 2",
+  "artist": "Lil Uzi Vert",
+  "artistId": "art_475",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_428"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Moana",
+  "artist": "Lin-Manuel Miranda & Mark Mancina",
+  "artistId": null,
+  "plays": null,
+  "tracks": 40,
+  "songs": [
+   "pop_song_344"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Encanto (Original Motion Picture Soundtrack)",
+  "artist": "Lin-Manuel Miranda, Germaine Franco & Encanto - Cast",
+  "artistId": null,
+  "plays": null,
+  "tracks": 44,
+  "songs": [
+   "pop_song_708"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "One More Light",
+  "artist": "Linkin Park",
+  "artistId": "art_478",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_431"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "House of LION BABE",
+  "artist": "Lion Babe",
+  "artistId": "art_602",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_795"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "LANDER",
+  "artist": "LiSA",
+  "artistId": "art_544",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_639"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Between Us",
+  "artist": "Little Mix",
+  "artistId": "art_430",
+  "plays": null,
+  "tracks": 26,
+  "songs": [
+   "pop_song_706"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Glory Days",
+  "artist": "Little Mix",
+  "artistId": "art_430",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_343"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Sorry for Party Rocking",
+  "artist": "LMFAO",
+  "artistId": "art_247",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_8"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Everybody",
+  "artist": "Logic",
+  "artistId": "art_457",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_384"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "This Wasn't Meant For You Anyway",
+  "artist": "Lola Young",
+  "artistId": "art_633",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_925"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Melodrama",
+  "artist": "Lorde",
+  "artistId": "art_327",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_369"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "The Love Club EP",
+  "artist": "Lorde",
+  "artistId": "art_327",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_131"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Top Gun: Maverick (Music from the Motion Picture)",
+  "artist": "Lorne Balfe, Harold Faltermeyer, Lady Gaga & Hans Zimmer",
+  "artistId": null,
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_755"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "VIDA",
+  "artist": "Luis Fonsi",
+  "artistId": "art_448",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_373"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Lukas Graham",
+  "artist": "Lukas Graham",
+  "artistId": "art_406",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_288"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Ivy to Roses (Mixtape)",
+  "artist": "Mabel",
+  "artistId": "art_513",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_528"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "GEMINI",
+  "artist": "Macklemore",
+  "artistId": "art_302",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_430"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "This Unruly Mess I've Made",
+  "artist": "Macklemore",
+  "artistId": "art_302",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_259"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "CONFESSIONS II",
+  "artist": "Madonna",
+  "artistId": "art_604",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_1034"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "Don't Kill the Magic",
+  "artist": "Magic",
+  "artistId": "art_351",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_172"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Peace Is The Mission (Extended)",
+  "artist": "Major Lazer",
+  "artistId": "art_391",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_246"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "D R E A M S I C L E",
+  "artist": "Maren Morris",
+  "artistId": "art_128",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_874"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Caution",
+  "artist": "Mariah Carey",
+  "artistId": "art_315",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_531"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Here For It All",
+  "artist": "Mariah Carey",
+  "artistId": "art_315",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_946"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Me. I Am Mariah…The Elusive Chanteuse",
+  "artist": "Mariah Carey",
+  "artistId": "art_315",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_108"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Late Night Feelings",
+  "artist": "Mark Ronson",
+  "artistId": "art_368",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_504"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Uptown Special",
+  "artist": "Mark Ronson",
+  "artistId": "art_368",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_206"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Hands All Over",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_10"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "Love Is Like",
+  "artist": "Maroon 5",
+  "artistId": "art_249",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_940"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "North",
+  "artist": "Matchbox Twenty",
+  "artistId": "art_290",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_66"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Hell's Kitchen Angel",
+  "artist": "Max",
+  "artistId": "art_486",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_458"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Suga",
+  "artist": "Megan Thee Stallion",
+  "artistId": "art_523",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_608"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "The Love Train",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_518"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "PORTALS",
+  "artist": "Melanie Martinez",
+  "artistId": "art_606",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_808"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "HEROES & VILLAINS",
+  "artist": "Metro Boomin'",
+  "artistId": "art_592",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_771"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Zootopia (Original Motion Picture Soundtrack)",
+  "artist": "Michael Giacchino",
+  "artistId": null,
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_287"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "At Night, Alone.",
+  "artist": "Mike Posner",
+  "artistId": "art_402",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_279"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Bass Persuades",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_1047"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "SHE IS COMING",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_555"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Something Beautiful",
+  "artist": "Miley Cyrus",
+  "artistId": "art_27",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_927"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Internet Killed the Rockstar",
+  "artist": "MOD SUN",
+  "artistId": "art_548",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_649"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Wilder Mind",
+  "artist": "Mumford & Sons",
+  "artistId": "art_380",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_231"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "R.E.D.",
+  "artist": "Ne-Yo",
+  "artistId": "art_289",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_62"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "7",
+  "artist": "Nelly Furtado",
+  "artistId": "art_629",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_905"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Picture Show",
+  "artist": "Neon Trees",
+  "artistId": "art_291",
+  "plays": null,
+  "tracks": 4,
+  "songs": [
+   "pop_song_67"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "Pop Psychology",
+  "artist": "Neon Trees",
+  "artistId": "art_291",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_175"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "The Search",
+  "artist": "NF",
+  "artistId": "art_473",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_558"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "The Show",
+  "artist": "Niall Horan",
+  "artistId": "art_461",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_778"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "All American",
+  "artist": "Nick Carter",
+  "artistId": "art_399",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_269"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Last Year Was Complicated",
+  "artist": "Nick Jonas",
+  "artistId": "art_367",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_302"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Nick Jonas X2",
+  "artist": "Nick Jonas",
+  "artistId": "art_367",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_258"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Here and Now",
+  "artist": "Nickelback",
+  "artistId": "art_258",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_18"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "Black Star Elephant",
+  "artist": "Nico & Vinz",
+  "artistId": "art_350",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_168"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Killer Love",
+  "artist": "Nicole Scherzinger",
+  "artistId": "art_251",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_11"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "THE END OF EVERYTHING",
+  "artist": "Noah Cyrus",
+  "artistId": "art_441",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_613"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Stick Season (We'll All Be Here Forever)",
+  "artist": "Noah Kahan",
+  "artistId": "art_217",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_842"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "On Company Time",
+  "artist": "OCT",
+  "artistId": "art_634",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_933"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "The Art of Loving",
+  "artist": "Olivia Dean",
+  "artistId": "art_652",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_968"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "GUTS",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_802"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "you seem pretty sad for a girl so in love",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_1009"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "24 HRS",
+  "artist": "Olly Murs",
+  "artistId": "art_311",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_325"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Right Place Right Time",
+  "artist": "Olly Murs",
+  "artistId": "art_311",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_101"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Sex Playlist",
+  "artist": "Omarion",
+  "artistId": "art_383",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_234"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Midnight Memories",
+  "artist": "One Direction",
+  "artistId": "art_279",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_139"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Up All Night",
+  "artist": "One Direction",
+  "artistId": "art_279",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_39"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Coco Moon",
+  "artist": "Owl City",
+  "artistId": "art_285",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_847"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Paramore",
+  "artist": "Paramore",
+  "artistId": "art_352",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_173"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "All the Little Lights",
+  "artist": "Passenger",
+  "artistId": "art_337",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_146"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Chapter 1: Singles Collection",
+  "artist": "Peach PRC",
+  "artistId": "art_650",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_973"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Porcelain",
+  "artist": "Peach PRC",
+  "artistId": "art_650",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_990"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Perrie",
+  "artist": "Perrie",
+  "artistId": "art_651",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_965"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "Climate Change",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_310"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "Globalization",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_241"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Planet Pit",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_25"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Woodstock",
+  "artist": "Portugal. The Man",
+  "artistId": "art_472",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_413"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "AUSTIN",
+  "artist": "Post Malone",
+  "artistId": "art_400",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_787"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Stoney",
+  "artist": "Post Malone",
+  "artistId": "art_400",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_272"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "Twelve Carat Toothache",
+  "artist": "Post Malone",
+  "artistId": "art_400",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_750"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "What Dreams Are Made Of",
+  "artist": "R City",
+  "artistId": "art_394",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_252"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Fight Song",
+  "artist": "Rachel Platten",
+  "artistId": "art_387",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_271"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Wildfire",
+  "artist": "Rachel Platten",
+  "artistId": "art_387",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_236"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "SremmLife 2",
+  "artist": "Rae Sremmurd",
+  "artistId": "art_423",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_335"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Bird's Eye",
+  "artist": "Ravyn Lenae",
+  "artistId": "art_648",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_957"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Rave & Roses Ultra",
+  "artist": "Rema",
+  "artistId": "art_594",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_777"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Black Panther: Wakanda Forever - Music From and Inspired By",
+  "artist": "Rihanna",
+  "artistId": "art_242",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_757"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Let the Road",
+  "artist": "Rixton",
+  "artistId": "art_349",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_167"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Blurred Lines",
+  "artist": "Robin Thicke",
+  "artistId": "art_317",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_111"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Sexistential",
+  "artist": "Robyn",
+  "artistId": "art_663",
+  "plays": null,
+  "tracks": 9,
+  "songs": [
+   "pop_song_1002"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "rosie",
+  "artist": "Rosé",
+  "artistId": "art_560",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_895"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "RUDIM3NTAL",
+  "artist": "Rudimental",
+  "artistId": "art_396",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_960"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "We the Generation",
+  "artist": "Rudimental",
+  "artistId": "art_396",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_256"
+  ],
+  "year": 2005,
+  "chart": "pop"
+ },
+ {
+  "name": "Safe Haven",
+  "artist": "Ruth B",
+  "artistId": "art_414",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_309"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Espresso EP",
+  "artist": "Sabrina Carpenter",
+  "artistId": "art_550",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_862"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "The Thrill of It All",
+  "artist": "Sam Smith",
+  "artistId": "art_354",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_420"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "The Blessed Unrest",
+  "artist": "Sara Bareilles",
+  "artistId": "art_324",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_126"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "ICY",
+  "artist": "Saweetie",
+  "artistId": "art_522",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_556"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "13 Reasons Why (Season 2)",
+  "artist": "Selena Gomez",
+  "artistId": "art_56",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_461"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Selena x Votes",
+  "artist": "Selena Gomez",
+  "artistId": "art_56",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_386"
+  ],
+  "year": 2017,
+  "chart": "pop"
+ },
+ {
+  "name": "El Dorado",
+  "artist": "Shakira",
+  "artistId": "art_44",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_372"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Las Mujeres Ya No Lloran",
+  "artist": "Shakira",
+  "artistId": "art_44",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_733"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Shakira.",
+  "artist": "Shakira",
+  "artistId": "art_44",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_154"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Handwritten (Revisited)",
+  "artist": "Shawn Mendes",
+  "artistId": "art_393",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_251"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Shawn",
+  "artist": "Shawn Mendes",
+  "artistId": "art_393",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_882"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Bombs Away",
+  "artist": "Sheppard",
+  "artistId": "art_381",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_232"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Mac and Devin Go to High School (Music from and Inspired By the Movie)",
+  "artist": "Snoop Dogg",
+  "artistId": "art_273",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_33"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Gemini Rights",
+  "artist": "Steve Lacy",
+  "artistId": "art_586",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_745"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "Until Now",
+  "artist": "Swedish House Mafia",
+  "artistId": "art_305",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_90"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "i used to think i could fly",
+  "artist": "Tate McRae",
+  "artistId": "art_539",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_720"
+  ],
+  "year": 2022,
+  "chart": "pop"
+ },
+ {
+  "name": "THE ANXIETY",
+  "artist": "The Anxiety",
+  "artistId": "art_568",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_694"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Bouquet",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_268"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "Breathe",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_998"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "No Hard Feelings",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_913"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "Summertime Friends",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 8,
+  "songs": [
+   "pop_song_818"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "F*CK LOVE 3+: OVER YOU",
+  "artist": "The Kid Laroi",
+  "artistId": "art_566",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_690"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "The Lumineers",
+  "artist": "The Lumineers",
+  "artistId": "art_297",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_77"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "#3",
+  "artist": "The Script",
+  "artistId": "art_306",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_91"
+  ],
+  "year": 2012,
+  "chart": "pop"
+ },
+ {
+  "name": "Try Again",
+  "artist": "The Walters",
+  "artistId": "art_575",
+  "plays": null,
+  "tracks": 6,
+  "songs": [
+   "pop_song_713"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "The Wanted",
+  "artist": "The Wanted",
+  "artistId": "art_269",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_52"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
+  "name": "Word of Mouth",
+  "artist": "The Wanted",
+  "artistId": "art_269",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_30"
+  ],
+  "year": 2011,
+  "chart": "pop"
+ },
+ {
+  "name": "Hurry Up Tomorrow",
+  "artist": "The Weeknd",
+  "artistId": "art_366",
+  "plays": null,
+  "tracks": 22,
+  "songs": [
+   "pop_song_956"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "My Dear Melancholy,",
+  "artist": "The Weeknd",
+  "artistId": "art_366",
+  "plays": null,
+  "tracks": 36,
+  "songs": [
+   "pop_song_450"
+  ],
+  "year": null,
+  "chart": "pop"
+ },
+ {
+  "name": "DRIVE",
+  "artist": "Tiesto",
+  "artistId": "art_494",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_705"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "The London Sessions",
+  "artist": "Tiesto",
+  "artistId": "art_494",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_477"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "Welcome to the Madhouse",
+  "artist": "Tones and I",
+  "artistId": "art_525",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_560"
+  ],
+  "year": 2019,
+  "chart": "pop"
+ },
+ {
+  "name": "Love, Marriage? & Divorce",
+  "artist": "Toni Braxton",
+  "artistId": "art_626",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_900"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
+  "name": "Blue Neighbourhood",
+  "artist": "Troye Sivan",
+  "artistId": "art_357",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_284"
+  ],
+  "year": 2015,
+  "chart": "pop"
+ },
+ {
+  "name": "In A Dream (2020)",
+  "artist": "Troye Sivan",
+  "artistId": "art_357",
+  "plays": null,
+  "tracks": 7,
+  "songs": [
+   "pop_song_643"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Trxye",
+  "artist": "Troye Sivan",
+  "artistId": "art_357",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_183"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "TOPxMM",
+  "artist": "Twenty One Pilots",
+  "artistId": "art_404",
+  "plays": null,
+  "tracks": 5,
+  "songs": [
+   "pop_song_320"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "TYLA +",
+  "artist": "Tyla",
+  "artistId": "art_611",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_831"
+  ],
+  "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "COMING HOME",
+  "artist": "Usher",
+  "artistId": "art_238",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_845"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
+  "name": "VÆBOUT",
+  "artist": "Væb",
+  "artistId": "art_639",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_938"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
+  "name": "TALKING IS HARD",
+  "artist": "Walk the Moon",
+  "artistId": "art_374",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_224"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "Weezer (Teal Album)",
+  "artist": "Weezer",
+  "artistId": "art_497",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_478"
+  ],
+  "year": 2018,
+  "chart": "pop"
+ },
+ {
+  "name": "amanda",
+  "artist": "Willa Ford",
+  "artistId": "art_659",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_993"
+  ],
+  "year": 2026,
+  "chart": "pop"
+ },
+ {
+  "name": "lately I feel EVERYTHING",
+  "artist": "Willow",
+  "artistId": "art_562",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_682"
+  ],
+  "year": 2021,
+  "chart": "pop"
+ },
+ {
+  "name": "Mind Of Mine",
+  "artist": "Zayn",
+  "artistId": "art_405",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_283"
+  ],
+  "year": 2016,
+  "chart": "pop"
+ },
+ {
+  "name": "Nobody Is Listening",
+  "artist": "Zayn",
+  "artistId": "art_405",
+  "plays": null,
+  "tracks": 11,
+  "songs": [
+   "pop_song_630"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ },
+ {
+  "name": "Therapy",
+  "artist": "Zoe Wees",
+  "artistId": "art_555",
+  "plays": null,
+  "tracks": 20,
+  "songs": [
+   "pop_song_667"
+  ],
+  "year": 2020,
+  "chart": "pop"
+ }
+]

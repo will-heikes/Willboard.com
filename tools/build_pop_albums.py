@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""Turn pop_album_matches.json (tools/fetch_pop_albums.py) into pop_albums.json for the site.
+
+    python3 tools/build_pop_albums.py
+
+Songs only out as singles (or not found) get no album. Editions of one album ("(Deluxe)",
+"(Expanded Edition)", " - EP") are merged, and the shortest name is kept. Album plays and
+certifications come from Will's iTunes library, which doesn't cover pop, so pop albums carry
+their charted songs and release year only. The site folds an album that's also in albums.json
+into that entry.
+"""
+import json
+import os
+import re
+import shutil
+from collections import Counter, defaultdict
+
+from fetch_artist_photos import norm
+from fetch_covers import OUT as COVERS, clean, cover_name, same_artist
+
+# Lookups that landed on the wrong release: "Artist|Title" (as in pop_album_matches.json) ->
+# the album to use instead, or None for a song that was only a single
+FIX = {
+    'Alessia Cara|Best Days': 'Love & Hyperbole',
+    'Alis|Nân': None,
+    'Ariana Grande|The Boy is Mine': 'eternal sunshine',
+    'Bebe Rexha|Meant to Be': 'Expectations',
+    'DNCE|Cake By the Ocean': 'DNCE',
+    'Hailee Steinfeld|Let Me Go': None,
+    'Kelly Clarkson|It\'s Quiet Uptown': 'The Hamilton Mixtape',
+    'Major Lazer|Cold Water': None,
+    'Marshmello|Be Kind (Feat. Halsey)': None,
+    'Neon Trees|Everybody Talks': 'Picture Show',
+    'Nickelback|When We Stand Together': 'Here and Now',
+    'Noah Cyrus|Team': None,
+    'Pink|Runaway': None,
+    'Post Malone|Better Now': 'beerbongs & bentleys',
+    'Post Malone|White Iverson': 'Stoney',
+    'Starley|Call On Me': None,
+    'T-Pain|5 O\'Clock': None,
+    'Avril Lavigne|Bois Lie': 'Love Sux',
+    'The Weeknd|Earned It': 'Beauty Behind the Madness',
+    'The Weeknd|The Hills': 'Beauty Behind the Madness',
+    'The Weeknd|I Feel It Coming': 'Starboy',
+    'The Weeknd|Die For You': 'Starboy',
+    'The Weeknd|Call Out My Name': 'My Dear Melancholy,',
+    'The Weeknd|Pray For Me': None,
+    'The Weeknd|One of the Girls': None,
+    'Ed Sheeran|Afterglow': None,
+    'Dua Lipa|Dance the Night': None,
+}
+# "(Deluxe)", "(Wembley Edition)", "[Expanded Edition]", "Deluxe: LANA", ": The Encore" and the like
+EDITION = re.compile(r'\s*([(\[][^)\]]*(deluxe|edition|version|expanded|remaster|anniversary)[^)\]]*[)\]]'
+                     r'|:\s*the encore|\s+deluxe(:.*)?|:\s*[^:]*edition)\s*$', re.I)
+
+
+def base_name(name):
+    return EDITION.sub('', name).strip() or name.strip()
+
+
+def group_key(name):
+    # Ed Sheeran's +, x, ÷ and = have no letters for clean() to keep
+    b = base_name(name)
+    return clean(b) or b
+
+
+def main():
+    data = json.load(open('data.json', encoding='utf-8'))
+    songs = {s['id']: s for s in data['songs']}
+    ids = {a['name']: a['id'] for a in data['artists']}
+    matches = json.load(open('pop_album_matches.json', encoding='utf-8'))
+    by_norm = {norm(n): n for n in ids}
+
+    def album_artist(m):
+        # Will's spelling of the act; an album by someone else (a DJ's album with the singer
+        # featured) goes under that act when Will's chart knows them
+        a = m.get('albumArtist') or m['artist']
+        return m['artist'] if same_artist(a, m['artist']) else by_norm.get(norm(a), a)
+
+    groups = defaultdict(list)
+    for sid, m in matches.items():
+        if sid not in songs:
+            continue
+        key = f"{m['artist']}|{m['title']}"
+        if key in FIX:
+            name = FIX[key]
+            if name:  # the right album is by the song's own act
+                m = {**m, 'album': None, 'albumArtist': m['artist'], 'released': None}
+        else:
+            name = m.get('album') if m.get('type') in ('album', 'ep') else None
+        if not name:
+            continue
+        groups[(norm(album_artist(m)), group_key(name))].append((sid, m, name))
+    out = []
+    for (_, _), rows in groups.items():
+        rows.sort(key=lambda r: songs[r[0]]['debutDate'])
+        artist = album_artist(rows[0][1])
+        name = min((base_name(r[2]) for r in rows), key=len)
+        # iTunes dates each track by its own release, so a lead single can predate its album;
+        # take the year most of the charted songs share
+        years = Counter(int(r[1]['released'][:4]) for r in rows if r[1].get('released'))
+        year = min(years, key=lambda y: (-years[y], y)) if years else None
+        # The lookup saved the cover under the edition it found; the site looks for it under this name
+        dest = os.path.join(COVERS, cover_name(artist, name))
+        for r in rows:
+            src = os.path.join(COVERS, cover_name(r[1]['artist'], r[1].get('album') or ''))
+            if not os.path.exists(dest) and r[1].get('album') and os.path.exists(src):
+                shutil.copyfile(src, dest)
+        out.append({'name': name, 'artist': artist, 'artistId': ids.get(artist), 'plays': None,
+                    'tracks': max((r[1].get('tracks') or 0) for r in rows) or None,
+                    'songs': [r[0] for r in rows], 'year': year, 'chart': 'pop'})
+    out.sort(key=lambda a: (-len(a['songs']), a['artist'].lower(), a['name'].lower()))
+    json.dump(out, open('pop_albums.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+    kinds = defaultdict(int)
+    for m in matches.values():
+        kinds[m.get('type', 'not found')] += 1
+    print(f'{len(out)} pop albums from {sum(len(a["songs"]) for a in out)} songs; lookups: {dict(kinds)}')
+
+
+if __name__ == '__main__':
+    main()
