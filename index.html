@@ -476,21 +476,12 @@ button { font: inherit; color: inherit; }
 .ye-lead .artist { font-size: 14px; margin-top: 3px; }
 /* Year-End drop-downs */
 .ye-item > a { cursor: pointer; }
-.ye-more { display: none; background: var(--card-2); border-bottom: 1px solid var(--line-soft); padding: 12px 16px 14px 58px; }
-.ye-item.open > .ye-more { display: block; }
+.ye-drop { display: none; background: var(--card-2); border-bottom: 1px solid var(--line-soft); padding: 10px 14px 12px 58px; }
+.ye-drop .table { background: var(--card); border: 1px solid var(--line-soft); border-radius: 8px; border-collapse: separate; border-spacing: 0; overflow: hidden; }
+.ye-item.open > .ye-drop { display: block; }
 .ye-item.open > .lrow { background: var(--card-2); }
-.ye-facts { display: flex; flex-wrap: wrap; gap: 10px 26px; }
-.ye-facts div { display: flex; flex-direction: column; }
-.ye-facts b { font-family: var(--f-cond); font-size: 20px; line-height: 1.1; }
-.ye-facts span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.ye-songs { width: 100%; border-collapse: collapse; font-size: 13px; }
-.ye-songs th { text-align: left; font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; padding: 0 8px 4px 0; }
-.ye-songs td { padding: 5px 8px 5px 0; border-top: 1px solid var(--line-soft); vertical-align: top; }
-.ye-songs td a { font-weight: 600; color: var(--ink); }
-.ye-songs small { display: block; color: var(--muted); font-size: 11px; }
-.ye-songs th:not(:first-child), .ye-songs td:not(:first-child) { text-align: right; white-space: nowrap; }
 .ye-go { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--accent); }
-@media (max-width: 600px) { .ye-more { padding-left: 14px; } }
+@media (max-width: 600px) { .ye-drop { padding-left: 14px; } .ye-drop .table td, .ye-drop .table th { padding-left: 10px; padding-right: 10px; } }
 .ye-lead .meta { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
 .split .empty { padding: 30px 12px; color: var(--muted); font-size: 13px; background: var(--card); }
 .cmod-strip { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 14px; }
@@ -1976,10 +1967,10 @@ function spanCharts(span) {
 // Each row opens a drop-down under it (Will); the drop-down links on to the full page
 const leadRow = r => `<div class="ye-item"><a class="ye-lead" href="${r.href}">${r.tile(true)}
   <div><div class="rk">1</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div><div class="meta">${r.lead}</div></div></a>
-  <div class="ye-more">${r.more?.() || ''}</div></div>`;
+  <div class="ye-drop">${r.more?.() || ''}</div></div>`;
 const listRow = r => `<div class="ye-item"><a class="lrow" href="${r.href}"><span class="rk">${r.rank}</span>${r.tile(false)}
   <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></span><span class="meta">${r.meta}</span></a>
-  <div class="ye-more">${r.more?.() || ''}</div></div>`;
+  <div class="ye-drop">${r.more?.() || ''}</div></div>`;
 // What a song did in a span of years: weeks, peak and the date it got there, weeks at #1
 function spanStats(s, from, to) {
   const run = s ? songRun(s).filter(w => w.pos && +w.week.slice(0, 4) >= from && +w.week.slice(0, 4) <= to) : [];
@@ -1992,23 +1983,29 @@ function yearPlays(s, from, to) {
   if (!s || from !== to) return null;
   return YEAREND?.[s.chart]?.[from]?.songs?.find(r => r.songId === s.id)?.plays ?? null;
 }
+// The drop-downs use the same song table as the artist and album pages, counted for this year or decade only
+function yeSongRow(s, st, from, to, single, plays) {
+  const pl = yearPlays(s, from, to), at1 = st.wks1 ? ` · ${n(st.wks1, 'wk')} at #1` : '';
+  return `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${single ? `<span class="show-sm">${at1}</span>` : at1}</div></td>
+    <td class="hide-sm">${fmtShort(s.debutDate)}</td>${single ? `<td class="hide-sm">${fmtShort(st.peakDate)}</td><td class="num hide-sm">${st.wks1 || '—'}</td>` : ''}
+    <td class="num"><b>${st.peak}</b></td><td class="num">${st.wc}</td>${plays ? `<td class="num">${pl?.toLocaleString() ?? '—'}</td>` : ''}</tr>`;
+}
+function yeSongHead(from, to, plays, single, peakLabel) {
+  const when = `<span class="hide-sm"> ${from === to ? from : `${from}s`}</span>`;
+  return `<tr><th>Song</th><th class="hide-sm">Debut</th>${single ? `<th class="hide-sm">${peakLabel}</th><th class="num hide-sm">Wks at #1</th>` : ''}<th class="num">Peak${when}</th><th class="num">Wks${when}</th>${plays ? `<th class="num">Plays${when}</th>` : ''}</tr>`;
+}
 function songMore(s, from, to) {
   const st = spanStats(s, from, to);
   if (!st) return '';
-  const when = from === to ? `in ${from}` : `in the ${from}s`, pl = yearPlays(s, from, to);
-  const fact = (v, k) => `<div><b>${v}</b><span>${k}</span></div>`;
-  return `<div class="ye-facts">${fact(st.wc, `${st.wc === 1 ? 'wk' : 'wks'} on chart ${when}`)}${fact('#' + st.peak, `peak ${when}`)}${fact(st.wks1, st.wks1 === 1 ? 'wk at #1' : 'wks at #1')}
-    ${fact(fmtShort(st.peakDate), st.peak === 1 ? 'first week at #1' : 'reached its peak')}${fact(fmtShort(s.debutDate), 'debut')}
-    ${pl != null ? fact(pl.toLocaleString(), `plays ${when}`) : ''}</div><a class="ye-go" href="#/song/${s.id}">Song page →</a>`;
+  const plays = yearPlays(s, from, to) != null;
+  return `<table class="table">${yeSongHead(from, to, plays, true, st.peak === 1 ? 'First #1' : 'Peaked')}${yeSongRow(s, st, from, to, true, plays)}</table>`;
 }
 function setMore(list, key, from, to, href, label) {
   const rows = list.map(s => ({ s, st: spanStats(s, from, to) })).filter(x => x.st)
     .sort((a, b) => a.st.peak - b.st.peak || b.st.wc - a.st.wc);
   if (!rows.length) return '';
   const plays = from === to && rows.some(x => yearPlays(x.s, from, to) != null);
-  return `<table class="ye-songs"><thead><tr><th>Song</th>${plays ? '<th>Plays</th>' : ''}<th>Peak</th><th>Wks</th></tr></thead><tbody>${rows.map(({ s, st }) =>
-    `<tr><td><a href="#/song/${s.id}">${esc(s.name)}</a>${creditParts(s.artistName).length > 1 ? `<small>${esc(s.artistName)}</small>` : ''}</td>${plays ? `<td>${yearPlays(s, from, to)?.toLocaleString() ?? '—'}</td>` : ''}<td>#${st.peak}${st.wks1 ? ` <small>${n(st.wks1, 'wk')} at #1</small>` : ''}</td><td>${st.wc}</td></tr>`).join('')}</tbody></table>
-    ${href ? `<a class="ye-go" href="${href}">${label} →</a>` : ''}`;
+  return `<table class="table">${yeSongHead(from, to, plays, false)}${rows.map(({ s, st }) => yeSongRow(s, st, from, to, false, plays)).join('')}</table>${href ? `<a class="ye-go" href="${href}">${label} →</a>` : ''}`;
 }
 async function renderYearEnd(span, slug) {
   if (!YEAREND) YEAREND = await fetch('yearend.json', FRESH).then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
