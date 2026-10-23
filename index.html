@@ -1024,7 +1024,7 @@ body.on-ask .ask-fab { display: none; }
     <div class="page-head">
       <div>
         <h1>Albums</h1>
-        <div class="sub">Every album with a song on the Willboard charts, ranked by plays.</div>
+        <div class="sub">Every album with a song on the Willboard charts. Country albums rank by plays, pop albums by charted songs.</div>
       </div>
       <input class="search" id="album-q" placeholder="Search albums or artists…" autocomplete="off">
     </div>
@@ -1245,7 +1245,12 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&l
 function parseDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
 function fmtShort(s) { return s ? parseDate(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; }
 function fmtLong(s)  { return s ? parseDate(s).toLocaleDateString('en-US', { month: 'long',  day: 'numeric', year: 'numeric' }) : ''; }
-function slugify(n)  { return n.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+// Ed Sheeran's albums are just symbols (+, ÷, =, -), which would otherwise slug to nothing
+const SYMBOL_WORDS = { '+': 'plus', '÷': 'divide', '×': 'multiply', '=': 'equals', '-': 'subtract' };
+function slugify(n)  {
+  return n.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    || [...n.trim()].map(c => SYMBOL_WORDS[c]).filter(Boolean).join('-');
+}
 // Lead artist of a credit. Acts with "&" in their name (Maddie & Tae, Big & Rich) stay whole.
 let ACT_NAMES = new Set(), ARTIST_ID = {};
 // Will's sheet tells same-named songs apart with the artist after a dash ("Heaven - Niall").
@@ -2218,15 +2223,26 @@ async function renderSong(id) {
 }
 
 // ─── ALBUMS ─────────────────────────────────────────────────────
-// Album plays come from Will's iTunes library, which holds his country collection, so one list
+// Country albums rank by plays from Will's iTunes library. Pop albums have no plays, so they rank
+// by charted songs, then #1 hits, then weeks on the chart
+const albumWeeks = al => al.songs.reduce((n, sid) => n + (SONGS[sid]?.weeksOnChart || 0), 0);
+const albumNo1s = al => al.songs.filter(sid => SONGS[sid]?.peakPosition === 1).length;
 function renderAlbums() {
   const q = $('album-q').value.trim().toLowerCase();
-  const all = ALBUMS.filter(al => !q || al.name.toLowerCase().includes(q) || al.artist.toLowerCase().includes(q));
-  const rows = all.slice(0, q ? 150 : 100);
-  $('album-split').innerHTML = `<div class="col country"><div class="col-h"><h2>Top Albums</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top 100 of ${ALBUMS.length}`}</small></div>` +
-    (rows.length ? rows.map((al, i) => `<a class="lrow" href="#/album/${al.id}"><span class="rk">${i + 1}</span>${albumTile(al)}
-      <span><div class="song">${esc(al.name)}</div><div class="artist">${esc(al.artist)} · ${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div></span>
-      <span class="meta">${albumCert(al)}</span></a>`).join('') : '<div class="empty">No matches.</div>') + '</div>';
+  const match = al => !q || al.name.toLowerCase().includes(q) || al.artist.toLowerCase().includes(q);
+  const country = ALBUMS.filter(al => al.plays != null);
+  const pop = ALBUMS.filter(al => al.plays == null)
+    .sort((a, b) => b.songs.length - a.songs.length || albumNo1s(b) - albumNo1s(a) || albumWeeks(b) - albumWeeks(a));
+  const col = (cls, title, list, meta) => {
+    const all = list.filter(match), rows = all.slice(0, q ? 150 : 100);
+    return `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top ${Math.min(100, list.length)} of ${list.length}`}</small></div>` +
+      (rows.length ? rows.map((al, i) => `<a class="lrow" href="#/album/${al.id}"><span class="rk">${i + 1}</span>${albumTile(al)}
+        <span><div class="song">${esc(al.name)}</div><div class="artist">${esc(al.artist)} · ${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div></span>
+        <span class="meta">${meta(al)}</span></a>`).join('') : '<div class="empty">No matches.</div>') + '</div>';
+  };
+  $('album-split').innerHTML = col('country', 'Country Albums', country, albumCert) +
+    (pop.length ? col('pop', 'Pop Albums', pop, al => { const n = albumNo1s(al); return n ? `${n} #1${n > 1 ? 's' : ''}` : ''; }) : '');
+  $('album-split').classList.toggle('one', !pop.length);
 }
 function renderAlbum(id) {
   const al = ALBUMS.find(a => a.id === id);
@@ -2236,7 +2252,7 @@ function renderAlbum(id) {
   const no1 = songs.filter(s => s.peakPosition === 1).length;
   const first = songs[0]?.debutDate;
   const stats = [[songs.length, 'Charted songs'], [no1 || '—', '#1 hits'], [peak < 99 ? `#${peak}` : '—', 'Best peak'],
-                 [al.plays.toLocaleString(), 'Plays'], [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']];
+                 ...(al.plays != null ? [[al.plays.toLocaleString(), 'Plays']] : []), [songs.reduce((n, s) => n + (s.weeksOnChart || 0), 0), 'Weeks on chart']];
   const hero = $('album-hero');
   hero.innerHTML = `${albumTile(al).replace(/loading="lazy"/g, '')}
     <div><div class="kick">Album${al.year || first ? ` · ${al.year || first.slice(0, 4)}` : ''}</div>
@@ -2245,7 +2261,8 @@ function renderAlbum(id) {
       ${albumCert(al)}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-album'));
-  $('album-songs-sub').textContent = `${al.tracks} track${al.tracks === 1 ? '' : 's'} in the library`;
+  $('album-songs-sub').textContent = al.plays == null ? (al.tracks ? `${al.tracks} track${al.tracks === 1 ? '' : 's'} on the album` : '')
+    : `${al.tracks} track${al.tracks === 1 ? '' : 's'} in the library`;
   $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Plays</th></tr>` +
     songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${al.editions?.[s.id] ? ` · from ${esc(al.editions[s.id])}` : ''}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
@@ -2980,6 +2997,14 @@ async function init() {
     AWARDS = await a.json();
     RETROS = await fetch('retrospectives.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
+    // Pop albums (pop_albums.json, tools/build_pop_albums.py) come from Deezer and iTunes, not Will's library,
+    // so they have no plays. One that's already in the library gets its pop songs added instead
+    const POP_ALBUMS = await fetch('pop_albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
+    for (const pa of POP_ALBUMS) {
+      const same = ALBUMS.find(al => squash(al.artist) === squash(pa.artist) && slugify(al.name) === slugify(pa.name));
+      if (same) same.songs.push(...pa.songs.filter(sid => !same.songs.includes(sid)));
+      else ALBUMS.push({ ...pa, cuts: [] });
+    }
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     SONG_LEN = await fetch('song_lengths.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);

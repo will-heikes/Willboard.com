@@ -42,9 +42,14 @@ def primary_artist(name, acts=frozenset()):
     return first if first in acts else re.split(r' & | x ', first, flags=re.I)[0].strip()
 
 
+# Ed Sheeran's albums are just symbols (+, ÷, =, -), which would otherwise slug to nothing
+SYMBOL_WORDS = {'+': 'plus', '÷': 'divide', '×': 'multiply', '=': 'equals', '-': 'subtract'}
+
+
 def slugify(name):
+    # Must match slugify() in index.html
     s = name.lower().replace("'", '').replace('’', '')
-    return re.sub(r'[^a-z0-9]+', '-', s).strip('-')
+    return re.sub(r'[^a-z0-9]+', '-', s).strip('-') or '-'.join(SYMBOL_WORDS[c] for c in name.strip() if c in SYMBOL_WORDS)
 
 
 def norm(name):
