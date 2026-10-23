@@ -8,7 +8,8 @@ YYYY.xlsx (the same folder build_year_tops.py reads). Plays on Will's own year-e
 (yearend.json) win; his workbooks fill in every other song that charted that year.
 Years with no workbook (2023) come from the CS Era Points plays archive exports, worked
 out the way Will's workbooks do it (checked against 2024): Hot 20, the song's highest
-running total in the year minus its first; Pop 10, its weekly plays after the year's first week. Pop before 2017 was ranked on chart points
+running total in the year minus its first; Pop 10, the sum of its weekly plays. These match
+his workbooks for nearly every song in 2020-2025. Pop before 2017 was ranked on chart points
 only, and Pop 2019 has neither, so those years have no plays.
 """
 import difflib
@@ -72,8 +73,7 @@ def country_running(path, weeks):
 
 
 def pop_year_plays(path):
-    """{song title: {year: plays}} from the Pop plays export (weekly plays, from 2020).
-    Will's workbooks leave out each year's first week, so this does too."""
+    """{song title: {year: plays}} from the Pop plays export (weekly plays, from 2020)."""
     rows = list(csv.reader(open(path, encoding='utf-8')))
     year, prev, years = 2020, None, {}
     for i, h in enumerate(rows[0][1:], 1):
@@ -84,11 +84,10 @@ def pop_year_plays(path):
         if prev and mon < prev:
             year += 1
         prev, years[i] = mon, year
-    first = {min(i for i, y in years.items() if y == yy) for yy in set(years.values())}
     out = defaultdict(lambda: defaultdict(int))
     for r in rows[1:]:
         for i, y in years.items():
-            if i not in first and i < len(r) and r[i].strip().isdigit():
+            if i < len(r) and r[i].strip().isdigit():
                 out[r[0].strip()][y] += int(r[i])
     return out
 
