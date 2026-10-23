@@ -114,6 +114,9 @@ def wanted(all_songs):
             artist = primary_artist(al['artist'], acts)
             if artist:
                 items.setdefault(cover_name(artist, al['name'].strip()), ('album', artist, al['name'].strip()))
+                # Songs off a deluxe edition show that edition's cover
+                for ed in al.get('deluxe', {}).values():
+                    items.setdefault(cover_name(artist, ed.strip()), ('album', artist, ed.strip()))
     if all_songs:
         for s in data['songs']:
             artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])

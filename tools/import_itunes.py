@@ -59,6 +59,10 @@ SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
               ('randallking', 'leanna'): ('randallking', 'shotglass', 'Shot Glass', 2022),
               ('ashtonshepherd', 'lookitup'): ('ashtonshepherd', 'wherecountrygrows', 'Where Country Grows', 2011)}
 
+# EPs folded into the album that followed (the rest of the merges above are deluxe reissues)
+FROM_EP = re.compile(r'\s-\s*EP$|\bEP$', re.I)
+EP_KEYS = {('carlypearce', '29')}  # (act, album) for EPs whose tracks carry no "- EP" tag
+
 # Tracks filed under the wrong album: Eric Church's Heart and Soul are two albums, not "Heart & Soul" (Will)
 TRACK_ALBUM = {('ericchurch', 'hellofaview'): 'Heart', ('ericchurch', 'stickthatinyourcountrysong'): 'Soul'}
 
@@ -106,6 +110,7 @@ def main():
     rows, missing, raised = [], [], 0
     album_songs = defaultdict(list)  # album key -> songs from it that charted
     edition = {}  # vault songs: song id -> "Fearless (Taylor's Version)"
+    deluxe = {}  # songs Will has from a deluxe edition: song id -> that edition, for its cover
     lengths = {}  # song id -> seconds, for Ask's longest and shortest song
     for s in data['songs']:
         # Will's tell-apart suffix ("Heaven - Niall") names the artist, not the title
@@ -123,6 +128,9 @@ def main():
             album_songs[album_key(t)[:2]].append(s)
             if TV.search(t['Album']):
                 edition[s['id']] = re.sub(r'\s*\[[^\]]*\]', '', t['Album']).strip()
+            elif not (FROM_EP.search(t['Album'].strip()) or (act_key(t.get('Album Artist') or t.get('Artist')), norm(t['Album'])) in EP_KEYS
+                      or (act_key(t.get('Album Artist') or t.get('Artist')), bare(t['Name'])) in TRACK_ALBUM):
+                deluxe[s['id']] = t['Album'].strip()
         timed = [(p, t) for p, t in hits if t.get('Total Time')]
         if timed:
             lengths[s['id']] = round(max(timed, key=lambda h: h[0])[1]['Total Time'] / 1000)
@@ -170,6 +178,10 @@ def main():
         cuts = sorted(((min(n, key=len), p) for b, (p, n) in a['cuts'].items() if b not in charted and p >= CUT_MIN), key=lambda c: -c[1])
         if cuts:
             al['cuts'] = [{'name': n, 'plays': p} for n, p in cuts]
+        # A song off a deluxe edition keeps that edition's cover (Will); one off an EP takes the album's
+        dlx = {s['id']: deluxe[s['id']] for s in songs if s['id'] in deluxe and norm(deluxe[s['id']]) != norm(al['name'])}
+        if dlx:
+            al['deluxe'] = dlx
         if any(s['id'] in edition for s in songs):
             al['editions'] = {s['id']: edition[s['id']] for s in songs if s['id'] in edition}
         out.append(al)

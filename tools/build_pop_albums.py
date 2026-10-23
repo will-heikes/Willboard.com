@@ -125,9 +125,16 @@ def main():
             src = os.path.join(COVERS, cover_name(r[1]['artist'], r[1].get('album') or ''))
             if not os.path.exists(dest) and r[1].get('album') and os.path.exists(src):
                 shutil.copyfile(src, dest)
-        out.append({'name': name, 'artist': artist, 'artistId': ids.get(artist), 'plays': None,
-                    'tracks': max((r[1].get('tracks') or 0) for r in rows) or None,
-                    'songs': [r[0] for r in rows], 'year': year, 'chart': 'pop'})
+        al = {'name': name, 'artist': artist, 'artistId': ids.get(artist), 'plays': None,
+              'tracks': max((r[1].get('tracks') or 0) for r in rows) or None,
+              'songs': [r[0] for r in rows], 'year': year, 'chart': 'pop'}
+        # A song found on a deluxe edition keeps that edition's cover (Will); one off an EP takes the album's
+        dlx = {r[0]: r[1]['album'] for r in rows if r[1].get('album') and clean(r[1]['album']) != clean(name)
+               and not re.search(r'\bEP\b', r[1]['album']) and r[1].get('type') != 'ep'
+               and os.path.exists(os.path.join(COVERS, cover_name(artist, r[1]['album'])))}
+        if dlx:
+            al['deluxe'] = dlx
+        out.append(al)
     out.sort(key=lambda a: (-len(a['songs']), a['artist'].lower(), a['name'].lower()))
     json.dump(out, open('pop_albums.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
     kinds = defaultdict(int)
