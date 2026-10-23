@@ -2077,18 +2077,18 @@
   "released": 2015
  },
  {
-  "name": "The Ones That Got The Plays",
+  "name": "Smile",
   "artist": "Katy Perry",
   "artistId": "art_256",
   "plays": null,
   "tracks": 22,
   "songs": [
    "pop_song_538",
-   "pop_song_983"
+   "pop_song_603"
   ],
-  "year": 2019,
+  "year": 2020,
   "chart": "pop",
-  "released": 2019
+  "released": 2020
  },
  {
   "name": "chemistry",
@@ -4135,19 +4135,6 @@
   "released": 2022
  },
  {
-  "name": "Dance Again...The Hits",
-  "artist": "Jennifer Lopez",
-  "artistId": "art_281",
-  "plays": null,
-  "tracks": 13,
-  "songs": [
-   "pop_song_42"
-  ],
-  "year": 2012,
-  "chart": "pop",
-  "released": 2012
- },
- {
   "name": "Late Nights",
   "artist": "Jeremih",
   "artistId": "art_365",
@@ -4437,19 +4424,6 @@
   "released": 1985
  },
  {
-  "name": "Smile",
-  "artist": "Katy Perry",
-  "artistId": "art_256",
-  "plays": null,
-  "tracks": 11,
-  "songs": [
-   "pop_song_603"
-  ],
-  "year": 2020,
-  "chart": "pop",
-  "released": 2020
- },
- {
   "name": "Kehlani",
   "artist": "Kehlani",
   "artistId": "art_487",
@@ -4461,19 +4435,6 @@
   "year": 2025,
   "chart": "pop",
   "released": 2025
- },
- {
-  "name": "Greatest Hits - Chapter One",
-  "artist": "Kelly Clarkson",
-  "artistId": "art_62",
-  "plays": null,
-  "tracks": 18,
-  "songs": [
-   "pop_song_83"
-  ],
-  "year": 2012,
-  "chart": "pop",
-  "released": 2012
  },
  {
   "name": "Stronger",
@@ -5624,19 +5585,6 @@
   "year": 2012,
   "chart": "pop",
   "released": 2012
- },
- {
-  "name": "Chapter 1: Singles Collection",
-  "artist": "Peach PRC",
-  "artistId": "art_650",
-  "plays": null,
-  "tracks": 15,
-  "songs": [
-   "pop_song_973"
-  ],
-  "year": 2024,
-  "chart": "pop",
-  "released": 2024
  },
  {
   "name": "Porcelain",

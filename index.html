@@ -384,7 +384,11 @@ button { font: inherit; color: inherit; }
 .ye-hub { display: grid; grid-template-columns: 1fr; gap: 38px; }
 .ye-hub .col-h a.ye-more { padding: 0; background: none; border: 0; font-size: 15px; }
 .ye-hub .col-h a.ye-more:hover { text-decoration: underline; background: none; }
-.ye-five { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 18px; align-items: end; }
+/* Each tile spans the grid's four rows (cover, rank, title, artist) so every cover sits on one line,
+   however many lines a title wraps to */
+.ye-five { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); grid-template-rows: repeat(4, auto); column-gap: 18px; }
+.ye-five .ye-tile { display: grid; grid-row: span 4; grid-template-rows: subgrid; align-content: start; }
+.ye-five .ye-tile .art { align-self: end; }
 .ye-tile.no1 .rk { font-size: 46px; }
 .ye-tile.no1 .song { font-size: 18px; }
 .ye-tile.no1 .artist { font-size: 14px; }

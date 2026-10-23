@@ -17,6 +17,7 @@ from collections import Counter, defaultdict
 
 from fetch_artist_photos import norm
 from fetch_covers import OUT as COVERS, clean, cover_name, same_artist
+from import_itunes import COMPILATION
 
 # Lookups that landed on the wrong release: "Artist|Title" (as in pop_album_matches.json) ->
 # the album to use instead, or None for a song that was only a single
@@ -48,6 +49,7 @@ FIX = {
     'The Weeknd|One of the Girls': None,
     'Ed Sheeran|Afterglow': None,
     'Dua Lipa|Dance the Night': None,
+    'Katy Perry|Never Really Over': 'Smile',
 }
 # "(Deluxe)", "(Wembley Edition)", "[Expanded Edition]", "Deluxe: LANA", ": The Encore" and the like
 EDITION = re.compile(r'\s*([(\[][^)\]]*(deluxe|edition|version|expanded|remaster|anniversary)[^)\]]*[)\]]'
@@ -113,7 +115,8 @@ def main():
             if name:  # the right album is by the song's own act
                 m = {**m, 'album': None, 'albumArtist': m['artist'], 'released': None}
         else:
-            name = m.get('album') if m.get('type') in ('album', 'ep') else None
+            # Hits collections aren't albums (Will): a song found only on one counts as a single
+            name = m.get('album') if m.get('type') in ('album', 'ep') and not COMPILATION.search(m.get('album') or '') else None
         if not name:
             continue
         if f"{m['artist']}|{base_name(name)}" in SAME_ALBUM:
