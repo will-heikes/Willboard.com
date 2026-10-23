@@ -399,12 +399,18 @@ button { font: inherit; color: inherit; }
 .ah-toggle:hover { border-color: var(--ink); }
 .ah-toggle i { font-style: normal; transition: transform .15s; }
 .ah-toggle[aria-expanded="true"] i { transform: rotate(180deg); }
-.ah { --accent: var(--country); margin-top: 14px; padding: 14px 0 10px; position: relative; }
-.ah.pop { --accent: var(--pop); }
-.ah h3 { margin: 0 16px 10px; font-family: var(--f-cond); font-weight: 700; font-size: 18px; text-transform: uppercase; color: var(--accent); }
+.ah { margin-top: 14px; padding: 14px 0 10px; position: relative; }
+.ah h3 { margin: 0 16px 10px; font-family: var(--f-cond); font-weight: 700; font-size: 18px; text-transform: uppercase; color: var(--ink); }
 .ah .key { float: right; font: 600 11.5px var(--f-body); text-transform: none; color: var(--muted); display: flex; gap: 12px; align-items: center; }
-.ah .key span { display: inline-flex; align-items: center; gap: 5px; }
-.ah .key b { width: 22px; height: 9px; border-radius: 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 25%, transparent), var(--accent)); }
+.ah .key span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+@media (max-width: 700px) { .ah .key { float: none; flex-wrap: wrap; gap: 6px 12px; margin-top: 8px; } }
+.ah .key b { width: 22px; height: 9px; border-radius: 2px; }
+.ah .key b.hot { background: linear-gradient(90deg, color-mix(in srgb, var(--country) 25%, transparent), var(--country)); }
+.ah .key b.pop { background: linear-gradient(90deg, color-mix(in srgb, var(--pop) 25%, transparent), var(--pop)); }
+.ah .key .dk { font-weight: 500; }
+.ah .era { fill: var(--line-soft); fill-opacity: .7; }
+.ah .key b.era { width: 12px; background: var(--line-soft); border: 1px solid var(--line); }
+.ah text.et { font: italic 600 10.5px var(--f-body); fill: var(--muted); }
 .ah .key b.no1 { width: 9px; background: var(--dot-yellow); }
 .ah .scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; padding: 0 8px; }
 .ah .scroll svg { display: block; }
@@ -415,7 +421,8 @@ button { font: inherit; color: inherit; }
 .ah.focus .run { opacity: .3; }
 .ah.focus .run.on { opacity: 1; }
 .ah .run.on text.nm { fill: var(--ink); }
-.ah .wk { fill: var(--accent); }
+.ah .wk.hot { fill: var(--country); }
+.ah .wk.pop { fill: var(--pop); }
 .ah .wk.no1 { fill: var(--dot-yellow); }
 .ah .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 12px; padding: 6px 9px; border-radius: 4px; white-space: nowrap; display: none; z-index: 2; }
 .ah .tip b { display: block; font-size: 12.5px; }
@@ -2131,68 +2138,91 @@ function renderArtist(id) {
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
 }
 
-// Every song an artist charted, on a shared weekly timeline, one panel per chart, behind a button so it stays
+// Every song an artist charted, Hot 20 and Pop 10 together on one weekly timeline, behind a button so it stays
 // out of the way. Songs that don't overlap share a lane, so a career reads left to right in a few lanes. Each
-// charted week is a block, darker the higher it ranked; #1 weeks are the logo's yellow.
+// charted week is a block in its chart's colour, darker the higher it ranked; #1 weeks are the logo's yellow.
+// The transitional era, when country and pop shared the Hot 20, is shaded.
+let WEEK_COLS = null;
+function weekCols() {
+  // One column per chart Thursday; the rare week the two charts are dated a day or two apart shares a column
+  if (WEEK_COLS) return WEEK_COLS;
+  const dates = [...new Set([...(RUNS.willboard?.weeks || []), ...(RUNS.pop?.weeks || [])])].sort();
+  const col = {}, list = [];
+  dates.forEach(d => {
+    const prev = list[list.length - 1];
+    if (prev && (new Date(d) - new Date(prev)) / 864e5 < 4) col[d] = list.length - 1;
+    else { col[d] = list.length; list.push(d); }
+  });
+  return (WEEK_COLS = { col, list });
+}
+const TRANSITIONAL = ['2010-01-28', '2011-10-20'];
 function artistRuns(id, list) {
-  const PX = 5, ROW = 36, TOP = 24, CH = 6.6;
-  const panels = [['willboard', 'Hot 20', '', 20], ['pop', 'Pop 10', 'pop', 10]].map(([key, title, cls, size]) => {
-    const c = RUNS?.[key];
-    const songs = list.filter(s => s.chart === key && c?.runs[s.id]).sort((a, b) => c.runs[a.id][0] - c.runs[b.id][0]);
-    if (!c || !songs.length) return '';
-    const span = s => { const r = c.runs[s.id]; return [r[0], r[0] + r.length - 2]; };
-    const first = Math.max(0, span(songs[0])[0] - 2);
-    const last = Math.min(c.weeks.length - 1, Math.max(...songs.map(s => span(s)[1])) + 2);
-    const x = i => 8 + (i - first) * PX;
-    // A song takes the first lane that's free from its debut, leaving room for its name
-    const lanes = [], lane = {};
-    songs.forEach((s, k) => {
-      const [a, b] = span(s), end = Math.max(b, a + Math.ceil((s.name.length * CH + 10) / PX));
-      let n = lanes.findIndex(e => e < a - 1);
-      if (n < 0) n = lanes.push(0) - 1;
-      lanes[n] = end; lane[k] = n;
-    });
-    const W = Math.max(400, x(last) + 8), H = TOP + lanes.length * ROW + 4;
-    let g = '';
-    for (let i = first; i <= last; i++) if (i === first || c.weeks[i].slice(0, 4) !== c.weeks[i - 1].slice(0, 4)) {
-      if (i > first) g += `<line class="yr" x1="${x(i) - .5}" x2="${x(i) - .5}" y1="4" y2="${H}"/>`;
-      if (i === first || i - first > 8) g += `<text class="yt" x="${x(i) + 4}" y="14">${c.weeks[i].slice(0, 4)}</text>`;
-    }
-    songs.forEach((s, k) => {
-      const r = c.runs[s.id], y = TOP + lane[k] * ROW;
-      g += `<g class="run" data-k="${k}"><text class="nm" x="${x(r[0])}" y="${y + 11}">${esc(s.name)}</text>`;
-      r.slice(1).forEach((p, j) => {
-        if (!p) return;
-        const op = p === 1 ? '' : ` fill-opacity="${(.25 + .75 * (size - p) / (size - 1)).toFixed(2)}"`;
-        g += `<rect class="wk${p === 1 ? ' no1' : ''}" data-i="${r[0] + j}" x="${x(r[0] + j)}" y="${y + 16}" width="${PX - 1}" height="13" rx="1"${op}/>`;
-      });
-      g += '</g>';
-    });
-    return `<div class="card ah ${cls}" data-key="${key}" data-ids="${songs.map(s => s.id).join(',')}">
-      <h3>${title}<span class="key"><span><b></b>Higher on the chart = darker</span><span><b class="no1"></b>#1</span></span></h3>
-      <div class="scroll"><svg width="${W}" height="${H}" role="img" aria-label="${title} weeks of each song">${g}</svg></div><div class="tip"></div></div>`;
-  }).filter(Boolean);
-  $('artist-runs-wrap').hidden = !panels.length;
+  const PX = 5, ROW = 36, TOP = 34, CH = 6.6;
+  const SIZE = { willboard: 20, pop: 10 }, NAME = { willboard: 'Hot 20', pop: 'Pop 10' };
   const box = $('artist-runs'), btn = $('artist-runs-btn');
+  const songs = (RUNS ? list : []).filter(s => RUNS[s.chart]?.runs[s.id]);
+  $('artist-runs-wrap').hidden = !songs.length;
   box.hidden = true; btn.setAttribute('aria-expanded', 'false');
   btn.onclick = () => { box.hidden = !box.hidden; btn.setAttribute('aria-expanded', String(!box.hidden)); };
-  box.innerHTML = panels.join('');
-  box.querySelectorAll('.ah').forEach(p => {
-    const tip = p.querySelector('.tip'), ids = p.dataset.ids.split(','), c = RUNS[p.dataset.key];
-    p.querySelectorAll('.run').forEach(g => {
-      const s = SONGS[ids[g.dataset.k]], r = c.runs[s.id];
-      g.onmousemove = e => {
-        p.classList.add('focus'); g.classList.add('on');
-        const i = +(e.target.dataset.i ?? r[0]), pos = r[i - r[0] + 1];
-        const bb = p.getBoundingClientRect();
-        tip.innerHTML = `<b>${esc(s.name)}</b>${e.target.dataset.i ? `#${pos} · ${fmtShort(c.weeks[i])}` : `Debuted ${fmtShort(c.weeks[r[0]])} · peaked at #${Math.min(...r.slice(1).filter(Boolean))}`}`;
-        tip.style.display = 'block';
-        tip.style.left = Math.min(e.clientX - bb.left + 12, bb.width - tip.offsetWidth - 6) + 'px';
-        tip.style.top = (e.clientY - bb.top + 14) + 'px';
-      };
-      g.onmouseleave = () => { p.classList.remove('focus'); g.classList.remove('on'); tip.style.display = 'none'; };
-      g.onclick = () => { location.hash = `#/song/${s.id}`; };
+  if (!songs.length) { box.innerHTML = ''; return; }
+  const { col, list: cols } = weekCols();
+  // Each song's weeks as [column, position, index in its own chart's weeks]
+  const wk = s => { const c = RUNS[s.chart], r = c.runs[s.id]; return r.slice(1).map((p, j) => [col[c.weeks[r[0] + j]], p, r[0] + j]); };
+  const W8 = new Map(songs.map(s => [s, wk(s)]));
+  songs.sort((a, b) => W8.get(a)[0][0] - W8.get(b)[0][0]);
+  const span = s => { const w = W8.get(s); return [w[0][0], w[w.length - 1][0]]; };
+  const first = Math.max(0, span(songs[0])[0] - 2);
+  const last = Math.min(cols.length - 1, Math.max(...songs.map(s => span(s)[1])) + 2);
+  const x = i => 8 + (i - first) * PX;
+  // A song takes the first lane that's free from its debut, leaving room for its name
+  const lanes = [], lane = {};
+  songs.forEach((s, k) => {
+    const [a, b] = span(s), end = Math.max(b, a + Math.ceil((s.name.length * CH + 10) / PX));
+    let n = lanes.findIndex(e => e < a - 1);
+    if (n < 0) n = lanes.push(0) - 1;
+    lanes[n] = end; lane[k] = n;
+  });
+  const W = Math.max(400, x(last) + 8), H = TOP + lanes.length * ROW + 4;
+  let g = '';
+  // Shade the transitional era where it falls inside this career
+  const t0 = Math.max(first, cols.findIndex(d => d >= TRANSITIONAL[0])), t1 = Math.min(last, cols.findLastIndex(d => d <= TRANSITIONAL[1]));
+  if (t0 <= t1) {
+    g += `<rect class="era" x="${x(t0)}" y="20" width="${(t1 - t0 + 1) * PX}" height="${H - 20}"/>`;
+    if ((t1 - t0) * PX > 90) g += `<text class="et" x="${x(t0) + 4}" y="30">Transitional era</text>`;
+  }
+  const era = t0 <= t1;
+  for (let i = first; i <= last; i++) if (i === first || cols[i].slice(0, 4) !== cols[i - 1].slice(0, 4)) {
+    if (i > first) g += `<line class="yr" x1="${x(i) - .5}" x2="${x(i) - .5}" y1="4" y2="${H}"/>`;
+    if (i === first || i - first > 8) g += `<text class="yt" x="${x(i) + 4}" y="14">${cols[i].slice(0, 4)}</text>`;
+  }
+  songs.forEach((s, k) => {
+    const w = W8.get(s), y = TOP + lane[k] * ROW, size = SIZE[s.chart], cls = s.chart === 'pop' ? 'pop' : 'hot';
+    g += `<g class="run" data-k="${k}"><text class="nm" x="${x(w[0][0])}" y="${y + 11}">${esc(s.name)}</text>`;
+    w.forEach(([ci, p, i]) => {
+      if (!p) return;
+      const op = p === 1 ? '' : ` fill-opacity="${(.25 + .75 * (size - p) / (size - 1)).toFixed(2)}"`;
+      g += `<rect class="wk ${p === 1 ? 'no1' : cls}" data-i="${i}" x="${x(ci)}" y="${y + 16}" width="${PX - 1}" height="13" rx="1"${op}/>`;
     });
+    g += '</g>';
+  });
+  const has = k => songs.some(s => s.chart === k);
+  box.innerHTML = `<div class="card ah">
+    <h3>Chart history<span class="key">${has('willboard') ? '<span><b class="hot"></b>Hot 20</span>' : ''}${has('pop') ? '<span><b class="pop"></b>Pop 10</span>' : ''}<span><b class="no1"></b>#1</span>${era ? '<span><b class="era"></b>Transitional era</span>' : ''}<span class="dk">Darker = higher</span></span></h3>
+    <div class="scroll"><svg width="${W}" height="${H}" role="img" aria-label="Hot 20 and Pop 10 weeks of each song">${g}</svg></div><div class="tip"></div></div>`;
+  const p = box.querySelector('.ah'), tip = p.querySelector('.tip');
+  p.querySelectorAll('.run').forEach(el => {
+    const s = songs[el.dataset.k], c = RUNS[s.chart], r = c.runs[s.id];
+    el.onmousemove = e => {
+      p.classList.add('focus'); el.classList.add('on');
+      const i = +(e.target.dataset.i ?? r[0]), pos = r[i - r[0] + 1];
+      const bb = p.getBoundingClientRect();
+      tip.innerHTML = `<b>${esc(s.name)}</b>${e.target.dataset.i ? `${NAME[s.chart]} #${pos} · ${fmtShort(c.weeks[i])}` : `${NAME[s.chart]} · debuted ${fmtShort(c.weeks[r[0]])} · peaked at #${Math.min(...r.slice(1).filter(Boolean))}`}`;
+      tip.style.display = 'block';
+      tip.style.left = Math.min(e.clientX - bb.left + 12, bb.width - tip.offsetWidth - 6) + 'px';
+      tip.style.top = (e.clientY - bb.top + 14) + 'px';
+    };
+    el.onmouseleave = () => { p.classList.remove('focus'); el.classList.remove('on'); tip.style.display = 'none'; };
+    el.onclick = () => { location.hash = `#/song/${s.id}`; };
   });
 }
 
