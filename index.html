@@ -1986,7 +1986,7 @@ function yearPlays(s, from, to) {
 // The drop-downs use the same song table as the artist and album pages, counted for this year or decade only
 function yeSongRow(s, st, from, to, single, plays) {
   const pl = yearPlays(s, from, to), at1 = st.wks1 ? ` · ${n(st.wks1, 'wk')} at #1` : '';
-  return `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${single ? `<span class="show-sm">${at1}</span>` : at1}</div></td>
+  return `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}${single ? `<span class="show-sm">${at1}</span>` : at1}</div></td>
     <td class="hide-sm">${fmtShort(s.debutDate)}</td>${single ? `<td class="hide-sm">${fmtShort(st.peakDate)}</td><td class="num hide-sm">${st.wks1 || '—'}</td>` : ''}
     <td class="num"><b>${st.peak}</b></td><td class="num">${st.wc}</td>${plays ? `<td class="num">${pl?.toLocaleString() ?? '—'}</td>` : ''}</tr>`;
 }
