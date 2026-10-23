@@ -665,6 +665,8 @@ body.on-ask .ask-fab { display: none; }
 .no1-year { font-family: var(--f-cond); font-weight: 700; font-size: 22px; padding: 14px 18px 6px; border-top: 1px solid var(--line-soft); color: var(--accent); }
 .no1-year:first-child { border-top: 0; }
 .no1-year small { font-family: var(--f-body, inherit); font-weight: 500; font-size: 12.5px; color: var(--muted); margin-left: 8px; letter-spacing: 0; }
+.no1-back .rk { color: var(--muted); font-size: 18px; }
+.no1-back .song::after { content: 'Return to #1'; margin-left: 8px; font-family: var(--f-body, inherit); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
 .rec-h { font-family: var(--f-cond); font-weight: 700; font-size: 24px; text-transform: uppercase; margin: 30px 0 12px; }
 .chart-links { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 16px; }
 .chart-links .ask-more { color: var(--ink); }
@@ -2994,15 +2996,37 @@ function numberOnes(chartId) {
   return Object.values(askStats(CHARTS[chartId].key).songs).filter(s => s.no1.length).sort((a, b) => a.no1[0].localeCompare(b.no1[0]));
 }
 const chartPills = (el, active, page) => pills(el, [['hot20', 'Country Hot 20'], ['pop10', 'Pop 10']], active, v => { location.hash = `#/${page}/${v}`; });
+// Every unbroken run at #1, in order. A song that drops and comes back gets a row for each run;
+// only its first run gets a number. A skipped chart week doesn't break a run
+function no1Runs(chartId) {
+  const runs = [], seen = {};
+  let last = null;
+  for (const w of askStats(CHARTS[chartId].key).weeks) {
+    const id = w.entries.find(e => e.position === 1)?.songId;
+    if (!id) continue;
+    if (last?.id === id) { last.weeks++; continue; }
+    seen[id] = (seen[id] || 0) + 1;
+    runs.push(last = { id, week: w.week, weeks: 1, run: seen[id] });
+  }
+  let k = 0;
+  for (const r of runs) if (r.run === 1) r.k = ++k;
+  return runs;
+}
 function renderNumberOnes(chartId) {
-  const c = CHARTS[chartId], list = numberOnes(chartId), first = DATA[c.key].find(w => w.entries?.length).week;
+  const c = CHARTS[chartId], runs = no1Runs(chartId), st = askStats(c.key), first = DATA[c.key].find(w => w.entries?.length).week;
+  const songs = runs.filter(r => r.k).length, back = runs.length - songs;
   chartPills($('no1-pills'), chartId, 'number-ones');
-  $('no1-sub').textContent = `${list.length} songs have reached #1 on the ${c.name} since ${fmtLong(first)}.${c.isWb ? ' Includes the transitional era (2010 to Oct. 2011), when country and pop charted together.' : ''}`;
+  $('no1-sub').textContent = `${songs} songs have reached #1 on the ${c.name} since ${fmtLong(first)}${back ? `, and ${back} times a song has returned to #1 after dropping` : ''}.${c.isWb ? ' Includes the transitional era (2010 to Oct. 2011), when country and pop charted together.' : ''}`;
   const years = {};
-  list.forEach((s, i) => (years[s.no1[0].slice(0, 4)] ||= []).push([i + 1, s]));
+  for (const r of runs) (years[r.week.slice(0, 4)] ||= []).push(r);
   $('no1-list').className = `card ask-ans ${c.cls}`;
-  $('no1-list').innerHTML = Object.entries(years).map(([y, rows]) => `<div class="no1-year">${y}<small>${n(rows.length, '#1')}</small></div>
-    <div class="ask-rows">${rows.map(([k, s]) => askRow(k, SONGS[s.id], `<b>${fmtShort(s.no1[0])}</b><br>${wk(s.no1.length)} at #1`, `#/${chartId}/${s.no1[0]}`)).join('')}</div>`).join('');
+  $('no1-list').innerHTML = Object.entries(years).map(([y, rows]) => `<div class="no1-year">${y}<small>${n(rows.filter(r => r.k).length, 'new #1')}</small></div>
+    <div class="ask-rows">${rows.map(r => {
+      const total = st.songs[r.id].no1.length;
+      const meta = r.k ? `<b>${fmtShort(r.week)}</b><br>${wk(r.weeks)} at #1${total > r.weeks ? ` (${total} in all)` : ''}`
+        : `<b>Returns ${fmtShort(r.week)}</b><br>${wk(r.weeks)} more at #1`;
+      return askRow(r.k || '↺', SONGS[r.id], meta, `#/${chartId}/${r.week}`).replace('class="lrow"', `class="lrow${r.k ? '' : ' no1-back'}"`);
+    }).join('')}</div>`).join('');
 }
 
 // ─── RECORDS ────────────────────────────────────────────────────
