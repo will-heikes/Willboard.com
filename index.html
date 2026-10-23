@@ -474,6 +474,23 @@ button { font: inherit; color: inherit; }
 .ye-lead .rk { font-family: var(--f-cond); font-weight: 700; font-size: 56px; line-height: .9; color: var(--accent); }
 .ye-lead .song { font-family: var(--f-cond); font-size: 28px; text-transform: uppercase; line-height: 1.02; margin-top: 6px; }
 .ye-lead .artist { font-size: 14px; margin-top: 3px; }
+/* Year-End drop-downs */
+.ye-item > a { cursor: pointer; }
+.ye-more { display: none; background: var(--card-2); border-bottom: 1px solid var(--line-soft); padding: 12px 16px 14px 58px; }
+.ye-item.open > .ye-more { display: block; }
+.ye-item.open > .lrow { background: var(--card-2); }
+.ye-facts { display: flex; flex-wrap: wrap; gap: 10px 26px; }
+.ye-facts div { display: flex; flex-direction: column; }
+.ye-facts b { font-family: var(--f-cond); font-size: 20px; line-height: 1.1; }
+.ye-facts span { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.ye-songs { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ye-songs th { text-align: left; font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; padding: 0 8px 4px 0; }
+.ye-songs td { padding: 5px 8px 5px 0; border-top: 1px solid var(--line-soft); vertical-align: top; }
+.ye-songs td a { font-weight: 600; color: var(--ink); }
+.ye-songs small { display: block; color: var(--muted); font-size: 11px; }
+.ye-songs th:not(:first-child), .ye-songs td:not(:first-child) { text-align: right; white-space: nowrap; }
+.ye-go { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--accent); }
+@media (max-width: 600px) { .ye-more { padding-left: 14px; } }
 .ye-lead .meta { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
 .split .empty { padding: 30px 12px; color: var(--muted); font-size: 13px; background: var(--card); }
 .cmod-strip { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 14px; }
@@ -1917,17 +1934,20 @@ const wks1Text = v => v ? `<b>${v}</b> wk${v === 1 ? '' : 's'} at #1` : '';
 function spanCharts(span) {
   const dec = /^\d{4}s$/.test(span), from = dec ? +span.slice(0, 4) : +span, to = dec ? from + 9 : from;
   const songs = list => list.map(r => inSpan(r, from, to)).map(r => ({
+    more: () => songMore(SONGS[r.songId], from, to),
     rank: r.rank, href: r.songId && SONGS[r.songId] ? `#/song/${r.songId}` : `#/year-end/${span}`,
     tile: lead => artTile(r.artistName, lead, undefined, r.name), name: r.name, sub: r.artistName, meta: rowFacts(r),
     lead: [r.wks1 ? `${r.wks1} wk${r.wks1 === 1 ? '' : 's'} at #1` : r.peak ? `Peak #${r.peak}` : '', r.wc ? `${r.wc} wks` : ''].filter(Boolean).join(' · ') }));
-  const artists = list => list.map(a => {
+  const artists = (list, key) => list.map(a => {
     const id = a.id || a.artistId;
-    return { rank: a.rank, href: id && artistStats[id] ? `#/artist/${id}` : '#/artists', tile: lead => artTile(a.name, lead),
+    return { more: () => setMore(DATA.songs.filter(s => s.chart === key && creditParts(s.artistName).some(p => p.id === id)), key, from, to, id && artistStats[id] ? `#/artist/${id}` : '', 'Artist page'),
+      rank: a.rank, href: id && artistStats[id] ? `#/artist/${id}` : '#/artists', tile: lead => artTile(a.name, lead),
       name: a.name, sub: a.songs ? n(a.songs, 'charted song') : '', meta: wks1Text(a.no1), lead: a.no1 ? `${n(a.no1, 'wk')} at #1` : '' };
   });
-  const albums = list => list.map(b => {
+  const albums = (list, key) => list.map(b => {
     const al = b.al || findAlbum(b.name, b.artist);
-    return { rank: b.rank, href: al ? `#/album/${al.id}` : '#/albums', tile: () => al ? albumTile(al) : artTile(b.artist),
+    return { more: () => setMore((al?.songs || []).map(id => SONGS[id]).filter(s => s?.chart === key), key, from, to, al ? `#/album/${al.id}` : '', 'Album page'),
+      rank: b.rank, href: al ? `#/album/${al.id}` : '#/albums', tile: () => al ? albumTile(al) : artTile(b.artist),
       name: al?.name || b.name, sub: al?.artist || b.artist, meta: b.songs ? n(b.songs, 'song') : (al?.year || ''), lead: al?.year ? `Released ${al.year}` : '' };
   });
   const out = [];
@@ -1936,9 +1956,9 @@ function spanCharts(span) {
     const d = DECADE?.[span] || {};
     add('country-songs', 'Country Songs', '', songs(d.willboard?.songs || []));
     add('pop-songs', 'Pop Songs', 'pop', songs(d.pop?.songs || []));
-    add('country-artists', 'Country Artists', '', artists(d.willboard?.artists || []));
-    add('pop-artists', 'Pop Artists', 'pop', artists(d.pop?.artists || []));
-    add('country-albums', 'Country Albums', '', albums(d.willboard?.albums || []));
+    add('country-artists', 'Country Artists', '', artists(d.willboard?.artists || [], 'willboard'));
+    add('pop-artists', 'Pop Artists', 'pop', artists(d.pop?.artists || [], 'pop'));
+    add('country-albums', 'Country Albums', '', albums(d.willboard?.albums || [], 'willboard'));
   } else {
     // Will's weighted totals (tools/build_year_tops.py → year_tops.json); points earned that year otherwise
     const t = yearTops(from), w = YEAR_TOPS?.[span] || {};
@@ -1946,17 +1966,50 @@ function spanCharts(span) {
     for (const k of ['willboard', 'pop']) if (w[k]) t[k] = { artists: ranks(w[k].artists), albums: ranks(w[k].albums) };
     add('country-songs', 'Country Songs', '', songs(YEAREND.willboard?.[span]?.songs || []));
     add('pop-songs', 'Pop Songs', 'pop', songs(YEAREND.pop?.[span]?.songs || []));
-    add('country-artists', 'Country Artists', '', artists(t.willboard?.artists || []));
-    add('pop-artists', 'Pop Artists', 'pop', artists(t.pop?.artists || []));
-    if (t.willboard?.albums.length >= 3) add('country-albums', 'Country Albums', '', albums(t.willboard.albums));
-    if (t.pop?.albums.length >= 3) add('pop-albums', 'Pop Albums', 'pop', albums(t.pop.albums));
+    add('country-artists', 'Country Artists', '', artists(t.willboard?.artists || [], 'willboard'));
+    add('pop-artists', 'Pop Artists', 'pop', artists(t.pop?.artists || [], 'pop'));
+    if (t.willboard?.albums.length >= 3) add('country-albums', 'Country Albums', '', albums(t.willboard.albums, 'willboard'));
+    if (t.pop?.albums.length >= 3) add('pop-albums', 'Pop Albums', 'pop', albums(t.pop.albums, 'pop'));
   }
   return out;
 }
-const leadRow = r => `<a class="ye-lead" href="${r.href}">${r.tile(true)}
-  <div><div class="rk">1</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div><div class="meta">${r.lead}</div></div></a>`;
-const listRow = r => `<a class="lrow" href="${r.href}"><span class="rk">${r.rank}</span>${r.tile(false)}
-  <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></span><span class="meta">${r.meta}</span></a>`;
+// Each row opens a drop-down under it (Will); the drop-down links on to the full page
+const leadRow = r => `<div class="ye-item"><a class="ye-lead" href="${r.href}">${r.tile(true)}
+  <div><div class="rk">1</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div><div class="meta">${r.lead}</div></div></a>
+  <div class="ye-more">${r.more?.() || ''}</div></div>`;
+const listRow = r => `<div class="ye-item"><a class="lrow" href="${r.href}"><span class="rk">${r.rank}</span>${r.tile(false)}
+  <span><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></span><span class="meta">${r.meta}</span></a>
+  <div class="ye-more">${r.more?.() || ''}</div></div>`;
+// What a song did in a span of years: weeks, peak and the date it got there, weeks at #1
+function spanStats(s, from, to) {
+  const run = s ? songRun(s).filter(w => w.pos && +w.week.slice(0, 4) >= from && +w.week.slice(0, 4) <= to) : [];
+  if (!run.length) return null;
+  const peak = Math.min(...run.map(w => w.pos));
+  return { wc: run.length, peak, wks1: run.filter(w => w.pos === 1).length, peakDate: run.find(w => w.pos === peak).week };
+}
+// Plays in a year come from Will's year-end lists (yearend.json); a span of years has none
+function yearPlays(s, from, to) {
+  if (!s || from !== to) return null;
+  return YEAREND?.[s.chart]?.[from]?.songs?.find(r => r.songId === s.id)?.plays ?? null;
+}
+function songMore(s, from, to) {
+  const st = spanStats(s, from, to);
+  if (!st) return '';
+  const when = from === to ? `in ${from}` : `in the ${from}s`, pl = yearPlays(s, from, to);
+  const fact = (v, k) => `<div><b>${v}</b><span>${k}</span></div>`;
+  return `<div class="ye-facts">${fact(st.wc, `${st.wc === 1 ? 'wk' : 'wks'} on chart ${when}`)}${fact('#' + st.peak, `peak ${when}`)}${fact(st.wks1, st.wks1 === 1 ? 'wk at #1' : 'wks at #1')}
+    ${fact(fmtShort(st.peakDate), st.peak === 1 ? 'first week at #1' : 'reached its peak')}${fact(fmtShort(s.debutDate), 'debut')}
+    ${pl != null ? fact(pl.toLocaleString(), `plays ${when}`) : ''}</div><a class="ye-go" href="#/song/${s.id}">Song page →</a>`;
+}
+function setMore(list, key, from, to, href, label) {
+  const rows = list.map(s => ({ s, st: spanStats(s, from, to) })).filter(x => x.st)
+    .sort((a, b) => a.st.peak - b.st.peak || b.st.wc - a.st.wc);
+  if (!rows.length) return '';
+  const plays = from === to && rows.some(x => yearPlays(x.s, from, to) != null);
+  return `<table class="ye-songs"><thead><tr><th>Song</th>${plays ? '<th>Plays</th>' : ''}<th>Peak</th><th>Wks</th></tr></thead><tbody>${rows.map(({ s, st }) =>
+    `<tr><td><a href="#/song/${s.id}">${esc(s.name)}</a>${creditParts(s.artistName).length > 1 ? `<small>${esc(s.artistName)}</small>` : ''}</td>${plays ? `<td>${yearPlays(s, from, to)?.toLocaleString() ?? '—'}</td>` : ''}<td>#${st.peak}${st.wks1 ? ` <small>${n(st.wks1, 'wk')} at #1</small>` : ''}</td><td>${st.wc}</td></tr>`).join('')}</tbody></table>
+    ${href ? `<a class="ye-go" href="${href}">${label} →</a>` : ''}`;
+}
 async function renderYearEnd(span, slug) {
   if (!YEAREND) YEAREND = await fetch('yearend.json', FRESH).then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
   if (!DECADE) DECADE = await fetch('decade.json', FRESH).then(r => r.json()).catch(() => ({}));
@@ -1992,6 +2045,12 @@ async function renderYearEnd(span, slug) {
         <div class="ye-tabs">${charts.map(c => `<a class="ye-tab ${c.cls} ${c.slug === chart.slug ? 'on' : ''}" href="#/year-end/${span}/${c.slug}">${c.rows[0].tile(false)}<span>${c.title}<small>No. 1 · ${esc(c.rows[0].name)}</small></span></a>`).join('')}</div></div>
       <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></div>
       ${leadRow(top)}${rest.map(listRow).join('')}</div>`;
+    split.onclick = e => {
+      const row = e.target.closest('.ye-item > a');
+      if (!row || !row.nextElementSibling?.innerHTML.trim()) return;
+      e.preventDefault();
+      row.parentElement.classList.toggle('open');
+    };
   } else {
     // The hub: every chart's top 5
     const popFrom = Math.min(...Object.keys(YEAREND.pop || {}).map(Number));
