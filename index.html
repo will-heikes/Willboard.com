@@ -464,7 +464,9 @@ button { font: inherit; color: inherit; }
 .clip-by { font-size: 11.5px; color: var(--muted); margin-top: 10px; font-style: italic; }
 
 /* ── EXPLORE (photo mosaics) ────────────────────────────────── */
-.explore { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.explore { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
+.explore .tile { grid-column: span 2; }
+.explore .tile.wide { grid-column: span 3; aspect-ratio: 16/9; }
 .tile { position: relative; display: block; aspect-ratio: 4/5; overflow: hidden; background: #1a1918; color: #fff; }
 .mosaic { position: absolute; inset: 0; display: grid; gap: 2px; }
 .mosaic.m4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
@@ -658,6 +660,14 @@ body.on-ask .ask-fab { display: none; }
 .ask-foot { border-top: 1px solid var(--line-soft); padding: 12px 18px; }
 .ask-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--accent); }
 .ask-none { padding: 6px 20px; max-width: 640px; }
+/* Every #1 and Records */
+.list-pills { margin: 4px 0 20px; }
+.no1-year { font-family: var(--f-cond); font-weight: 700; font-size: 22px; padding: 14px 18px 6px; border-top: 1px solid var(--line-soft); color: var(--accent); }
+.no1-year:first-child { border-top: 0; }
+.no1-year small { font-family: var(--f-body, inherit); font-weight: 500; font-size: 12.5px; color: var(--muted); margin-left: 8px; letter-spacing: 0; }
+.rec-h { font-family: var(--f-cond); font-weight: 700; font-size: 24px; text-transform: uppercase; margin: 30px 0 12px; }
+.chart-links { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 16px; }
+.chart-links .ask-more { color: var(--ink); }
 .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; color: #fff; }
 .tag.country { background: var(--country); }
 .tag.pop { background: var(--pop); }
@@ -723,7 +733,8 @@ body.on-ask .ask-fab { display: none; }
   .beat { grid-template-columns: 1fr; }
   .archive { grid-template-columns: 1fr; gap: 22px; }
   .explore { grid-template-columns: 1fr 1fr; }
-  .explore .tile:last-child { grid-column: span 2; aspect-ratio: 16/9; }
+  .explore .tile, .explore .tile.wide { grid-column: auto; aspect-ratio: 4/5; }
+  .explore .tile:nth-child(3) { grid-column: span 2; aspect-ratio: 16/9; }
 }
 @media (max-width: 760px) {
   .aw-lead { grid-template-columns: 1fr; gap: 0; }
@@ -762,7 +773,7 @@ body.on-ask .ask-fab { display: none; }
   .beat-item .art { width: 84px; height: 64px; }
   .beat-item h4 { font-size: 16.5px; }
   .explore { grid-template-columns: 1fr; }
-  .explore .tile, .explore .tile:last-child { grid-column: auto; aspect-ratio: 4/3; }
+  .explore .tile, .explore .tile.wide, .explore .tile:nth-child(3) { grid-column: auto; aspect-ratio: 4/3; }
   .years { grid-auto-columns: 140px; }
   .topbar .wrap { height: 62px; }
   .topbar .wm { font-size: 34px; }
@@ -898,6 +909,8 @@ body.on-ask .ask-fab { display: none; }
         <a class="tile" href="#/year-end" id="tile-ye"></a>
         <a class="tile" href="#/awards" id="tile-aw"></a>
         <a class="tile" href="#/artists" id="tile-ar"></a>
+        <a class="tile wide" href="#/number-ones/hot20" id="tile-no1"></a>
+        <a class="tile wide" href="#/records/hot20" id="tile-rec"></a>
       </div>
     </div>
 
@@ -927,6 +940,7 @@ body.on-ask .ask-fab { display: none; }
       <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Artist</span><span class="c hide-sm">Peak</span><span class="c">LW</span><span class="c" title="Weeks on chart">Wks</span><span class="c">Move</span></div>
       <div id="chart-rows"></div>
     </div>
+    <div class="chart-links" id="chart-links"></div>
   </section>
 
   <!-- ── YEAR-END ── -->
@@ -1093,6 +1107,20 @@ body.on-ask .ask-fab { display: none; }
   </section>
 
   <!-- ── ABOUT ── -->
+  <!-- ── EVERY #1 ── -->
+  <section class="page" id="page-number-ones">
+    <div class="page-head"><div><h1>Every #1</h1><div class="sub" id="no1-sub"></div></div></div>
+    <div class="pills list-pills" id="no1-pills"></div>
+    <div class="card ask-ans" id="no1-list"></div>
+  </section>
+
+  <!-- ── RECORDS ── -->
+  <section class="page" id="page-records">
+    <div class="page-head"><div><h1>Chart Records</h1><div class="sub" id="rec-sub"></div></div></div>
+    <div class="pills list-pills" id="rec-pills"></div>
+    <div id="rec-body"></div>
+  </section>
+
   <section class="page" id="page-about">
     <div class="page-head"><div><h1>About Willboard</h1></div></div>
     <div class="about">
@@ -1655,6 +1683,16 @@ function renderExplore() {
   // Artists: the biggest acts by career points
   const big = Object.values(artistStats).sort((a, b) => b.points - a.points).slice(0, 6).map(a => a.name);
   tile($('tile-ar'), `${Object.keys(artistStats).length} artists and counting`, 'Artist<br>History', `Every song, peak and #1, led by ${big[0]}.`, big, 'm6');
+
+  // Every #1: the latest Hot 20 leaders
+  const no1s = numberOnes('hot20');
+  const recent = [...new Set(no1s.slice(-10).reverse().map(x => primaryArtist(SONGS[x.id].artistName)))].filter(a => a !== ent?.artist).slice(0, 4);
+  tile($('tile-no1'), `${no1s.length} Hot 20 #1s and counting`, 'Every #1', `Every song to top the Hot 20 and the Pop 10, in order.`, recent, 'm4');
+
+  // Records: the song with the most weeks at #1
+  const led = Object.values(askStats('willboard').songs).filter(x => x.no1.length).sort((a, b) => b.no1.length - a.no1.length || a.no1[0].localeCompare(b.no1[0]));
+  const top = led[0], tied = led.filter(x => x.no1.length === top.no1.length).length;
+  tile($('tile-rec'), `${top.no1.length} weeks at #1`, 'Chart<br>Records', `${tied > 1 ? `${SONGS[top.id].name} and ${tied - 1} other${tied > 2 ? 's' : ''} share` : `${SONGS[top.id].name} holds`} the Hot 20 record. See the longest runs, biggest jumps and more.`, [SONGS[top.id].artistName], 'm1');
 }
 
 // ─── THROUGH THE YEARS ──────────────────────────────────────────
@@ -1687,6 +1725,7 @@ function renderChartPage(chartId) {
   $('wk-prev').disabled = idx === 0;
   $('wk-next').disabled = idx === weeks.length - 1;
   $('chart-rows').innerHTML = chartRows(chartId, idx, 99, true);
+  $('chart-links').innerHTML = `<a class="ask-more" href="#/number-ones/${chartId}">Every #1 on the ${c.name} ${arrow}</a><a class="ask-more" href="#/records/${chartId}">${c.name} records ${arrow}</a>`;
   tintRows($('chart-rows'));
 }
 function stepWeek(d) {
@@ -2949,6 +2988,95 @@ function renderArticle(id) {
     ${a.link ? `<a class="more" href="${a.link}">${esc(a.linkText || 'Read more')} ${arrow}</a>` : ''}`;
 }
 
+// ─── EVERY #1 ───────────────────────────────────────────────────
+// Each song that reached #1, in the order it first got there
+function numberOnes(chartId) {
+  return Object.values(askStats(CHARTS[chartId].key).songs).filter(s => s.no1.length).sort((a, b) => a.no1[0].localeCompare(b.no1[0]));
+}
+const chartPills = (el, active, page) => pills(el, [['hot20', 'Country Hot 20'], ['pop10', 'Pop 10']], active, v => { location.hash = `#/${page}/${v}`; });
+function renderNumberOnes(chartId) {
+  const c = CHARTS[chartId], list = numberOnes(chartId), first = DATA[c.key].find(w => w.entries?.length).week;
+  chartPills($('no1-pills'), chartId, 'number-ones');
+  $('no1-sub').textContent = `${list.length} songs have reached #1 on the ${c.name} since ${fmtLong(first)}.${c.isWb ? ' Includes the transitional era (2010 to Oct. 2011), when country and pop charted together.' : ''}`;
+  const years = {};
+  list.forEach((s, i) => (years[s.no1[0].slice(0, 4)] ||= []).push([i + 1, s]));
+  $('no1-list').className = `card ask-ans ${c.cls}`;
+  $('no1-list').innerHTML = Object.entries(years).map(([y, rows]) => `<div class="no1-year">${y}<small>${n(rows.length, '#1')}</small></div>
+    <div class="ask-rows">${rows.map(([k, s]) => askRow(k, SONGS[s.id], `<b>${fmtShort(s.no1[0])}</b><br>${wk(s.no1.length)} at #1`, `#/${chartId}/${s.no1[0]}`)).join('')}</div>`).join('');
+}
+
+// ─── RECORDS ────────────────────────────────────────────────────
+// The top five on each record (more when tied), transitional era included on the Hot 20
+function renderRecords(chartId) {
+  const c = CHARTS[chartId], st = askStats(c.key), songs = Object.values(st.songs), S = id => SONGS[id];
+  const top = c.isWb ? 10 : 5;
+  chartPills($('rec-pills'), chartId, 'records');
+  $('rec-sub').textContent = `The biggest runs and acts in ${c.name} history, through the week of ${fmtLong(st.weeks[st.weeks.length - 1].week)}.`;
+  const card = (title, lead, rows) => `<div class="card ask-ans ${c.cls}"><div class="ask-chart">${title}</div><div class="ask-lead">${lead}</div><div class="ask-rows">${rows}</div></div>`;
+  const songCard = (title, pool, val, meta, lead) => {
+    const list = pool.filter(val).sort((a, b) => val(b) - val(a) || a.debut.localeCompare(b.debut)).filter(ties(5, val));
+    return list.length ? card(title, lead(list[0], tiedTop(list, val)), list.map((s, i) => askRow(rankIn(list, i, val), S(s.id), meta(s))).join('')) : '';
+  };
+  // Acts get credit for every song they're on, features included
+  const actCard = (title, val, unit, lead) => {
+    const acts = {};
+    for (const s of songs) for (const p of creditParts(S(s.id).artistName)) {
+      if (!p.id) continue;
+      const a = acts[p.id] ||= { id: p.id, name: p.name, v: 0, n: 0 };
+      a.v += val(s); a.n++;
+    }
+    const list = Object.values(acts).filter(a => a.v).sort((a, b) => b.v - a.v || a.name.localeCompare(b.name)).filter(ties(5, a => a.v));
+    return list.length ? card(title, lead(list), list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), { ...a, sub: n(a.n, 'charted song') }, `<b>${a.v}</b><br>${a.v === 1 ? unit[0] : unit[1]}`)).join('')) : '';
+  };
+  const names = (list, val) => list.slice(0, tiedTop(list, val)).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ');
+  const t = s => `“${esc(S(s.id).name)}” by ${esc(S(s.id).artistName)}`;
+  // Ages: how old each act was when their first #1 on this chart got there
+  const ageCard = young => {
+    const best = {};
+    for (const s of songs) {
+      if (!s.no1.length) continue;
+      for (const p of creditParts(S(s.id).artistName)) {
+        const born = actInfo(p.name)?.born;
+        if (!born) continue;
+        const age = ageAt(born, s.no1[0]), v = age.y * 400 + age.days;
+        if (!best[p.name] || (young ? v < best[p.name].v : v > best[p.name].v)) best[p.name] = { name: p.name, v, age, s };
+      }
+    }
+    const list = Object.values(best).sort((a, b) => young ? a.v - b.v : b.v - a.v).slice(0, 5);
+    if (!list.length) return '';
+    const x = list[0];
+    return card(young ? 'Youngest at #1' : 'Oldest at #1', `${esc(x.name)} was ${x.age.y} when ${t(x.s)} reached #1 on ${fmtLong(x.s.no1[0])}.`,
+      list.map((x, i) => askRow(i + 1, S(x.s.id), `<b>${x.age.y}</b> yrs old<br>${esc(x.name)}`)).join(''));
+  };
+  const jumps = songs.filter(s => s.from && !s.onFirst);
+  const bigMove = {};
+  for (const m of st.moves) if (m.from - m.to > (bigMove[m.id]?.d || 0)) bigMove[m.id] = { d: m.from - m.to, ...m };
+  const movers = songs.filter(s => bigMove[s.id]);
+  $('rec-body').innerHTML = `<h2 class="rec-h">Songs</h2><div class="ask-grid two">
+    ${songCard('Most weeks at #1', songs, s => s.no1.length, s => `<b>${s.no1.length}</b> weeks<br>${s.no1[0].slice(0, 4)}`,
+      (s, k) => k > 1 ? `${k} songs share the record with ${wk(s.no1.length)} at #1.` : `${t(s)} holds the record with ${wk(s.no1.length)} at #1.`)}
+    ${songCard('Most weeks on the chart', songs, s => s.weeks.length, s => `<b>${s.weeks.length}</b> weeks<br>Peak ${s.peak}`,
+      (s, k) => k > 1 ? `${k} songs share the record with ${wk(s.weeks.length)} on the chart.` : `${t(s)} spent ${wk(s.weeks.length)} on the chart, more than any other song.`)}
+    ${songCard('Biggest jump to #1', jumps, s => s.from - 1, s => `<b>${s.from}–1</b><br>${fmtShort(s.no1[0])}`,
+      (s, k) => k > 1 ? `${k} songs share the record, jumping ${s.from - 1} spots to #1.` : `${t(s)} jumped from #${s.from} to #1 on ${fmtLong(s.no1[0])}.`)}
+    ${songCard('Biggest one-week climb', movers, s => bigMove[s.id].d, s => `<b>${bigMove[s.id].from}–${bigMove[s.id].to}</b><br>${fmtShort(bigMove[s.id].week)}`,
+      (s, k) => k > 1 ? `${k} songs share the record, climbing ${bigMove[s.id].d} spots in one week.` : `${t(s)} climbed ${bigMove[s.id].d} spots in one week, from #${bigMove[s.id].from} to #${bigMove[s.id].to}.`)}
+    ${songCard('Longest climb to #1', songs.filter(s => s.climb && !s.onFirst), s => s.climb, s => `<b>${s.climb}</b> weeks<br>${fmtShort(s.no1[0])}`,
+      (s, k) => k > 1 ? `${k} songs share the record, reaching #1 in their ${ordinal(s.climb)} week.` : `${t(s)} took the longest to get to the top, reaching #1 in its ${ordinal(s.climb)} week.`)}
+    ${songCard('Most weeks in the top 5', songs, s => s.pos.filter(p => p <= 5).length, s => `<b>${s.pos.filter(p => p <= 5).length}</b> weeks<br>Peak ${s.peak}`,
+      (s, k) => k > 1 ? `${k} songs share the record.` : `${t(s)} spent ${wk(s.pos.filter(p => p <= 5).length)} in the top 5.`)}
+  </div>
+  <h2 class="rec-h">Artists</h2><div class="ask-grid two">
+    ${actCard('Most #1s', s => s.no1.length ? 1 : 0, ['#1', '#1s'], l => `${names(l, a => a.v)} ${tiedTop(l, a => a.v) > 1 ? 'share' : 'has'} the most #1s, with ${l[0].v}${tiedTop(l, a => a.v) > 1 ? ' each' : ''}.`)}
+    ${actCard('Most weeks at #1', s => s.no1.length, ['week', 'weeks'], l => `${names(l, a => a.v)} ${tiedTop(l, a => a.v) > 1 ? 'share' : 'has'} the most weeks at #1, with ${l[0].v}${tiedTop(l, a => a.v) > 1 ? ' each' : ''}.`)}
+    ${actCard(`Most top ${top} hits`, s => s.peak <= top ? 1 : 0, [`top ${top}`, `top ${top}s`], l => `${names(l, a => a.v)} ${tiedTop(l, a => a.v) > 1 ? 'share' : 'has'} the most top ${top} hits, with ${l[0].v}${tiedTop(l, a => a.v) > 1 ? ' each' : ''}.`)}
+    ${actCard('Most chart entries', () => 1, ['song', 'songs'], l => `${names(l, a => a.v)} ${tiedTop(l, a => a.v) > 1 ? 'share' : 'has'} the most songs on the chart, with ${l[0].v}${tiedTop(l, a => a.v) > 1 ? ' each' : ''}.`)}
+    ${ageCard(false)}
+    ${ageCard(true)}
+  </div>
+  <p style="margin-top:24px">${askLink('Who has the most #1s?', 'Ask Willboard for more records')}</p>`;
+}
+
 function route() {
   if (!DATA) return;
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
@@ -2980,6 +3108,8 @@ function route() {
   else if (page === 'recap')    { id = 'beat'; renderRecap(arg); }
   else if (page === 'ask')      { id = 'ask'; renderAsk(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'about')    { id = 'about'; }
+  else if (page === 'number-ones') { id = 'number-ones'; renderNumberOnes(CHARTS[arg] ? arg : 'hot20'); }
+  else if (page === 'records')  { id = 'records'; renderRecords(CHARTS[arg] ? arg : 'hot20'); }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
   document.body.classList.toggle('on-ask', id === 'ask');
   document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === page || a.dataset.nav === page + 's'));
