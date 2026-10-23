@@ -611,7 +611,13 @@
  "pop_song_58": {
   "artist": "P!nk",
   "title": "Blow Me (One Last Kiss)",
-  "note": "not found"
+  "album": "The Truth About Love",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2012-07-02",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/72/d6/ba/72d6ba5d-95bb-7293-0094-39a0b7fc6774/886443562103.jpg/600x600bb.jpg",
+  "tracks": 15,
+  "source": "iTunes"
  },
  "pop_song_59": {
   "artist": "Train",
@@ -818,7 +824,13 @@
  "pop_song_79": {
   "artist": "P!nk",
   "title": "Try",
-  "note": "not found"
+  "album": "The Truth About Love",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2012-09-06",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2c/b0/de/2cb0de7b-4559-d885-36f8-271c950cba34/886443562097.jpg/600x600bb.jpg",
+  "tracks": 15,
+  "source": "iTunes"
  },
  "pop_song_80": {
   "artist": "Of Monsters & Men",
@@ -947,7 +959,13 @@
  "pop_song_94": {
   "artist": "P!nk",
   "title": "Just Give Me A Reason",
-  "note": "not found"
+  "album": "The Truth About Love",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2012-09-14",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2c/b0/de/2cb0de7b-4559-d885-36f8-271c950cba34/886443562097.jpg/600x600bb.jpg",
+  "tracks": 15,
+  "source": "iTunes"
  },
  "pop_song_95": {
   "artist": "Pitbull",
@@ -3195,7 +3213,13 @@
  "pop_song_306": {
   "artist": "P!nk",
   "title": "Just Like Fire",
-  "note": "not found"
+  "album": "Alice Through the Looking Glass (Original Motion Picture Soundtrack)",
+  "albumArtist": "Danny Elfman",
+  "type": "album",
+  "released": "2016-05-27",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/79/3a/dd/793addcc-63a5-bc8a-0f8b-517e61f3f4a9/00050087345471.rgb.jpg/600x600bb.jpg",
+  "tracks": 28,
+  "source": "iTunes"
  },
  "pop_song_307": {
   "artist": "Ariana Grande",
@@ -4197,7 +4221,13 @@
  "pop_song_402": {
   "artist": "P!nk",
   "title": "What About Us",
-  "note": "not found"
+  "album": "Beautiful Trauma",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2017-08-10",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8e/7f/54/8e7f541a-2200-b236-5fb9-539116d103cf/886446684505.jpg/600x600bb.jpg",
+  "tracks": 13,
+  "source": "iTunes"
  },
  "pop_song_403": {
   "artist": "Justin Bieber",
@@ -5018,7 +5048,13 @@
  "pop_song_481": {
   "artist": "P!nk",
   "title": "Whatever You Want",
-  "note": "not found"
+  "album": "Beautiful Trauma",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2017-10-05",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8e/7f/54/8e7f541a-2200-b236-5fb9-539116d103cf/886446684505.jpg/600x600bb.jpg",
+  "tracks": 13,
+  "source": "iTunes"
  },
  "pop_song_482": {
   "artist": "Bebe Rexha",
@@ -5564,7 +5600,13 @@
  "pop_song_535": {
   "artist": "P!nk",
   "title": "Walk Me Home",
-  "note": "not found"
+  "album": "Hurts 2B Human",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2019-02-22",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/0b/ae/f4/0baef48f-63a0-d93d-2e20-12029d4fac1a/886447553121.jpg/600x600bb.jpg",
+  "tracks": 13,
+  "source": "iTunes"
  },
  "pop_song_536": {
   "artist": "Halsey",
@@ -7990,7 +8032,13 @@
  "pop_song_773": {
   "artist": "P!nk",
   "title": "Trustfall",
-  "note": "not found"
+  "album": "TRUSTFALL",
+  "albumArtist": "P!nk",
+  "type": "album",
+  "released": "2023-01-27",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/e0/47/01/e047015a-0a4d-4058-d981-aec960e67e69/196589666222.jpg/600x600bb.jpg",
+  "tracks": 13,
+  "source": "iTunes"
  },
  "pop_song_774": {
   "artist": "Kayla Rae",
@@ -10730,6 +10778,17 @@
   "released": "2026-08-07",
   "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1b/86/c9/1b86c988-03b8-ca21-10a5-0963d09f5bcf/075679561893.jpg/600x600bb.jpg",
   "tracks": 10,
+  "source": "iTunes"
+ },
+ "pop_song_1056": {
+  "artist": "Olivia Rodrigo",
+  "title": "Expectations",
+  "album": "you seem pretty sad for a girl so in love",
+  "albumArtist": "Olivia Rodrigo",
+  "type": "album",
+  "released": "2026-06-12",
+  "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1d/1b/f9/1d1bf9b1-44c6-9a6c-6ffb-c158488c06ce/26UMGIM39303.rgb.jpg/600x600bb.jpg",
+  "tracks": 13,
   "source": "iTunes"
  }
 }
