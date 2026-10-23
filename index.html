@@ -308,6 +308,17 @@ button { font: inherit; color: inherit; }
 .article .body p { margin: 0 0 18px; }
 .article .body a, .article .more { text-decoration: underline; text-underline-offset: 3px; }
 .article .more { font-weight: 700; font-size: 15px; }
+.news-all { color: var(--ink); align-self: flex-end; }
+.news-q { max-width: 520px; margin: 0 0 18px; }
+.news-list { display: grid; gap: 0; max-width: 900px; }
+.news-row { display: grid; grid-template-columns: 1fr 150px; gap: 20px; align-items: center; padding: 18px 0; border-top: 1px solid var(--line); }
+.news-row:last-child { border-bottom: 1px solid var(--line); }
+.news-row h3 { font-family: var(--f-serif); font-weight: 700; font-size: 22px; line-height: 1.2; margin: 6px 0 6px; }
+.news-row p { font-family: var(--f-serif); font-size: 15.5px; line-height: 1.45; color: var(--ink-soft); margin: 0; }
+.news-row .when { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.news-row .art { width: 150px; height: 100px; border-radius: 0; font-size: 28px; }
+.news-row:hover h3 { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) { .news-row { grid-template-columns: 1fr 96px; gap: 14px; } .news-row .art { width: 96px; height: 72px; } .news-row h3 { font-size: 18px; } }
 .beat-lead .dek { font-family: var(--f-serif); font-size: 17px; line-height: 1.4; color: var(--ink-soft); margin: 8px 0 0; }
 
 /* ── CHART MODULES (home): top five as photo cards ──────────── */
@@ -840,6 +851,7 @@ body.on-ask .ask-fab { display: none; }
       <a href="#/artists" data-nav="artists">Artists</a>
       <a href="#/albums" data-nav="albums">Albums</a>
       <a href="#/songs" data-nav="songs">Songs</a>
+      <a href="#/news" data-nav="news">News</a>
     </nav>
     <a class="search-btn" href="#/songs?focus=1" aria-label="Search">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
@@ -873,6 +885,7 @@ body.on-ask .ask-fab { display: none; }
     <div class="sec">
       <div class="sec-head">
         <div><h2>Chart Beat</h2><div class="sub" id="beat-sub"></div></div>
+        <a class="ask-more news-all" href="#/news">All news <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 5h12M8 1l4 4-4 4"/></svg></a>
       </div>
       <div class="beat">
         <div id="beat-lead"></div>
@@ -1075,7 +1088,7 @@ body.on-ask .ask-fab { display: none; }
   <section class="page" id="page-story">
     <div class="page-head">
       <div>
-        <div class="eyebrow"><a href="#/">← Home</a></div>
+        <div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div>
         <h1 id="story-h1" style="margin-top:6px"></h1>
         <div class="sub">Every week's #1 on the Hot 20 and Pop 10.</div>
       </div>
@@ -1107,6 +1120,13 @@ body.on-ask .ask-fab { display: none; }
   </section>
 
   <!-- ── ABOUT ── -->
+  <!-- ── NEWS ── -->
+  <section class="page" id="page-news">
+    <div class="page-head"><div><h1>News</h1><div class="sub" id="news-sub"></div></div></div>
+    <input class="search news-q" id="news-q" type="search" placeholder="Search stories, songs or artists..." autocomplete="off">
+    <div class="news-list" id="news-list"></div>
+  </section>
+
   <!-- ── EVERY #1 ── -->
   <section class="page" id="page-number-ones">
     <div class="page-head"><div><h1>Every #1</h1><div class="sub" id="no1-sub"></div></div></div>
@@ -1518,7 +1538,8 @@ function renderHome() {
   // Up to five articles, never the same artist's photo twice (Will). The week's chart stories
   // stand in only when there are no articles (they still run in the ticker)
   const seen = new Set();
-  const beat = (ARTICLES.length ? ARTICLES.map(articleCard) : stories)
+  const live = ARTICLES.filter(a => !a.archived);
+  const beat = (live.length ? live.map(articleCard) : stories)
     .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 5);
   const [first, ...rest] = beat;
   $('beat-sub').textContent = `The stories behind the week of ${fmtLong(week)}.`;
@@ -2966,8 +2987,8 @@ const plainText = t => t.replace(/\[\[([^\]]+)\]\]/g, '$1');
 function renderRecap(week) {
   const r = RECAPS.find(x => x.week === week) || (!week && RECAPS[0]);
   const i = RECAPS.indexOf(r);
-  $('article').innerHTML = !r ? `<div class="eyebrow"><a href="#/">← Home</a></div><h1>Recap not found</h1>` : `
-    <div class="eyebrow"><a href="#/">← Home</a></div>
+  $('article').innerHTML = !r ? `<div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div><h1>Recap not found</h1>` : `
+    <div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div>
     <div class="kick" style="margin-top:14px">Weekly Recap</div>
     <h1>${esc(r.headline)}</h1>
     <div class="byline">Week of ${fmtLong(r.week)} · <a href="#/hot20/${r.week}" style="text-decoration:underline">Hot 20</a> · <a href="#/pop10/${r.week}" style="text-decoration:underline">Pop 10</a></div>
@@ -2975,10 +2996,34 @@ function renderRecap(week) {
     <div class="ay-nav">${RECAPS[i + 1] ? `<a class="more" href="#/recap/${RECAPS[i + 1].week}">← Week of ${fmtLong(RECAPS[i + 1].week)}</a>` : ''}
       ${RECAPS[i - 1] ? `<a class="more" href="#/recap/${RECAPS[i - 1].week}">Week of ${fmtLong(RECAPS[i - 1].week)} ${arrow}</a>` : ''}</div>`;
 }
+// ─── NEWS: every article and weekly recap, newest first, searchable ──
+function newsItems() {
+  const firstAct = t => (/\[\[([^\]]+)\]\]/.exec(t) || [])[1] || '';
+  return [
+    ...ARTICLES.map(a => ({ date: a.date, kicker: a.kicker, chart: a.chart === 'pop10' ? 'pop' : '', headline: a.headline, dek: a.dek || '',
+      artist: a.artist, href: `#/beat/${a.id}`, text: plainText(a.body.join(' ')) })),
+    ...RECAPS.map(r => ({ date: r.week, kicker: 'Weekly Recap', chart: '', headline: r.headline,
+      dek: `The Hot 20 and Pop 10 for the week of ${fmtLong(r.week)}.`, artist: firstAct(r.body[0]), href: `#/recap/${r.week}`, text: plainText(r.body.join(' ')) })),
+  ].sort((a, b) => b.date.localeCompare(a.date) || (a.kicker === 'Weekly Recap') - (b.kicker === 'Weekly Recap'));
+}
+function renderNews(q) {
+  const items = newsItems(), box = $('news-q');
+  if (box.value !== q) box.value = q;
+  box.oninput = () => { history.replaceState(null, '', box.value ? `#/news?q=${encodeURIComponent(box.value)}` : '#/news'); draw(box.value); };
+  const draw = q => {
+    const words = squash(q) ? q.toLowerCase().split(/\s+/).filter(Boolean) : [];
+    const hits = items.filter(it => words.every(w => `${it.headline} ${it.dek} ${it.kicker} ${it.artist} ${it.text}`.toLowerCase().includes(w)));
+    $('news-sub').textContent = words.length ? `${n(hits.length, 'story')} matching “${q}”.`.replace('storys', 'stories') : `Every Chart Beat story and weekly recap, newest first.`;
+    $('news-list').innerHTML = hits.map(it => `<a class="news-row" href="${it.href}"><div><div class="kick ${it.chart}">${esc(it.kicker)}</div>
+      <h3>${esc(it.headline)}</h3>${it.dek ? `<p>${esc(it.dek)}</p>` : ''}<div class="when">${fmtLong(it.date)}</div></div>${artTile(it.artist)}</a>`).join('')
+      || `<p class="hint">Nothing matches that yet.</p>`;
+  };
+  draw(q);
+}
 function renderArticle(id) {
   const a = ARTICLES.find(x => x.id === id);
-  $('article').innerHTML = !a ? `<div class="eyebrow"><a href="#/">← Home</a></div><h1>Story not found</h1>` : `
-    <div class="eyebrow"><a href="#/">← Home</a></div>
+  $('article').innerHTML = !a ? `<div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div><h1>Story not found</h1>` : `
+    <div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div>
     <div class="kick ${a.chart === 'pop10' ? 'pop' : ''}" style="margin-top:14px">${esc(a.kicker)}</div>
     <h1>${esc(a.headline)}</h1>
     ${a.dek ? `<p class="dek">${esc(a.dek)}</p>` : ''}
@@ -3130,6 +3175,7 @@ function route() {
   else if (page === 'recap')    { id = 'beat'; renderRecap(arg); }
   else if (page === 'ask')      { id = 'ask'; renderAsk(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'about')    { id = 'about'; }
+  else if (page === 'news')     { id = 'news'; renderNews(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'number-ones') { id = 'number-ones'; renderNumberOnes(CHARTS[arg] ? arg : 'hot20'); }
   else if (page === 'records')  { id = 'records'; renderRecords(CHARTS[arg] ? arg : 'hot20'); }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
