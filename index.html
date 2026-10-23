@@ -2136,7 +2136,7 @@ function renderAwards() {
   $('aw-chart').className = 'ye-tabs';
   $('aw-chart').innerHTML = ['country', 'pop'].filter(c => AWARDS[c]).map(c => {
     const y = awYears(c)[0], w = awWinner(c, y, AW_TOP[c]);
-    return `<a class="ye-tab ${c === 'pop' ? 'pop' : ''} ${c === chart ? 'on' : ''}" href="#/awards" data-v="${c}">${artTile(awFace(c, y), false, y)}
+    return `<a class="ye-tab ${c === 'pop' ? 'pop' : ''} ${c === chart ? 'on' : ''}" href="#/awards" data-v="${c}">${artTile(awFace(c, y), false, awPhotoYear(c, y))}
       <span>${c === 'pop' ? 'Pop' : 'Country'} Awards<small>${w ? `${y} · ${esc(w.artist || awName(w))}` : `${y} nominees`}</small></span></a>`;
   }).join('');
   $('aw-chart').querySelectorAll('a').forEach(a => a.onclick = e => { e.preventDefault(); ui.awChart = a.dataset.v; renderAwards(); });
@@ -2156,7 +2156,7 @@ function renderAwards() {
       <span class="btn-line">See the ${leadYear} ${top ? 'show' : 'nominees'} ${arrow}</span></div></a>`;
   $('aw-list').innerHTML = years.filter(y => y !== leadYear).map(y => {
     const w = awWinner(chart, y, AW_TOP[chart]);
-    return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(awFace(chart, y), false, y)}<b>${y}</b></div>
+    return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(awFace(chart, y), false, awPhotoYear(chart, y))}<b>${y}</b></div>
       <h3>${esc(awTitle(chart, y))}</h3></a>`;
   }).join('');
 }
@@ -2175,6 +2175,9 @@ function awRecap(chart, year) {
   if (!out.length) out.push(`The nominees for the ${year} ${AW_SHOW[chart]} are below. Winners are still to come.`);
   return out.map(p => `<p>${esc(p)}</p>`).join('');
 }
+// Era photos are filed by chart year. A Pop show honours the year before it (Grammy-style
+// eligibility), so its photos come from that year
+const awPhotoYear = (chart, y) => chart === 'pop' ? y - 1 : y;
 function renderAwardYear(chart, year) {
   if (!AWARDS[chart]) chart = 'country';
   const years = awYears(chart);
@@ -2182,15 +2185,15 @@ function renderAwardYear(chart, year) {
   ui.awChart = chart;
   const top = awWinner(chart, year, AW_TOP[chart]);
   const lead = awMostNominated(chart, year);
-  $('ay-photo').innerHTML = top ? artTile(top.artist || '', true, year) + `<figcaption>${esc(AW_TOP[chart])}</figcaption>`
-    : artTile(lead.artist, true, year) + `<figcaption>Most nominated · ${lead.count} nominations</figcaption>`;
+  $('ay-photo').innerHTML = top ? artTile(top.artist || '', true, awPhotoYear(chart, year)) + `<figcaption>${esc(AW_TOP[chart])}</figcaption>`
+    : artTile(lead.artist, true, awPhotoYear(chart, year)) + `<figcaption>Most nominated · ${lead.count} nominations</figcaption>`;
   $('ay-winners-h').textContent = top ? 'The Winners' : 'The Nominees';
   $('ay-title').textContent = `${year} ${AW_SHOW[chart]}`;
   $('ay-head').hidden = true;
   const retro = RETROS[chart]?.[year];
   $('ay-retro').innerHTML = retro ? retro.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('') : awRecap(chart, year);
   const i = years.indexOf(year);
-  const navTab = (y, label) => `<a class="ye-tab ${chart === 'pop' ? 'pop' : ''}" href="${awHref(chart, y)}">${artTile(awFace(chart, y), false, y)}
+  const navTab = (y, label) => `<a class="ye-tab ${chart === 'pop' ? 'pop' : ''}" href="${awHref(chart, y)}">${artTile(awFace(chart, y), false, awPhotoYear(chart, y))}
     <span>${label}<small>${esc(awTitle(chart, y))}</small></span></a>`;
   $('ay-nav').className = 'ye-tabs ay-nav';
   $('ay-nav').innerHTML = (years[i + 1] ? navTab(years[i + 1], `← ${years[i + 1]}`) : '') + (years[i - 1] ? navTab(years[i - 1], `${years[i - 1]} →`) : '');
@@ -2200,12 +2203,12 @@ function renderAwardYear(chart, year) {
   $('aw-grid').innerHTML = Object.entries(byCat).sort((x, y) => order(x[0]) - order(y[0])).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
-    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, year, win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
+    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, awPhotoYear(chart, year), win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).sort(byAwArtist).map(r => {
       const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
-      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, year, r.song || r.album) : '<span class="mark">·</span>';
+      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, awPhotoYear(chart, year), r.song || r.album) : '<span class="mark">·</span>';
       return `<div class="award-row${r.song || r.album ? ' has-art' : ''}">${thumb}
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}</div></div>`;
     }).join('') + '</div>';
