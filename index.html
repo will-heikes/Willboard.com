@@ -2475,7 +2475,7 @@ function renderSongs() {
 const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
-  'Who had the longest gap between #1s?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
+  'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
   'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'What is the longest song to chart?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
@@ -2742,6 +2742,32 @@ function askAnswer(q, chartId, f) {
     return {
       lead: `The ${young ? 'youngest' : 'oldest'} ${kind === 'woman' ? 'woman' : kind === 'man' ? 'man' : 'act'} to reach #1 on the ${c.name}${inYear(f.span)} is ${esc(x.name)}, who was ${x.age.y} years, ${x.age.days} days old when “${esc(x.s.name || S(x.s.id).name)}” hit #1 the week of ${fmtLong(x.at)}.`,
       rows: list.map((x, i) => askRow(rankIn(list, i, x => x.age.y), S(x.s.id), `<b>${x.age.y}</b> yrs old<br>${esc(x.name)}`)).join(''),
+    };
+  }
+
+  // The longest gap between one song's runs at #1: it drops from the top, then returns
+  if (NO1.test(t) && /\b(gap|gaps|between|wait|waited|longest|apart)\b/.test(t) && /\bruns?\b|\bsongs?\b|\bre-?turn(ed|s|ing)?\b|\bback to\b/.test(t)) {
+    const last = {}, gaps = [];
+    st.weeks.forEach((w, i) => {
+      const id = w.entries[0]?.songId;
+      if (!id) return;
+      // A return: this song was #1 before, but not on the chart just before this one
+      if (last[id] != null && last[id] < i - 1 && inSpanW(f.span, w.week)) {
+        const s = S(id);
+        if (!f.artist || creditParts(s.artistName).some(p => squash(p.name) === squash(f.artist.name)))
+          gaps.push({ s, from: st.weeks[last[id]].week, to: w.week, away: i - last[id] - 1 });
+      }
+      last[id] = i;
+    });
+    // A song that returned more than once is listed by its longest time away
+    const best = {};
+    for (const g of gaps) if (!best[g.s.id] || g.away > best[g.s.id].away) best[g.s.id] = g;
+    const list = Object.values(best).sort((a, b) => b.away - a.away || a.to.localeCompare(b.to));
+    if (!list.length) return { lead: `${f.artist ? `No ${esc(f.artist.name)} song has` : 'No song has'} returned to #1 after dropping on the ${c.name}${inYear(f.span)}.` };
+    const g = list[0], tie = tiedTop(list, x => x.away);
+    return {
+      lead: `${tie > 1 ? `${tie} songs share the longest gap between runs at #1 on the ${c.name}${inYear(f.span)}. Among them, ` : `The longest gap between runs at #1 on the ${c.name}${inYear(f.span)} belongs to `}${title(g.s)}${tie > 1 ? '' : ':'} it left the top after the week of ${fmtLong(g.from)} and returned the week of ${fmtLong(g.to)}, ${n(g.away, 'chart week')} later (${spanText(g.from, g.to)}).`,
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.away), x.s, `<b>${x.away}</b> ${x.away === 1 ? 'wk' : 'wks'} away<br>${x.to.slice(0, 4)}`)).join(''),
     };
   }
 
