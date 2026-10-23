@@ -90,7 +90,11 @@ def main():
     songs = {s['id']: s for s in data['songs']}
     acts = {a['name'] for a in data['artists']}
     act_id = {a['name']: a['id'] for a in data['artists']}
-    album_of = {sid: a for a in albums for sid in a['songs']}
+    # Pop albums (tools/build_pop_albums.py) rank the Pop 10's songs; one that's also a library album
+    # (a song that charted on both) counts with that album, as on the site
+    pop_albums = json.load(open('pop_albums.json', encoding='utf-8')) if os.path.exists('pop_albums.json') else []
+    album_of = {sid: a for a in pop_albums for sid in a['songs']}
+    album_of.update({sid: a for a in albums for sid in a['songs']})
 
     def credits(name):
         """The acts on a credit, lead first. "&" and " x " split only when every part is a known act."""
