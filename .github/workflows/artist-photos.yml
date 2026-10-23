@@ -23,6 +23,10 @@ on:
         description: 'With covers: also every song that has charted (slow)'
         type: boolean
         default: false
+      pop_albums:
+        description: 'Instead: find the album each Pop 10 song comes from (pop_album_matches.json)'
+        type: boolean
+        default: false
       info:
         description: 'Instead: look up each act on Wikidata (person or group, birth date) for the Ask page'
         type: boolean
@@ -49,7 +53,12 @@ jobs:
           fetch-depth: 0  # full history, so the newest of two uploads for one photo wins
       - if: github.event_name == 'workflow_dispatch' && inputs.info
         run: python3 tools/fetch_artist_info.py
-      - if: github.event_name == 'workflow_dispatch' && !inputs.covers && !inputs.info
+      - if: github.event_name == 'workflow_dispatch' && inputs.pop_albums
+        # Stops in time to commit what it found; run again for the rest
+        run: python3 tools/fetch_pop_albums.py --minutes 100 --redo "$REDO"
+        env:
+          REDO: ${{ inputs.redo }}
+      - if: github.event_name == 'workflow_dispatch' && !inputs.covers && !inputs.info && !inputs.pop_albums
         run: python3 tools/fetch_artist_photos.py --redo "$REDO" --wiki "$WIKI"
         env:
           REDO: ${{ inputs.redo }}
@@ -65,7 +74,7 @@ jobs:
           python3 tools/fetch_covers.py --tidy-only
       - name: Find faces in new photos
         # So square tiles crop around the face (images/artists/focus.json)
-        if: ${{ !inputs.covers && !inputs.info }}
+        if: ${{ !inputs.covers && !inputs.info && !inputs.pop_albums }}
         run: |
           pip install -q "opencv-python-headless<5"
           python3 tools/find_faces.py
@@ -74,6 +83,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A images
-          git add artist_info.json artist_info_missing.txt 2>/dev/null || true
+          for f in artist_info.json artist_info_missing.txt pop_album_matches.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || git commit -m "Update artist photos and covers"
           git push
