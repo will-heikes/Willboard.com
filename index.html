@@ -2576,10 +2576,11 @@ const askNorm = t => ` ${(t || '').normalize('NFKD').replace(/[\u0300-\u036f]/g,
 function askArtist(q) {
   const lower = askNorm(q);
   let best = null;
-  for (const a of DATA.artists) {
-    const n = askNorm(a.name);
+  // P!nk is asked about as Pink
+  for (const a of DATA.artists) for (const said of new Set([a.name, a.name.replace(/!/g, 'i')])) {
+    const n = askNorm(said);
     if (n.length < 4 || !(lower.includes(n) || lower.includes(n.trimEnd() + 's ')) || (best && n.length <= best.n.length)) continue;
-    if (n.length <= 8 && !new RegExp(`(^|[^A-Za-z])${a.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^A-Za-z])`).test(q)
+    if (n.length <= 8 && !new RegExp(`(^|[^A-Za-z])${said.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^A-Za-z])`).test(q)
       && !new RegExp(`(^|[^a-z])${n.trim()}['’]?s\\b|\\bby ${n.trim()}\\b`, 'i').test(q)) continue;
     best = { id: a.id, name: a.name, n };
   }
