@@ -54,6 +54,21 @@ EDITION = re.compile(r'\s*([(\[][^)\]]*(deluxe|edition|version|expanded|remaster
                      r'|:\s*the encore|\s+deluxe(:.*)?|:\s*[^:]*edition)\s*$', re.I)
 
 
+# Reissues and EPs that count with an album (Will, 2026-10-23): "Artist|Album" as found -> that album.
+# An EP goes into the album that followed it, since its songs were carried onto it.
+SAME_ALBUM = {
+    'Katy Perry|Teenage Dream: The Complete Confection': 'Teenage Dream',
+    'Katy Perry|1432': '143',
+    'Olivia Rodrigo|GUTS (spilled)': 'GUTS',
+    'Pitbull|Global Warming: Meltdown': 'Global Warming',
+    'Nick Jonas|Nick Jonas X2': 'Nick Jonas',
+    "Demi Lovato|It's Not That Deep (Unless You Want It To Be)": 'It’s Not That Deep',
+    'Tyla|TYLA +': 'TYLA',
+    'Lorde|The Love Club EP': 'Pure Heroine',
+    'Sabrina Carpenter|Espresso EP': "Short n' Sweet",
+}
+
+
 def base_name(name):
     return EDITION.sub('', name).strip() or name.strip()
 
@@ -90,6 +105,9 @@ def main():
             name = m.get('album') if m.get('type') in ('album', 'ep') else None
         if not name:
             continue
+        if f"{m['artist']}|{base_name(name)}" in SAME_ALBUM:
+            # The reissue's date isn't the album's
+            name, m = SAME_ALBUM[f"{m['artist']}|{base_name(name)}"], {**m, 'released': None, 'reissued': m.get('released')}
         groups[(norm(album_artist(m)), group_key(name))].append((sid, m, name))
     out = []
     for (_, _), rows in groups.items():
@@ -98,7 +116,8 @@ def main():
         name = min((base_name(r[2]) for r in rows), key=len)
         # iTunes dates each track by its own release, so a lead single can predate its album;
         # take the year most of the charted songs share
-        years = Counter(int(r[1]['released'][:4]) for r in rows if r[1].get('released'))
+        years = (Counter(int(r[1]['released'][:4]) for r in rows if r[1].get('released'))
+                 or Counter(int(r[1]['reissued'][:4]) for r in rows if r[1].get('reissued')))
         year = min(years, key=lambda y: (-years[y], y)) if years else None
         # The lookup saved the cover under the edition it found; the site looks for it under this name
         dest = os.path.join(COVERS, cover_name(artist, name))

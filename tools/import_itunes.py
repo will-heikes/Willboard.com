@@ -44,7 +44,20 @@ SAME_ACT = {'ladyantebellum': 'ladya'}
 SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
               ('carlypearce', 'hummingbirdnorainnoflowers'): ('carlypearce', 'hummingbird'),
               ('lukecombs', 'thisonesforyoutoo'): ('lukecombs', 'thisonesforyou'),
-              ('coleswindell', 'stereotypebroken'): ('coleswindell', 'stereotype')}
+              ('coleswindell', 'stereotypebroken'): ('coleswindell', 'stereotype'),
+              # Deluxe reissues with their own title, and EPs whose songs went onto the album that
+              # followed (Will, 2026-10-23). These give the album's name and release year, so the
+              # EP's name and earlier date don't take over.
+              ('carlypearce', '29'): ('carlypearce', '29writteninstone', '29: Written In Stone', 2021),
+              ('lukecombs', 'whatyouseeaintalwayswhatyouget'): ('lukecombs', 'whatyouseeiswhatyouget', 'What You See Is What You Get', 2019),
+              ('ellalangley', 'stillhungover'): ('ellalangley', 'hungover', 'hungover', 2024),
+              ('kelseaballerini', 'thefirsttime10yearanniversaryedition'): ('kelseaballerini', 'thefirsttime', 'The First Time', 2015),
+              ('maddie', 'onehearttoanother'): ('maddie', 'thewayitfeels', 'The Way It Feels', 2020),
+              ('maddie', 'whatawomancando'): ('maddie', 'lovelight', 'Love & Light', 2025),
+              ('parkermccollum', 'hollywoodgold'): ('parkermccollum', 'goldchaincowboy', 'Gold Chain Cowboy', 2021),
+              ('runawayjune', 'runawayjune'): ('runawayjune', 'blueroses', 'Blue Roses', 2019),
+              ('randallking', 'leanna'): ('randallking', 'shotglass', 'Shot Glass', 2022),
+              ('ashtonshepherd', 'lookitup'): ('ashtonshepherd', 'wherecountrygrows', 'Where Country Grows', 2011)}
 
 # Tracks filed under the wrong album: Eric Church's Heart and Soul are two albums, not "Heart & Soul" (Will)
 TRACK_ALBUM = {('ericchurch', 'hellofaview'): 'Heart', ('ericchurch', 'stickthatinyourcountrysong'): 'Soul'}
@@ -62,7 +75,8 @@ def album_key(t):
     act = act_key(t.get('Album Artist') or t.get('Artist'))
     name = TRACK_ALBUM.get((act, bare(t['Name'])), name)
     key = act, norm(re.sub(r'\s+-\s+EP$', '', name, flags=re.I))
-    return (*SAME_ALBUM.get(key, key), name)
+    to = SAME_ALBUM.get(key, key)
+    return to if len(to) == 4 else (*to, name, None)
 
 
 TV = re.compile(r"taylor['’]s version", re.I)
@@ -139,9 +153,10 @@ def main():
             cut[0] += t.get('Play Count', 0)
             cut[1].append(re.sub(r'\s*[\(\[][^\)\]]*(version|vault|remaster)[^\)\]]*[\)\]]', '', EXTRA.sub('', t['Name']), flags=re.I).strip())
             if not TV.search(t['Album']):
-                a['names'].append(album_key(t)[2])
-                if t.get('Year'):
-                    a['years'].append(t['Year'])
+                k = album_key(t)
+                a['names'].append(k[2])
+                if k[3] or t.get('Year'):
+                    a['years'].append(k[3] or t['Year'])
     out = []
     for k, a in albums.items():
         songs = sorted(album_songs[k], key=lambda s: s['debutDate'])
