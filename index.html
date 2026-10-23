@@ -1917,7 +1917,7 @@ function decadeBanner(dec) {
 // and his decade lists (tools/build_decade.py → decade.json).
 // Like Billboard's year-end hub: each year (or decade) opens on a card per chart showing its top 5,
 // and each card opens the full list at #/year-end/<year>/<chart>.
-let YEAREND = null, DECADE = null, YEAR_TOPS = null;
+let YEAREND = null, DECADE = null, YEAR_TOPS = null, YEAR_PLAYS = null;
 const DECADES = ['2010s'];
 const n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
 const wks1Text = v => v ? `<b>${v}</b> wk${v === 1 ? '' : 's'} at #1` : '';
@@ -1978,10 +1978,11 @@ function spanStats(s, from, to) {
   const peak = Math.min(...run.map(w => w.pos));
   return { wc: run.length, peak, wks1: run.filter(w => w.pos === 1).length, peakDate: run.find(w => w.pos === peak).week };
 }
-// Plays in a year come from Will's year-end lists (yearend.json); a span of years has none
+// Plays in a year come from Will's year-end lists and Top Songs workbooks (year_plays.json,
+// tools/build_year_plays.py); a span of years has none
 function yearPlays(s, from, to) {
   if (!s || from !== to) return null;
-  return YEAREND?.[s.chart]?.[from]?.songs?.find(r => r.songId === s.id)?.plays ?? null;
+  return YEAR_PLAYS?.[s.chart]?.[from]?.[s.id] ?? YEAREND?.[s.chart]?.[from]?.songs?.find(r => r.songId === s.id)?.plays ?? null;
 }
 // The drop-downs use the same song table as the artist and album pages, counted for this year or decade only
 function yeSongRow(s, st, from, to, single, plays) {
@@ -2011,6 +2012,7 @@ async function renderYearEnd(span, slug) {
   if (!YEAREND) YEAREND = await fetch('yearend.json', FRESH).then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
   if (!DECADE) DECADE = await fetch('decade.json', FRESH).then(r => r.json()).catch(() => ({}));
   if (!YEAR_TOPS) YEAR_TOPS = await fetch('year_tops.json', FRESH).then(r => r.json()).catch(() => ({}));
+  if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
   for (const k in YEAREND) for (const y in YEAREND[k]) for (const r of YEAREND[k][y].songs) if (SONGS[r.songId]) r.name = SONGS[r.songId].name;
   const years = [...new Set([...Object.keys(YEAREND.willboard || {}), ...Object.keys(YEAREND.pop || {})])].map(Number).sort((a, b) => a - b);
   const spans = [...years.map(String), ...DECADES.filter(d => DECADE[d])];
