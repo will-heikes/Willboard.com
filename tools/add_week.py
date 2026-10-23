@@ -116,9 +116,11 @@ def apply_week(data, when, charts, allow_gap=False, runs=None):
             cands.sort(key=lambda s: (s['id'] not in on_chart, norm(s['artistName']) != norm(e['artist'])))
             s = cands[0] if cands else None
             if s is None:
-                a = artists.get(norm(e['artist']))
+                # A credit like "Olivia Rodrigo, Chappell Roan" belongs to its lead act
+                lead = re.split(r', | feat\.? | ft\.? | featuring | with ', e['artist'], flags=re.I)[0].strip()
+                a = artists.get(norm(e['artist'])) or artists.get(norm(lead))
                 if a is None:
-                    a = {'id': f'art_{next_art}', 'name': e['artist']}
+                    a = {'id': f'art_{next_art}', 'name': lead}
                     next_art += 1
                     data['artists'].append(a)
                     artists[norm(a['name'])] = a
