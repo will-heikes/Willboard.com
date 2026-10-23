@@ -4,8 +4,10 @@
     python3 tools/build_year_plays.py <folder of YYYY.xlsx> [country_plays.csv pop_plays.csv]
 
 Run from the repo folder. The folder holds Will's "Top Songs of YYYY" workbooks saved as
-YYYY.xlsx (the same folder build_year_tops.py reads). Plays on Will's own year-end lists
-(yearend.json) win; his workbooks fill in every other song that charted that year.
+YYYY.xlsx (the same folder build_year_tops.py reads); 2019 has no Top Songs workbook, so
+2019.xlsx there is his "Plays Page 2019". From 2020 the plays on Will's own year-end lists
+(yearend.json) win and his workbooks fill in every other song that charted that year.
+Before 2020 the workbooks win where the two differ (Will, 2026-10-23).
 Years with no workbook (2023) come from the CS Era Points plays archive exports, worked
 out the way Will's workbooks do it (checked against 2024): Hot 20, the song's highest
 running total in the year minus its first; Pop 10, the sum of its weekly plays. These match
@@ -38,6 +40,8 @@ SHEETS = {
     (2017, 'pop'): ('Pop Plays', 1, 'Total'),
     (2018, 'willboard'): ('Top Country Songs', 4, 5),
     (2018, 'pop'): ('Top Pop Songs', 4, 5),
+    (2019, 'willboard'): ('Country Total', 0, 4),  # Plays Page 2019
+    (2019, 'pop'): ('Pop Total', 0, 4),
     (2020, 'willboard'): ('Country Test', 1, 6),
     (2020, 'pop'): ('Pop Test', 1, 6),
     (2021, 'willboard'): ('Country Songs', 1, 64),
@@ -157,11 +161,12 @@ def main():
                     sid = next((by_key[kk] for kk in keys(title) if kk in by_key), None)
                     if sid:
                         out[key][y].setdefault(sid, n)
-        # Will's year-end lists win where they give plays
+        # Will's year-end lists give the rest, and win from 2020 on
         for y, v in yearend[key].items():
             for row in v['songs']:
                 if row.get('songId') and row.get('plays') is not None:
-                    out[key][y][row['songId']] = row['plays']
+                    if int(y) >= 2020 or row['songId'] not in out[key][y]:
+                        out[key][y][row['songId']] = row['plays']
     json.dump(out, open('year_plays.json', 'w', encoding='utf-8'), separators=(',', ':'), sort_keys=True)
     for key in out:
         print(key, ', '.join(f'{y}: {len(v)}' for y, v in sorted(out[key].items())))
