@@ -1,5 +1,27 @@
 [
   {
+    "id": "2026-pop-record-of-the-year",
+    "date": "2026-10-23",
+    "chart": "pop10",
+    "kicker": "Pop Awards",
+    "bucket": "analysis",
+    "artist": "Willa Ford",
+    "link": "#/awards/pop/2025",
+    "linkText": "See last year's Pop Awards",
+    "headline": "Record of the Year almost always goes to the year's biggest hit. Who can break the pattern in 2026?",
+    "dek": "Production and chart success both count. A critic's guide to the front-runners, the safe bets and the dark horses.",
+    "body": [
+      "Song of the Year asks what is on the page. Record of the Year asks about the finished record: how it sounds, how it was built, and how hard it landed on the Pop 10. Nominations aren't final, so this is a read of the field from the chart and from the records themselves. No song can be nominated twice, so last year's nominees, including ‘Bite My Tongue,’ are out.",
+      "<b>The biggest hit usually wins.</b> In 14 shows, the song that finished the year at No. 1 on the Year-End Pop 10 has taken Record of the Year 12 times, from ‘Somebody That I Used to Know’ in 2012 to ‘Honesty’ last year. The two upsets barely count as upsets. In 2022 The Chainsmokers' ‘High’ beat the year's No. 1, ‘Unholy,’ and in 2024 Ariana Grande's ‘We Can't Be Friends’ beat ‘Espresso.’ Both winners were the year's No. 2 song. No record ranked lower than that has ever won.",
+      "<b>Late bloomers are the exception that proves the rule.</b> Two recent winners took a while to get going. [[Cassandra Coleman]]'s ‘Habit’ was only No. 27 on the 2022 Year-End list before topping 2023, and Nelly Furtado's ‘Honesty’ climbed from No. 36 in 2024 to No. 1 in 2025. Voters reward a record when its peak year arrives, not when it debuts.",
+      "<b>Dark horses get nominated. They don't win.</b> Every field has one or two. ‘Catch My Breath’ was nominated in 2013 from No. 15 on the Year-End list, ‘Love Me Harder’ in 2015 from No. 16, ‘Someone You Loved’ in 2019 from No. 13 and ‘Ur So F**king Cool’ in 2020 from No. 14. ‘Homura’ made the 2021 field without placing on that year's list at all. None of them came close to winning, and that history should shape any bet you make this year.",
+      "<b>The front-runners.</b> Four songs share the year's longest run at No. 1, four weeks each, but two of them also have the staying power the Year-End list rewards. [[Chloe Tang]]'s ‘Obsexxed’ spent nine weeks in the top 3 across a 15-week run. Tang has built her sound on emotionally charged pop with a darker R&B edge, and this May single is where it finally clicked; with ‘Running on Blue’ alongside Casandra, she also has a second No. 1 this year. [[Willa Ford]]'s ‘Love4Life’ held the top 3 for eight weeks. It's the comeback record of the year: Ford co-produced it with Gustav Afsahi and Jonathan Bluth for her album <i>amanda</i>, and reviewers singled out the shimmering '80s synth textures that wrap its warm, grateful message. If history holds, the winner comes from these two.",
+      "<b>The safe bets for a nomination.</b> [[Hilary Duff]]'s ‘Weather for Tennis’ debuted at No. 1 and stayed four weeks; Matthew Koma and Brian Phillips produced it as the opener of a record Rolling Stone called a shimmering synth-pop comeback. Alexandra Căpitănescu's ‘Choke Me’ also debuted at No. 1 for four weeks, a nu-metal Eurovision entry built from a beat producer Călin Grajdan had on his laptop that finished third in Vienna. It's the boldest production in the field, though its title drew criticism that could give voters pause. [[Kim Petras]]'s ‘Brutalist’ matches ‘Obsexxed’ with nine weeks in the top 3, riding a catchy beat that fades into a quiet, yearning ending. [[Katy Perry]]'s ‘Bandaids’ has the longest run of any contender at 17 weeks. Perry traded synths for guitars on a pop-rock ballad that Clash called a top-tier heartbreak anthem. And ‘Stateside + Zara Larsson’ is the best-built record of the year: [[Pink Pantheress]] and Oscar Scheller reworked the beat around Larsson's verse, stitching in Adina Howard's ‘Freak Like Me’ and Groove Armada's ‘I See You Baby.’",
+      "<b>The dark horses.</b> Cassandra Coleman's ‘End of Your Love’ is the one to watch. She co-produced it with Alec Shaw and recorded it with a full band in one room at Sound Emporium in Nashville, and it has spent the last three weeks at No. 1. It arrived late, but so did ‘Habit,’ and she has already won this award once. Petras's ‘Need for Speed,’ made with Margo XS, Frost Children and nightfeelings, debuted at No. 1 and held three weeks, though it spent only four weeks on the chart and may split her support with ‘Brutalist.’ girlsweetvoiced's whispered ‘Cranberry’ had three weeks on top and proves a quiet record can win the chart. Then there's Kayla Rae's ‘True,’ which spent seven weeks in the top 3 without ever reaching No. 1. That is exactly the profile of a song that gets a nomination and a polite round of applause.",
+      "<b>The verdict.</b> On production alone, ‘Stateside’ and ‘Choke Me’ are the most striking records in the race. But Record of the Year has never been decided on sound alone. Fourteen years of history say the trophy goes to the record that owned the year, and on the chart that's a fight between ‘Obsexxed’ and ‘Love4Life,’ with ‘Brutalist’ and ‘Bandaids’ close enough to make it interesting. If there's a third upset in the show's history, look for it at the very top of the Year-End list, not from a dark horse."
+    ]
+  },
+  {
     "id": "megan-moroney-nine-for-nine",
     "date": "2026-10-23",
     "chart": "hot20",
@@ -15,7 +37,9 @@
       "<b>Six No. 1s from nine songs.</b> Two thirds of everything she has released to the chart has gone to No. 1. ‘Medicine’ is the third charting song from her album <i>Cloud 9</i>, after ‘6 Months Later’ and ‘Wedding Dress.’",
       "<b>The perfect-record club.</b> Moroney joins a short list of acts with at least nine entries that all made the top 10. [[Kip Moore]] leads it by a wide margin: all 21 of his songs have reached the top 10, including ‘Faith in the Wind’ at No. 8 this week. [[George Strait]], [[Leann Rimes]] and [[Lainey Wilson]] are each 13 for 13, [[Chris Young]] is 11 for 11, and [[The Band Perry]] and [[Morgan Wade]] are 10 for 10.",
       "<b>Awards season.</b> The timing doesn't hurt. Moroney goes into this year's Country Awards with five nominations, including her first for Entertainer of the Year, and ‘Wedding Dress’ is up for both Single and Song of the Year."
-    ]
+    ],
+    "bucket": "history",
+    "archived": true
   },
   {
     "id": "2026-country-awards-panel",
@@ -26,19 +50,20 @@
     "link": "#/awards/country/2026",
     "linkText": "See every 2026 Country Awards nominee",
     "headline": "Who will win at the 2026 Country Awards? Three experts make their picks",
-    "dek": "The analyst follows the chart, the critic follows the writing, and the fan follows the heart. They don't always agree.",
+    "dek": "A chart editor, a critic and a fan podcaster call the winners. They don't always agree.",
     "body": [
-      "The 2026 Country Awards nominations are set, so we asked three very different voices to call the winners. <b>The Analyst</b> goes strictly by the past year on the Hot 20: No. 1s, weeks on top and staying power. <b>The Critic</b> cares about craft, meaning the writing, the singing and whether the record says something. <b>The Fan</b> picks with the heart, the songs that got played the most in the car this year.",
-      "<b>Entertainer of the Year.</b> The Analyst picks [[Ella Langley]], and it isn't close on paper. She has four No. 1s and 13 weeks at No. 1 over the past year, the most of any nominee, and she's the reigning winner. The Critic goes with [[Megan Moroney]]: “<i>Cloud 9</i> is the sound of a writer who knows exactly who she is, and this is her first Entertainer nomination. Reward the leap.” The Fan picks [[Zach Top]]: “Two No. 1s, the most fun shows in country and a sound that makes 1995 feel brand new.”",
-      "<b>Female Vocalist.</b> The Analyst and the Fan both pick Langley. The Critic stays with Moroney, pointing to the restraint of ‘Wedding Dress,’ which a quieter singer would have overplayed. Two votes to one for Langley.",
-      "<b>Male Vocalist.</b> The Analyst picks Zach Top, whose ‘South of Sanity’ and ‘When You See Me’ spent seven weeks at No. 1 between them. The Critic picks [[David Nail]], whose cover of Bruce Cockburn's ‘Pacing the Cage’ reached No. 2: “It's the best vocal performance on the ballot, full stop.” The Fan picks [[Kip Moore]]: “Twenty-one songs, twenty-one top 10s. He's earned it.”",
-      "<b>Vocal Duo/Group.</b> The Analyst picks [[Flatland Cavalry]], the only nominee with a No. 1 this year (‘A Life Where We Work Out’ with Kaitlin Butts). The Critic picks [[Maddie & Tae]]: “Their harmonies are still the gold standard, and they're the most decorated act in the show's history for a reason.” The Fan picks [[The Castellows]], whose ‘Love Is A Game’ is climbing the chart right now.",
-      "<b>New Artist.</b> The Analyst picks [[Mackenzie Carpenter]], who has a No. 1 (‘Jesus, I'm Jealous’) and two more top 5 hits this year. The Critic likes Flatland Cavalry's songwriting depth. The Fan picks [[Kevin Powers]], whose ‘Move On’ with Shaboozey made it to No. 1.",
-      "<b>Album of the Year.</b> The Analyst picks Langley's <i>Dandelion</i>, which has sent three songs to No. 1 for a combined 12 weeks. The Critic picks Moroney's <i>Cloud 9</i>, which reviewers called her most confident work. The Fan picks Top's <i>Ain't In It For My Health</i>.",
-      "<b>Single of the Year.</b> The Analyst picks ‘Wedding Dress,’ whose seven weeks at No. 1 are the most of any song on the ballot. The Critic and the Fan both pick ‘Choosin' Texas,’ which the Fan calls “the song you sing along to with the windows down,” and the Critic calls a classic country record in every sense.",
-      "<b>Song of the Year.</b> Here the Analyst and the Critic agree: ‘Wedding Dress.’ For the Critic, it's the writing of the year: a spare, acoustic song about realizing at the altar that you never got over the one who got away. It turns the fairy tale into something unsettling without a wasted line. The Fan goes with ‘Choosin' Texas,’ the story of losing a homesick partner to his Texas hometown and the woman waiting there, told from the long drive back east.",
-      "<b>The consensus.</b> Two of three experts land on Ella Langley for Female Vocalist and on ‘Wedding Dress’ for Song of the Year. Everything else is up for grabs, which is exactly how an awards night should feel."
-    ]
+      "The 2026 Country Awards nominations are set, so we asked three very different voices to call the winners. <b>Renée Holcomb</b>, Willboard's chart data editor, goes strictly by the past year on the Hot 20: No. 1s, weeks on top and staying power. <b>Theo Marchetti</b>, our senior music critic, cares about craft, meaning the writing, the singing and whether the record says something. <b>Lainey Booker</b>, host of the fan podcast <i>Windows Down</i>, picks with the heart: the songs that got played the most in the car this year.",
+      "<b>Entertainer of the Year.</b> Holcomb picks [[Ella Langley]], and it isn't close on paper. She has four No. 1s and 13 weeks at No. 1 over the past year, the most of any nominee, and she's the reigning winner. Marchetti goes with [[Megan Moroney]]: “<i>Cloud 9</i> is the sound of a writer who knows exactly who she is, and this is her first Entertainer nomination. Reward the leap.” Booker picks [[Zach Top]]: “Two No. 1s, the most fun shows in country and a sound that makes 1995 feel brand new.”",
+      "<b>Female Vocalist.</b> Holcomb and Booker both pick Langley. Marchetti stays with Moroney, pointing to the restraint of ‘Wedding Dress,’ which a quieter singer would have overplayed. Two votes to one for Langley.",
+      "<b>Male Vocalist.</b> Holcomb picks Zach Top, whose ‘South of Sanity’ and ‘When You See Me’ spent seven weeks at No. 1 between them. Marchetti picks [[David Nail]], whose cover of Bruce Cockburn's ‘Pacing the Cage’ reached No. 2: “It's the best vocal performance on the ballot, full stop.” Booker picks [[Kip Moore]]: “Twenty-one songs, twenty-one top 10s. He's earned it.”",
+      "<b>Vocal Duo/Group.</b> Holcomb picks [[Flatland Cavalry]], the only nominee with a No. 1 this year (‘A Life Where We Work Out’ with Kaitlin Butts). Marchetti picks [[Maddie & Tae]]: “Their harmonies are still the gold standard, and they're the most decorated act in the show's history for a reason.” Booker picks [[The Castellows]], whose ‘Love Is A Game’ is climbing the chart right now.",
+      "<b>New Artist.</b> Holcomb picks [[Mackenzie Carpenter]], who has a No. 1 (‘Jesus, I'm Jealous’) and two more top 5 hits this year. Marchetti likes Flatland Cavalry's songwriting depth. Booker picks [[Kevin Powers]], whose ‘Move On’ with Shaboozey made it to No. 1.",
+      "<b>Album of the Year.</b> Holcomb picks Langley's <i>Dandelion</i>, which has sent three songs to No. 1 for a combined 12 weeks. Marchetti picks Moroney's <i>Cloud 9</i>, which reviewers called her most confident work. Booker picks Top's <i>Ain't In It For My Health</i>.",
+      "<b>Single of the Year.</b> Holcomb picks ‘Wedding Dress,’ whose seven weeks at No. 1 are the most of any song on the ballot. Marchetti and Booker both pick ‘Choosin' Texas,’ which Booker calls “the song you sing along to with the windows down,” and Marchetti calls a classic country record in every sense.",
+      "<b>Song of the Year.</b> Here Holcomb and Marchetti agree: ‘Wedding Dress.’ For Marchetti, it's the writing of the year: a spare, acoustic song about realizing at the altar that you never got over the one who got away. It turns the fairy tale into something unsettling without a wasted line. Booker goes with ‘Choosin' Texas,’ the story of losing a homesick partner to his Texas hometown and the woman waiting there, told from the long drive back east.",
+      "<b>The consensus.</b> Two of our three panelists land on Ella Langley for Female Vocalist and on ‘Wedding Dress’ for Song of the Year. Everything else is up for grabs, which is exactly how an awards night should feel."
+    ],
+    "bucket": "analysis"
   },
   {
     "id": "miranda-lambert-34-entries",
@@ -56,7 +81,8 @@
       "<b>The records.</b> Lambert has 11 No. 1s and 28 total weeks at No. 1. ‘Over You’ ruled for nine weeks in 2012, the longest reign the Hot 20 has seen, a record it now shares with Kenny Chesney and Grace Potter's ‘You and Tequila’ and Kip Moore and Morgan Wade's ‘If I Was Your Lover.’ ‘Tin Man’ added eight more weeks in 2017. Her No. 1s span 15 years, from ‘The House That Built Me’ in 2010 to ‘Run’ in 2025.",
       "<b>Good company.</b> She's also one of the chart's great collaborators. ‘We Were Us’ with Keith Urban and ‘Santa Fe’ with Parker McCollum both reached No. 2, and ‘Somethin' Bad’ with Carrie Underwood made No. 5. She even crossed over to the Pop 10, where ‘Drunk’ with Elle King peaked at No. 2 in 2021.",
       "<b>The count.</b> At 34 entries, Lambert trails only Underwood. Her 11 No. 1s tie her with Kip Moore for fifth all-time, behind Underwood (21), Carly Pearce (18), Kenny Chesney (12) and Maddie & Tae (12). Sixteen years after she showed up on the very first chart, her story is still being written."
-    ]
+    ],
+    "bucket": "history"
   },
   {
     "id": "2026-country-awards-nominees",
@@ -74,7 +100,8 @@
       "Several acts earn their first nominations. [[Kevin Powers]] leads them with four: Male Vocalist, New Artist, and Single and Musical Event for “Move On” with [[Shaboozey]]. [[Mackenzie Carpenter]] has three (Female Vocalist, New Artist and Album for <i>Hey Country Queen</i>), as does [[Flatland Cavalry]] (Duo/Group, New Artist and Musical Event for “A Life Where We Work Out” with Kaitlin Butts). [[Danielle Bradbery]] picks up two, for Female Vocalist and “Dent” in Single.",
       "The veterans are here too. [[Carly Pearce]], already the most nominated act in the show's history, adds two more for 40 in all, including her eighth Entertainer nomination. [[Maddie & Tae]], the show's biggest winners with 16 awards, return in Duo/Group."
     ],
-    "archived": true
+    "archived": true,
+    "bucket": "analysis"
   },
   {
     "id": "2026-pop-awards-predictions",
@@ -94,7 +121,8 @@
       "<b>‘Cranberry,’ [[girlsweetvoiced]].</b> The quietest writing in the race, and on purpose. It's a whispered, shy confession about everyday romance, the kind of song that works by holding back. Its gift is turning shyness itself into the hook.",
       "<b>The verdict.</b> Plenty of songs had longer runs this year, but the writing narrows the field fast. ‘Brutalist’ and ‘Weather for Tennis’ say the most and say it in ways only their writers could. ‘Bandaids’ is close behind on the strength of its ending. If Song of the Year is about the song, that's where it should be decided."
     ],
-    "archived": true
+    "archived": true,
+    "bucket": "analysis"
   },
   {
     "id": "kenny-chesney-top-two",
@@ -109,7 +137,8 @@
       "The song took the long road. It debuted at No. 18 on July 23 and spent four weeks at No. 7 before jumping five spots to No. 2 on October 8.",
       "Chesney never went far in between. “Knowing You” in 2021 and “Just to Say We Did” in 2025 both stopped at No. 4. “Silver Sands Marina” is his 29th Hot 20 entry, his 24th top 10 and his 19th top 5."
     ],
-    "archived": true
+    "archived": true,
+    "bucket": "history"
   },
   {
     "id": "pop-10-turns-15",
@@ -129,7 +158,8 @@
       "<b>Counting the plays (2017 to now).</b> Since December 2017 the Pop 10 has run on real play counts, first from Last.fm and since 2023 from stats.fm. Demi Lovato came full circle with ‘Sorry Not Sorry,’ the 2017 Year-End No. 1. Sam Smith topped the year twice, with ‘How Do You Sleep’ in 2019 and ‘Unholy’ with Kim Petras in 2022. In 2023 [[Cassandra Coleman]]'s ‘Habit’ came within one week of Gotye's record with 14 weeks at No. 1. And the chart has gone global: Erika Vikman's ‘Ich Komme’ led for seven weeks in 2025, the same year the Pop Awards added Foreign Language Song of the Year.",
       "<b>Milestones.</b> The 100th song to reach No. 1 was Mariah Carey and YG's ‘I Don't’ on March 2, 2017. Meghan Trainor fittingly brought up No. 1 number 200 with ‘Made You Look’ on December 1, 2022, and Chloe Tang and Casandra's ‘Running on Blue’ became the 250th last December. Panic! At the Disco's ‘High Hopes’ was the 500th song ever to chart, in November 2018. The 1,000th was [[Hilary Duff]]'s ‘Weather for Tennis,’ which debuted at No. 1 on March 5 of this year and was still on top a week later for the 750th Pop 10.",
       "<b>By the numbers.</b> Through 780 charts, 267 different songs have reached No. 1. Meghan Trainor owns the record books with 13 No. 1s and 42 weeks on top, ahead of The Chainsmokers (34 weeks) and Ariana Grande (32). Here's to the next 15."
-    ]
+    ],
+    "bucket": "history"
   },
   {
     "id": "dolly-parton-chart-legacy",
@@ -149,6 +179,7 @@
       "<b>Crossing over (2019).</b> Few country legends have topped the Pop 10, and Parton did it at 73. Galantis' ‘Faith,’ with Mr. Probz, debuted at No. 6 on November 28, 2019, and reached No. 1 two weeks later. It led for four straight weeks, carrying her into 2020, and finished No. 24 on the 2019 Pop Year-End chart. At the time she was the oldest act ever to top the Pop 10. Only Elton John and Cher have since topped it older, and Cher is the only woman to do it.",
       "<b>Still collaborating.</b> She kept showing up alongside younger acts. ‘Happy All the Time’ with Sam Williams, Hank Williams' grandson, reached No. 12 on the Hot 20 in 2021, and ‘Bets On Us’ with Cheat Codes climbed to No. 5 on the Pop 10 in January 2023, her last Willboard hit.",
       "<b>By the numbers.</b> Six chart entries, 65 weeks on the charts and six weeks at No. 1. She is one of only seven acts to send a song to No. 1 on both the Hot 20 and the Pop 10. Her legacy is much bigger than any chart, but on this one she left a mark that will be hard to touch."
-    ]
+    ],
+    "bucket": "relevance"
   }
 ]
