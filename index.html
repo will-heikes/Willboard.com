@@ -665,8 +665,6 @@ body.on-ask .ask-fab { display: none; }
 .no1-year { font-family: var(--f-cond); font-weight: 700; font-size: 22px; padding: 14px 18px 6px; border-top: 1px solid var(--line-soft); color: var(--accent); }
 .no1-year:first-child { border-top: 0; }
 .no1-year small { font-family: var(--f-body, inherit); font-weight: 500; font-size: 12.5px; color: var(--muted); margin-left: 8px; letter-spacing: 0; }
-.no1-back .rk { color: var(--muted); font-size: 18px; }
-.no1-back .song::after { content: 'Return to #1'; margin-left: 8px; font-family: var(--f-body, inherit); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
 .rec-h { font-family: var(--f-cond); font-weight: 700; font-size: 24px; text-transform: uppercase; margin: 30px 0 12px; }
 .chart-links { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 16px; }
 .chart-links .ask-more { color: var(--ink); }
@@ -3023,9 +3021,9 @@ function renderNumberOnes(chartId) {
   $('no1-list').innerHTML = Object.entries(years).map(([y, rows]) => `<div class="no1-year">${y}<small>${n(rows.filter(r => r.k).length, 'new #1')}</small></div>
     <div class="ask-rows">${rows.map(r => {
       const total = st.songs[r.id].no1.length;
-      const meta = r.k ? `<b>${fmtShort(r.week)}</b><br>${wk(r.weeks)} at #1${total > r.weeks ? ` (${total} in all)` : ''}`
-        : `<b>Returns ${fmtShort(r.week)}</b><br>${wk(r.weeks)} more at #1`;
-      return askRow(r.k || '↺', SONGS[r.id], meta, `#/${chartId}/${r.week}`).replace('class="lrow"', `class="lrow${r.k ? '' : ' no1-back'}"`);
+      const RUN = ['', 'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'];
+      const meta = `<b>${fmtShort(r.week)}</b><br>${r.k ? '' : `${RUN[r.run] || ordinal(r.run)} run · `}${total > r.weeks ? `${r.weeks} of ${total} weeks` : `${wk(r.weeks)} at #1`}`;
+      return askRow(r.k || '', SONGS[r.id], meta, `#/${chartId}/${r.week}`);
     }).join('')}</div>`).join('');
 }
 
