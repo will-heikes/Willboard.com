@@ -27,6 +27,7 @@ from collections import defaultdict
 import openpyxl
 
 from add_week import norm, points
+from import_itunes import COMPILATION  # hits collections stay off Year-End (Will)
 
 TOP = 10
 # (year, chart): (tab, song column, total column) or, for 2014 Country, (tab, song, points share, plays share)
@@ -181,7 +182,7 @@ def main():
                 al = album_of.get(sid)
                 # An album only counts in or after the year it came out (Will): a lead single's
                 # points the year before its album was announced don't put the album on that list
-                if al and (al.get('released') or al.get('year') or 0) <= y:
+                if al and (al.get('released') or al.get('year') or 0) <= y and not COMPILATION.search(al['name']):
                     a = al_tally[(al['name'], al['artist'])]
                     a[0] += pp + pl
                     a[1].add(sid)

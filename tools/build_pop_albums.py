@@ -17,7 +17,6 @@ from collections import Counter, defaultdict
 
 from fetch_artist_photos import norm
 from fetch_covers import OUT as COVERS, clean, cover_name, same_artist
-from import_itunes import COMPILATION
 
 # Lookups that landed on the wrong release: "Artist|Title" (as in pop_album_matches.json) ->
 # the album to use instead, or None for a song that was only a single
@@ -38,7 +37,7 @@ FIX = {
     'Post Malone|Better Now': 'beerbongs & bentleys',
     'Post Malone|White Iverson': 'Stoney',
     'Starley|Call On Me': None,
-    'T-Pain|5 O\'Clock': None,
+    'T-Pain|5 O\'Clock': 'Revolver',
     'Avril Lavigne|Bois Lie': 'Love Sux',
     'The Weeknd|Earned It': 'Beauty Behind the Madness',
     'The Weeknd|The Hills': 'Beauty Behind the Madness',
@@ -50,6 +49,7 @@ FIX = {
     'Ed Sheeran|Afterglow': None,
     'Dua Lipa|Dance the Night': None,
     'Katy Perry|Never Really Over': 'Smile',
+    'Katy Perry|Bandaids': None,
 }
 # "(Deluxe)", "(Wembley Edition)", "[Expanded Edition]", "Deluxe: LANA", ": The Encore" and the like
 EDITION = re.compile(r'\s*([(\[][^)\]]*(deluxe|edition|version|expanded|remaster|anniversary)[^)\]]*[)\]]'
@@ -79,6 +79,7 @@ RELEASED = {
     'Camila Cabello|Camila': 2018,
     'Halsey|Manic': 2020,
     "Meghan Trainor|Takin' It Back": 2022,
+    'T-Pain|Revolver': 2011,
 }
 
 
@@ -115,8 +116,7 @@ def main():
             if name:  # the right album is by the song's own act
                 m = {**m, 'album': None, 'albumArtist': m['artist'], 'released': None}
         else:
-            # Hits collections aren't albums (Will): a song found only on one counts as a single
-            name = m.get('album') if m.get('type') in ('album', 'ep') and not COMPILATION.search(m.get('album') or '') else None
+            name = m.get('album') if m.get('type') in ('album', 'ep') else None
         if not name:
             continue
         if f"{m['artist']}|{base_name(name)}" in SAME_ALBUM:
@@ -154,6 +154,7 @@ def main():
         if out_years:
             al['released'] = max(out_years)
         al['released'] = RELEASED.get(f'{artist}|{name}', al.get('released'))
+        al['year'] = al['year'] or al['released']
         out.append(al)
     out.sort(key=lambda a: (-len(a['songs']), a['artist'].lower(), a['name'].lower()))
     json.dump(out, open('pop_albums.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
