@@ -129,6 +129,22 @@ button { font: inherit; color: inherit; }
 }
 .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }  /* tall photos: faces sit high */
 
+/* ── SONG PREVIEWS (30 seconds from Deezer) ─────────────────── */
+.pv { position: absolute; right: 3px; bottom: 3px; z-index: 2; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(20,24,30,.78); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .12s, background .12s; }
+.pv:hover { transform: scale(1.12); background: rgba(20,24,30,.95); }
+.pv svg { width: 10px; height: 10px; fill: currentColor; }
+.pv .ps, .pv.on .pl { display: none; }
+.pv.on .ps { display: block; }
+.pv.on { background: var(--country); }
+.pv.wait { opacity: .6; cursor: progress; }
+.pv-pill { position: static; display: inline-flex; width: auto; height: auto; padding: 7px 14px 7px 11px; border-radius: 999px; gap: 7px; margin-top: 12px;
+  font: 700 12.5px var(--f-body); letter-spacing: .02em; background: var(--ink); }
+.pv-pill svg { width: 11px; height: 11px; }
+.pv-pill .lb::after { content: 'Play preview'; }
+.pv-pill.on .lb::after { content: 'Pause'; }
+.pv.err { background: var(--muted); }
+
 /* ── CARDS ──────────────────────────────────────────────────── */
 .card {
   background: var(--card);
@@ -1386,6 +1402,55 @@ function artTile(artistName, eager, year, title) {
   return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy}${pos ? ` style="object-position:${pos.join('% ')}%"` : ''} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
 }
 
+// 30-second previews. previews.json (tools/fetch_previews.py) maps songs to Deezer tracks; Deezer's preview
+// links expire, so a fresh one is fetched when play is pressed. One song plays at a time.
+let PREVIEWS = {};
+const PV_ICONS = '<svg class="pl" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg><svg class="ps" viewBox="0 0 10 10"><path d="M2 1h2v8H2zM6 1h2v8H6z"/></svg>';
+function playBtn(songId, pill) {
+  if (!PREVIEWS[songId]) return '';
+  return `<button class="pv${pill ? ' pv-pill' : ''}" data-pv="${songId}" aria-label="Play a preview of ${esc(SONGS[songId]?.name || 'this song')}">${PV_ICONS}${pill ? '<span class="lb"></span>' : ''}</button>`;
+}
+// An art tile with a play button in its corner
+function playTile(html, songId) { const b = playBtn(songId); return b ? html.replace(/<\/div>$/, b + '</div>') : html; }
+const PV = { audio: new Audio(), id: null, n: 0 };
+PV.audio.volume = .8;
+PV.audio.onended = PV.audio.onpause = () => pvMark(null);
+function pvMark(id) {
+  PV.id = id;
+  document.querySelectorAll('.pv').forEach(b => b.classList.toggle('on', !!id && b.dataset.pv === id));
+}
+function deezerTrack(trackId) {
+  return new Promise((ok, fail) => {
+    const cb = `__dz${++PV.n}`, el = document.createElement('script');
+    const done = v => { delete window[cb]; el.remove(); clearTimeout(t); v instanceof Error ? fail(v) : ok(v); };
+    const t = setTimeout(() => done(new Error('timeout')), 8000);
+    window[cb] = done;
+    el.onerror = () => done(new Error('load'));
+    el.src = `https://api.deezer.com/track/${trackId}?output=jsonp&callback=${cb}`;
+    document.head.appendChild(el);
+  });
+}
+async function togglePreview(btn) {
+  const id = btn.dataset.pv;
+  if (PV.id === id && !PV.audio.paused) { PV.audio.pause(); return; }
+  btn.classList.add('wait');
+  try {
+    const t = await deezerTrack(PREVIEWS[id]);
+    if (!t?.preview) throw new Error('no preview');
+    PV.audio.src = t.preview;
+    await PV.audio.play();
+    pvMark(id);
+  } catch (e) {
+    btn.classList.add('err'); btn.title = 'Preview unavailable';
+  } finally { btn.classList.remove('wait'); }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.pv');
+  if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  togglePreview(b);
+}, true);
+
 function weeksAt1(songId, hist, upTo) {
   let n = 0;
   for (const w of DATA[hist]) { if (upTo && w.week > upTo) break; if (w.no1 && w.no1.songId === songId) n++; }
@@ -1500,7 +1565,7 @@ function chartRows(chartId, idx, limit, full) {
     return `<a class="chart-row${e.position === 1 ? ' top' : ''}" href="${href}">
       <span class="pos">${e.position}</span>
       <span class="move">${moveCell(p, e.position, e.weeks)}</span>
-      ${artTile(s.artistName, e.position <= 3, undefined, s.name)}
+      ${playTile(artTile(s.artistName, e.position <= 3, undefined, s.name), s.id)}
       <span><div class="song">${esc(s.name || '—')}${wks1 > 1 ? `<span class="wks1">${wks1} wks at #1</span>` : ''}</div>
         <div class="artist">${esc(s.artistName || '')}${chip}</div>${cert ? `<div class="cert-inline">${cert}</div>` : ''}</span>
       <span class="certcol">${cert}</span>
@@ -2300,6 +2365,7 @@ async function renderSong(id) {
       <h1>${esc(s.name)}</h1>
       <div class="by">${creditLinks(s.artistName)}</div>
       ${songCert(s)}
+      ${playBtn(s.id, true)}
       ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(albumName(s))}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-song'));
@@ -3254,6 +3320,7 @@ async function init() {
       else ALBUMS.push({ ...pa, cuts: [] });
     }
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    PREVIEWS = await fetch('previews.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     SONG_LEN = await fetch('song_lengths.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
     RECAPS = (await fetch('recaps.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => [])).sort((a, b) => b.week.localeCompare(a.week));
@@ -3314,6 +3381,7 @@ async function init() {
   $('ask-form').onsubmit = e => { e.preventDefault(); const v = $('ask-q').value.trim(); if (v) location.hash = askHref(v); };
 
   renderHome();
+  window.addEventListener('hashchange', () => PV.audio.pause());
   window.addEventListener('hashchange', route);
   route();
 }
