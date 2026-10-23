@@ -1387,11 +1387,12 @@ function coverUrl(artistName, title) {
   const p = primaryArtist(artistName);
   return p && title ? `images/covers/${slugify(p)}--${slugify(title)}.jpg` : '';
 }
-// The cover of the album a charted song is on (a vault song uses its Taylor's Version)
+// The covers of the album a charted song is on (a vault song uses its Taylor's Version), then the
+// deluxe edition it came from, if it did: the last one that loads sits on top
 let SONG_ALBUM = {};
-function albumCoverUrl(artistName, title) {
+function albumCoverUrls(artistName, title) {
   const al = title && SONG_ALBUM[`${squash(primaryArtist(artistName))}|${squash(title)}`];
-  return al ? coverUrl(al[0], al[1]) : '';
+  return al ? [coverUrl(al[0], al[1]), al[2] && coverUrl(al[0], al[2])] : [];
 }
 function artTile(artistName, eager, year, title) {
   const p = primaryArtist(artistName);
@@ -1400,7 +1401,7 @@ function artTile(artistName, eager, year, title) {
   const src = photoUrl(artistName, year);
   const lazy = eager ? '' : ' loading="lazy"', pos = src && FOCUS[src.split('/').pop().split('?')[0]];
   // Will prefers the album cover over the single's: it sits on top when the song is on an album we have art for
-  const covers = [...new Set([coverUrl(artistName, title), albumCoverUrl(artistName, title)].filter(Boolean))];
+  const covers = [...new Set([coverUrl(artistName, title), ...albumCoverUrls(artistName, title)].filter(Boolean))];
   return `<div class="art" style="background:${bg}">${esc(init)}${src ? `<img src="${src}" alt=""${lazy}${pos ? ` style="object-position:${pos.join('% ')}%"` : ''} onerror="this.remove()">` : ''}${covers.map(c => `<img src="${c}" alt=""${lazy} onerror="this.remove()">`).join('')}</div>`;
 }
 
@@ -3346,7 +3347,10 @@ async function init() {
     const POP_ALBUMS = await fetch('pop_albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
     for (const pa of POP_ALBUMS) {
       const same = ALBUMS.find(al => squash(al.artist) === squash(pa.artist) && slugify(al.name) === slugify(pa.name));
-      if (same) same.songs.push(...pa.songs.filter(sid => !same.songs.includes(sid)));
+      if (same) {
+        same.songs.push(...pa.songs.filter(sid => !same.songs.includes(sid)));
+        if (pa.deluxe) same.deluxe = { ...pa.deluxe, ...same.deluxe };
+      }
       else ALBUMS.push({ ...pa, cuts: [] });
     }
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
@@ -3376,7 +3380,8 @@ async function init() {
   for (const a of DATA.artists) ARTIST_ID[a.name] ||= a.id;
   for (const al of ALBUMS) for (const sid of al.songs) {
     const s = SONGS[sid];
-    if (s) SONG_ALBUM[`${squash(primaryArtist(s.artistName))}|${squash(s.name)}`] = [al.artist, (al.editions?.[sid] || al.name).trim()];
+    // A song off a deluxe edition shows that edition's cover, over the album's if we have it (Will)
+    if (s) SONG_ALBUM[`${squash(primaryArtist(s.artistName))}|${squash(s.name)}`] = [al.artist, (al.editions?.[sid] || al.name).trim(), al.deluxe?.[sid]?.trim()];
   }
   [PHOTO_YEARS, FOCUS] = await Promise.all(['_years.json', 'focus.json'].map(f => fetch(IMAGES_BASE + f, FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
   buildArtistStats();

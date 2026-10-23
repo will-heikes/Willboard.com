@@ -52,7 +52,11 @@
    "pop_song_1011"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_1008": "It's Not That Deep (Unless You Want It To Be)",
+   "pop_song_1011": "It's Not That Deep (Unless You Want It To Be)"
+  }
  },
  {
   "name": "The Rise and Fall of a Midwest Princess",
@@ -120,7 +124,11 @@
    "pop_song_867"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_812": "SOS Deluxe: LANA",
+   "pop_song_867": "SOS Deluxe: LANA"
+  }
  },
  {
   "name": "My Everything",
@@ -216,7 +224,14 @@
    "pop_song_1052"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_971": "The Life of a Showgirl: The Encore",
+   "pop_song_980": "The Life of a Showgirl: The Encore",
+   "pop_song_991": "The Life of a Showgirl: The Encore",
+   "pop_song_1007": "The Life of a Showgirl: The Encore",
+   "pop_song_1052": "The Life of a Showgirl: The Encore"
+  }
  },
  {
   "name": "Demi",
@@ -291,7 +306,11 @@
    "pop_song_962"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_878": "1432",
+   "pop_song_962": "1432"
+  }
  },
  {
   "name": "JORDI",
@@ -381,7 +400,11 @@
    "pop_song_140"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_82": "Global Warming: Meltdown (Deluxe Version)",
+   "pop_song_140": "Global Warming: Meltdown (Deluxe Version)"
+  }
  },
  {
   "name": "Talk That Talk",
@@ -484,7 +507,10 @@
    "pop_song_926"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_926": "eternal sunshine deluxe: brighter days ahead (a cappella version)"
+  }
  },
  {
   "name": "Positions",
@@ -792,7 +818,11 @@
    "pop_song_45"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_28": "Teenage Dream: The Complete Confection",
+   "pop_song_45": "Teenage Dream: The Complete Confection"
+  }
  },
  {
   "name": "Witness",
@@ -946,7 +976,10 @@
    "pop_song_258"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_258": "Nick Jonas X2"
+  }
  },
  {
   "name": "Pink Friday ... Roman Reloaded",
@@ -1002,7 +1035,11 @@
    "pop_song_841"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_811": "GUTS (spilled)",
+   "pop_song_841": "GUTS (spilled)"
+  }
  },
  {
   "name": "SOUR",
@@ -1953,7 +1990,11 @@
    "pop_song_712"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_645": "DISCO: Guest List Edition",
+   "pop_song_712": "DISCO: Guest List Edition"
+  }
  },
  {
   "name": "ARTPOP",
@@ -3593,7 +3634,10 @@
    "pop_song_60"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_60": "We Run The Night (10 Year Anniversary)"
+  }
  },
  {
   "name": "Cruel World",
@@ -3965,7 +4009,10 @@
    "pop_song_466"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_466": "Goodbye & Good Riddance (Anniversary)"
+  }
  },
  {
   "name": "Inner Monologue, Pt. 1",
@@ -4949,7 +4996,10 @@
    "pop_song_778"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_778": "The Show: The Encore"
+  }
  },
  {
   "name": "All American",
@@ -5141,7 +5191,10 @@
    "pop_song_847"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_847": "Coco Moon Deluxe"
+  }
  },
  {
   "name": "Paramore",
