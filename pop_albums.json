@@ -4135,6 +4135,19 @@
   "released": 2022
  },
  {
+  "name": "Dance Again...The Hits",
+  "artist": "Jennifer Lopez",
+  "artistId": "art_281",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_42"
+  ],
+  "year": 2012,
+  "chart": "pop",
+  "released": 2012
+ },
+ {
   "name": "Late Nights",
   "artist": "Jeremih",
   "artistId": "art_365",
@@ -4435,6 +4448,19 @@
   "year": 2025,
   "chart": "pop",
   "released": 2025
+ },
+ {
+  "name": "Greatest Hits - Chapter One",
+  "artist": "Kelly Clarkson",
+  "artistId": "art_62",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_83"
+  ],
+  "year": 2012,
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Stronger",
@@ -5587,6 +5613,19 @@
   "released": 2012
  },
  {
+  "name": "Chapter 1: Singles Collection",
+  "artist": "Peach PRC",
+  "artistId": "art_650",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_973"
+  ],
+  "year": 2024,
+  "chart": "pop",
+  "released": 2024
+ },
+ {
   "name": "Porcelain",
   "artist": "Peach PRC",
   "artistId": "art_650",
@@ -6066,6 +6105,19 @@
   "year": 2012,
   "chart": "pop",
   "released": 2012
+ },
+ {
+  "name": "Revolver",
+  "artist": "T-Pain",
+  "artistId": "art_253",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_13"
+  ],
+  "year": 2011,
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "i used to think i could fly",

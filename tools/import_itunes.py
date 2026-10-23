@@ -62,14 +62,17 @@ SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
 # Albums whose tracks carry their singles' earlier year. Year-End lists an album only from the year
 # it came out (Will), so this matters there as well as for ordering
 RELEASED = {('maddie', 'thewayitfeels'): 2020, ('carlypearce', 'carlypearce'): 2020,
-            ('mackenziecarpenter', 'heycountryqueen'): 2025, ('gabbybarrett', 'goldmine'): 2020}
+            ('mackenziecarpenter', 'heycountryqueen'): 2025, ('gabbybarrett', 'goldmine'): 2020,
+            ('timmcgraw', 'setthiscircusdown'): 2001}
 
 # EPs folded into the album that followed (the rest of the merges above are deluxe reissues)
 FROM_EP = re.compile(r'\s-\s*EP$|\bEP$', re.I)
 EP_KEYS = {('carlypearce', '29')}  # (act, album) for EPs whose tracks carry no "- EP" tag
 
 # Tracks filed under the wrong album: Eric Church's Heart and Soul are two albums, not "Heart & Soul" (Will)
-TRACK_ALBUM = {('ericchurch', 'hellofaview'): 'Heart', ('ericchurch', 'stickthatinyourcountrysong'): 'Soul'}
+TRACK_ALBUM = {('ericchurch', 'hellofaview'): 'Heart', ('ericchurch', 'stickthatinyourcountrysong'): 'Soul',
+               # Will only has it on Greatest Hits, Vol. 2; it came from this 2001 album
+               ('timmcgraw', 'grownmendontcry'): 'Set This Circus Down'}
 
 
 def act_key(artist):
@@ -95,8 +98,8 @@ def lead(artist):
     return norm(re.split(r',| & | and | ft\.? | feat\.? | featuring | x | with |;', artist or '', flags=re.I)[0])
 
 
-# Hits collections aren't albums on Willboard (Will): a song off one counts as a single, unless
-# Will also has it on a studio album
+# Hits collections (Will): a song is filed under one only when it's on no studio album, like Ain't
+# Back Yet. Their pages list just those songs, and Year-End leaves them out
 COMPILATION = re.compile(r"greatest hits|\bhits\b|singles collection|: the collection|number one hits|"
                          r"out of the box|the ones that got the plays", re.I)
 
@@ -104,7 +107,6 @@ COMPILATION = re.compile(r"greatest hits|\bhits\b|singles collection|: the colle
 def is_album(t):
     # iTunes' Compilation flag is set on plenty of ordinary albums, so only Various Artists counts as one
     return (t.get('Album') and not re.search(r'\s-\s*single$', t['Album'], re.I)
-            and not COMPILATION.search(t['Album'])
             and (t.get('Album Artist') or '').lower() != 'various artists')
 
 
@@ -133,6 +135,8 @@ def main():
         if not hits:
             hits = [(p, t) for a, p, t in loose.get(bare(title), []) if who and who[:8] in a]
         on_album = [h for h in hits if is_album(h[1])]
+        # A studio album beats a hits collection
+        on_album = [h for h in on_album if not COMPILATION.search(h[1]['Album'])] or on_album
         # A song re-recorded for a Taylor's Version belongs to the original release
         on_album = [h for h in on_album if not TV.search(h[1]['Album'])] or on_album
         if on_album:
@@ -166,6 +170,9 @@ def main():
     albums = defaultdict(lambda: {'plays': 0, 'tracks': 0, 'names': [], 'years': [], 'cuts': defaultdict(lambda: [0, []])})
     for t in lib['Tracks'].values():
         if is_album(t) and album_key(t)[:2] in album_songs:
+            if COMPILATION.search(t['Album']) and album_key(t)[2] == t['Album'].strip() \
+                    and bare(t['Name']) not in {bare(s['name']) for s in album_songs[album_key(t)[:2]]}:
+                continue  # a hits collection's old hits aren't its own songs
             a = albums[album_key(t)[:2]]
             a['plays'] += t.get('Play Count', 0)
             a['tracks'] += 1
