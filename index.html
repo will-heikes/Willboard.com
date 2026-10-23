@@ -1622,12 +1622,12 @@ function renderHome() {
 
   // Chart Beat: Will's articles, newest first
   const stories = weekStories(last, pop.length - 1);
-  // Up to five articles, never the same artist's photo twice (Will). The week's chart stories
-  // stand in only when there are no articles (they still run in the ticker)
+  // Up to six articles, never the same artist's photo twice (Will). The week's chart stories
+  // stand in only when there are no articles (they still run in the ticker). "last": true pins one to the end
   const seen = new Set();
-  const live = ARTICLES.filter(a => !a.archived);
+  const live = ARTICLES.filter(a => !a.archived).sort((a, b) => !!a.last - !!b.last);
   const beat = (live.length ? live.map(articleCard) : stories)
-    .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 5);
+    .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 6);
   const [first, ...rest] = beat;
   $('beat-sub').textContent = `The stories behind the week of ${fmtLong(week)}.`;
   $('beat-lead').innerHTML = first ? `<a class="beat-lead" href="${first.href}">
