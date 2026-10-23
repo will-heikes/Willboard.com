@@ -2003,7 +2003,7 @@ function songMore(s, from, to) {
 }
 function setMore(list, key, from, to, href, label) {
   const rows = list.map(s => ({ s, st: spanStats(s, from, to) })).filter(x => x.st)
-    .sort((a, b) => a.st.peak - b.st.peak || b.st.wc - a.st.wc);
+    .sort((a, b) => a.s.debutDate.localeCompare(b.s.debutDate));
   if (!rows.length) return '';
   const plays = from === to && rows.some(x => yearPlays(x.s, from, to) != null);
   return `<table class="table">${yeSongHead(from, to, plays, false)}${rows.map(({ s, st }) => yeSongRow(s, st, from, to, false, plays)).join('')}</table>${href ? `<a class="ye-go" href="${href}">${label} →</a>` : ''}`;
