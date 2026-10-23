@@ -1638,24 +1638,44 @@ function weekStories(wbIdx, popIdx) {
 
 // ─── FROM THE ARCHIVE: this week in past years ──────────────────
 // Will's own written chart notes, plus stories written from the chart data (archive.json):
-// first top fives, certifications, debuts, milestones. #1 stories are played down.
+// first top fives, certifications, debuts, milestones. What Will counts as news comes first: a song
+// reaching #1, a record, a big jump. A song merely slipping a spot or holding is left out (Will, Oct 23)
 let ARCHIVE = null;
 const ARCH_KICK = { note: 'Chart note', top5: 'Top five', top10: 'Top ten', cert: 'Certified', debut: 'Debut', leap: 'Big mover', weeks: 'Milestone', double: 'Double up', no1: 'No. 1' };
-const isNo1Text = t => /#1\b|atop|No\. 1|\brises \d+-1\b|number one/i.test(t);
+// How newsworthy one of Will's notes is: 0 leaves it out
+const NOT_YET = /\b(closer|follows? up|after leading|nearly|almost|just shy|short of)\b/i;
+const newNo1 = t => !NOT_YET.test(t) && /(\b\d+-1\b|\bto (#1|number one|no\. 1)\b|to the top of the chart|\breaches (#1|number one)|\b(earns?|scores?|gives?|sends?|becomes?)\b[^.]{0,30}(#1|number one)\b)/i.test(t);
+function noteScore(t) {
+  const record = /\b(record|longest|fastest|biggest|ties|history|all-time)\b/i.test(t);
+  if (/\b(slides?|slips?|falls?|drops?|dips?|declines?)\b/i.test(t) && !record) return 0;
+  // A note that leans on the one before it ("The song also ties...") reads oddly alone
+  const orphan = /^(the song|this|it|he|she|they|also)\b/i.test(t.trim()) ? 4 : 0;
+  if (newNo1(t) || record) return 10 - orphan;
+  if (/\b(blasts?|flies|leaps?|rockets?|soars?|jumps?)\b|greatest gainer/i.test(t)) return 8 - orphan;
+  if (/\b(spends?|holds?|remains?|stays?)\b/i.test(t)) return 3 - orphan;
+  return 6 - orphan;
+}
+const ARCH_SCORE = { no1: 9, leap: 7, top10: 6, double: 6, cert: 5, weeks: 4, top5: 4, debut: 3 };
 function factArtist(text) {
-  for (const m of text.matchAll(/'([^']{2,60})'/g)) {
+  // A note can start with a title whose opening quote Will left off ("Sleep at Night' spends...")
+  for (const m of [/^([^']{2,60})'/.exec(text), ...text.matchAll(/'([^']{2,60})'/g)].filter(Boolean)) {
     const hit = DATA.songs.find(s => s.chart === 'willboard' && s.name.toLowerCase() === m[1].toLowerCase());
     if (hit) return hit.artistName;
   }
-  return null;
+  // Otherwise the first act the note names (Will sometimes leaves a quote mark off a title)
+  let best = null;
+  for (const a of ACT_NAMES) {
+    const i = a.length > 3 ? text.indexOf(a) : -1;
+    if (i >= 0 && (!best || i < best.i || (i === best.i && a.length > best.a.length))) best = { a, i };
+  }
+  return best?.a || null;
 }
 async function renderArchive(week) {
   if (!ARCHIVE) ARCHIVE = await fetch('archive.json', FRESH).then(r => r.json()).catch(() => []);
   const now = parseDate(week), thisYear = now.getFullYear();
-  const notes = (DATA.facts || []).map(f => {
-    const no1 = isNo1Text(f.text);
-    return { ...f, type: no1 ? 'no1' : 'note', score: no1 ? 3 : 9, artist: factArtist(f.text), note: true };
-  });
+  const notes = (DATA.facts || []).map(f => ({ ...f, type: newNo1(f.text) || /\bweeks? (at|atop) (#1|number one)|leads the chart/i.test(f.text) ? 'no1' : 'note',
+    score: noteScore(f.text) + 1, artist: factArtist(f.text), note: true }))
+    .filter(f => f.score > 1);
   const near = f => {
     const y = +f.week.slice(0, 4);
     if (y >= thisYear) return false;
@@ -1663,15 +1683,15 @@ async function renderArchive(week) {
     return Math.abs(parseDate(f.week) - t) < 4 * 864e5;
   };
   const rand = seeded(Math.floor(now / 6048e5));
-  const pool = [...notes, ...ARCHIVE].filter(near)
-    .map(f => ({ ...f, rank: f.score - (f.type === 'no1' ? 4 : 0) + rand() * 3 }))
+  const pool = [...notes, ...ARCHIVE.map(f => ({ ...f, score: ARCH_SCORE[f.type] ?? f.score }))].filter(near)
+    .map(f => ({ ...f, rank: f.score + rand() * 2 }))
     .sort((a, b) => b.rank - a.rank);
-  // Three stories from three different years, no two of the same kind
+  // Three stories from three different years, no two of the same kind (two #1 stories are fine)
   const picks = [], years = new Set(), kinds = new Set();
   for (const strict of [true, false]) for (const f of pool) {
     if (picks.length === 3 || picks.includes(f)) continue;
     const y = f.week.slice(0, 4);
-    if (years.has(y) || (strict && kinds.has(f.type))) continue;
+    if (years.has(y) || (strict && f.type !== 'no1' && kinds.has(f.type))) continue;
     picks.push(f); years.add(y); kinds.add(f.type);
   }
   picks.sort((a, b) => b.week.localeCompare(a.week));
