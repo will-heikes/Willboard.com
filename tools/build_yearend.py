@@ -171,7 +171,9 @@ def main():
                                  'artistName': s['artistName'] if s else r['artist'].strip(),
                                  'peak': num(r['peak']) or (st.get('peak') if st else None),
                                  'wks1': num(r['wks1']) or (st.get('wks1') if st else 0),
-                                 'wc': num(r['wc']) or (st.get('wc') if st else None)})
+                                 'wc': num(r['wc']) or (st.get('wc') if st else None),
+                                 # Will's plays for the year, shown in the Year-End drop-downs (never points)
+                                 'plays': num(r['plays'])})
                 src = 'will'
             if len(rows) < 10:
                 # No list, or only a short one (2010 has a top five): rank the rest by formula
