@@ -95,9 +95,16 @@ def lead(artist):
     return norm(re.split(r',| & | and | ft\.? | feat\.? | featuring | x | with |;', artist or '', flags=re.I)[0])
 
 
+# Hits collections aren't albums on Willboard (Will): a song off one counts as a single, unless
+# Will also has it on a studio album
+COMPILATION = re.compile(r"greatest hits|\bhits\b|singles collection|: the collection|number one hits|"
+                         r"out of the box|the ones that got the plays", re.I)
+
+
 def is_album(t):
     # iTunes' Compilation flag is set on plenty of ordinary albums, so only Various Artists counts as one
     return (t.get('Album') and not re.search(r'\s-\s*single$', t['Album'], re.I)
+            and not COMPILATION.search(t['Album'])
             and (t.get('Album Artist') or '').lower() != 'various artists')
 
 
