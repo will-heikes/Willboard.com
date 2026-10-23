@@ -179,7 +179,9 @@ def main():
                     t[1].add(sid)
                     t[2] += year[sid][1]
                 al = album_of.get(sid)
-                if al:
+                # An album only counts in or after the year it came out (Will): a lead single's
+                # points the year before its album was announced don't put the album on that list
+                if al and (al.get('released') or al.get('year') or 0) <= y:
                     a = al_tally[(al['name'], al['artist'])]
                     a[0] += pp + pl
                     a[1].add(sid)

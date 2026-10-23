@@ -68,6 +68,17 @@ SAME_ALBUM = {
     'Sabrina Carpenter|Espresso EP': "Short n' Sweet",
 }
 
+# Release years the track dates get wrong: a deluxe track dated later, or singles out long before the album
+RELEASED = {
+    'Dua Lipa|Future Nostalgia': 2020,
+    'Sam Smith|Gloria': 2023,
+    'Zara Larsson|So Good': 2017,
+    'Katy Perry|The Ones That Got The Plays': 2019,
+    'Camila Cabello|Camila': 2018,
+    'Halsey|Manic': 2020,
+    "Meghan Trainor|Takin' It Back": 2022,
+}
+
 
 def base_name(name):
     return EDITION.sub('', name).strip() or name.strip()
@@ -134,6 +145,12 @@ def main():
                and os.path.exists(os.path.join(COVERS, cover_name(artist, r[1]['album'])))}
         if dlx:
             al['deluxe'] = dlx
+        # The album's own release: its latest charted track, leaving out deluxe additions, since its
+        # singles come out first. Year-End only lists an album from this year on (Will)
+        out_years = [int(r[1]['released'][:4]) for r in rows if r[1].get('released') and r[0] not in dlx]
+        if out_years:
+            al['released'] = max(out_years)
+        al['released'] = RELEASED.get(f'{artist}|{name}', al.get('released'))
         out.append(al)
     out.sort(key=lambda a: (-len(a['songs']), a['artist'].lower(), a['name'].lower()))
     json.dump(out, open('pop_albums.json', 'w', encoding='utf-8'), indent=1, ensure_ascii=False)

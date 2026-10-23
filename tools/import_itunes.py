@@ -59,6 +59,11 @@ SAME_ALBUM = {('dixiechicks', 'gaslighter'): ('thechicks', 'gaslighter'),
               ('randallking', 'leanna'): ('randallking', 'shotglass', 'Shot Glass', 2022),
               ('ashtonshepherd', 'lookitup'): ('ashtonshepherd', 'wherecountrygrows', 'Where Country Grows', 2011)}
 
+# Albums whose tracks carry their singles' earlier year. Year-End lists an album only from the year
+# it came out (Will), so this matters there as well as for ordering
+RELEASED = {('maddie', 'thewayitfeels'): 2020, ('carlypearce', 'carlypearce'): 2020,
+            ('mackenziecarpenter', 'heycountryqueen'): 2025, ('gabbybarrett', 'goldmine'): 2020}
+
 # EPs folded into the album that followed (the rest of the merges above are deluxe reissues)
 FROM_EP = re.compile(r'\s-\s*EP$|\bEP$', re.I)
 EP_KEYS = {('carlypearce', '29')}  # (act, album) for EPs whose tracks carry no "- EP" tag
@@ -174,6 +179,7 @@ def main():
               'plays': a['plays'], 'tracks': a['tracks'], 'songs': [s['id'] for s in songs]}
         if a['years']:
             al['year'] = min(a['years'])  # release year, for ordering an artist's albums
+        al['year'] = RELEASED.get(k, al.get('year'))
         charted = {bare(s['name']) for s in songs}
         cuts = sorted(((min(n, key=len), p) for b, (p, n) in a['cuts'].items() if b not in charted and p >= CUT_MIN), key=lambda c: -c[1])
         if cuts:

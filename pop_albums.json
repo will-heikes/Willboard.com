@@ -16,7 +16,8 @@
    "pop_song_510"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "End Of Your Love",
@@ -34,7 +35,8 @@
    "pop_song_1050"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "It’s Not That Deep",
@@ -56,7 +58,8 @@
   "deluxe": {
    "pop_song_1008": "It's Not That Deep (Unless You Want It To Be)",
    "pop_song_1011": "It's Not That Deep (Unless You Want It To Be)"
-  }
+  },
+  "released": 2025
  },
  {
   "name": "The Rise and Fall of a Midwest Princess",
@@ -73,7 +76,8 @@
    "pop_song_907"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Future Nostalgia",
@@ -90,7 +94,8 @@
    "pop_song_672"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Short n' Sweet",
@@ -107,7 +112,8 @@
    "pop_song_928"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "SOS",
@@ -128,7 +134,8 @@
   "deluxe": {
    "pop_song_812": "SOS Deluxe: LANA",
    "pop_song_867": "SOS Deluxe: LANA"
-  }
+  },
+  "released": 2022
  },
  {
   "name": "My Everything",
@@ -144,7 +151,8 @@
    "pop_song_215"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Planet Her",
@@ -160,7 +168,8 @@
    "pop_song_721"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "PRISM",
@@ -176,7 +185,8 @@
    "pop_song_195"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Red Pill Blues",
@@ -192,7 +202,8 @@
    "pop_song_465"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "V",
@@ -208,7 +219,8 @@
    "pop_song_266"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "The Life of a Showgirl",
@@ -231,7 +243,8 @@
    "pop_song_991": "The Life of a Showgirl: The Encore",
    "pop_song_1007": "The Life of a Showgirl: The Encore",
    "pop_song_1052": "The Life of a Showgirl: The Encore"
-  }
+  },
+  "released": null
  },
  {
   "name": "Demi",
@@ -246,7 +259,8 @@
    "pop_song_188"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Wild Ones",
@@ -261,7 +275,8 @@
    "pop_song_71"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Fine Line",
@@ -276,7 +291,8 @@
    "pop_song_635"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Blue",
@@ -291,7 +307,8 @@
    "pop_song_495"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "143",
@@ -310,7 +327,8 @@
   "deluxe": {
    "pop_song_878": "1432",
    "pop_song_962": "1432"
-  }
+  },
+  "released": 2024
  },
  {
   "name": "JORDI",
@@ -325,7 +343,8 @@
    "pop_song_677"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Overexposed",
@@ -340,7 +359,8 @@
    "pop_song_110"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Takin' It Back",
@@ -355,7 +375,8 @@
    "pop_song_797"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Timeless",
@@ -370,7 +391,8 @@
    "pop_song_892"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Pink Friday 2",
@@ -385,7 +407,8 @@
    "pop_song_836"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Global Warming",
@@ -404,7 +427,8 @@
   "deluxe": {
    "pop_song_82": "Global Warming: Meltdown (Deluxe Version)",
    "pop_song_140": "Global Warming: Meltdown (Deluxe Version)"
-  }
+  },
+  "released": 2012
  },
  {
   "name": "Talk That Talk",
@@ -419,7 +443,8 @@
    "pop_song_44"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Unapologetic",
@@ -434,7 +459,8 @@
    "pop_song_118"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Man’s Best Friend",
@@ -449,7 +475,8 @@
    "pop_song_981"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "World War Joy",
@@ -464,7 +491,8 @@
    "pop_song_578"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "After Hours",
@@ -479,7 +507,8 @@
    "pop_song_653"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Dangerous Woman",
@@ -493,7 +522,8 @@
    "pop_song_324"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "eternal sunshine",
@@ -510,7 +540,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_926": "eternal sunshine deluxe: brighter days ahead (a cappella version)"
-  }
+  },
+  "released": 2024
  },
  {
   "name": "Positions",
@@ -524,7 +555,8 @@
    "pop_song_671"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Heaven & Hell",
@@ -538,7 +570,8 @@
    "pop_song_660"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Love Sux",
@@ -552,7 +585,8 @@
    "pop_song_764"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "HIT ME HARD AND SOFT",
@@ -566,7 +600,8 @@
    "pop_song_902"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Unorthodox Jukebox",
@@ -580,7 +615,8 @@
    "pop_song_133"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Romance",
@@ -594,7 +630,8 @@
    "pop_song_584"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Nine Track Mind",
@@ -608,7 +645,8 @@
    "pop_song_313"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Voicenotes",
@@ -622,7 +660,8 @@
    "pop_song_460"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "SHOCK TO THE SYSTEM (PART ONE)",
@@ -636,7 +675,8 @@
    "pop_song_898"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Nothing But the Beat",
@@ -650,7 +690,8 @@
    "pop_song_49"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Confident",
@@ -664,7 +705,8 @@
    "pop_song_292"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Hot Pink",
@@ -678,7 +720,8 @@
    "pop_song_651"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Radical Optimism",
@@ -692,7 +735,8 @@
    "pop_song_908"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "No.6 Collaborations Project",
@@ -706,7 +750,8 @@
    "pop_song_580"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "÷",
@@ -720,7 +765,8 @@
    "pop_song_415"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "The Secret of Us",
@@ -734,7 +780,8 @@
    "pop_song_914"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Manic",
@@ -748,7 +795,8 @@
    "pop_song_585"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Kiss All The Time. Disco, Occasionally.",
@@ -762,7 +810,8 @@
    "pop_song_1004"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "luck... or something",
@@ -776,7 +825,8 @@
    "pop_song_1000"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Evolve",
@@ -790,7 +840,8 @@
    "pop_song_435"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Night Visions",
@@ -804,7 +855,8 @@
    "pop_song_113"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Teenage Dream",
@@ -822,7 +874,8 @@
   "deluxe": {
    "pop_song_28": "Teenage Dream: The Complete Confection",
    "pop_song_45": "Teenage Dream: The Complete Confection"
-  }
+  },
+  "released": 2010
  },
  {
   "name": "Witness",
@@ -836,7 +889,8 @@
    "pop_song_401"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Meaning of Life",
@@ -850,7 +904,8 @@
    "pop_song_525"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Piece by Piece",
@@ -864,7 +919,8 @@
    "pop_song_285"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Feed The Beast",
@@ -878,7 +934,8 @@
    "pop_song_819"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "MAYHEM",
@@ -892,7 +949,8 @@
    "pop_song_916"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Pure Heroine",
@@ -906,7 +964,8 @@
    "pop_song_156"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "The Heist",
@@ -920,7 +979,8 @@
    "pop_song_114"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Thank You",
@@ -934,7 +994,8 @@
    "pop_song_329"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Title",
@@ -948,7 +1009,8 @@
    "pop_song_247"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Bangerz",
@@ -962,7 +1024,8 @@
    "pop_song_147"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Nick Jonas",
@@ -979,7 +1042,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_258": "Nick Jonas X2"
-  }
+  },
+  "released": 2014
  },
  {
   "name": "Pink Friday ... Roman Reloaded",
@@ -993,7 +1057,8 @@
    "pop_song_75"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Queen",
@@ -1007,7 +1072,8 @@
    "pop_song_490"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "The Pinkprint",
@@ -1021,7 +1087,8 @@
    "pop_song_242"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "GUTS",
@@ -1039,7 +1106,8 @@
   "deluxe": {
    "pop_song_811": "GUTS (spilled)",
    "pop_song_841": "GUTS (spilled)"
-  }
+  },
+  "released": 2023
  },
  {
   "name": "SOUR",
@@ -1053,7 +1121,8 @@
    "pop_song_673"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Native",
@@ -1067,7 +1136,8 @@
    "pop_song_208"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "beerbongs & bentleys",
@@ -1081,7 +1151,8 @@
    "pop_song_470"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "ANTI",
@@ -1095,7 +1166,8 @@
    "pop_song_304"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Gloria",
@@ -1109,7 +1181,8 @@
    "pop_song_751"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "In the Lonely Hour",
@@ -1123,7 +1196,8 @@
    "pop_song_200"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Revival",
@@ -1137,7 +1211,8 @@
    "pop_song_311"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Shawn Mendes",
@@ -1151,7 +1226,8 @@
    "pop_song_545"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "So Close To What",
@@ -1165,7 +1241,8 @@
    "pop_song_972"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Collage",
@@ -1179,7 +1256,8 @@
    "pop_song_332"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Memories...Do Not Open",
@@ -1193,7 +1271,8 @@
    "pop_song_394"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "So Far So Good",
@@ -1207,7 +1286,8 @@
    "pop_song_729"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Beauty Behind the Madness",
@@ -1221,7 +1301,8 @@
    "pop_song_277"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Starboy",
@@ -1235,7 +1316,8 @@
    "pop_song_776"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "So Good",
@@ -1249,7 +1331,8 @@
    "pop_song_352"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "5 Seconds of Summer",
@@ -1262,7 +1345,8 @@
    "pop_song_189"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "PRIMA",
@@ -1275,7 +1359,8 @@
    "pop_song_1054"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "25",
@@ -1288,7 +1373,8 @@
    "pop_song_339"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Know-It-All",
@@ -1301,7 +1387,8 @@
    "pop_song_331"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "petal",
@@ -1314,7 +1401,8 @@
    "pop_song_1042"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Sweetener",
@@ -1327,7 +1415,8 @@
    "pop_song_479"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "thank u, next",
@@ -1340,7 +1429,8 @@
    "pop_song_511"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Yours Truly",
@@ -1353,7 +1443,8 @@
    "pop_song_119"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Diamonds & Dancefloors",
@@ -1366,7 +1457,8 @@
    "pop_song_767"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "True",
@@ -1379,7 +1471,8 @@
    "pop_song_151"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Avril Lavigne",
@@ -1392,7 +1485,8 @@
    "pop_song_165"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Head Above Water",
@@ -1405,7 +1499,8 @@
    "pop_song_516"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Expectations",
@@ -1418,7 +1513,8 @@
    "pop_song_482"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "RENAISSANCE",
@@ -1431,7 +1527,8 @@
    "pop_song_756"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
@@ -1444,7 +1541,8 @@
    "pop_song_540"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "BORN PINK",
@@ -1457,7 +1555,8 @@
    "pop_song_761"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Proof",
@@ -1470,7 +1569,8 @@
    "pop_song_674"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Motion",
@@ -1483,7 +1583,8 @@
    "pop_song_203"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Camila",
@@ -1496,7 +1597,8 @@
    "pop_song_437"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "AM I THE DRAMA?",
@@ -1509,7 +1611,8 @@
    "pop_song_654"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Dedicated",
@@ -1522,7 +1625,8 @@
    "pop_song_522"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Emotion",
@@ -1535,7 +1639,8 @@
    "pop_song_624"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Kiss",
@@ -1548,7 +1653,8 @@
    "pop_song_54"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "The Loneliest Time",
@@ -1561,7 +1667,8 @@
    "pop_song_911"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "One Night in Nashville",
@@ -1574,7 +1681,8 @@
    "pop_song_768"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "What Is Love?",
@@ -1587,7 +1695,8 @@
    "pop_song_472"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Ghost Stories",
@@ -1600,7 +1709,8 @@
    "pop_song_169"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Fifty Shades Freed (Original Motion Picture Soundtrack)",
@@ -1613,7 +1723,8 @@
    "pop_song_445"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Sit Still, Look Pretty",
@@ -1626,7 +1737,8 @@
    "pop_song_305"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Dancing With The Devil…The Art of Starting Over",
@@ -1639,7 +1751,8 @@
    "pop_song_662"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "HOLY FVCK",
@@ -1652,7 +1765,8 @@
    "pop_song_738"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Tell Me You Love Me",
@@ -1665,7 +1779,8 @@
    "pop_song_424"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "DNCE",
@@ -1678,7 +1793,8 @@
    "pop_song_317"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Scorpion",
@@ -1691,7 +1807,8 @@
    "pop_song_502"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Dua Lipa",
@@ -1704,7 +1821,8 @@
    "pop_song_442"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Talking Dreams",
@@ -1717,7 +1835,8 @@
    "pop_song_239"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "+",
@@ -1730,7 +1849,8 @@
    "pop_song_116"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "=",
@@ -1743,7 +1863,8 @@
    "pop_song_691"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "x",
@@ -1756,7 +1877,8 @@
    "pop_song_245"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Delirium",
@@ -1769,7 +1891,8 @@
    "pop_song_275"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "American Beauty / American Psycho",
@@ -1782,7 +1905,8 @@
    "pop_song_278"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "7/27",
@@ -1795,7 +1919,8 @@
    "pop_song_340"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "My House",
@@ -1808,7 +1933,8 @@
    "pop_song_273"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Some Nights",
@@ -1821,7 +1947,8 @@
    "pop_song_63"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Making Mirrors",
@@ -1834,7 +1961,8 @@
    "pop_song_56"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Bouquet",
@@ -1847,7 +1975,8 @@
    "pop_song_948"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "hopeless fountain kingdom",
@@ -1860,7 +1989,8 @@
    "pop_song_416"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Ascend",
@@ -1873,7 +2003,8 @@
    "pop_song_571"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Origins",
@@ -1886,7 +2017,8 @@
    "pop_song_503"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Ruby",
@@ -1899,7 +2031,8 @@
    "pop_song_920"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Nervous System",
@@ -1912,7 +2045,8 @@
    "pop_song_411"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Not In Chronological Order",
@@ -1925,7 +2059,8 @@
    "pop_song_666"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Purpose",
@@ -1938,7 +2073,8 @@
    "pop_song_264"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "The Ones That Got The Plays",
@@ -1951,7 +2087,8 @@
    "pop_song_983"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "chemistry",
@@ -1964,7 +2101,8 @@
    "pop_song_801"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Golden Hour",
@@ -1977,7 +2115,8 @@
    "pop_song_638"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "DISCO",
@@ -1994,7 +2133,8 @@
   "deluxe": {
    "pop_song_645": "DISCO: Guest List Edition",
    "pop_song_712": "DISCO: Guest List Edition"
-  }
+  },
+  "released": null
  },
  {
   "name": "ARTPOP",
@@ -2007,7 +2147,8 @@
    "pop_song_159"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Born This Way",
@@ -2020,7 +2161,8 @@
    "pop_song_765"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Chromatica",
@@ -2033,7 +2175,8 @@
    "pop_song_607"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Joanne",
@@ -2046,7 +2189,8 @@
    "pop_song_333"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Divinely Uninspired To A Hellish Extent",
@@ -2059,7 +2203,8 @@
    "pop_song_576"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Cuz I Love You",
@@ -2072,7 +2217,8 @@
    "pop_song_563"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Special",
@@ -2085,7 +2231,8 @@
    "pop_song_759"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Whirlwind",
@@ -2098,7 +2245,8 @@
    "pop_song_568"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Toy With Me",
@@ -2111,7 +2259,8 @@
    "pop_song_1012"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "TREAT MYSELF",
@@ -2124,7 +2273,8 @@
    "pop_song_589"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Endless Summer Vacation",
@@ -2137,7 +2287,8 @@
    "pop_song_814"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Plastic Hearts",
@@ -2150,7 +2301,8 @@
    "pop_song_642"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Younger Now",
@@ -2163,7 +2315,8 @@
    "pop_song_409"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Perception",
@@ -2176,7 +2329,8 @@
    "pop_song_480"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Flicker",
@@ -2189,7 +2343,8 @@
    "pop_song_463"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "FOUR",
@@ -2202,7 +2357,8 @@
    "pop_song_212"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Made In The A.M.",
@@ -2215,7 +2371,8 @@
    "pop_song_261"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Pray for the Wicked",
@@ -2228,7 +2385,8 @@
    "pop_song_551"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Hollywood's Bleeding",
@@ -2241,7 +2399,8 @@
    "pop_song_562"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "I Said I Love You First",
@@ -2254,7 +2413,8 @@
    "pop_song_929"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Rare",
@@ -2267,7 +2427,8 @@
    "pop_song_602"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Illuminate",
@@ -2280,7 +2441,8 @@
    "pop_song_336"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "1000 Forms of Fear",
@@ -2293,7 +2455,8 @@
    "pop_song_214"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "This Is Acting",
@@ -2306,7 +2469,8 @@
    "pop_song_326"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "THINK LATER",
@@ -2319,7 +2483,8 @@
    "pop_song_833"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Queen of the Clouds",
@@ -2332,7 +2497,8 @@
    "pop_song_223"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "California 37",
@@ -2345,7 +2511,8 @@
    "pop_song_59"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Something To Give Each Other",
@@ -2358,7 +2525,8 @@
    "pop_song_825"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Blurryface",
@@ -2371,7 +2539,8 @@
    "pop_song_312"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Looking 4 Myself",
@@ -2384,7 +2553,8 @@
    "pop_song_46"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Poster Girl",
@@ -2397,7 +2567,8 @@
    "pop_song_617"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Clarity",
@@ -2410,7 +2581,8 @@
    "pop_song_144"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "CALM",
@@ -2422,7 +2594,8 @@
    "pop_song_542"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Youngblood",
@@ -2434,7 +2607,8 @@
    "pop_song_467"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Is There Anybody Out There?",
@@ -2446,7 +2620,8 @@
    "pop_song_143"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Addison",
@@ -2458,7 +2633,8 @@
    "pop_song_951"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "21",
@@ -2470,7 +2646,8 @@
    "pop_song_16"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "30",
@@ -2482,7 +2659,8 @@
    "pop_song_697"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "CUARTO AZUL",
@@ -2494,7 +2672,8 @@
    "pop_song_955"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Love & Hyperbole",
@@ -2506,7 +2685,8 @@
    "pop_song_695"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "The Pains of Growing",
@@ -2518,7 +2698,8 @@
    "pop_song_546"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "The Lateness Of The Hour",
@@ -2530,7 +2711,8 @@
    "pop_song_61"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Saxobeats",
@@ -2542,7 +2724,8 @@
    "pop_song_12"
   ],
   "year": 2005,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2005
  },
  {
   "name": "a touch of the beat gets you up on your feet gets you out and then into the sun",
@@ -2554,7 +2737,8 @@
    "pop_song_681"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Oh, What a Life",
@@ -2566,7 +2750,8 @@
    "pop_song_150"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Magazines Or Novels",
@@ -2578,7 +2763,8 @@
    "pop_song_233"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Speak Your Mind",
@@ -2590,7 +2776,8 @@
    "pop_song_341"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Intense",
@@ -2602,7 +2789,8 @@
    "pop_song_162"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "The Girl Of Your Dreams",
@@ -2614,7 +2802,8 @@
    "pop_song_1055"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Don't Click Play",
@@ -2626,7 +2815,8 @@
    "pop_song_950"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Vengeance Through My Omnipresence",
@@ -2638,7 +2828,8 @@
    "pop_song_1040"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Let Go",
@@ -2650,7 +2841,8 @@
    "pop_song_732"
   ],
   "year": 2002,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2002
  },
  {
   "name": "Disobey",
@@ -2662,7 +2854,8 @@
    "pop_song_447"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Bad Blood",
@@ -2674,7 +2867,8 @@
    "pop_song_136"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "COSMIC",
@@ -2686,7 +2880,8 @@
    "pop_song_493"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Better Mistakes",
@@ -2698,7 +2893,8 @@
    "pop_song_632"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "DIRTY BLONDE",
@@ -2710,7 +2906,8 @@
    "pop_song_1039"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Reverie",
@@ -2722,7 +2919,8 @@
    "pop_song_678"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Brand New",
@@ -2734,7 +2932,8 @@
    "pop_song_314"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "FRIENDS KEEP SECRETS",
@@ -2746,7 +2945,8 @@
    "pop_song_474"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "American Heart",
@@ -2758,7 +2958,8 @@
    "pop_song_943"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Happier Than Ever",
@@ -2770,7 +2971,8 @@
    "pop_song_622"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "TRANSLATION",
@@ -2782,7 +2984,8 @@
    "pop_song_582"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "everything means nothing",
@@ -2794,7 +2997,8 @@
    "pop_song_570"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "THE ALBUM",
@@ -2806,7 +3010,8 @@
    "pop_song_615"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Gone Now",
@@ -2818,7 +3023,8 @@
    "pop_song_429"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "ONE MORE TIME... PART-2",
@@ -2830,7 +3036,8 @@
    "pop_song_838"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Hell Is What You Make It",
@@ -2842,7 +3049,8 @@
    "pop_song_26"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Femme Fatale",
@@ -2854,7 +3062,8 @@
    "pop_song_844"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "18 Months",
@@ -2866,7 +3075,8 @@
    "pop_song_93"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Familia",
@@ -2878,7 +3088,8 @@
    "pop_song_724"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "In A Tidal Wave of Mystery",
@@ -2890,7 +3101,8 @@
    "pop_song_120"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Invasion of Privacy",
@@ -2902,7 +3114,8 @@
    "pop_song_464"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Dedicated Side B",
@@ -2914,7 +3127,8 @@
    "pop_song_804"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "BRAT",
@@ -2926,7 +3140,8 @@
    "pop_song_880"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "how i'm feeling now",
@@ -2938,7 +3153,8 @@
    "pop_song_942"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Sucker",
@@ -2950,7 +3166,8 @@
    "pop_song_182"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "CHARLIE",
@@ -2962,7 +3179,8 @@
    "pop_song_711"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Christmas",
@@ -2974,7 +3192,8 @@
    "pop_song_830"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Sticks & Stones",
@@ -2986,7 +3205,8 @@
    "pop_song_57"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Change",
@@ -2998,7 +3218,8 @@
    "pop_song_100"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Night Shades",
@@ -3010,7 +3231,8 @@
    "pop_song_3"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "A Head Full of Dreams",
@@ -3022,7 +3244,8 @@
    "pop_song_318"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Music of the Spheres",
@@ -3034,7 +3257,8 @@
    "pop_song_696"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Dream Crusher",
@@ -3046,7 +3270,8 @@
    "pop_song_1024"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Baptized",
@@ -3058,7 +3283,8 @@
    "pop_song_132"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Cage to Rattle",
@@ -3070,7 +3296,8 @@
    "pop_song_487"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Listen",
@@ -3082,7 +3309,8 @@
    "pop_song_230"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "The Difference",
@@ -3094,7 +3322,8 @@
    "pop_song_698"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Unbroken",
@@ -3106,7 +3335,8 @@
    "pop_song_50"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "The Night the Sun Came Up",
@@ -3118,7 +3348,8 @@
    "pop_song_2"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Grateful",
@@ -3130,7 +3361,8 @@
    "pop_song_376"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Encore",
@@ -3142,7 +3374,8 @@
    "pop_song_321"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Alligator Bites Never Heal",
@@ -3154,7 +3387,8 @@
    "pop_song_912"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Scarlet 2 CLAUDE",
@@ -3166,7 +3400,8 @@
    "pop_song_824"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Vie",
@@ -3178,7 +3413,8 @@
    "pop_song_974"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Alchemical: Volume 1",
@@ -3190,7 +3426,8 @@
    "pop_song_717"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "More Life",
@@ -3202,7 +3439,8 @@
    "pop_song_366"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Nothing Was the Same",
@@ -3214,7 +3452,8 @@
    "pop_song_130"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Take Care",
@@ -3226,7 +3465,8 @@
    "pop_song_27"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Views",
@@ -3238,7 +3478,8 @@
    "pop_song_301"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "-",
@@ -3250,7 +3491,8 @@
    "pop_song_783"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "PREGUNTAS A LAS 11:11",
@@ -3262,7 +3504,8 @@
    "pop_song_969"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Chapter One",
@@ -3274,7 +3517,8 @@
    "pop_song_209"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Love Stuff",
@@ -3286,7 +3530,8 @@
    "pop_song_295"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "I Know Too Much",
@@ -3298,7 +3543,8 @@
    "pop_song_1049"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Diamonds",
@@ -3310,7 +3556,8 @@
    "pop_song_746"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Egg in the Backseat",
@@ -3322,7 +3569,8 @@
    "pop_song_739"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "The Marshall Mathers LP2",
@@ -3334,7 +3582,8 @@
    "pop_song_137"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Encanto (Original Motion Picture Soundtrack)",
@@ -3346,7 +3595,8 @@
    "pop_song_707"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "SEX and LOVE",
@@ -3358,7 +3608,8 @@
    "pop_song_192"
   ],
   "year": 1998,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 1998
  },
  {
   "name": "Official FIFA World Cup 2026™ Album",
@@ -3370,7 +3621,8 @@
    "pop_song_1037"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Fifth Harmony",
@@ -3382,7 +3634,8 @@
    "pop_song_399"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Reflection",
@@ -3394,7 +3647,8 @@
    "pop_song_240"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "The Beginning",
@@ -3406,7 +3660,8 @@
    "pop_song_796"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "In Search Of The Antidote",
@@ -3418,7 +3673,8 @@
    "pop_song_848"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "THERAPY AT THE CLUB",
@@ -3430,7 +3686,8 @@
    "pop_song_1026"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Torches",
@@ -3442,7 +3699,8 @@
    "pop_song_6"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2010
  },
  {
   "name": "Jungle Rules",
@@ -3454,7 +3712,8 @@
    "pop_song_404"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Church",
@@ -3466,7 +3725,8 @@
    "pop_song_574"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Rx",
@@ -3478,7 +3738,8 @@
    "pop_song_859"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Sweeter",
@@ -3490,7 +3751,8 @@
    "pop_song_20"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Lovesweet",
@@ -3502,7 +3764,8 @@
    "pop_song_1036"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Dreamland",
@@ -3514,7 +3777,8 @@
    "pop_song_714"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "us",
@@ -3526,7 +3790,8 @@
    "pop_song_330"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Apple Music London Sessions",
@@ -3538,7 +3803,8 @@
    "pop_song_856"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Vertigo",
@@ -3550,7 +3816,8 @@
    "pop_song_815"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "This Is What the Truth Feels Like",
@@ -3562,7 +3829,8 @@
    "pop_song_291"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "The Papercut Chronicles II",
@@ -3574,7 +3842,8 @@
    "pop_song_53"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Haiz",
@@ -3586,7 +3855,8 @@
    "pop_song_255"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "If I Can’t Have Love, I Want Power (Extended)",
@@ -3598,7 +3868,8 @@
    "pop_song_536"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Harry Styles",
@@ -3610,7 +3881,8 @@
    "pop_song_380"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Harry's House",
@@ -3622,7 +3894,8 @@
    "pop_song_722"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "We Run The Night",
@@ -3637,7 +3910,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_60": "We Run The Night (10 Year Anniversary)"
-  }
+  },
+  "released": null
  },
  {
   "name": "Cruel World",
@@ -3649,7 +3923,8 @@
    "pop_song_1005"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Whatever",
@@ -3661,7 +3936,8 @@
    "pop_song_23"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "KPop Demon Hunters (Soundtrack from the Netflix Film)",
@@ -3673,7 +3949,8 @@
    "pop_song_961"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Frozen (Original Motion Picture Soundtrack)",
@@ -3685,7 +3962,8 @@
    "pop_song_157"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Frozen 2 (Original Motion Picture Soundtrack)",
@@ -3697,7 +3975,8 @@
    "pop_song_577"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "In My Defense",
@@ -3709,7 +3988,8 @@
    "pop_song_526"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Reclassified",
@@ -3721,7 +4001,8 @@
    "pop_song_207"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "The New Classic",
@@ -3733,7 +4014,8 @@
    "pop_song_184"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Awake",
@@ -3745,7 +4027,8 @@
    "pop_song_395"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "ILLENIUM",
@@ -3757,7 +4040,8 @@
    "pop_song_788"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Lights Out",
@@ -3769,7 +4053,8 @@
    "pop_song_176"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "A Good Friend Is Nice",
@@ -3781,7 +4066,8 @@
    "pop_song_473"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Skrillex and Diplo present Jack Ü",
@@ -3793,7 +4079,8 @@
    "pop_song_235"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Back from the Edge",
@@ -3805,7 +4092,8 @@
    "pop_song_379"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Everything Is 4",
@@ -3817,7 +4105,8 @@
    "pop_song_229"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Future History",
@@ -3829,7 +4118,8 @@
    "pop_song_5"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Dear Joe,",
@@ -3841,7 +4131,8 @@
    "pop_song_743"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Dance Again...The Hits",
@@ -3853,7 +4144,8 @@
    "pop_song_42"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Late Nights",
@@ -3865,7 +4157,8 @@
    "pop_song_196"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "I Cry When I Laugh",
@@ -3877,7 +4170,8 @@
    "pop_song_190"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Who You Are",
@@ -3889,7 +4183,8 @@
    "pop_song_22"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "AMORTAGE",
@@ -3901,7 +4196,8 @@
    "pop_song_923"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Into the Unknown",
@@ -3913,7 +4209,8 @@
    "pop_song_941"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "love + everything else",
@@ -3925,7 +4222,8 @@
    "pop_song_583"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Love in the Future",
@@ -3937,7 +4235,8 @@
    "pop_song_153"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "SMITHEREENS",
@@ -3949,7 +4248,8 @@
    "pop_song_741"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Greetings From Your Hometown",
@@ -3961,7 +4261,8 @@
    "pop_song_963"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "The Album",
@@ -3973,7 +4274,8 @@
    "pop_song_785"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "The Family Business",
@@ -3985,7 +4287,8 @@
    "pop_song_683"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Hold It Together",
@@ -3997,7 +4300,8 @@
    "pop_song_598"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Goodbye & Good Riddance",
@@ -4012,7 +4316,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_466": "Goodbye & Good Riddance (Anniversary)"
-  }
+  },
+  "released": null
  },
  {
   "name": "Inner Monologue, Pt. 1",
@@ -4024,7 +4329,8 @@
    "pop_song_514"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Clumsy Words and Bad Pickup Lines",
@@ -4036,7 +4342,8 @@
    "pop_song_51"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Justice",
@@ -4048,7 +4355,8 @@
    "pop_song_700"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "SWAG II",
@@ -4060,7 +4368,8 @@
    "pop_song_953"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Everything I Thought It Was",
@@ -4072,7 +4381,8 @@
    "pop_song_843"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "The 20/20 Experience",
@@ -4084,7 +4394,8 @@
    "pop_song_103"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Hello",
@@ -4096,7 +4407,8 @@
    "pop_song_48"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "NO ME ARREPIENTO DE SENTIR TANTO",
@@ -4108,7 +4420,8 @@
    "pop_song_1045"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Hounds of Love",
@@ -4120,7 +4433,8 @@
    "pop_song_730"
   ],
   "year": 1985,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 1985
  },
  {
   "name": "Smile",
@@ -4132,7 +4446,8 @@
    "pop_song_603"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Kehlani",
@@ -4144,7 +4459,8 @@
    "pop_song_1025"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Greatest Hits - Chapter One",
@@ -4156,7 +4472,8 @@
    "pop_song_83"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Stronger",
@@ -4168,7 +4485,8 @@
    "pop_song_24"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "The Hamilton Mixtape",
@@ -4180,7 +4498,8 @@
    "pop_song_334"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "Black Panther: The Album",
@@ -4192,7 +4511,8 @@
    "pop_song_457"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "DAMN.",
@@ -4204,7 +4524,8 @@
    "pop_song_375"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "The After Taste",
@@ -4216,7 +4537,8 @@
    "pop_song_823"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "American Teen",
@@ -4228,7 +4550,8 @@
    "pop_song_414"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Suncity",
@@ -4240,7 +4563,8 @@
    "pop_song_506"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Detour",
@@ -4252,7 +4576,8 @@
    "pop_song_1022"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Problématique",
@@ -4264,7 +4589,8 @@
    "pop_song_821"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Frozen (Original Motion Picture Soundtrack)",
@@ -4276,7 +4602,8 @@
    "pop_song_148"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "KYGO",
@@ -4288,7 +4615,8 @@
    "pop_song_875"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Stargazing EP",
@@ -4300,7 +4628,8 @@
    "pop_song_433"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Extension (The Extended Mixes)",
@@ -4312,7 +4641,8 @@
    "pop_song_794"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Tension",
@@ -4324,7 +4654,8 @@
    "pop_song_828"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Cha Cha Cha Mixtape",
@@ -4336,7 +4667,8 @@
    "pop_song_792"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "A Star Is Born Soundtrack",
@@ -4348,7 +4680,8 @@
    "pop_song_520"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Look Up Child",
@@ -4360,7 +4693,8 @@
    "pop_song_484"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "~How I'm Feeling~",
@@ -4372,7 +4706,8 @@
    "pop_song_513"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Broken By Desire To Be Heavenly Sent",
@@ -4384,7 +4719,8 @@
    "pop_song_748"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "LP1",
@@ -4396,7 +4732,8 @@
    "pop_song_393"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Almeria",
@@ -4408,7 +4745,8 @@
    "pop_song_84"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "MONTERO",
@@ -4420,7 +4758,8 @@
    "pop_song_684"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Luv Is Rage 2",
@@ -4432,7 +4771,8 @@
    "pop_song_428"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Moana",
@@ -4444,7 +4784,8 @@
    "pop_song_344"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Encanto (Original Motion Picture Soundtrack)",
@@ -4456,7 +4797,8 @@
    "pop_song_708"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "One More Light",
@@ -4468,7 +4810,8 @@
    "pop_song_431"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "House of LION BABE",
@@ -4480,7 +4823,8 @@
    "pop_song_795"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "LANDER",
@@ -4492,7 +4836,8 @@
    "pop_song_639"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Between Us",
@@ -4504,7 +4849,8 @@
    "pop_song_706"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Glory Days",
@@ -4516,7 +4862,8 @@
    "pop_song_343"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Sorry for Party Rocking",
@@ -4528,7 +4875,8 @@
    "pop_song_8"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Everybody",
@@ -4540,7 +4888,8 @@
    "pop_song_384"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "This Wasn't Meant For You Anyway",
@@ -4552,7 +4901,8 @@
    "pop_song_925"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Melodrama",
@@ -4564,7 +4914,8 @@
    "pop_song_369"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Top Gun: Maverick (Music from the Motion Picture)",
@@ -4576,7 +4927,8 @@
    "pop_song_755"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "VIDA",
@@ -4588,7 +4940,8 @@
    "pop_song_373"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Lukas Graham",
@@ -4600,7 +4953,8 @@
    "pop_song_288"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Ivy to Roses (Mixtape)",
@@ -4612,7 +4966,8 @@
    "pop_song_528"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "GEMINI",
@@ -4624,7 +4979,8 @@
    "pop_song_430"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "This Unruly Mess I've Made",
@@ -4636,7 +4992,8 @@
    "pop_song_259"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "CONFESSIONS II",
@@ -4648,7 +5005,8 @@
    "pop_song_1034"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Don't Kill the Magic",
@@ -4660,7 +5018,8 @@
    "pop_song_172"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Peace Is The Mission (Extended)",
@@ -4672,7 +5031,8 @@
    "pop_song_246"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "D R E A M S I C L E",
@@ -4684,7 +5044,8 @@
    "pop_song_874"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Caution",
@@ -4696,7 +5057,8 @@
    "pop_song_531"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Here For It All",
@@ -4708,7 +5070,8 @@
    "pop_song_946"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Me. I Am Mariah…The Elusive Chanteuse",
@@ -4720,7 +5083,8 @@
    "pop_song_108"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Late Night Feelings",
@@ -4732,7 +5096,8 @@
    "pop_song_504"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Uptown Special",
@@ -4744,7 +5109,8 @@
    "pop_song_206"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Hands All Over",
@@ -4756,7 +5122,8 @@
    "pop_song_10"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2010
  },
  {
   "name": "Love Is Like",
@@ -4768,7 +5135,8 @@
    "pop_song_940"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "North",
@@ -4780,7 +5148,8 @@
    "pop_song_66"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Hell's Kitchen Angel",
@@ -4792,7 +5161,8 @@
    "pop_song_458"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Suga",
@@ -4804,7 +5174,8 @@
    "pop_song_608"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "The Love Train",
@@ -4816,7 +5187,8 @@
    "pop_song_518"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "PORTALS",
@@ -4828,7 +5200,8 @@
    "pop_song_808"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "HEROES & VILLAINS",
@@ -4840,7 +5213,8 @@
    "pop_song_771"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Zootopia (Original Motion Picture Soundtrack)",
@@ -4852,7 +5226,8 @@
    "pop_song_287"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "At Night, Alone.",
@@ -4864,7 +5239,8 @@
    "pop_song_279"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Bass Persuades",
@@ -4876,7 +5252,8 @@
    "pop_song_1047"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "SHE IS COMING",
@@ -4888,7 +5265,8 @@
    "pop_song_555"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Something Beautiful",
@@ -4900,7 +5278,8 @@
    "pop_song_927"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Internet Killed the Rockstar",
@@ -4912,7 +5291,8 @@
    "pop_song_649"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Wilder Mind",
@@ -4924,7 +5304,8 @@
    "pop_song_231"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "R.E.D.",
@@ -4936,7 +5317,8 @@
    "pop_song_62"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "7",
@@ -4948,7 +5330,8 @@
    "pop_song_905"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Picture Show",
@@ -4960,7 +5343,8 @@
    "pop_song_67"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "Pop Psychology",
@@ -4972,7 +5356,8 @@
    "pop_song_175"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "The Search",
@@ -4984,7 +5369,8 @@
    "pop_song_558"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "The Show",
@@ -4999,7 +5385,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_778": "The Show: The Encore"
-  }
+  },
+  "released": null
  },
  {
   "name": "All American",
@@ -5011,7 +5398,8 @@
    "pop_song_269"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Last Year Was Complicated",
@@ -5023,7 +5411,8 @@
    "pop_song_302"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Here and Now",
@@ -5035,7 +5424,8 @@
    "pop_song_18"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "Black Star Elephant",
@@ -5047,7 +5437,8 @@
    "pop_song_168"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Killer Love",
@@ -5059,7 +5450,8 @@
    "pop_song_11"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "THE END OF EVERYTHING",
@@ -5071,7 +5463,8 @@
    "pop_song_613"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Stick Season (We'll All Be Here Forever)",
@@ -5083,7 +5476,8 @@
    "pop_song_842"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "On Company Time",
@@ -5095,7 +5489,8 @@
    "pop_song_933"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "The Art of Loving",
@@ -5107,7 +5502,8 @@
    "pop_song_968"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "you seem pretty sad for a girl so in love",
@@ -5119,7 +5515,8 @@
    "pop_song_1009"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "24 HRS",
@@ -5131,7 +5528,8 @@
    "pop_song_325"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Right Place Right Time",
@@ -5143,7 +5541,8 @@
    "pop_song_101"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Sex Playlist",
@@ -5155,7 +5554,8 @@
    "pop_song_234"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Midnight Memories",
@@ -5167,7 +5567,8 @@
    "pop_song_139"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Up All Night",
@@ -5179,7 +5580,8 @@
    "pop_song_39"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Coco Moon",
@@ -5194,7 +5596,8 @@
   "chart": "pop",
   "deluxe": {
    "pop_song_847": "Coco Moon Deluxe"
-  }
+  },
+  "released": null
  },
  {
   "name": "Paramore",
@@ -5206,7 +5609,8 @@
    "pop_song_173"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "All the Little Lights",
@@ -5218,7 +5622,8 @@
    "pop_song_146"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Chapter 1: Singles Collection",
@@ -5230,7 +5635,8 @@
    "pop_song_973"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Porcelain",
@@ -5242,7 +5648,8 @@
    "pop_song_990"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Perrie",
@@ -5254,7 +5661,8 @@
    "pop_song_965"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Climate Change",
@@ -5266,7 +5674,8 @@
    "pop_song_310"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "Globalization",
@@ -5278,7 +5687,8 @@
    "pop_song_241"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Planet Pit",
@@ -5290,7 +5700,8 @@
    "pop_song_25"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Woodstock",
@@ -5302,7 +5713,8 @@
    "pop_song_413"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "AUSTIN",
@@ -5314,7 +5726,8 @@
    "pop_song_787"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "Stoney",
@@ -5326,7 +5739,8 @@
    "pop_song_272"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "Twelve Carat Toothache",
@@ -5338,7 +5752,8 @@
    "pop_song_750"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "What Dreams Are Made Of",
@@ -5350,7 +5765,8 @@
    "pop_song_252"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Fight Song",
@@ -5362,7 +5778,8 @@
    "pop_song_271"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Wildfire",
@@ -5374,7 +5791,8 @@
    "pop_song_236"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "SremmLife 2",
@@ -5386,7 +5804,8 @@
    "pop_song_335"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Bird's Eye",
@@ -5398,7 +5817,8 @@
    "pop_song_957"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Rave & Roses Ultra",
@@ -5410,7 +5830,8 @@
    "pop_song_777"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Black Panther: Wakanda Forever - Music From and Inspired By",
@@ -5422,7 +5843,8 @@
    "pop_song_757"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Let the Road",
@@ -5434,7 +5856,8 @@
    "pop_song_167"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Blurred Lines",
@@ -5446,7 +5869,8 @@
    "pop_song_111"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Sexistential",
@@ -5458,7 +5882,8 @@
    "pop_song_1002"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "rosie",
@@ -5470,7 +5895,8 @@
    "pop_song_895"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "RUDIM3NTAL",
@@ -5482,7 +5908,8 @@
    "pop_song_960"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "We the Generation",
@@ -5494,7 +5921,8 @@
    "pop_song_256"
   ],
   "year": 2005,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2005
  },
  {
   "name": "Safe Haven",
@@ -5506,7 +5934,8 @@
    "pop_song_309"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "The Thrill of It All",
@@ -5518,7 +5947,8 @@
    "pop_song_420"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "The Blessed Unrest",
@@ -5530,7 +5960,8 @@
    "pop_song_126"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "ICY",
@@ -5542,7 +5973,8 @@
    "pop_song_556"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "13 Reasons Why (Season 2)",
@@ -5554,7 +5986,8 @@
    "pop_song_461"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Selena x Votes",
@@ -5566,7 +5999,8 @@
    "pop_song_386"
   ],
   "year": 2017,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2017
  },
  {
   "name": "El Dorado",
@@ -5578,7 +6012,8 @@
    "pop_song_372"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Las Mujeres Ya No Lloran",
@@ -5590,7 +6025,8 @@
    "pop_song_733"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Shakira.",
@@ -5602,7 +6038,8 @@
    "pop_song_154"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Handwritten (Revisited)",
@@ -5614,7 +6051,8 @@
    "pop_song_251"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Shawn",
@@ -5626,7 +6064,8 @@
    "pop_song_882"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Bombs Away",
@@ -5638,7 +6077,8 @@
    "pop_song_232"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Mac and Devin Go to High School (Music from and Inspired By the Movie)",
@@ -5650,7 +6090,8 @@
    "pop_song_33"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Gemini Rights",
@@ -5662,7 +6103,8 @@
    "pop_song_745"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "Until Now",
@@ -5674,7 +6116,8 @@
    "pop_song_90"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "i used to think i could fly",
@@ -5686,7 +6129,8 @@
    "pop_song_720"
   ],
   "year": 2022,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2022
  },
  {
   "name": "THE ANXIETY",
@@ -5698,7 +6142,8 @@
    "pop_song_694"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Bouquet",
@@ -5710,7 +6155,8 @@
    "pop_song_268"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Breathe",
@@ -5722,7 +6168,8 @@
    "pop_song_998"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "No Hard Feelings",
@@ -5734,7 +6181,8 @@
    "pop_song_913"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "Summertime Friends",
@@ -5746,7 +6194,8 @@
    "pop_song_818"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "F*CK LOVE 3+: OVER YOU",
@@ -5758,7 +6207,8 @@
    "pop_song_690"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "The Lumineers",
@@ -5770,7 +6220,8 @@
    "pop_song_77"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "#3",
@@ -5782,7 +6233,8 @@
    "pop_song_91"
   ],
   "year": 2012,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Try Again",
@@ -5794,7 +6246,8 @@
    "pop_song_713"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "The Wanted",
@@ -5806,7 +6259,8 @@
    "pop_song_52"
   ],
   "year": 2010,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2010
  },
  {
   "name": "Word of Mouth",
@@ -5818,7 +6272,8 @@
    "pop_song_30"
   ],
   "year": 2011,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2011
  },
  {
   "name": "Hurry Up Tomorrow",
@@ -5830,7 +6285,8 @@
    "pop_song_956"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "My Dear Melancholy,",
@@ -5842,7 +6298,8 @@
    "pop_song_450"
   ],
   "year": null,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "DRIVE",
@@ -5854,7 +6311,8 @@
    "pop_song_705"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "The London Sessions",
@@ -5866,7 +6324,8 @@
    "pop_song_477"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "Welcome to the Madhouse",
@@ -5878,7 +6337,8 @@
    "pop_song_560"
   ],
   "year": 2019,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2019
  },
  {
   "name": "Love, Marriage? & Divorce",
@@ -5890,7 +6350,8 @@
    "pop_song_900"
   ],
   "year": 2013,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Blue Neighbourhood",
@@ -5902,7 +6363,8 @@
    "pop_song_284"
   ],
   "year": 2015,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "In A Dream (2020)",
@@ -5914,7 +6376,8 @@
    "pop_song_643"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Trxye",
@@ -5926,7 +6389,8 @@
    "pop_song_183"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "TOPxMM",
@@ -5938,7 +6402,8 @@
    "pop_song_320"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "TYLA",
@@ -5950,7 +6415,8 @@
    "pop_song_831"
   ],
   "year": 2023,
-  "chart": "pop"
+  "chart": "pop",
+  "released": null
  },
  {
   "name": "COMING HOME",
@@ -5962,7 +6428,8 @@
    "pop_song_845"
   ],
   "year": 2024,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "VÆBOUT",
@@ -5974,7 +6441,8 @@
    "pop_song_938"
   ],
   "year": 2025,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "TALKING IS HARD",
@@ -5986,7 +6454,8 @@
    "pop_song_224"
   ],
   "year": 2014,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2014
  },
  {
   "name": "Weezer (Teal Album)",
@@ -5998,7 +6467,8 @@
    "pop_song_478"
   ],
   "year": 2018,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2018
  },
  {
   "name": "amanda",
@@ -6010,7 +6480,8 @@
    "pop_song_993"
   ],
   "year": 2026,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "lately I feel EVERYTHING",
@@ -6022,7 +6493,8 @@
    "pop_song_682"
   ],
   "year": 2021,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2021
  },
  {
   "name": "Mind Of Mine",
@@ -6034,7 +6506,8 @@
    "pop_song_283"
   ],
   "year": 2016,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2016
  },
  {
   "name": "Nobody Is Listening",
@@ -6046,7 +6519,8 @@
    "pop_song_630"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Therapy",
@@ -6058,6 +6532,7 @@
    "pop_song_667"
   ],
   "year": 2020,
-  "chart": "pop"
+  "chart": "pop",
+  "released": 2020
  }
 ]
