@@ -37,6 +37,24 @@
   "chart": "pop"
  },
  {
+  "name": "It’s Not That Deep",
+  "artist": "Demi Lovato",
+  "artistId": "art_82",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_959",
+   "pop_song_977",
+   "pop_song_987",
+   "pop_song_997",
+   "pop_song_1006",
+   "pop_song_1008",
+   "pop_song_1011"
+  ],
+  "year": 2025,
+  "chart": "pop"
+ },
+ {
   "name": "The Rise and Fall of a Midwest Princess",
   "artist": "Chappell Roan",
   "artistId": "art_226",
@@ -71,6 +89,23 @@
   "chart": "pop"
  },
  {
+  "name": "Short n' Sweet",
+  "artist": "Sabrina Carpenter",
+  "artistId": "art_550",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_862",
+   "pop_song_869",
+   "pop_song_883",
+   "pop_song_896",
+   "pop_song_906",
+   "pop_song_928"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
   "name": "SOS",
   "artist": "SZA",
   "artistId": "art_470",
@@ -101,22 +136,6 @@
    "pop_song_215"
   ],
   "year": 2014,
-  "chart": "pop"
- },
- {
-  "name": "It’s Not That Deep",
-  "artist": "Demi Lovato",
-  "artistId": "art_82",
-  "plays": null,
-  "tracks": 14,
-  "songs": [
-   "pop_song_959",
-   "pop_song_977",
-   "pop_song_987",
-   "pop_song_997",
-   "pop_song_1006"
-  ],
-  "year": 2025,
   "chart": "pop"
  },
  {
@@ -181,22 +200,6 @@
    "pop_song_266"
   ],
   "year": 2014,
-  "chart": "pop"
- },
- {
-  "name": "Short n' Sweet",
-  "artist": "Sabrina Carpenter",
-  "artistId": "art_550",
-  "plays": null,
-  "tracks": 17,
-  "songs": [
-   "pop_song_869",
-   "pop_song_883",
-   "pop_song_896",
-   "pop_song_906",
-   "pop_song_928"
-  ],
-  "year": 2024,
   "chart": "pop"
  },
  {
@@ -276,6 +279,21 @@
   "chart": "pop"
  },
  {
+  "name": "143",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_877",
+   "pop_song_878",
+   "pop_song_888",
+   "pop_song_962"
+  ],
+  "year": 2024,
+  "chart": "pop"
+ },
+ {
   "name": "JORDI",
   "artist": "Maroon 5",
   "artistId": "art_249",
@@ -348,6 +366,21 @@
    "pop_song_836"
   ],
   "year": 2023,
+  "chart": "pop"
+ },
+ {
+  "name": "Global Warming",
+  "artist": "Pitbull",
+  "artistId": "art_265",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_47",
+   "pop_song_82",
+   "pop_song_95",
+   "pop_song_140"
+  ],
+  "year": 2012,
   "chart": "pop"
  },
  {
@@ -748,6 +781,20 @@
   "chart": "pop"
  },
  {
+  "name": "Teenage Dream",
+  "artist": "Katy Perry",
+  "artistId": "art_256",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_14",
+   "pop_song_28",
+   "pop_song_45"
+  ],
+  "year": 2010,
+  "chart": "pop"
+ },
+ {
   "name": "Witness",
   "artist": "Katy Perry",
   "artistId": "art_256",
@@ -818,6 +865,20 @@
   "chart": "pop"
  },
  {
+  "name": "Pure Heroine",
+  "artist": "Lorde",
+  "artistId": "art_327",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_131",
+   "pop_song_145",
+   "pop_song_156"
+  ],
+  "year": 2013,
+  "chart": "pop"
+ },
+ {
   "name": "The Heist",
   "artist": "Macklemore",
   "artistId": "art_302",
@@ -874,6 +935,20 @@
   "chart": "pop"
  },
  {
+  "name": "Nick Jonas",
+  "artist": "Nick Jonas",
+  "artistId": "art_367",
+  "plays": null,
+  "tracks": 21,
+  "songs": [
+   "pop_song_201",
+   "pop_song_218",
+   "pop_song_258"
+  ],
+  "year": 2014,
+  "chart": "pop"
+ },
+ {
   "name": "Pink Friday ... Roman Reloaded",
   "artist": "Nicki Minaj",
   "artistId": "art_261",
@@ -913,6 +988,20 @@
    "pop_song_242"
   ],
   "year": 2014,
+  "chart": "pop"
+ },
+ {
+  "name": "GUTS",
+  "artist": "Olivia Rodrigo",
+  "artistId": "art_549",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_802",
+   "pop_song_811",
+   "pop_song_841"
+  ],
+  "year": 2023,
   "chart": "pop"
  },
  {
@@ -1529,19 +1618,6 @@
   "chart": "pop"
  },
  {
-  "name": "It's Not That Deep (Unless You Want It To Be)",
-  "artist": "Demi Lovato",
-  "artistId": "art_82",
-  "plays": null,
-  "tracks": 8,
-  "songs": [
-   "pop_song_1008",
-   "pop_song_1011"
-  ],
-  "year": 2026,
-  "chart": "pop"
- },
- {
   "name": "Tell Me You Love Me",
   "artist": "Demi Lovato",
   "artistId": "art_82",
@@ -1828,45 +1904,6 @@
   "chart": "pop"
  },
  {
-  "name": "143",
-  "artist": "Katy Perry",
-  "artistId": "art_256",
-  "plays": null,
-  "tracks": 11,
-  "songs": [
-   "pop_song_877",
-   "pop_song_888"
-  ],
-  "year": 2024,
-  "chart": "pop"
- },
- {
-  "name": "1432",
-  "artist": "Katy Perry",
-  "artistId": "art_256",
-  "plays": null,
-  "tracks": 15,
-  "songs": [
-   "pop_song_878",
-   "pop_song_962"
-  ],
-  "year": 2024,
-  "chart": "pop"
- },
- {
-  "name": "Teenage Dream: The Complete Confection",
-  "artist": "Katy Perry",
-  "artistId": "art_256",
-  "plays": null,
-  "tracks": 19,
-  "songs": [
-   "pop_song_28",
-   "pop_song_45"
-  ],
-  "year": 2012,
-  "chart": "pop"
- },
- {
   "name": "The Ones That Got The Plays",
   "artist": "Katy Perry",
   "artistId": "art_256",
@@ -2010,19 +2047,6 @@
   "chart": "pop"
  },
  {
-  "name": "Pure Heroine",
-  "artist": "Lorde",
-  "artistId": "art_327",
-  "plays": null,
-  "tracks": 10,
-  "songs": [
-   "pop_song_145",
-   "pop_song_156"
-  ],
-  "year": 2013,
-  "chart": "pop"
- },
- {
   "name": "Whirlwind",
   "artist": "Maddie Poppe",
   "artistId": "art_518",
@@ -2127,32 +2151,6 @@
   "chart": "pop"
  },
  {
-  "name": "Nick Jonas",
-  "artist": "Nick Jonas",
-  "artistId": "art_367",
-  "plays": null,
-  "tracks": 11,
-  "songs": [
-   "pop_song_201",
-   "pop_song_218"
-  ],
-  "year": 2014,
-  "chart": "pop"
- },
- {
-  "name": "GUTS (spilled)",
-  "artist": "Olivia Rodrigo",
-  "artistId": "art_549",
-  "plays": null,
-  "tracks": 17,
-  "songs": [
-   "pop_song_811",
-   "pop_song_841"
-  ],
-  "year": 2023,
-  "chart": "pop"
- },
- {
   "name": "FOUR",
   "artist": "One Direction",
   "artistId": "art_279",
@@ -2189,32 +2187,6 @@
    "pop_song_551"
   ],
   "year": 2018,
-  "chart": "pop"
- },
- {
-  "name": "Global Warming",
-  "artist": "Pitbull",
-  "artistId": "art_265",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_47",
-   "pop_song_95"
-  ],
-  "year": 2012,
-  "chart": "pop"
- },
- {
-  "name": "Global Warming: Meltdown",
-  "artist": "Pitbull",
-  "artistId": "art_265",
-  "plays": null,
-  "tracks": 17,
-  "songs": [
-   "pop_song_82",
-   "pop_song_140"
-  ],
-  "year": 2012,
   "chart": "pop"
  },
  {
@@ -4116,18 +4088,6 @@
   "chart": "pop"
  },
  {
-  "name": "Teenage Dream",
-  "artist": "Katy Perry",
-  "artistId": "art_256",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_14"
-  ],
-  "year": 2010,
-  "chart": "pop"
- },
- {
   "name": "Kehlani",
   "artist": "Kehlani",
   "artistId": "art_487",
@@ -4557,18 +4517,6 @@
    "pop_song_369"
   ],
   "year": 2017,
-  "chart": "pop"
- },
- {
-  "name": "The Love Club EP",
-  "artist": "Lorde",
-  "artistId": "art_327",
-  "plays": null,
-  "tracks": 5,
-  "songs": [
-   "pop_song_131"
-  ],
-  "year": 2013,
   "chart": "pop"
  },
  {
@@ -5028,18 +4976,6 @@
   "chart": "pop"
  },
  {
-  "name": "Nick Jonas X2",
-  "artist": "Nick Jonas",
-  "artistId": "art_367",
-  "plays": null,
-  "tracks": 21,
-  "songs": [
-   "pop_song_258"
-  ],
-  "year": 2015,
-  "chart": "pop"
- },
- {
   "name": "Here and Now",
   "artist": "Nickelback",
   "artistId": "art_258",
@@ -5121,18 +5057,6 @@
    "pop_song_968"
   ],
   "year": 2025,
-  "chart": "pop"
- },
- {
-  "name": "GUTS",
-  "artist": "Olivia Rodrigo",
-  "artistId": "art_549",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_802"
-  ],
-  "year": 2023,
   "chart": "pop"
  },
  {
@@ -5529,18 +5453,6 @@
    "pop_song_309"
   ],
   "year": 2015,
-  "chart": "pop"
- },
- {
-  "name": "Espresso EP",
-  "artist": "Sabrina Carpenter",
-  "artistId": "art_550",
-  "plays": null,
-  "tracks": 6,
-  "songs": [
-   "pop_song_862"
-  ],
-  "year": 2024,
   "chart": "pop"
  },
  {
@@ -5976,7 +5888,7 @@
   "chart": "pop"
  },
  {
-  "name": "TYLA +",
+  "name": "TYLA",
   "artist": "Tyla",
   "artistId": "art_611",
   "plays": null,
