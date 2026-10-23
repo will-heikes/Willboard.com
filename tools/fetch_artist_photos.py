@@ -31,8 +31,8 @@ import urllib.request
 OUT = os.path.join('images', 'artists')
 API = 'https://api.deezer.com/search/artist?limit=5&q='
 WIKI = 'https://en.wikipedia.org/api/rest_v1/page/summary/'
-# What to search Deezer for when the act goes by a stylized name there (Will spells it Pink)
-SEARCH_AS = {'Pink': 'P!nk'}
+# What to search Deezer for when the act goes by another spelling there (Will spells it Pink, Love & Theft)
+SEARCH_AS = {'Pink': 'P!nk', 'Love & Theft': 'Love and Theft'}
 
 
 # Must match primaryArtist() and slugify() in index.html.
