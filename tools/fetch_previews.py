@@ -135,6 +135,7 @@ def itunes(artist, title, album='', original=False):
                or same_artist(h.get('artistName', ''), artist)) for h in hits):
             break
     full = lambda h: f"{h.get('trackName', '')} {h.get('collectionName', '')}"
+    seen = hits
     hits = [h for h in hits if h.get('previewUrl') and match(h.get('trackName', ''))
             and (norm(h.get('artistName', '')) == who or same_artist(h.get('artistName', ''), artist))
             and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
@@ -143,6 +144,8 @@ def itunes(artist, title, album='', original=False):
         if original:
             hits = [h for h in hits if not TV.search(full(h))]
     if not hits:
+        # What Apple did answer, to see why nothing matched
+        print(f'    apple: no match in {len(seen)}: ' + '; '.join(f"{h.get('trackName')} | {h.get('artistName')} | {h.get('collectionName')}" for h in seen[:4]))
         return None
     own = [h for h in hits if album and clean(h.get('collectionName', '')).startswith(clean(album))]
     h = (own or hits)[0]
