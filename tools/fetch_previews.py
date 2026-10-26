@@ -42,7 +42,7 @@ ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks'
 # "We Can't Be Friends (wait for your love)" is the song Will charted as "We Can't Be Friends"
 # Talk rather than the song: never played, even when it's all Deezer has
 SPOKEN = re.compile(r'\b(commentary|voice memo|interview|track by track|story behind|behind the song|spoken|radio release special|radio special)\b', re.I)
-ITUNES = 'https://itunes.apple.com/search?entity=song&country=us&limit=25&term={q}'
+ITUNES = 'https://itunes.apple.com/search?entity=song&country=us&limit=50&term={q}'
 PARENS = re.compile(r'\s*[(\[][^)\]]*[)\]]')
 
 
@@ -108,12 +108,18 @@ def note(h):
 def itunes(artist, title, album=''):
     want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
     match = named(want)
-    time.sleep(3)  # Apple allows about 20 searches a minute
-    try:
-        hits = json.loads(get(ITUNES.format(q=urllib.parse.quote(f'{artist} {title}')))).get('results', [])
-    except Exception as e:
-        print(f'    itunes lookup failed: {e}')
-        return None
+    hits = []
+    # Apple sometimes answers a busy minute with an empty list rather than an error, so an empty
+    # answer is asked again after a pause, then once more by title alone
+    for q, wait in ((f'{artist} {title}', 3), (f'{artist} {title}', 20), (title, 3)):
+        time.sleep(wait)  # Apple allows about 20 searches a minute
+        try:
+            hits = json.loads(get(ITUNES.format(q=urllib.parse.quote(q)))).get('results', [])
+        except Exception as e:
+            print(f'    itunes lookup failed: {e}')
+        if any(match(h.get('trackName', '')) and (norm(h.get('artistName', '')) == who
+               or same_artist(h.get('artistName', ''), artist)) for h in hits):
+            break
     full = lambda h: f"{h.get('trackName', '')} {h.get('collectionName', '')}"
     hits = [h for h in hits if h.get('previewUrl') and match(h.get('trackName', ''))
             and (norm(h.get('artistName', '')) == who or same_artist(h.get('artistName', ''), artist))
