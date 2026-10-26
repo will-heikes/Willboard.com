@@ -32,7 +32,9 @@ FIX = {}
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
 ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
                  r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit|'
-                 r'radio release|radio special|track by track|interview|story behind|behind the song|spoken)\b', re.I)
+                 r'radio release|radio special|track by track|interview|story behind|behind the song|spoken|'
+                 # "Remix" alone missed "(Almighty Club Mix)", "(Dyro Radio Edit)", "(A Cappella)" and "... (Remixes)"
+                 r'remixes|club mix|radio mix|dub mix|mix edit|radio edit|club edit|a cappella|acapella|extended mix)\b', re.I)
 # Edition names that are still the studio recording
 EDITIONS = re.compile(r"taylor'?s version|deluxe( edition| version)?|expanded edition|platinum edition|remaster(ed)?", re.I)
 
