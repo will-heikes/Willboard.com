@@ -2538,8 +2538,8 @@ function chartMovie(el, all, actName) {
         else d += `M${hx.toFixed(1)} ${hy.toFixed(1)}`;
         const cp = f < .5 ? p0 || p1 : p1 || p0;
         if (cp && (!lead || cp < lead.p)) lead = { s, p: cp };
-        // The music follows the newest song on the chart (the one the story is about), then the higher one
-        if (cp && PREVIEWS[s.id] && !bad.has(s.id) && (!tune || a > tune.a || (a === tune.a && cp < tune.p))) tune = { s, a, p: cp };
+        // The music follows the highest-charting song (Will), the newer one on a tie
+        if (cp && PREVIEWS[s.id] && !bad.has(s.id) && (!tune || cp < tune.p || (cp === tune.p && a > tune.a))) tune = { s, a, p: cp };
       }
       if (d) g += `<path d="${d}" fill="none" stroke="${color[s.id]}" stroke-width="${p0 || p1 ? 3 : 2}" stroke-opacity="${p0 || p1 ? 1 : .35}" stroke-linejoin="round" stroke-linecap="round"/>`;
       const h = heads[s.id];
