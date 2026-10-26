@@ -1541,6 +1541,8 @@ function pvMark(id) {
   document.querySelectorAll('.pv').forEach(b => b.classList.toggle('on', !!id && b.dataset.pv === id));
 }
 function deezerTrack(trackId) {
+  // Songs Deezer has no clip for carry Apple's preview link instead (tools/fetch_previews.py)
+  if (typeof trackId === 'string' && trackId.startsWith('https://')) return Promise.resolve({ preview: trackId });
   return new Promise((ok, fail) => {
     const cb = `__dz${++PV.n}`, el = document.createElement('script');
     const done = v => { delete window[cb]; el.remove(); clearTimeout(t); v instanceof Error ? fail(v) : ok(v); };
