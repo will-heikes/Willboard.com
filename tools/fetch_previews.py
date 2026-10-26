@@ -34,11 +34,25 @@ ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slow
 EDITIONS = re.compile(r"taylor'?s version|deluxe( edition| version)?|expanded edition|platinum edition|remaster(ed)?", re.I)
 
 
+# Acts Deezer files under another name
+ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks': 'Dixie Chicks'}
+# "We Can't Be Friends (wait for your love)" is the song Will charted as "We Can't Be Friends"
+PARENS = re.compile(r'\s*[(\[][^)\]]*[)\]]')
+
+
 def find(artist, title, album=''):
-    want, who = clean(title), norm(artist)
+    for name in (artist, ALIAS.get(artist)):
+        if name and (hit := search(name, title, album)):
+            return hit
+    return 0
+
+
+def search(artist, title, album=''):
+    want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
+    named = lambda t: clean(t) == want or clean(PARENS.sub('', t)) == want
     for q in (f'artist:"{artist}" track:"{title}"', f'{artist} {title}'):
         hits = json.loads(get(SEARCH.format(q=urllib.parse.quote(q)))).get('data', [])
-        hits = [h for h in hits if h.get('preview') and clean(h.get('title_short') or h.get('title', '')) == want]
+        hits = [h for h in hits if h.get('preview') and named(h.get('title_short') or h.get('title', ''))]
         # The act itself, not a tribute band or a karaoke label that has its name in theirs. A loose
         # match is only for Will's spellings ("Ariana Grade"), and never an act named like a cover act
         ok = [h for h in hits if norm(h.get('artist', {}).get('name', '')) == who] or \
