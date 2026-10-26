@@ -499,15 +499,18 @@ button { font: inherit; color: inherit; }
 .rl .ctl .play { background: var(--ink); color: var(--card); border-color: var(--ink); min-width: 74px; }
 @keyframes rlIn { from { opacity: 0; transform: translateY(14px); } }
 @keyframes rlUp { from { opacity: 0; transform: translateY(calc(-50% + 14px)); } }
-.cmv .date { position: absolute; left: 30px; top: 0; pointer-events: none; display: flex; align-items: flex-start; gap: 18px; }
-.cmv .date .tl { border-left: 1px solid var(--line); padding-left: 12px; }
-.cmv .date b, .cmv .date small { white-space: nowrap; }
-@media (max-width: 600px) { .cmv .date { gap: 9px; } .cmv .date .tl { padding-left: 8px; } .cmv .date b { font-size: 21px !important; } .cmv .date small { font-size: 9.5px !important; letter-spacing: .3px !important; } }
-.cmv .date .tl b { transform-origin: left center; }
-.cmv .date .tl b.bump { animation: cmBump .6s ease-out; }
+.cmv .date { position: absolute; left: 30px; top: 0; pointer-events: none; }
+/* The running totals stay put on the right, away from the changing date (Will) */
+.cmv .tally { position: absolute; right: 12px; top: 0; pointer-events: none; display: flex; gap: 12px; text-align: right; }
+.cmv .tally .tl + .tl { border-left: 1px solid var(--line); padding-left: 12px; }
+.cmv .tally b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); font-variant-numeric: tabular-nums; transform-origin: right center; }
+.cmv .tally small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.cmv .tally b.bump { animation: cmBump .6s ease-out; }
+.cmv .date b, .cmv .date small, .cmv .tally small { white-space: nowrap; }
 @keyframes cmBump { 0% { transform: scale(1.35); color: var(--cc, var(--country)); } 100% { transform: scale(1); } }
 .cmv .date b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); letter-spacing: .5px; }
 .cmv .date small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+@media (max-width: 600px) { .cmv .tally { gap: 8px; } .cmv .tally .tl + .tl { padding-left: 8px; } .cmv .date b, .cmv .tally b { font-size: 21px; } .cmv .date small, .cmv .tally small { font-size: 9.5px; letter-spacing: .3px; } }
 .cmv .head { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; pointer-events: none; transition: opacity .25s; will-change: transform; }
 .cmv .head .art { width: 26px; height: 26px; border-radius: 50%; flex: none; font-size: 10px; box-shadow: 0 0 0 2px var(--c), 0 1px 4px rgb(0 0 0 / .2); }
 .cmv .head span { font: 700 12px var(--f-body); color: var(--ink); background: color-mix(in srgb, var(--card) 85%, transparent); padding: 1px 5px; border-radius: 3px; white-space: nowrap; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
@@ -518,7 +521,7 @@ button { font: inherit; color: inherit; }
 .cmv .sum.in { opacity: 1; transform: none; }
 /* The card takes the stage's place, so it can grow taller than the chart on a phone */
 .cmv .stage.ended { display: flex; align-items: center; }
-.cmv .stage.ended > svg, .cmv .stage.ended > .date, .cmv .stage.ended > .head { display: none; }
+.cmv .stage.ended > svg, .cmv .stage.ended > .date, .cmv .stage.ended > .tally, .cmv .stage.ended > .head { display: none; }
 .cmv .stage.ended .sum { position: relative; inset: auto; width: 100%; background: none; }
 .cmv .sum-in { width: min(720px, 100%); padding: 14px 12px; text-align: center; }
 .cmv .sum-h small { display: block; font: 700 11px var(--f-body); text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
@@ -2410,8 +2413,10 @@ function renderArtist(id) {
   const songs = DATA.songs.filter(s => s.artistId === id).sort((x, y) => x.debutDate.localeCompare(y.debutDate));
   // Songs where they're a featured or second credit sit in date order with their own, tinted and tagged
   const featured = new Set(DATA.songs.filter(s => s.artistId !== id && creditParts(s.artistName).some(p => p.id === id)));
-  const wks1 = songs.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
-  $('artist-stats').innerHTML = [[a.songs, 'Chart entries'], [a.no1, '#1 hits'], [wks1, 'Weeks at #1'], [chartWeeks(songs), 'Weeks on chart']]
+  // Collaborations count in the totals, as they do in the chart video (Will)
+  const credited = [...songs, ...featured];
+  const wks1 = credited.reduce((n, s) => n + weeksAt1(s.id, s.chart === 'pop' ? 'popHistory' : 'wbHistory'), 0);
+  $('artist-stats').innerHTML = [[credited.length, 'Chart entries'], [credited.filter(s => s.peakPosition === 1).length, '#1 hits'], [wks1, 'Weeks at #1'], [chartWeeks(credited), 'Weeks on chart']]
     .map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
   artistRuns(id, [...songs, ...featured]);
   // Oldest first, by release year, then by the album's first charted song
@@ -2544,7 +2549,7 @@ function chartMovie(el, all, actName, opt = {}) {
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
-  el.innerHTML = `<div class="cmv${year ? ' ye' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div><div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div></div><div class="sum" hidden></div></div>
+  el.innerHTML = `<div class="cmv${year ? ' ye' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally"><div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div></div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
       <select class="speed" aria-label="Speed">${year
@@ -2699,7 +2704,7 @@ function chartMovie(el, all, actName, opt = {}) {
       if (pk <= 5) n5++;
     }
     for (const [sel, n] of [['.n1', n1], ['.n5', n5]]) {
-      const b = root.querySelector('.date ' + sel);
+      const b = root.querySelector('.tally ' + sel);
       if (b.textContent !== String(n)) {
         const up = n > +b.textContent;
         b.textContent = n;
