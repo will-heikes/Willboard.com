@@ -2408,6 +2408,7 @@ function artistRuns(id, list) {
 let CM = null;
 function stopChartMovie() { if (CM) { CM.stop(); CM = null; } }
 window.addEventListener('hashchange', () => { if (!location.hash.startsWith('#/artist/')) stopChartMovie(); });
+const SILENCE = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=';
 const CM_COLORS = ['#E0312C', '#3B8BDE', '#F2B705', '#2BA84A', '#8E5BD8', '#E05AA0', '#17A2B8', '#F26B1D', '#2E4A9E', '#8CC63F', '#C2185B', '#00897B'];
 function chartMovie(el, all) {
   const SIZE = { willboard: 20, pop: 10 }, NAME = { willboard: 'Hot 20', pop: 'Pop 10' };
@@ -2426,7 +2427,7 @@ function chartMovie(el, all) {
   let songs, weeks, first, last, t, playing = false, raf = 0, prev = 0, zoom = 0, heads = {}, color = {};
   let muted = false, music = null;
   const A = [new Audio(), new Audio()].map(a => { a.loop = true; a.volume = 0; return a; });
-  const tracks = {}, want = { id: null };
+  const tracks = {}, want = { id: null }, bad = new Set();
   let cur = { id: null, a: null };
 
   function load(k) {
@@ -2468,7 +2469,7 @@ function chartMovie(el, all) {
     for (let i = lo + 1; i <= hi; i++) if (weeks[i].slice(0, 4) !== weeks[i - 1].slice(0, 4))
       g += `<line class="yr" x1="${x(i)}" x2="${x(i)}" y1="${T - 14}" y2="${H - B}"/><text class="ax" x="${x(i) + 4}" y="${H - 8}">${weeks[i].slice(0, 4)}</text>`;
     const i0 = Math.floor(t), f = t - i0;
-    let lead = null;
+    let lead = null, tune = null;
     for (const xs of songs) {
       const { s } = xs, a = xs.r[0], b = Math.min(i0, a + xs.r.length - 2);
       let d = '', pen = false;
@@ -2487,6 +2488,8 @@ function chartMovie(el, all) {
         else d += `M${hx.toFixed(1)} ${hy.toFixed(1)}`;
         const cp = f < .5 ? p0 || p1 : p1 || p0;
         if (cp && (!lead || cp < lead.p)) lead = { s, p: cp };
+        // The music follows the newest song on the chart (the one the story is about), then the higher one
+        if (cp && PREVIEWS[s.id] && !bad.has(s.id) && (!tune || a > tune.a || (a === tune.a && cp < tune.p))) tune = { s, a, p: cp };
       }
       if (d) g += `<path d="${d}" fill="none" stroke="${color[s.id]}" stroke-width="${p0 || p1 ? 3 : 2}" stroke-opacity="${p0 || p1 ? 1 : .35}" stroke-linejoin="round" stroke-linecap="round"/>`;
       const h = heads[s.id];
@@ -2505,8 +2508,9 @@ function chartMovie(el, all) {
     root.querySelector('.date b').textContent = fmtShort(weeks[Math.min(i0, last)]);
     root.querySelector('.date small').textContent = `${NAME[key]} · week of`;
     range.value = t;
-    now.textContent = lead ? `${PREVIEWS[lead.s.id] && !muted ? '♪ ' : ''}${lead.s.name} · ${lead.s.artistName}` : (playing ? 'Fast-forwarding…' : '');
-    want.id = playing && !muted && lead && PREVIEWS[lead.s.id] ? lead.s.id : null;
+    const on = tune || lead;
+    now.textContent = on ? `${tune && !muted ? '♪ ' : ''}${on.s.name} · ${on.s.artistName}` : (playing ? 'Fast-forwarding…' : '');
+    want.id = playing && !muted && tune ? tune.s.id : null;
     sync();
   }
 
@@ -2522,10 +2526,11 @@ function chartMovie(el, all) {
     if (old) fade(old, 0);
     if (!id) return;
     const url = await track(id);
-    if (cur.id !== id || !url) return;
+    if (!url) bad.add(id);
+    if (cur.id !== id || !url) { if (cur.id === id) cur = { id: null, a: null }; return; }
     const a = A[0] === old ? A[1] : A[0];
     a.src = url; a.volume = 0; cur.a = a;
-    try { await a.play(); fade(a, .8); } catch (e) {}
+    try { await a.play(); fade(a, .8); } catch (e) { bad.add(id); if (cur.id === id) cur = { id: null, a: null }; }
   }
   function fade(a, to) {
     const from = a.volume, t0 = performance.now();
@@ -2550,6 +2555,8 @@ function chartMovie(el, all) {
   function play() {
     if (t >= last && zoom >= 1) { t = first; zoom = 0; }
     PV.audio.pause();
+    // Phones only let audio start inside a tap, so wake both players now, while this is one
+    for (const a of A) if (!a.src) { a.src = SILENCE; a.play().then(() => a.pause()).catch(() => {}); }
     playing = true; playB.textContent = '❚❚ Pause';
     prev = performance.now(); raf = requestAnimationFrame(frame);
   }

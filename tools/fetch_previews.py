@@ -4,7 +4,7 @@
 Run from the Willboard.com repo folder (the "Fetch artist photos" Action runs it with "previews" ticked):
     python3 tools/fetch_previews.py [--redo "Song title,Other song"] [--minutes 100]
 
---redo missing tries again every song that had no match.
+--redo missing tries again every song that had no match; --redo all checks every song again.
 
 Deezer's preview links expire after a while, so this only stores each song's Deezer track id in
 previews.json ({songId: trackId}, 0 when nothing matched). The site asks Deezer for a fresh preview
@@ -19,26 +19,32 @@ import time
 import urllib.parse
 
 from fetch_artist_photos import get, primary_artist
+from fetch_artist_photos import norm
 from fetch_covers import clean, display_title, same_artist
 
 OUT = 'previews.json'
 SEARCH = 'https://api.deezer.com/search/track?limit=25&q={q}'
 # songId: Deezer track id, for matches the search gets wrong
 FIX = {}
-# Live takes, remixes and the like lose to the studio recording
-ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version)\b', re.I)
+# Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
+ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
+                 r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit)\b', re.I)
 
 
 def find(artist, title):
-    want = clean(title)
+    want, who = clean(title), norm(artist)
     for q in (f'artist:"{artist}" track:"{title}"', f'{artist} {title}'):
         hits = json.loads(get(SEARCH.format(q=urllib.parse.quote(q)))).get('data', [])
-        ok = [h for h in hits if h.get('preview') and same_artist(h.get('artist', {}).get('name', ''), artist)
-              and clean(h.get('title_short') or h.get('title', '')) == want]
-        if ok:
-            # Keep Deezer's order (most popular first), but a studio take beats a live one or a remix
-            ok.sort(key=lambda h: bool(ALT.search(h.get('title', ''))) and not ALT.search(title))
-            return ok[0]['id']
+        hits = [h for h in hits if h.get('preview') and clean(h.get('title_short') or h.get('title', '')) == want]
+        # The act itself, not a tribute band or a karaoke label that has its name in theirs. A loose
+        # match is only for Will's spellings ("Ariana Grade"), and never an act named like a cover act
+        ok = [h for h in hits if norm(h.get('artist', {}).get('name', '')) == who] or \
+             [h for h in hits if same_artist(h.get('artist', {}).get('name', ''), artist) and not ALT.search(h.get('artist', {}).get('name', ''))]
+        # Deezer keeps "(Commentary)" or "(Live)" in title_version, so check the whole title and the album
+        full = lambda h: f"{h.get('title', '')} {h.get('title_version', '')} {h.get('album', {}).get('title', '')}"
+        studio = [h for h in ok if not ALT.search(full(h)) or ALT.search(title)]
+        if studio or ok:
+            return max(studio or ok, key=lambda h: h.get('rank', 0))['id']
         time.sleep(0.12)
     return 0
 
@@ -58,7 +64,7 @@ def main():
         if s['id'] in FIX:
             found[s['id']] = FIX[s['id']]
             continue
-        if s['id'] in found and title.lower() not in redo and not ('missing' in redo and not found[s['id']]):
+        if s['id'] in found and 'all' not in redo and title.lower() not in redo and not ('missing' in redo and not found[s['id']]):
             continue
         if args.minutes and time.time() - start > args.minutes * 60:
             print(f'Out of time at {i}/{len(data["songs"])}; run again for the rest')
