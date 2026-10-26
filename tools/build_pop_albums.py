@@ -33,7 +33,7 @@ FIX = {
     'Neon Trees|Everybody Talks': 'Picture Show',
     'Nickelback|When We Stand Together': 'Here and Now',
     'Noah Cyrus|Team': None,
-    'P!nk|Runaway': None,
+    'P!nk|Runaway': 'TRUSTFALL',
     'Post Malone|Better Now': 'beerbongs & bentleys',
     'Post Malone|White Iverson': 'Stoney',
     'Starley|Call On Me': None,

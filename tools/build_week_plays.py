@@ -19,6 +19,7 @@ import datetime
 import difflib
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 
@@ -44,6 +45,7 @@ def week_entries(runs, key):
 def matcher(songs):
     """Match a title to one of a week's songs by name, loosest form last."""
     def find(title, sids):
+        title = re.sub(r'\*[^*]*\*', '', str(title)).strip()  # "*GREATEST GAINER*" notes on Plays Pages
         by = {}
         for sid in sids:
             for k in keys(songs[sid]['name']):
@@ -59,8 +61,9 @@ def matcher(songs):
     return find
 
 
-def plays_page_blocks(path, tab):
-    """Every week block on a Hot 20 Plays Page: [(song, start, end, plays, position)]."""
+def plays_page_blocks(path, tab, year):
+    """Every week block on a Hot 20 Plays Page: (dates the header could mean, [(song, start, end,
+    plays, position)]). 2015-2018 headers carry a "Song M-D" label; 2019's carry only a number."""
     rows = list(openpyxl.load_workbook(path, data_only=True)[tab].iter_rows(values_only=True))
     blocks = defaultdict(list)  # (band start row, column) -> records
     band = 0
@@ -72,7 +75,20 @@ def plays_page_blocks(path, tab):
             band = i  # a header or blank row starts a new band of weeks
         for c, rec in recs:
             blocks[(band, c)].append(rec)
-    return [b for b in blocks.values() if len(b) >= 10]
+    out = []
+    for (band, c), recs in blocks.items():
+        if len(recs) < 10:
+            continue
+        dates = []
+        for v in rows[band][c:c + 4]:
+            m = re.search(r'(\d{1,2})-(\d{1,2})\s*$', v) if isinstance(v, str) else None
+            for y in (year, year - 1) if m else ():
+                try:
+                    dates.append(datetime.date(y, int(m.group(1)), int(m.group(2))))
+                except ValueError:
+                    pass
+        out.append((dates, recs))
+    return out
 
 
 def main():
@@ -84,31 +100,54 @@ def main():
     out = {'willboard': defaultdict(dict), 'pop': defaultdict(dict)}
     missed = defaultdict(int)
 
-    # Hot 20, 2015-2019: match each block to the week whose chart it reproduces
+    # Hot 20, 2015-2019: a block goes to the chart week whose songs and positions it reproduces,
+    # near the date in its header when it has one (2019's headers carry only a number)
     wb = week_entries(runs, 'willboard')
+    def score(block, w):
+        return sum(1 for song, *_, pos in block if wb[w].get(pos) and find(song, [wb[w][pos]]))
+    blocks = []
     for y in range(2015, 2020):
         path = os.path.join(pp, f'{y}.xlsx')
-        if not os.path.exists(path):
-            continue
-        tab = next(t for t in openpyxl.load_workbook(path, read_only=True).sheetnames if t.startswith('Country') and 'Total' not in t and 'Points' not in t)
-        for block in plays_page_blocks(path, tab):
-            best, score = None, 0
-            for w, ents in wb.items():
-                if not (f'{y - 1}-12' <= w <= f'{y}-12-31'):
-                    continue
-                s = sum(1 for song, *_, pos in block if ents.get(pos) and find(song, [ents[pos]]))
-                if s > score:
-                    best, score = w, s
-            if not best or score < len(block) // 2:
-                missed['hot20 block'] += 1
-                continue
-            ents = wb[best]
-            for song, start, end, plays, pos in block:
-                sid = find(song, list(ents.values()))
-                if sid:
-                    out['willboard'][best][sid] = [plays, end]
-                else:
-                    missed['hot20 song'] += 1
+        if os.path.exists(path):
+            tab = next(t for t in openpyxl.load_workbook(path, read_only=True).sheetnames if t.startswith('Country') and 'Total' not in t and 'Points' not in t)
+            blocks += [(y, dates, recs) for dates, recs in plays_page_blocks(path, tab, y)]
+    # Header dates can be off by a week (two blocks labelled 10-18), so a dated block may go to any
+    # week within ten days of its label; each block and week is used once, best match first
+    def candidates(y, dates):
+        if dates:
+            return [w for w in wb if any(abs((datetime.date.fromisoformat(w) - d).days) <= 10 for d in dates)]
+        return [w for w in wb if f'{y - 1}-12' <= w <= f'{y}-12-31']
+    pairs = sorted(((score(recs, w), -min((abs((datetime.date.fromisoformat(w) - d).days) for d in dates), default=0), w, k)
+                    for k, (y, dates, recs) in enumerate(blocks) for w in candidates(y, dates)), reverse=True)
+    placed, used = {}, set()
+    for sc, _, w, k in pairs:
+        if sc >= 8 and w not in placed and k not in used:
+            placed[w] = blocks[k][2]
+            used.add(k)
+    for k, (y, dates, recs) in enumerate(blocks):  # a week whose chart was since corrected
+        exact = [d.isoformat() for d in dates if d.isoformat() in wb and d.isoformat() not in placed]
+        if k not in used and exact:
+            placed[exact[0]] = recs
+            used.add(k)
+    missed['hot20 blocks unplaced'] = len(blocks) - len(used)
+    starts = defaultdict(dict)  # week -> {songId: running total going into that week}
+    for w, recs in placed.items():
+        for song, start, end, plays, pos in recs:
+            sid = find(song, list(wb[w].values()))
+            if sid:
+                out['willboard'][w][sid] = [plays, end]
+                starts[w][sid] = start
+            else:
+                missed['hot20 song'] += 1
+    # A song's debut week isn't on the Plays Pages; its start the next week is its total going
+    # out of the debut week, which also counts as that week's plays (everything up to its debut)
+    weeks = sorted(wb)
+    for i, w in enumerate(weeks[:-1]):
+        if w in placed:
+            for sid in wb[w].values():
+                if sid not in out['willboard'][w] and sid in starts[weeks[i + 1]]:
+                    total = starts[weeks[i + 1]][sid]
+                    out['willboard'][w][sid] = [total, total]
 
     # Hot 20, 2020 on: the archive's running totals, a (total, position) column pair per week.
     # The pairs drift against the calendar (skipped and repeated weeks), so each position column
@@ -117,7 +156,7 @@ def main():
     rows = list(csv.reader(open(country_csv, encoding='utf-8')))
     recent = data['willboard'][0]['week']
     span = [w for w in wb if '2019-12-26' <= w < recent and w not in out['willboard']]
-    best = {}  # week -> (score, position column)
+    pairs = []
     for c in range(2, max(map(len, rows))):
         tally = defaultdict(int)
         for r in rows[1:]:
@@ -126,10 +165,12 @@ def main():
                 for w in span:
                     if wb[w].get(pos) and find(r[0], [wb[w][pos]]):
                         tally[w] += 1
-        if tally:
-            w = max(tally, key=tally.get)
-            if tally[w] >= 12 and tally[w] > best.get(w, (0,))[0]:
-                best[w] = (tally[w], c)
+        pairs += [(n, w, c) for w, n in tally.items() if n >= 8]
+    best, taken = {}, set()  # week -> (score, position column), best match first
+    for n, w, c in sorted(pairs, key=lambda x: (x[0], x[1], -x[2]), reverse=True):  # ties: earliest column
+        if w not in best and c not in taken:
+            best[w] = (n, c)
+            taken.add(c)
     cols = sorted((c, w) for w, (_, c) in best.items())
     for k, (c, w) in enumerate(cols):
         before = cols[k - 1][0] - 1 if k and cols[k - 1][1] < w else None
@@ -142,7 +183,53 @@ def main():
                 continue
             was = r[before].strip() if before is not None and before < len(r) else ''
             out['willboard'][w][sid] = [total - int(was) if was.isdigit() else None, total]
+        # Debut weeks carry a running total but no position; the total is that week's plays
+        for r in rows[1:]:
+            if c < len(r) and not r[c].strip() and r[c - 1].strip().isdigit():
+                left = [sid for sid in wb[w].values() if sid not in out['willboard'][w]]
+                sid = find(r[0], left) if left else None
+                if sid:
+                    out['willboard'][w][sid] = [int(r[c - 1])] * 2
+    # Around a few weeks the archive has running totals with no positions beside them. Those weeks
+    # take the totals column between their neighbours' columns that holds the most of their songs
+    # at or above the week before's totals
+    W = sorted(wb)
+    for w in sorted(set(span) - set(best)):
+        cp = max((c for c, x in cols if x < w), default=1)
+        cn = min((c for c, x in cols if x > w), default=max(map(len, rows)))
+        prev = out['willboard'].get(W[W.index(w) - 1], {})
+        def fit(t):
+            got = {}
+            for r in rows[1:]:
+                v = r[t].strip() if t < len(r) else ''
+                sid = find(r[0], list(wb[w].values())) if v.isdigit() else None
+                if sid and int(v) >= prev.get(sid, [0, 0])[1]:
+                    got[sid] = int(v)
+            return got
+        tries = [fit(t) for t in range(cp + 1, cn - 1)
+                 if max((int(r[t]) for r in rows[1:] if t < len(r) and r[t].strip().isdigit()), default=0) > 20]
+        got = max(tries, key=len, default={})
+        # A column copied from the week before (Aug 1, 2024) isn't that week's plays
+        if len(got) >= 12 and sum(v > prev.get(sid, [0, 0])[1] for sid, v in got.items()) >= 12:
+            best[w] = None
+            for sid, total in got.items():
+                was = prev.get(sid, [None, None])[1]
+                out['willboard'][w][sid] = [total - was if was is not None else total, total]
     missed['hot20 archive weeks unmatched'] = len(set(span) - set(best))
+    # The archive only gives running totals, so a week's plays are its total less the song's last
+    # known total; in a song's first chart week, everything up to then
+    first, last = {}, {}
+    for w in W:
+        for sid in wb[w].values():
+            first.setdefault(sid, w)
+    for i, w in enumerate(W):
+        gap = i and not out['willboard'].get(W[i - 1])  # after a week with no plays, two weeks' worth
+        for sid, v in out['willboard'].get(w, {}).items():
+            if w in best:
+                v[0] = None if gap else v[1] - last[sid] if sid in last else v[1] if first[sid] == w else None
+                if v[0] is not None and v[0] < 0:  # two songs of one name
+                    v[0] = None
+            last[sid] = v[1]
 
     # Pop 10, 2018-2019: Plays Pages "Pop Plays" tabs
     pop = week_entries(runs, 'pop')
@@ -197,6 +284,14 @@ def main():
             if j < len(r) and r[j].strip().isdigit():
                 add_pop(w, r[0], r[j])
 
+    # A debut week's plays are everything up to the debut. That's one week's listening for most
+    # songs, but an album cut that charted late (Genevieve, 295) brings months of it: leave those out
+    hw = sorted(out['willboard'])
+    for i, w in enumerate(hw[:-1]):
+        for sid, v in out['willboard'][w].items():
+            nxt = out['willboard'][hw[i + 1]].get(sid, [None])[0]
+            if v[0] is not None and v[0] == v[1] and nxt is not None and v[0] > 2 * nxt + 10:
+                v[0] = None
     res = {k: {w: v[w] for w in sorted(v)} for k, v in out.items()}
     json.dump(res, open('week_plays.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     for k, v in res.items():

@@ -705,6 +705,7 @@ body.on-ask .ask-fab { display: none; }
 .ask-rows { border-top: 1px solid var(--line-soft); }
 .ask-rows .lrow:last-child { border-bottom: 0; }
 .ask-foot { border-top: 1px solid var(--line-soft); padding: 12px 18px; }
+.ask-note { font-size: 12px; color: var(--muted); }
 .ask-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--accent); }
 .ask-none { padding: 6px 20px; max-width: 640px; }
 /* Every #1 and Records */
@@ -2568,7 +2569,7 @@ const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most wee
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'What is the longest song to chart?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
@@ -2933,6 +2934,24 @@ function askAnswer(q, chartId, f) {
     return {
       lead: `The ${short ? 'shortest' : 'longest'} song to chart on the ${c.name}${who}${inYear(f.span)} is ${title(S(x.id))}, at ${mmss(SONG_LEN[x.id])}.`,
       rows: list.map((s, i) => askRow(rankIn(list, i, s => SONG_LEN[s.id]), S(s.id), `<b>${mmss(SONG_LEN[s.id])}</b><br>Peak ${s.peak}`)).join(''),
+    };
+  }
+
+  // Most plays in one week (week_plays.json, from 2015 on the Hot 20 and 2018 on the Pop 10)
+  if (/\b(plays|played|listens|streams|spins)\b/.test(t) && /\b(in|of|during) (a|one|any|a single|single) week\b|\bweekly\b|\bone[\s-]week\b|\bsingle week\b/.test(t) && !f.date) {
+    if (!WEEK_PLAYS) return { quiet: true, lead: 'Loading the weekly plays…' };
+    const few = /\b(least|fewest)\b/.test(t), all = [];
+    for (const w of st.weeks) {
+      if (!inSpanW(f.span, w.week)) continue;
+      for (const e of w.entries) if (e.wkPlays > 0 && S(e.songId) && byArtist(S(e.songId), f.artist) && (!f.songs.length || f.songs.some(x => x.id === e.songId))) all.push({ s: S(e.songId), week: w.week, pos: e.position, v: e.wkPlays });
+    }
+    if (!all.length) return { lead: `I don't have weekly plays for that on the ${c.name}.` };
+    const list = all.sort((a, b) => few ? a.v - b.v : b.v - a.v || a.week.localeCompare(b.week)).filter(ties(10, x => x.v)), n = tiedTop(list, x => x.v), top = list[0];
+    return {
+      lead: n > 1 ? `${n} chart weeks${who} tie for the ${few ? 'fewest' : 'most'} plays in a single week on the ${c.name}${inYear(f.span)}, with ${top.v.toLocaleString()} each.`
+        : `${title(top.s)} had the ${few ? 'fewest' : 'most'} plays in a single week on the ${c.name}${inYear(f.span)}: ${top.v.toLocaleString()}, the week of ${fmtLong(top.week)}.`,
+      rows: list.map((x, i) => askRow(rankIn(list, i, x => x.v), x.s, `<b>${x.v.toLocaleString()}</b> plays<br>${fmtShort(x.week)} · No. ${x.pos}`, `#/${chartId}/${x.week}`)).join(''),
+      more: `<span class="ask-note">Weekly plays start in 2015 on the Hot 20 and 2018 on the Pop 10.</span>`,
     };
   }
 
@@ -3409,7 +3428,12 @@ function route() {
   else if (page === 'story')    { id = 'story'; renderStory(+arg); }
   else if (page === 'beat')     { id = 'beat'; renderArticle(arg); }
   else if (page === 'recap')    { id = 'beat'; renderRecap(arg); }
-  else if (page === 'ask')      { id = 'ask'; renderAsk(new URLSearchParams(query || '').get('q') || ''); }
+  else if (page === 'ask')      {
+    id = 'ask';
+    const q = new URLSearchParams(query || '').get('q') || '';
+    renderAsk(q);
+    if (!WEEK_PLAYS && /\bplays|played\b/i.test(q)) loadWeekPlays().then(() => { if (location.hash.startsWith('#/ask')) renderAsk(q); });
+  }
   else if (page === 'about')    { id = 'about'; }
   else if (page === 'news')     { id = 'news'; renderNews(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'number-ones') { id = 'number-ones'; renderNumberOnes(CHARTS[arg] ? arg : 'hot20'); }

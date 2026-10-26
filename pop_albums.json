@@ -2418,6 +2418,20 @@
   "released": 2017
  },
  {
+  "name": "TRUSTFALL",
+  "artist": "P!nk",
+  "artistId": "art_134",
+  "plays": null,
+  "tracks": 13,
+  "songs": [
+   "pop_song_773",
+   "pop_song_891"
+  ],
+  "year": 2023,
+  "chart": "pop",
+  "released": 2023
+ },
+ {
   "name": "Pray for the Wicked",
   "artist": "Panic! At the Disco",
   "artistId": "art_504",
@@ -5641,19 +5655,6 @@
   "year": 2019,
   "chart": "pop",
   "released": 2019
- },
- {
-  "name": "TRUSTFALL",
-  "artist": "P!nk",
-  "artistId": "art_134",
-  "plays": null,
-  "tracks": 13,
-  "songs": [
-   "pop_song_773"
-  ],
-  "year": 2023,
-  "chart": "pop",
-  "released": 2023
  },
  {
   "name": "Paramore",
