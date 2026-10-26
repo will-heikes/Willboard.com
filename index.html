@@ -462,6 +462,8 @@ button { font: inherit; color: inherit; }
 .ye-movie .ye-play .go { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--c, #E0312C); color: #fff; display: grid; place-items: center; font-size: 15px; }
 .ye-movie.pop .ye-play .go { --c: #3B8BDE; }
 .ye-movie .m-anim, .ye-movie .m-reel { padding-bottom: 10px; }
+.ye-movie .m-canva { padding: 0 12px 12px; }
+.ye-movie .m-canva video { display: block; width: min(100%, 460px); aspect-ratio: 4 / 5; margin: 0 auto; background: #000; border-radius: 4px; }
 .rl { padding: 0 12px; }
 .rl [hidden] { display: none !important; }
 .rl-stage { container-type: inline-size; position: relative; width: min(100%, 520px); aspect-ratio: 4 / 5; margin: 0 auto; background: radial-gradient(ellipse at 50% 20%, #1A2233, #07090D 70%); overflow: hidden; border-radius: 4px; color: #fff; }
@@ -2153,12 +2155,22 @@ async function renderYearEnd(span, slug) {
     const reelKey = !dec && { 'country-songs': 'willboard', 'pop-songs': 'pop' }[chart.slug];
     const reelList = reelKey && YEAREND[reelKey]?.[span]?.songs || [];
     const reel = reelList.slice(0, 10).some(r => VIDEOS[r.songId]);
+    // Will's own Top 10 countdown videos, made in Canva (videos/<year>-<country|pop>-top-10.mp4)
+    const canva = reelKey && YE_VIDEOS[span]?.includes(reelKey) && `videos/${span}-${reelKey === 'pop' ? 'pop' : 'country'}-top-10`;
     split.innerHTML = `<div class="ye-crumbs"><a href="#/year-end/${span}">← All ${dec ? 'the ' + span : span} charts</a>
         <div class="ye-tabs">${charts.map(c => `<a class="ye-tab ${c.cls} ${c.slug === chart.slug ? 'on' : ''}" href="#/year-end/${span}/${c.slug}">${c.rows[0].tile(false)}<span>${c.title}<small>No. 1 · ${esc(c.rows[0].name)}</small></span></a>`).join('')}</div></div>
+      ${canva ? `<div class="card ye-movie ye-canva ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Will's Top 10 ${reelKey === 'pop' ? 'Pop' : 'Country'} Songs of ${span}</b><small>The countdown video, #10 to #1</small></span></button><div class="m-canva" hidden><video controls playsinline preload="none" poster="${canva}.jpg" src="${canva}.mp4"></video></div></div>` : ''}
       ${reel ? `<div class="card ye-movie ye-reel ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>The ${span} Top 10 countdown</b><small>#10 to #1, with a clip of each song's video</small></span></button><div class="m-reel" hidden></div></div>` : ''}
       ${movieKey ? `<div class="card ye-movie ye-anim ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Watch ${span} on the ${movieKey === 'pop' ? 'Pop 10' : 'Hot 20'}</b><small>Every song that charted, week by week, with the music</small></span></button><div class="m-anim" hidden></div></div>` : ''}
       <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></div>
       ${leadRow(top)}${rest.map(listRow).join('')}</div>`;
+    const cvd = split.querySelector('.ye-canva');
+    if (cvd) cvd.querySelector('.ye-play').onclick = e => {
+      const box = cvd.querySelector('.m-canva'), v = box.querySelector('video'), open = box.hidden;
+      box.hidden = !open; e.currentTarget.setAttribute('aria-expanded', String(open));
+      cvd.querySelector('.go').textContent = open ? '✕' : '▶';
+      if (open) { PV.audio.pause(); CM?.pause(); RL?.pause(); v.play().catch(() => {}); } else v.pause();
+    };
     const rv = split.querySelector('.ye-reel');
     if (rv) rv.querySelector('.ye-play').onclick = e => {
       const box = rv.querySelector('.m-reel'), open = box.hidden;
@@ -2787,8 +2799,11 @@ function chartMovie(el, all, actName, opt = {}) {
 // coloured from its cover. A song without a video, or one YouTube won't play here, shows its cover
 // over its 30-second preview instead.
 let VIDEOS = null, YT_API = null, RL = null;
+// Years with Will's Canva Top 10 videos in videos/, and which charts
+const YE_VIDEOS = { 2025: ['willboard', 'pop'] };
 function stopReel() { if (RL) { RL.stop(); RL = null; } }
 window.addEventListener('hashchange', () => { if (RL && location.hash !== RL.hash) stopReel(); });
+window.addEventListener('hashchange', () => document.querySelectorAll('.m-canva video').forEach(v => v.pause()));
 function ytApi() {
   if (!YT_API) YT_API = new Promise(ok => {
     if (window.YT?.Player) return ok(window.YT);
