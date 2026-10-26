@@ -499,7 +499,13 @@ button { font: inherit; color: inherit; }
 .rl .ctl .play { background: var(--ink); color: var(--card); border-color: var(--ink); min-width: 74px; }
 @keyframes rlIn { from { opacity: 0; transform: translateY(14px); } }
 @keyframes rlUp { from { opacity: 0; transform: translateY(calc(-50% + 14px)); } }
-.cmv .date { position: absolute; left: 30px; top: 0; pointer-events: none; }
+.cmv .date { position: absolute; left: 30px; top: 0; pointer-events: none; display: flex; align-items: flex-start; gap: 18px; }
+.cmv .date .tl { border-left: 1px solid var(--line); padding-left: 12px; }
+.cmv .date b, .cmv .date small { white-space: nowrap; }
+@media (max-width: 600px) { .cmv .date { gap: 9px; } .cmv .date .tl { padding-left: 8px; } .cmv .date b { font-size: 21px !important; } .cmv .date small { font-size: 9.5px !important; letter-spacing: .3px !important; } }
+.cmv .date .tl b { transform-origin: left center; }
+.cmv .date .tl b.bump { animation: cmBump .6s ease-out; }
+@keyframes cmBump { 0% { transform: scale(1.35); color: var(--cc, var(--country)); } 100% { transform: scale(1); } }
 .cmv .date b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); letter-spacing: .5px; }
 .cmv .date small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
 .cmv .head { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; pointer-events: none; transition: opacity .25s; will-change: transform; }
@@ -2538,7 +2544,7 @@ function chartMovie(el, all, actName, opt = {}) {
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
-  el.innerHTML = `<div class="cmv${year ? ' ye' : ''}"><div class="stage"><svg></svg><div class="date"><small></small><b></b></div><div class="sum" hidden></div></div>
+  el.innerHTML = `<div class="cmv${year ? ' ye' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div><div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div></div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
       <select class="speed" aria-label="Speed">${year
@@ -2679,8 +2685,27 @@ function chartMovie(el, all, actName, opt = {}) {
     g += '</g>';
     svg.setAttribute('width', W); svg.setAttribute('height', H);
     svg.innerHTML = g;
-    root.querySelector('.date b').textContent = fmtShort(weeks[Math.min(i0, last)]);
-    root.querySelector('.date small').textContent = `${NAME[key]} · week of`;
+    root.querySelector('.date .wk b').textContent = fmtShort(weeks[Math.min(i0, last)]);
+    root.querySelector('.date .wk small').textContent = `${NAME[key]} · week of`;
+    root.style.setProperty('--cc', key === 'pop' ? 'var(--pop)' : 'var(--country)');
+    // Running totals of songs that have reached #1 and the top 5 so far (Will), counting from the
+    // start of the year on a Year-End video; a new one ticks in as its badge changes
+    const upTo = Math.min(last, f < .5 ? i0 : i0 + 1), from = year ? first : 0;
+    let n1 = 0, n5 = 0;
+    for (const xs of songs) {
+      let pk = 99;
+      for (let i = Math.max(xs.r[0], from); i <= upTo; i++) { const p = pos(xs, i); if (p && p < pk) pk = p; }
+      if (pk === 1) n1++;
+      if (pk <= 5) n5++;
+    }
+    for (const [sel, n] of [['.n1', n1], ['.n5', n5]]) {
+      const b = root.querySelector('.date ' + sel);
+      if (b.textContent !== String(n)) {
+        const up = n > +b.textContent;
+        b.textContent = n;
+        if (up && playing) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+      }
+    }
     range.value = t;
     const on = tune || lead;
     now.textContent = on ? `${tune && !muted ? '♪ ' : ''}${on.s.name} · ${on.s.artistName}` : (playing ? 'Fast-forwarding…' : '');
