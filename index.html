@@ -2553,6 +2553,8 @@ function chartMovie(el, all, actName, opt = {}) {
   let muted = false, music = null;
   const A = [new Audio(), new Audio()].map(a => { a.loop = true; a.volume = 0; return a; });
   const tracks = {}, want = { id: null }, bad = new Set();
+  // Where each song's preview was when it lost the lead, so it picks up there when it returns (Will)
+  let heard = {};
   let cur = { id: null, a: null };
 
   function load(k) {
@@ -2577,7 +2579,7 @@ function chartMovie(el, all, actName, opt = {}) {
       first = Math.max(0, songs[0].r[0] - 1);
       last = Math.min(weeks.length - 1, Math.max(...songs.map(x => x.r[0] + x.r.length - 1)) + 2);
     }
-    t = first; hideSummary();
+    t = first; hideSummary(); heard = {};
     range.min = first; range.max = last; range.value = t;
     Object.values(heads).forEach(h => h.remove()); heads = {};
     for (const { s, r } of songs) {
@@ -2691,6 +2693,7 @@ function chartMovie(el, all, actName, opt = {}) {
   async function sync() {
     if (want.id === cur.id) return;
     const id = want.id, old = cur.a;
+    if (old && cur.id) heard[cur.id] = old.currentTime;
     cur = { id, a: null };
     if (old) fade(old, 0);
     if (!id) return;
@@ -2701,7 +2704,7 @@ function chartMovie(el, all, actName, opt = {}) {
     // would otherwise pause the new song (one song leaving as another enters)
     const a = old ? (A[0] === old ? A[1] : A[0]) : A.find(p => p.paused) || A[0];
     a._f = (a._f || 0) + 1;
-    a.src = url; a.volume = 0; cur.a = a;
+    a.src = heard[id] ? `${url}#t=${heard[id].toFixed(2)}` : url; a.volume = 0; cur.a = a;
     try { await a.play(); if (cur.a === a) fade(a, .8); }
     catch (e) { if (e.name !== 'AbortError') bad.add(id); if (cur.id === id) cur = { id: null, a: null }; }
   }
@@ -2739,7 +2742,7 @@ function chartMovie(el, all, actName, opt = {}) {
     cancelAnimationFrame(raf); draw();
   }
   playB.onclick = () => playing ? pause() : play();
-  root.querySelector('.restart').onclick = () => { t = first; hideSummary(); draw(); };
+  root.querySelector('.restart').onclick = () => { t = first; heard = {}; hideSummary(); draw(); };
   range.oninput = () => { t = +range.value; hideSummary(); draw(); };
 
   // The end card: the career (or the year) on this chart in numbers, with the biggest hits
@@ -2778,7 +2781,7 @@ function chartMovie(el, all, actName, opt = {}) {
     stage.style.minHeight = svg.getAttribute('height') + 'px';
     stage.classList.add('ended');
     sumEl.hidden = false; requestAnimationFrame(() => sumEl.classList.add('in'));
-    sumEl.querySelector('.again').onclick = () => { t = first; play(); };
+    sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
     ended = true;
     // The biggest hit (the year's No. 1) plays under the end card
     const tuneEnd = yeTop || best;
