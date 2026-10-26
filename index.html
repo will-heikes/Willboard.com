@@ -1567,6 +1567,7 @@ function chartRows(chartId, idx, limit, full) {
   const debutId = cur.entries.filter(e => e.weeks === 1).sort((a, b) => a.position - b.position)[0]?.songId;
   const gain = cur.entries.filter(e => prevMap[e.songId] > e.position).sort((a, b) => (prevMap[b.songId] - b.position) - (prevMap[a.songId] - a.position))[0];
   const gainerId = gain && prevMap[gain.songId] - gain.position >= 2 ? gain.songId : null;
+  const showPlays = full && cur.entries.some(e => e.wkPlays != null);
   return cur.entries.slice(0, limit).map(e => {
     const s = SONGS[e.songId] || {};
     const p = prevMap[e.songId];
@@ -1584,7 +1585,7 @@ function chartRows(chartId, idx, limit, full) {
       <span><div class="song">${esc(s.name || '—')}${wks1 > 1 ? `<span class="wks1">${wks1} wks at #1</span>` : ''}</div>
         <div class="artist">${esc(s.artistName || '')}${chip}</div>${cert ? `<div class="cert-inline">${cert}</div>` : ''}</span>
       <span class="certcol">${cert}</span>
-      <span class="stats"><div><small>LW</small><b>${p ?? '—'}</b></div><div><small>Peak</small><b>${peakUpTo(e.songId, c, idx)}</b></div><div><small>Wks</small><b>${e.weeks ?? '—'}</b></div></span>
+      <span class="stats"><div><small>LW</small><b>${p ?? '—'}</b></div><div><small>Peak</small><b>${peakUpTo(e.songId, c, idx)}</b></div><div><small>Wks</small><b>${e.weeks ?? '—'}</b></div>${showPlays ? `<div><small>Plays</small><b>${e.wkPlays?.toLocaleString() ?? '—'}</b></div>` : ''}</span>
     </a>`;
   }).join('');
 }
@@ -1853,6 +1854,7 @@ function renderChartPage(chartId) {
   $('wk-prev').disabled = idx === 0;
   $('wk-next').disabled = idx === weeks.length - 1;
   $('chart-rows').innerHTML = chartRows(chartId, idx, 99, true);
+  if (!WEEK_PLAYS) loadWeekPlays().then(() => { if (ui.chart === chartId && location.hash.startsWith(`#/${chartId}`)) renderChartPage(chartId); });
   $('chart-links').innerHTML = `<a class="ask-more" href="#/number-ones/${chartId}">Every #1 on the ${c.name} ${arrow}</a><a class="ask-more" href="#/records/${chartId}">${c.name} records ${arrow}</a>`;
   tintRows($('chart-rows'));
 }
@@ -2416,6 +2418,27 @@ function fullHistory(key) {
   const all = weeks.filter(w => w.entries.length && !recent[w.week]);
   for (const w of all) w.entries.sort((a, b) => a.position - b.position);
   DATA[key] = [...all, ...DATA[key]].sort((a, b) => a.week.localeCompare(b.week));
+}
+// Plays per chart week (week_plays.json, tools/build_week_plays.py): Hot 20 from 2015 and Pop 10
+// from 2018, as [plays that week, running total] for the Hot 20 and plays that week for the Pop 10.
+// Older Hot 20 weeks take their running total for the week's certification. Weeks in data.json
+// work out the week's plays from the running totals when the archive doesn't have them.
+let WEEK_PLAYS = null;
+async function loadWeekPlays() {
+  WEEK_PLAYS = await fetch('week_plays.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  for (const key of ['willboard', 'pop']) {
+    let prev = {};
+    for (const w of DATA[key]) {
+      const got = WEEK_PLAYS[key]?.[w.week] || {}, now = {};
+      for (const e of w.entries) {
+        const v = got[e.songId], wk = key === 'willboard' ? v?.[0] : v;
+        if (key === 'willboard' && e.plays == null && v) e.plays = v[1];
+        e.wkPlays = wk ?? (e.plays != null && prev[e.songId] != null ? e.plays - prev[e.songId] : null);
+        now[e.songId] = e.plays;
+      }
+      prev = now;
+    }
+  }
 }
 async function renderSong(id) {
   const s = SONGS[id];
