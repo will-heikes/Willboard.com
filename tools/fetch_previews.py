@@ -23,6 +23,9 @@ from fetch_artist_photos import norm
 from fetch_covers import clean, display_title, same_artist
 
 OUT = 'previews.json'
+# What each match actually is ({songId: "title | artist | album"}), to spot commentary and covers
+PICKS = 'preview_picks.json'
+picked = {}
 SEARCH = 'https://api.deezer.com/search/track?limit=25&q={q}'
 # songId: Deezer track id, for matches the search gets wrong
 FIX = {}
@@ -69,7 +72,8 @@ def search(artist, title, album=''):
                and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
         if own or studio or ok:
             best = max(own or studio or ok, key=lambda h: h.get('rank', 0))
-            print(f"    -> {best.get('title')} {best.get('title_version', '')} | {best.get('artist', {}).get('name')} | {best.get('album', {}).get('title')}")
+            picked[best['id']] = f"{best.get('title')} {best.get('title_version', '')}".strip() + f" | {best.get('artist', {}).get('name')} | {best.get('album', {}).get('title')}"
+            print(f"    -> {picked[best['id']]}")
             return best['id']
         time.sleep(0.12)
     return 0
@@ -113,6 +117,13 @@ def main():
             json.dump(found, open(OUT, 'w', encoding='utf-8'), indent=0, sort_keys=True)
         time.sleep(0.12)
     json.dump(found, open(OUT, 'w', encoding='utf-8'), indent=0, sort_keys=True)
+    picks = json.load(open(PICKS, encoding='utf-8')) if os.path.exists(PICKS) else {}
+    for sid, tid in found.items():
+        if tid in picked:
+            picks[sid] = picked[tid]
+        elif not tid:
+            picks.pop(sid, None)
+    json.dump(picks, open(PICKS, 'w', encoding='utf-8'), indent=0, sort_keys=True, ensure_ascii=False)
     print(f'\nDone. {sum(1 for v in found.values() if v)} of {len(found)} songs have a preview.')
 
 

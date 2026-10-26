@@ -92,7 +92,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A images
-          for f in artist_info.json artist_info_missing.txt pop_album_matches.json previews.json; do [ -f "$f" ] && git add "$f"; done
+          for f in artist_info.json artist_info_missing.txt pop_album_matches.json previews.json preview_picks.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || git commit -m "Update artist photos and covers"
           # main may have moved during a long run
           git pull --rebase origin main
