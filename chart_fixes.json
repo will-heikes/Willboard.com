@@ -1,0 +1,208 @@
+{
+ "_note": "Corrections to Will's CS Era Points sheet, applied to runs.json and data.json by tools/apply_chart_fixes.py. 'charts' are full charts from Will's iTunes chart playlists (2026-10-26); 'moves' set one song's position from his Plays Pages.",
+ "willboard": {
+  "charts": {
+   "2017-04-20": [
+    "Heaven Sent",
+    "After The Storm Blows Through",
+    "What I Never Knew I Always Wanted",
+    "She Don't Honky Tonk No More",
+    "Roots",
+    "Old Men Young Women",
+    "More Girls Like You",
+    "Good At Tonight",
+    "Kicked Outta Country",
+    "Busted",
+    "Just a Phase",
+    "With You I Am",
+    "Back to God",
+    "I Could Use a Love Song",
+    "Black",
+    "Bar at the End of the World",
+    "Drinkin' Problem",
+    "It Ain't My Fault",
+    "Tin Man",
+    "Speak to a Girl"
+   ],
+   "2017-05-18": [
+    "She Don't Honky Tonk No More",
+    "What I Never Knew I Always Wanted",
+    "Old Men Young Women",
+    "After The Storm Blows Through",
+    "More Girls Like You",
+    "Kicked Outta Country",
+    "Tin Man",
+    "Roots",
+    "Back to God",
+    "With You I Am",
+    "I Could Use a Love Song",
+    "Good At Tonight",
+    "It Ain't My Fault",
+    "Drinkin' Problem",
+    "Speak to a Girl",
+    "Heaven Sent",
+    "Just a Phase",
+    "Til Tomorrow",
+    "Happy People",
+    "Round Here Buzz"
+   ],
+   "2018-01-04": [
+    "Wreck You",
+    "Diane",
+    "Runnin' Just In Case",
+    "Nice Things",
+    "Old Stone Church",
+    "No Words",
+    "She Ain't In It",
+    "That's Why They Make Jack Daniels",
+    "Old Man's Symphony",
+    "I Should Go to Church Sometime",
+    "The Rest of Our Life",
+    "Ask Me How I Know",
+    "Make a Little",
+    "New Year's Day",
+    "Still the Same",
+    "I'll Be The Moon",
+    "Worth It",
+    "Hide the Wine",
+    "Wild West"
+   ],
+   "2018-04-26": [
+    "Hide the Wine",
+    "Worth It",
+    "That's Why They Make Jack Daniels",
+    "Vinyl",
+    "Wild West",
+    "Space Cowboy",
+    "I'll Be The Moon",
+    "Last Shot",
+    "Life's About To Get Good",
+    "Never Gets Old",
+    "When It Rains It Pours",
+    "You Got 'Em All",
+    "Woman, Amen",
+    "Only Broken Heart In San Antone",
+    "Babe",
+    "New Year's Day",
+    "Better Me",
+    "This Town Is Killing Me",
+    "Drunk Girl",
+    "Cry Pretty"
+   ],
+   "2018-05-10": [
+    "Hide the Wine",
+    "Space Cowboy",
+    "Last Shot",
+    "Wild West",
+    "Life's About To Get Good",
+    "Babe",
+    "Worth It",
+    "Vinyl",
+    "Never Gets Old",
+    "When It Rains It Pours",
+    "You Got 'Em All",
+    "Woman, Amen",
+    "Only Broken Heart In San Antone",
+    "Better Me",
+    "This Town Is Killing Me",
+    "That's Why They Make Jack Daniels",
+    "Drunk Girl",
+    "Cry Pretty",
+    "Keeper Of The Flame",
+    "Get Along"
+   ],
+   "2019-03-14": [
+    "In My Head",
+    "If My Name Was Whiskey",
+    "Hurt",
+    "Die From A Broken Heart",
+    "Mirror, Mirror",
+    "Neon Church",
+    "Night Shift",
+    "Dammit",
+    "Slow Burn",
+    "Brokenhearted",
+    "Beautiful Crazy",
+    "The Joke",
+    "Don't Let the Old Man In",
+    "I Don't Remember Me (Before You)",
+    "Girl Goin' Nowhere",
+    "Some of It",
+    "Tourist in This Town",
+    "Every Little Honky Tonk Bar",
+    "Stronger Than the Truth",
+    "I Can Do Hard Things"
+   ],
+   "2022-05-19": [
+    "Diamondback",
+    "Heartfirst",
+    "Don't Make Her Look Dumb",
+    "You In A Honky Tonk",
+    "Marfa Lights",
+    "Never Say Never",
+    "Last Night Lonely",
+    "The Story",
+    "Circles Around This Town",
+    "Wilder Days",
+    "7500 OBO",
+    "She Had Me At Heads Carolina",
+    "Love My Hair",
+    "camera roll",
+    "What I Can't Talk About",
+    "Broken Neon Hearts",
+    "My Bar",
+    "Everyone She Knows",
+    "Look At The Mess I'm In",
+    "Crazy One More Time"
+   ]
+  },
+  "moves": {
+   "2017-03-16": {
+    "Busted": 3
+   },
+   "2017-03-23": {
+    "Busted": 4
+   },
+   "2017-03-30": {
+    "Busted": 3
+   },
+   "2017-04-06": {
+    "Busted": 2
+   },
+   "2017-04-13": {
+    "Busted": 4
+   },
+   "2017-04-27": {
+    "Roots": 5
+   },
+   "2017-05-11": {
+    "Good At Tonight": 8,
+    "Roots": 6
+   },
+   "2017-05-25": {
+    "Roots": 11
+   },
+   "2017-06-29": {
+    "Doin' Fine": 12
+   },
+   "2017-07-27": {
+    "Speak to a Girl": 20
+   },
+   "2018-03-22": {
+    "You Got 'Em All": 16
+   },
+   "2018-04-19": {
+    "I'll Be the Moon": 4
+   },
+   "2018-08-16": {
+    "Billy Graham's Bible": 11
+   },
+   "2018-08-23": {
+    "Billy Graham's Bible": 11
+   },
+   "2019-05-02": {
+    "Girl Goin' Nowhere": 18
+   }
+  }
+ }
+}

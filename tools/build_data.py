@@ -321,6 +321,9 @@ def main():
     archive.sort(key=lambda f: (f['week'], f['chart'], -f['score']))
     json.dump(archive, open('archive.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print(f'archive.json: {len(archive)} stories')
+    # Will's sheet keeps a few typo'd weeks; the site's corrected versions live in chart_fixes.json
+    import apply_chart_fixes
+    apply_chart_fixes.apply()
 
 
 if __name__ == '__main__':
