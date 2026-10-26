@@ -2386,6 +2386,15 @@ function buildArtistStats() {
     c.songs++; c.points += s.totalPoints || 0;
     if (s.peakPosition === 1) c.no1++;
   }
+  // Collaborations and features count in each credited act's song and #1 totals, as on their own
+  // page (Will); the ranking still goes by the points of songs they led
+  for (const s of DATA.songs) {
+    for (const id of new Set(creditParts(s.artistName).map(p => p.id).filter(id => id && id !== s.artistId))) {
+      const c = chartArtists[s.chart][id] ||= { id, name: '', songs: 0, no1: 0, points: 0 };
+      c.songs++;
+      if (s.peakPosition === 1) c.no1++;
+    }
+  }
   for (const a of DATA.artists) {
     if (artistStats[a.id]) artistStats[a.id].name = a.name;
     for (const k in chartArtists) if (chartArtists[k][a.id]) chartArtists[k][a.id].name = a.name;
