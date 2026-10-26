@@ -28,7 +28,10 @@ SEARCH = 'https://api.deezer.com/search/track?limit=25&q={q}'
 FIX = {}
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
 ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
-                 r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit)\b', re.I)
+                 r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit|'
+                 r'radio release|radio special|track by track|interview|story behind|behind the song|spoken)\b', re.I)
+# Edition names that are still the studio recording
+EDITIONS = re.compile(r"taylor'?s version|deluxe( edition| version)?|expanded edition|platinum edition|remaster(ed)?", re.I)
 
 
 def find(artist, title, album=''):
@@ -46,10 +49,14 @@ def find(artist, title, album=''):
         # A recording on the song's own album (or its Taylor's Version, deluxe...) beats a lookalike
         # upload credited to the act, which is how a cover of "Mine" slipped through (Will)
         # (its album title may say "Taylor's Version", so only the track's own title is checked there)
+        # Taylor Swift's "Big Machine Radio Release Special" albums share the album's name but are
+        # commentary, so the album title is checked too, once edition names are taken out (Will)
         own = [h for h in ok if album and clean(h.get('album', {}).get('title', '')).startswith(clean(album))
-               and (not ALT.search(f"{h.get('title', '')} {h.get('title_version', '')}".replace("Taylor's Version", '')) or ALT.search(title))]
+               and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
         if own or studio or ok:
-            return max(own or studio or ok, key=lambda h: h.get('rank', 0))['id']
+            best = max(own or studio or ok, key=lambda h: h.get('rank', 0))
+            print(f"    -> {best.get('title')} {best.get('title_version', '')} | {best.get('artist', {}).get('name')} | {best.get('album', {}).get('title')}")
+            return best['id']
         time.sleep(0.12)
     return 0
 
