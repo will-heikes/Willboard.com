@@ -40,22 +40,42 @@ EDITIONS = re.compile(r"taylor'?s version|deluxe( edition| version)?|expanded ed
 # Acts Deezer files under another name
 ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks': 'Dixie Chicks'}
 # "We Can't Be Friends (wait for your love)" is the song Will charted as "We Can't Be Friends"
+# Talk rather than the song: never played, even when it's all Deezer has
+SPOKEN = re.compile(r'\b(commentary|voice memo|interview|track by track|story behind|behind the song|spoken|radio release special|radio special)\b', re.I)
+ITUNES = 'https://itunes.apple.com/search?entity=song&country=us&limit=25&term={q}'
 PARENS = re.compile(r'\s*[(\[][^)\]]*[)\]]')
 
 
 def find(artist, title, album=''):
+    """The song's Deezer track id, else an Apple preview link, else a Deezer remix or edit. Never talk."""
+    spare = 0
     for name in (artist, ALIAS.get(artist)):
-        if name and (hit := search(name, title, album)):
-            return hit
-    return 0
+        if not name:
+            continue
+        best, other = search(name, title, album)
+        if best:
+            return best
+        spare = spare or other
+    # Deezer has no preview of the studio recording for some catalogues (Big Machine's offers only its
+    # commentary editions, Lady A and Keith Urban none at all), so Apple's 30-second clip stands in
+    for name in (artist, ALIAS.get(artist)):
+        if name and (url := itunes(name, title, album)):
+            return url
+    return spare
+
+
+def named(want):
+    return lambda t: clean(t) == want or clean(PARENS.sub('', t)) == want
 
 
 def search(artist, title, album=''):
+    """(studio recording's Deezer id, a remix or edit's id as a last resort)"""
     want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
-    named = lambda t: clean(t) == want or clean(PARENS.sub('', t)) == want
+    match = named(want)
+    spare = 0
     for q in (f'artist:"{artist}" track:"{title}"', f'{artist} {title}'):
         hits = json.loads(get(SEARCH.format(q=urllib.parse.quote(q)))).get('data', [])
-        hits = [h for h in hits if h.get('preview') and named(h.get('title_short') or h.get('title', ''))]
+        hits = [h for h in hits if h.get('preview') and match(h.get('title_short') or h.get('title', ''))]
         # The act itself, not a tribute band or a karaoke label that has its name in theirs. A loose
         # match is only for Will's spellings ("Ariana Grade"), and never an act named like a cover act
         ok = [h for h in hits if norm(h.get('artist', {}).get('name', '')) == who] or \
@@ -64,19 +84,47 @@ def search(artist, title, album=''):
         full = lambda h: f"{h.get('title', '')} {h.get('title_version', '')} {h.get('album', {}).get('title', '')}"
         studio = [h for h in ok if not ALT.search(full(h)) or ALT.search(title)]
         # A recording on the song's own album (or its Taylor's Version, deluxe...) beats a lookalike
-        # upload credited to the act, which is how a cover of "Mine" slipped through (Will)
-        # (its album title may say "Taylor's Version", so only the track's own title is checked there)
-        # Taylor Swift's "Big Machine Radio Release Special" albums share the album's name but are
+        # upload credited to the act, which is how a cover of "Mine" slipped through (Will). Taylor
+        # Swift's "Big Machine Radio Release Special" albums share the album's name but are
         # commentary, so the album title is checked too, once edition names are taken out (Will)
         own = [h for h in ok if album and clean(h.get('album', {}).get('title', '')).startswith(clean(album))
                and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
-        if own or studio or ok:
-            best = max(own or studio or ok, key=lambda h: h.get('rank', 0))
-            picked[best['id']] = f"{best.get('title')} {best.get('title_version', '')}".strip() + f" | {best.get('artist', {}).get('name')} | {best.get('album', {}).get('title')}"
-            print(f"    -> {picked[best['id']]}")
-            return best['id']
+        if own or studio:
+            return note(max(own or studio, key=lambda h: h.get('rank', 0))), 0
+        # A remix or radio edit will do if nothing better turns up; someone talking never will
+        rest = [h for h in ok if not SPOKEN.search(full(h))]
+        if rest and not spare:
+            spare = note(max(rest, key=lambda h: h.get('rank', 0)))
         time.sleep(0.12)
-    return 0
+    return 0, spare
+
+
+def note(h):
+    picked[h['id']] = f"{h.get('title')} {h.get('title_version', '')}".strip() + f" | {h.get('artist', {}).get('name')} | {h.get('album', {}).get('title')}"
+    print(f"    -> {picked[h['id']]}")
+    return h['id']
+
+
+def itunes(artist, title, album=''):
+    want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
+    match = named(want)
+    time.sleep(3)  # Apple allows about 20 searches a minute
+    try:
+        hits = json.loads(get(ITUNES.format(q=urllib.parse.quote(f'{artist} {title}')))).get('results', [])
+    except Exception as e:
+        print(f'    itunes lookup failed: {e}')
+        return None
+    full = lambda h: f"{h.get('trackName', '')} {h.get('collectionName', '')}"
+    hits = [h for h in hits if h.get('previewUrl') and match(h.get('trackName', ''))
+            and (norm(h.get('artistName', '')) == who or same_artist(h.get('artistName', ''), artist))
+            and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
+    if not hits:
+        return None
+    own = [h for h in hits if album and clean(h.get('collectionName', '')).startswith(clean(album))]
+    h = (own or hits)[0]
+    picked[h['previewUrl']] = f"{h.get('trackName')} | {h.get('artistName')} | {h.get('collectionName')} (Apple)"
+    print(f"    -> {picked[h['previewUrl']]}")
+    return h['previewUrl']
 
 
 def main():
