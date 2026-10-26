@@ -2758,6 +2758,12 @@ function chartMovie(el, all, actName, opt = {}) {
     const count = f => st.filter(f).length, top = st.filter(x => x.peak === 1);
     const best = [...st].sort((a, b) => b.n1 - a.n1 || a.peak - b.peak || b.wks - a.wks)[0];
     const long = [...st].sort((a, b) => b.wks - a.wks || a.peak - b.peak)[0];
+    // The biggest hit is the Year-End formula over a whole career: all-time plays as a share of the
+    // chart's most-played song, plus chart points as a share of its top scorer (Will)
+    const pool = DATA.songs.filter(x => x.chart === key);
+    const topPlays = Math.max(1, ...pool.map(x => x.itunesPlays || 0)), topPts = Math.max(1, ...pool.map(x => x.totalPoints || 0));
+    const score = x => (x.s.itunesPlays || 0) / topPlays + (x.s.totalPoints || 0) / topPts;
+    const big = year ? best : [...st].sort((a, b) => score(b) - score(a) || b.n1 - a.n1 || a.peak - b.peak)[0];
     const hiDebut = [...st].filter(x => x.fresh).sort((a, b) => a.dpos - b.dpos || a.debut.localeCompare(b.debut))[0];
     // Every song that tied for the highest debut gets named (Will: 2016 had three #1 debuts)
     const debutTies = hiDebut ? st.filter(x => x.fresh && x.dpos === hiDebut.dpos).sort((a, b) => a.debut.localeCompare(b.debut)) : [];
@@ -2771,7 +2777,7 @@ function chartMovie(el, all, actName, opt = {}) {
       : num(st.length, st.length === 1 ? 'Hit' : 'Hits') + num(top.length, top.length === 1 ? '#1' : '#1s') + num(st.reduce((n, x) => n + x.n1, 0), 'Weeks at #1') + num(count(x => x.peak <= 5), 'Top 5s') + num(count(x => x.peak <= 10), 'Top 10s') + num(new Set(songs.flatMap(({ r }) => r.slice(1).map((p, i) => p ? r[0] + i : -1).filter(i => i >= 0))).size, 'Weeks on chart');
     const hls = year
       ? row('Year-End No. 1', yeTop, atOne(yeTop || best)) + (best === yeTop ? row('Longest run', long, `${long.wks} weeks this year`) : row('Most weeks at #1', best, atOne(best)))
-      : row('Biggest hit', best, atOne(best)) + row('Longest run', long, `${long.wks} weeks on the chart`);
+      : row('Biggest hit', big, atOne(big)) + row('Longest run', long, `${long.wks} weeks on the chart`);
     sumEl.innerHTML = `<div class="sum-in"><div class="sum-h"><small>${year ? `${NAME[key]} · ${year}` : `${NAME[key]} career${yrs[0] === yrs[1] ? ` · ${yrs[0]}` : ` · ${yrs[0]}–${yrs[1]}`}`}</small><b>${esc(actName || '')}</b></div>
       <div class="nums">${nums}</div>
       <div class="hls">${hls}
@@ -2786,7 +2792,7 @@ function chartMovie(el, all, actName, opt = {}) {
     sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
     ended = true;
     // The biggest hit (the year's No. 1) plays under the end card
-    const tuneEnd = yeTop || best;
+    const tuneEnd = yeTop || big;
     want.id = !muted && PREVIEWS[tuneEnd.s.id] && !bad.has(tuneEnd.s.id) ? tuneEnd.s.id : null;
     now.textContent = want.id ? `♪ ${tuneEnd.s.name} · ${tuneEnd.s.artistName}` : '';
     sync();
