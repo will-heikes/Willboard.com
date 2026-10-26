@@ -461,7 +461,42 @@ button { font: inherit; color: inherit; }
 .ye-movie .ye-play small { display: block; font: 500 12.5px var(--f-body); color: var(--muted); text-transform: none; letter-spacing: 0; margin-top: 2px; }
 .ye-movie .ye-play .go { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--c, #E0312C); color: #fff; display: grid; place-items: center; font-size: 15px; }
 .ye-movie.pop .ye-play .go { --c: #3B8BDE; }
-.ye-movie .m-anim { padding-bottom: 10px; }
+.ye-movie .m-anim, .ye-movie .m-reel { padding-bottom: 10px; }
+.rl { padding: 0 12px; }
+.rl [hidden] { display: none !important; }
+.rl-stage { container-type: inline-size; position: relative; width: min(100%, 520px); aspect-ratio: 4 / 5; margin: 0 auto; background: radial-gradient(ellipse at 50% 20%, #1A2233, #07090D 70%); overflow: hidden; border-radius: 4px; color: #fff; }
+.rl-stage .snow { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rl-intro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: rlIn .8s ease both; }
+.rl-intro small { font: 700 3cqw var(--f-body); letter-spacing: 1.2cqw; text-transform: uppercase; }
+.rl-intro b { font: 800 12cqw/.95 var(--f-cond); color: #fff; text-transform: uppercase; margin: 10px 0; }
+.rl-intro span { font: 700 4.5cqw var(--f-body); letter-spacing: 1.6cqw; }
+.rl-slot { position: absolute; left: 6%; right: 6%; top: 50%; transform: translateY(-50%); --rt: 224 49 44; }
+.rl-slot.in { animation: rlUp .6s ease both; }
+.rl-slot .rk { display: inline-block; background: rgb(var(--rt)); color: #fff; font: 800 5.5cqw/1 var(--f-body); padding: 1.6cqw 2.8cqw; margin-bottom: 2.4cqw; min-width: 10cqw; text-align: center; }
+.rl-slot .frame { position: relative; aspect-ratio: 16 / 9; border: 4px solid rgb(var(--rt)); background: #000; }
+.rl-slot .yt, .rl-slot .cov { position: absolute; inset: 0; }
+.rl-slot .yt iframe { width: 100%; height: 100%; display: block; pointer-events: none; }
+.rl-slot .yt { opacity: 0; }
+.rl-slot.vid .yt { opacity: 1; }
+.rl-slot.vid .cov { display: none; }
+.rl-slot .cov .art { width: 100%; height: 100%; border-radius: 0; font-size: 40px; }
+.rl-slot .cov .art img { object-fit: contain; background: #000; }
+.rl-slot .bar { margin-top: 2.4cqw; background: color-mix(in srgb, rgb(var(--rt)) 72%, #000); text-align: center; padding: 8px 10px 9px; }
+.rl-slot .bar b { display: block; font: 700 6.5cqw/1.05 var(--f-cond); text-transform: uppercase; }
+.rl-slot .bar small { font: 500 2.8cqw var(--f-body); opacity: .9; }
+.rl-end { position: absolute; inset: 0; padding: 6% 7%; display: flex; flex-direction: column; justify-content: center; animation: rlIn .8s ease both; }
+.rl-end small { font: 700 2.4cqw var(--f-body); letter-spacing: .8cqw; text-transform: uppercase; text-align: center; }
+.rl-end > b { font: 800 6.5cqw/1 var(--f-cond); text-transform: uppercase; text-align: center; margin: 1.2cqw 0 3cqw; }
+.rl-end ol { list-style: none; margin: 0; padding: 0; }
+.rl-end li { display: flex; align-items: baseline; gap: 2cqw; padding: 1.1cqw 0; border-bottom: 1px solid rgb(255 255 255 / .12); }
+.rl-end li i { font: 800 3.8cqw var(--f-cond); font-style: normal; width: 5cqw; text-align: right; color: #F2B705; }
+.rl-end li a { color: #fff; font: 700 3.1cqw var(--f-body); }
+.rl-end li span { font: 500 2.5cqw var(--f-body); opacity: .7; margin-left: auto; text-align: right; }
+.rl .ctl { display: flex; gap: 8px; justify-content: center; padding: 10px 0 2px; flex-wrap: wrap; }
+.rl .ctl button, .rl .ctl select { background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; font: 700 12.5px var(--f-body); cursor: pointer; color: var(--ink); }
+.rl .ctl .play { background: var(--ink); color: var(--card); border-color: var(--ink); min-width: 74px; }
+@keyframes rlIn { from { opacity: 0; transform: translateY(14px); } }
+@keyframes rlUp { from { opacity: 0; transform: translateY(calc(-50% + 14px)); } }
 .cmv .date { position: absolute; left: 30px; top: 0; pointer-events: none; }
 .cmv .date b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); letter-spacing: .5px; }
 .cmv .date small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
@@ -2079,7 +2114,8 @@ function setMore(list, key, from, to, href, label) {
   return `<table class="table">${yeSongHead(from, to, plays, false)}${rows.map(({ s, st }) => yeSongRow(s, st, from, to, false, plays)).join('')}</table>${href ? `<a class="ye-go" href="${href}">${label} →</a>` : ''}`;
 }
 async function renderYearEnd(span, slug) {
-  stopChartMovie();
+  stopChartMovie(); stopReel();
+  if (!VIDEOS) VIDEOS = await fetch('videos.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   if (!YEAREND) YEAREND = await fetch('yearend.json', FRESH).then(r => r.json()).catch(() => ({ willboard: {}, pop: {} }));
   if (!DECADE) DECADE = await fetch('decade.json', FRESH).then(r => r.json()).catch(() => ({}));
   if (!YEAR_TOPS) YEAR_TOPS = await fetch('year_tops.json', FRESH).then(r => r.json()).catch(() => ({}));
@@ -2113,12 +2149,25 @@ async function renderYearEnd(span, slug) {
     const [top, ...rest] = chart.rows;
     // A song chart's year can play as a moving chart, like an artist's history
     const movieKey = !dec && RUNS && { 'country-songs': 'willboard', 'pop-songs': 'pop' }[chart.slug];
+    // The Top 10 countdown, for years with music videos picked out (videos.json)
+    const reelKey = !dec && { 'country-songs': 'willboard', 'pop-songs': 'pop' }[chart.slug];
+    const reelList = reelKey && YEAREND[reelKey]?.[span]?.songs || [];
+    const reel = reelList.slice(0, 10).some(r => VIDEOS[r.songId]);
     split.innerHTML = `<div class="ye-crumbs"><a href="#/year-end/${span}">← All ${dec ? 'the ' + span : span} charts</a>
         <div class="ye-tabs">${charts.map(c => `<a class="ye-tab ${c.cls} ${c.slug === chart.slug ? 'on' : ''}" href="#/year-end/${span}/${c.slug}">${c.rows[0].tile(false)}<span>${c.title}<small>No. 1 · ${esc(c.rows[0].name)}</small></span></a>`).join('')}</div></div>
-      ${movieKey ? `<div class="card ye-movie ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Watch ${span} on the ${movieKey === 'pop' ? 'Pop 10' : 'Hot 20'}</b><small>Every song that charted, week by week, with the music</small></span></button><div class="m-anim" hidden></div></div>` : ''}
+      ${reel ? `<div class="card ye-movie ye-reel ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>The ${span} Top 10 countdown</b><small>#10 to #1, with a clip of each song's video</small></span></button><div class="m-reel" hidden></div></div>` : ''}
+      ${movieKey ? `<div class="card ye-movie ye-anim ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Watch ${span} on the ${movieKey === 'pop' ? 'Pop 10' : 'Hot 20'}</b><small>Every song that charted, week by week, with the music</small></span></button><div class="m-anim" hidden></div></div>` : ''}
       <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></div>
       ${leadRow(top)}${rest.map(listRow).join('')}</div>`;
-    const mv = split.querySelector('.ye-movie');
+    const rv = split.querySelector('.ye-reel');
+    if (rv) rv.querySelector('.ye-play').onclick = e => {
+      const box = rv.querySelector('.m-reel'), open = box.hidden;
+      box.hidden = !open; e.currentTarget.setAttribute('aria-expanded', String(open));
+      rv.querySelector('.go').textContent = open ? '✕' : '▶';
+      if (open && !RL) RL = topTenReel(box, reelKey, span, reelList);
+      else if (!open && RL) RL.pause();
+    };
+    const mv = split.querySelector('.ye-anim');
     if (mv) mv.querySelector('.ye-play').onclick = e => {
       const box = mv.querySelector('.m-anim'), open = box.hidden;
       box.hidden = !open; e.currentTarget.setAttribute('aria-expanded', String(open));
@@ -2663,7 +2712,7 @@ function chartMovie(el, all, actName, opt = {}) {
   function play() {
     if (t >= last) t = first;
     hideSummary();
-    PV.audio.pause();
+    PV.audio.pause(); RL?.pause();
     // Phones only let audio start inside a tap, so wake both players now, while this is one
     for (const a of A) if (!a.src) { a.src = SILENCE; a.play().then(() => a.pause()).catch(() => {}); }
     playing = true; playB.textContent = '❚❚ Pause';
@@ -2731,6 +2780,141 @@ function chartMovie(el, all, actName, opt = {}) {
     pause,
     stop() { hideSummary(); pause(); want.id = null; sync(); A.forEach(a => a.pause()); ro.disconnect(); document.removeEventListener('fullscreenchange', draw); },
   };
+}
+
+// Year-End Top 10 countdown, after Will's Canva video: a title card on a starry night, then #10 to #1,
+// each a few seconds of its music video (videos.json: songId -> [YouTube id, start second]) in a frame
+// coloured from its cover. A song without a video, or one YouTube won't play here, shows its cover
+// over its 30-second preview instead.
+let VIDEOS = null, YT_API = null, RL = null;
+function stopReel() { if (RL) { RL.stop(); RL = null; } }
+window.addEventListener('hashchange', () => { if (RL && location.hash !== RL.hash) stopReel(); });
+function ytApi() {
+  if (!YT_API) YT_API = new Promise(ok => {
+    if (window.YT?.Player) return ok(window.YT);
+    const t = setTimeout(() => ok(null), 8000);
+    window.onYouTubeIframeAPIReady = () => { clearTimeout(t); ok(window.YT); };
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = () => { clearTimeout(t); ok(null); };
+    document.head.appendChild(s);
+  });
+  return YT_API;
+}
+function topTenReel(el, key, year, list) {
+  const CHART = key === 'pop' ? 'Pop' : 'Country', INTRO = 3.5;
+  const rows = list.slice(0, 10).map(r => ({ r, s: SONGS[r.songId], v: VIDEOS?.[r.songId] })).reverse();
+  el.innerHTML = `<div class="rl"><div class="rl-stage"><canvas class="snow"></canvas>
+      <div class="rl-intro"><small>Willboard</small><b>Top 10<br>${CHART} Songs</b><span>${year}</span></div>
+      <div class="rl-slot" hidden><div class="rk"></div><div class="frame"><div class="yt"></div><div class="cov"></div></div>
+        <div class="bar"><b></b><small></small></div></div>
+      <div class="rl-end" hidden></div></div>
+    <div class="ctl"><button class="play">▶ Play</button><button class="prev" title="Back one">⏮</button><button class="next" title="Next song">⏭</button><button class="restart" title="Start over">⟲</button>
+      <select class="len" aria-label="Clip length"><option value="8">8 sec clips</option><option value="10" selected>10 sec clips</option><option value="15">15 sec clips</option><option value="30">30 sec clips</option></select></div></div>`;
+  const root = el.querySelector('.rl'), stage = root.querySelector('.rl-stage'), slot = root.querySelector('.rl-slot');
+  const intro = root.querySelector('.rl-intro'), endEl = root.querySelector('.rl-end'), playB = root.querySelector('.play');
+  const cov = slot.querySelector('.cov'), ytBox = slot.querySelector('.yt');
+  const audio = new Audio(); audio.volume = .8;
+  let step = -1, t = 0, playing = false, raf = 0, prev = 0, player = null, ytOk = null, bad = new Set(), alive = true;
+  const len = () => +root.querySelector('.len').value;
+  const dur = i => i < 0 ? INTRO : len();
+
+  // Falling snow, like the Canva background
+  const cv = root.querySelector('.snow'), cx = cv.getContext('2d');
+  const flakes = Array.from({ length: 90 }, () => ({ x: Math.random(), y: Math.random(), r: .6 + Math.random() * 1.6, v: .02 + Math.random() * .05, d: Math.random() * 6 }));
+  function snow(dt) {
+    const W = cv.width = stage.clientWidth, H = cv.height = stage.clientHeight;
+    cx.fillStyle = 'rgba(255,255,255,.85)';
+    for (const f of flakes) {
+      if (playing) { f.y += f.v * dt; f.d += dt; if (f.y > 1.02) { f.y = -.02; f.x = Math.random(); } }
+      cx.beginPath(); cx.arc((f.x + Math.sin(f.d) * .01) * W, f.y * H, f.r, 0, 7); cx.fill();
+    }
+  }
+
+  // Each song's frame colour comes from its cover, like the rest of the site
+  function tint(row) {
+    const img = cov.querySelector('img:last-of-type');
+    const set = () => { const c = img && img.naturalWidth && pictureTint(img); if (c) slot.style.setProperty('--rt', c); };
+    slot.style.setProperty('--rt', key === 'pop' ? '59 139 222' : '224 49 44');
+    if (img) img.complete ? set() : img.addEventListener('load', set);
+  }
+  async function show(i) {
+    step = i; t = 0;
+    audio.pause(); player?.pauseVideo?.();
+    intro.hidden = i !== -1; slot.hidden = i < 0 || i >= rows.length; endEl.hidden = i < rows.length;
+    if (i >= rows.length) return end();
+    if (i < 0) return;
+    const { r, s, v } = rows[i];
+    slot.querySelector('.rk').textContent = r.rank;
+    slot.querySelector('.bar b').textContent = s?.name || r.name;
+    slot.querySelector('.bar small').textContent = s?.artistName || r.artistName;
+    cov.innerHTML = artTile(r.artistName, true, +year, r.name);
+    tint(r);
+    slot.classList.remove('in'); void slot.offsetWidth; slot.classList.add('in');
+    const video = v && !bad.has(r.songId) && await ytPlayer();
+    if (step !== i) return;
+    slot.classList.toggle('vid', !!video);
+    if (video) player[playing ? 'loadVideoById' : 'cueVideoById']({ videoId: v[0], startSeconds: v[1], endSeconds: v[1] + len() + 1 });
+    else music(r.songId);
+  }
+  async function music(id) {
+    if (!PREVIEWS[id] || !playing) return;
+    const url = await deezerTrack(PREVIEWS[id]).then(x => x?.preview).catch(() => null);
+    if (url && rows[step]?.r.songId === id && playing) { audio.src = url; audio.play().catch(() => {}); }
+  }
+  async function ytPlayer() {
+    if (ytOk === false) return false;
+    if (player) return true;
+    const YT = await ytApi();
+    if (!YT) return ytOk = false;
+    return ytOk = await new Promise(ok => {
+      player = new YT.Player(ytBox.appendChild(document.createElement('div')), {
+        width: '100%', height: '100%',
+        playerVars: { controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0 },
+        events: {
+          onReady: () => ok(true),
+          // Embedding switched off, or the video's gone: this song falls back to its cover
+          onError: () => { const x = rows[step]; if (x) { bad.add(x.r.songId); slot.classList.remove('vid'); music(x.r.songId); } },
+        },
+      });
+      setTimeout(() => ok(false), 8000);
+    });
+  }
+  function end() {
+    endEl.innerHTML = `<small>Willboard · ${year}</small><b>Top 10 ${CHART} Songs</b><ol>${rows.slice().reverse().map(({ r, s }) =>
+      `<li><i>${r.rank}</i><a href="#/song/${r.songId}">${esc(s?.name || r.name)}</a><span>${esc(s?.artistName || r.artistName)}</span></li>`).join('')}</ol>`;
+    pause();
+  }
+  function frame(ts) {
+    const dt = Math.min(.1, (ts - prev) / 1000); prev = ts;
+    snow(dt);
+    if (playing && alive) {
+      t += dt;
+      if (t >= dur(step)) show(step + 1);
+      raf = requestAnimationFrame(frame);
+    }
+  }
+  function play() {
+    if (step >= rows.length) step = -2;
+    PV.audio.pause(); CM?.pause();
+    // Phones only let sound start inside a tap
+    if (!audio.src) { audio.src = SILENCE; audio.play().then(() => audio.pause()).catch(() => {}); }
+    playing = true; playB.textContent = '❚❚ Pause';
+    if (step < -1) show(-1);
+    else if (step >= 0) { const x = rows[step]; slot.classList.contains('vid') ? player?.playVideo?.() : music(x.r.songId); }
+    prev = performance.now(); raf = requestAnimationFrame(frame);
+  }
+  function pause() {
+    playing = false; playB.textContent = '▶ Play';
+    cancelAnimationFrame(raf); audio.pause(); player?.pauseVideo?.();
+  }
+  playB.onclick = () => playing ? pause() : play();
+  root.querySelector('.next').onclick = () => show(Math.min(rows.length, step + 1));
+  root.querySelector('.prev').onclick = () => show(Math.max(-1, step - 1));
+  root.querySelector('.restart').onclick = () => { show(-1); if (!playing) play(); };
+  show(-1); step = -2; intro.hidden = false;
+  requestAnimationFrame(ts => { prev = ts; snow(0); });
+  return { hash: location.hash, pause, stop() { alive = false; pause(); player?.destroy?.(); } };
 }
 
 // ─── SONG PAGE ──────────────────────────────────────────────────
