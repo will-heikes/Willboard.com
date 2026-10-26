@@ -31,7 +31,7 @@ ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slow
                  r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit)\b', re.I)
 
 
-def find(artist, title):
+def find(artist, title, album=''):
     want, who = clean(title), norm(artist)
     for q in (f'artist:"{artist}" track:"{title}"', f'{artist} {title}'):
         hits = json.loads(get(SEARCH.format(q=urllib.parse.quote(q)))).get('data', [])
@@ -43,8 +43,13 @@ def find(artist, title):
         # Deezer keeps "(Commentary)" or "(Live)" in title_version, so check the whole title and the album
         full = lambda h: f"{h.get('title', '')} {h.get('title_version', '')} {h.get('album', {}).get('title', '')}"
         studio = [h for h in ok if not ALT.search(full(h)) or ALT.search(title)]
-        if studio or ok:
-            return max(studio or ok, key=lambda h: h.get('rank', 0))['id']
+        # A recording on the song's own album (or its Taylor's Version, deluxe...) beats a lookalike
+        # upload credited to the act, which is how a cover of "Mine" slipped through (Will)
+        # (its album title may say "Taylor's Version", so only the track's own title is checked there)
+        own = [h for h in ok if album and clean(h.get('album', {}).get('title', '')).startswith(clean(album))
+               and (not ALT.search(f"{h.get('title', '')} {h.get('title_version', '')}".replace("Taylor's Version", '')) or ALT.search(title))]
+        if own or studio or ok:
+            return max(own or studio or ok, key=lambda h: h.get('rank', 0))['id']
         time.sleep(0.12)
     return 0
 
@@ -58,6 +63,13 @@ def main():
     data = json.load(open('data.json', encoding='utf-8'))
     acts = frozenset(a['name'] for a in data['artists'])
     found = json.load(open(OUT, encoding='utf-8')) if os.path.exists(OUT) else {}
+    # Each song's album, from Will's library (country) and the pop album lookups
+    album = {}
+    for f in ('albums.json', 'pop_albums.json'):
+        if os.path.exists(f):
+            for a in json.load(open(f, encoding='utf-8')):
+                for sid in a['songs']:
+                    album.setdefault(sid, a['name'])
     start, done = time.time(), 0
     for i, s in enumerate(data['songs'], 1):
         artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
@@ -70,7 +82,7 @@ def main():
             print(f'Out of time at {i}/{len(data["songs"])}; run again for the rest')
             break
         try:
-            found[s['id']] = find(artist, title)
+            found[s['id']] = find(artist, title, album.get(s['id'], ''))
         except Exception as e:
             print(f'[{i}] {artist} - {title}: lookup failed: {e}')
             continue
