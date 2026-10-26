@@ -43,19 +43,29 @@ ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks'
 # Talk rather than the song: never played, even when it's all Deezer has
 SPOKEN = re.compile(r'\b(commentary|voice memo|interview|track by track|story behind|behind the song|spoken|radio release special|radio special)\b', re.I)
 ITUNES = 'https://itunes.apple.com/search?entity=song&country=us&limit=50&term={q}'
+# A re-recording (Taylor's Version) is only played when that's what Will charted, or when it's the only
+# recording there is (the From The Vault songs); otherwise the original plays, the one that charted (Will)
+TV = re.compile(r"taylor['’]?s version", re.I)
 PARENS = re.compile(r'\s*[(\[][^)\]]*[)\]]')
 
 
 def find(artist, title, album=''):
     """The song's Deezer track id, else an Apple preview link, else a Deezer remix or edit. Never talk."""
-    spare = 0
+    spare = redo = 0
     for name in (artist, ALIAS.get(artist)):
         if not name:
             continue
-        best, other = search(name, title, album)
+        best, other, again = search(name, title, album)
         if best:
             return best
-        spare = spare or other
+        spare, redo = spare or other, redo or again
+    # Deezer has Taylor's originals only as commentary editions, so Apple's original comes before
+    # Deezer's re-recording
+    if redo:
+        for name in (artist, ALIAS.get(artist)):
+            if name and (url := itunes(name, title, album, original=True)):
+                return url
+        return redo
     # Deezer has no preview of the studio recording for some catalogues (Big Machine's offers only its
     # commentary editions, Lady A and Keith Urban none at all), so Apple's 30-second clip stands in
     for name in (artist, ALIAS.get(artist)):
@@ -69,10 +79,10 @@ def named(want):
 
 
 def search(artist, title, album=''):
-    """(studio recording's Deezer id, a remix or edit's id as a last resort)"""
+    """(studio recording's Deezer id, a remix or edit's id as a last resort, a re-recording's id)"""
     want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
     match = named(want)
-    spare = 0
+    spare = redo = 0
     for q in (f'artist:"{artist}" track:"{title}"', f'{artist} {title}'):
         hits = json.loads(get(SEARCH.format(q=urllib.parse.quote(q)))).get('data', [])
         hits = [h for h in hits if h.get('preview') and match(h.get('title_short') or h.get('title', ''))]
@@ -89,14 +99,18 @@ def search(artist, title, album=''):
         # commentary, so the album title is checked too, once edition names are taken out (Will)
         own = [h for h in ok if album and clean(h.get('album', {}).get('title', '')).startswith(clean(album))
                and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
-        if own or studio:
-            return note(max(own or studio, key=lambda h: h.get('rank', 0))), 0
+        pool = own or studio
+        first = [h for h in pool if TV.search(title) or not TV.search(full(h))]
+        if first:
+            return note(max(first, key=lambda h: h.get('rank', 0))), 0, 0
+        if pool and not redo:
+            redo = note(max(pool, key=lambda h: h.get('rank', 0)))
         # A remix or radio edit will do if nothing better turns up; someone talking never will
         rest = [h for h in ok if not SPOKEN.search(full(h))]
         if rest and not spare:
             spare = note(max(rest, key=lambda h: h.get('rank', 0)))
         time.sleep(0.12)
-    return 0, spare
+    return 0, spare, redo
 
 
 def note(h):
@@ -105,7 +119,7 @@ def note(h):
     return h['id']
 
 
-def itunes(artist, title, album=''):
+def itunes(artist, title, album='', original=False):
     want, who = clean(PARENS.sub('', title)) or clean(title), norm(artist)
     match = named(want)
     hits = []
@@ -124,6 +138,10 @@ def itunes(artist, title, album=''):
     hits = [h for h in hits if h.get('previewUrl') and match(h.get('trackName', ''))
             and (norm(h.get('artistName', '')) == who or same_artist(h.get('artistName', ''), artist))
             and (not ALT.search(EDITIONS.sub('', full(h))) or ALT.search(title))]
+    if not TV.search(title):
+        hits = sorted(hits, key=lambda h: bool(TV.search(full(h))))
+        if original:
+            hits = [h for h in hits if not TV.search(full(h))]
     if not hits:
         return None
     own = [h for h in hits if album and clean(h.get('collectionName', '')).startswith(clean(album))]
