@@ -236,6 +236,7 @@ button { font: inherit; color: inherit; }
 .table tr.sub-h td { background: var(--card-2); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 10px; padding-bottom: 10px; }
 .album-link { font-weight: 600; font-size: 13px; }
 .album-link:hover { color: var(--accent); text-decoration: underline; }
+.lost-note { margin-top: 10px; font-size: 13px; font-style: italic; color: var(--muted); }
 .album-from { margin-top: 10px; font-size: 13px; color: var(--muted); }
 .album-from b { color: var(--ink); font-weight: 700; }
 .album-from .cert { margin: 0 0 0 8px; }
@@ -3087,6 +3088,8 @@ async function loadWeekPlays() {
     }
   }
 }
+// Songs whose recording no store or upload has a clip for any more (Will, 2026-10-27)
+const LOST_AUDIO = new Set(['pop_song_786', 'pop_song_779']);  // Night Air, Re: Love (Cassandra Coleman)
 async function renderSong(id) {
   const s = SONGS[id];
   if (!s) { location.hash = '#/songs'; return; }
@@ -3106,6 +3109,7 @@ async function renderSong(id) {
       <div class="by">${creditLinks(s.artistName)}</div>
       ${songCert(s)}
       ${playBtn(s.id, true)}
+      ${LOST_AUDIO.has(s.id) && !PREVIEWS[s.id] ? '<div class="lost-note">A lost recording: no clip of this song survives, but its chart run lives on here.</div>' : ''}
       ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(albumName(s))}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
       <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
   heroTint(hero, $('page-song'));
