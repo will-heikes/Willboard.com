@@ -1,5 +1,8 @@
 kind,artist,title,file,result
+album,6ix9ine,DUMMY BOY (Revised),6ix9ine--dummy-boy-revised.jpg,download failed: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>
+album,Alessia Cara,Love & Hyperbole,alessia-cara--love-hyperbole.jpg,Deezer: Love & Hyperbole
 album,Ashley Cooke,Running Back / Dirt On 'Em,ashley-cooke--running-back-dirt-on-em.jpg,not found
+album,BlackBear,digital druglord,blackbear--digital-druglord.jpg,Deezer: digital druglord
 album,Carly Pearce,TBD,carly-pearce--tbd.jpg,not found
 album,Carrie Underwood,Demin & Rhinestones,carrie-underwood--demin-rhinestones.jpg,not found
 album,Chappell Roan,The Rise and Fall of a Midwestern Princess,chappell-roan--the-rise-and-fall-of-a-midwestern-princess.jpg,not found
@@ -7,28 +10,49 @@ album,David Nail & the Well Ravens,Only This and Nothing More,david-nail-the-wel
 album,Didi Benami,What Becomes of the Broken Hearted- Single,didi-benami--what-becomes-of-the-broken-hearted-single.jpg,not found
 album,Dixie Chicks,Home,dixie-chicks--home.jpg,not found
 album,Dixie Chicks,Taking the Long Way,dixie-chicks--taking-the-long-way.jpg,not found
+album,Ed Sheeran,-,ed-sheeran--subtract.jpg,iTunes: - (Deluxe)
+album,Fall Out Boy,Save Rock And Roll,fall-out-boy--save-rock-and-roll.jpg,Deezer: Save Rock And Roll
 album,Garth Brooks,Gunslinger,garth-brooks--gunslinger.jpg,not found
 album,Greg Bates,Greg Bates,greg-bates--greg-bates.jpg,not found
 album,Hunter Hayes,Hunter Hayes,hunter-hayes--hunter-hayes.jpg,not found
 album,Jennifer Nettles,I Can Do Hard Things - Single,jennifer-nettles--i-can-do-hard-things-single.jpg,not found
+album,Kayla Rae,Pressure,kayla-rae--pressure.jpg,Deezer: Pressure
+album,Ke$ha,Rainbow,ke-ha--rainbow.jpg,Deezer: Rainbow
+album,Ke$ha,Warrior,ke-ha--warrior.jpg,Deezer: Warrior (Expanded Edition)
+album,Kelly Clarkson,The Hamilton Mixtape,kelly-clarkson--the-hamilton-mixtape.jpg,not found
+album,Kristen Anderson-Lopez,Frozen (Original Motion Picture Soundtrack),kristen-anderson-lopez--frozen-original-motion-picture-soundtrack.jpg,iTunes: Frozen (Original Motion Picture Soundtrack)
 album,Kristian Bush,In the Key of Summer,kristian-bush--in-the-key-of-summer.jpg,not found
 album,Kristian Bush,Southern Gravity,kristian-bush--southern-gravity.jpg,not found
 album,Leann Rimes,Lady and Gentlemen,leann-rimes--lady-and-gentlemen.jpg,not found
 album,Lee DeWyze,Falling Slowly- Single,lee-dewyze--falling-slowly-single.jpg,not found
+album,Lin-Manuel Miranda,Encanto (Original Motion Picture Soundtrack),lin-manuel-miranda--encanto-original-motion-picture-soundtrack.jpg,Deezer: Encanto (Original Motion Picture Soundtrack)
+album,Lin-Manuel Miranda,Moana,lin-manuel-miranda--moana.jpg,iTunes: Moana (Original Motion Picture Soundtrack/Deluxe Edition)
 album,Little Big Town,Every Little Thing,little-big-town--every-little-thing.jpg,not found
 album,Lori McKenna,Ella Langley,lori-mckenna--ella-langley.jpg,not found
+album,Lorne Balfe,Top Gun: Maverick (Music from the Motion Picture),lorne-balfe--top-gun-maverick-music-from-the-motion-picture.jpg,iTunes: Top Gun: Maverick (Music from the Motion Picture)
 album,Love & Theft,Love and Theft,love-theft--love-and-theft.jpg,not found
+album,Machine Gun Kelly,bloom,machine-gun-kelly--bloom.jpg,not found
+album,Machine Gun Kelly,Tickets To My Downfall,machine-gun-kelly--tickets-to-my-downfall.jpg,not found
 album,Madeline Merlo,ONE HOUSE DOWN (from the girl next door) - EP,madeline-merlo--one-house-down-from-the-girl-next-door-ep.jpg,not found
+album,Maneskin,Chosen,maneskin--chosen.jpg,Deezer: Chosen
 album,Mickey Guyton,Better Than You Left Me,mickey-guyton--better-than-you-left-me.jpg,not found
+album,Neon Trees,Picture Show,neon-trees--picture-show.jpg,Deezer: Picture Show (Deluxe Edition)
 album,Never Enough,Parker McCollum,never-enough--parker-mccollum.jpg,not found
+album,Nickelback,Here and Now,nickelback--here-and-now.jpg,Deezer: Here and Now
+album,Pink Pantheress,Fancy Some More?,pink-pantheress--fancy-some-more.jpg,not found
+album,Post Malone,Stoney,post-malone--stoney.jpg,Deezer: Stoney (Deluxe)
 album,Randall King,Hey Moon - Single,randall-king--hey-moon-single.jpg,not found
 album,Reba McEntire,Keep on Lovin' You,reba-mcentire--keep-on-lovin-you.jpg,not found
+album,Roxy Dekker,SUPERSTAR,roxy-dekker--superstar.jpg,Deezer: SUPERSTAR
 album,Sayin' What I'm Thinkin',Lainey Wilson,sayin-what-im-thinkin--lainey-wilson.jpg,not found
+album,Slayyyter,WOR$T GIRL IN AMERICA,slayyyter--wor-t-girl-in-america.jpg,Deezer: WOR$T GIRL IN AMERICA
 album,Stereotype,Cole Swindell,stereotype--cole-swindell.jpg,not found
 album,Sugarland,Gold & Green,sugarland--gold-green.jpg,not found
 album,Sweetener,Ariana Grande,sweetener--ariana-grande.jpg,not found
+album,T-Pain,Revolver,t-pain--revolver.jpg,Deezer: Revolver (Expanded Edition)
 album,Taylor Swift,Today Was a Fairytale,taylor-swift--today-was-a-fairytale.jpg,not found
 album,The Band Perry,Glen Campbell I'll Be Me Soundtrack - EP,the-band-perry--glen-campbell-ill-be-me-soundtrack-ep.jpg,not found
+album,The Weeknd,"My Dear Melancholy,",the-weeknd--my-dear-melancholy.jpg,"Deezer: My Dear Melancholy,"
 album,Tim McGraw,Country Strong,tim-mcgraw--country-strong.jpg,not found
 album,Tim McGraw,Neon Church - Single,tim-mcgraw--neon-church-single.jpg,not found
 album,Toby Keith,The Mule,toby-keith--the-mule.jpg,not found
@@ -59,8 +83,6 @@ song,Lee DeWyze,Falling Slowly,lee-dewyze--falling-slowly.jpg,not found
 song,Love & Theft,Whiskey on my Breath,love-theft--whiskey-on-my-breath.jpg,not found
 song,Mariah Carey,GTFO,mariah-carey--gtfo.jpg,not found
 song,Meghan Trainor,Wave,meghan-trainor--wave.jpg,not found
-song,P!nk,Blow Me (One Last Kiss),p-nk--blow-me-one-last-kiss.jpg,iTunes: Blow Me (One Last Kiss)
-song,P!nk,Just Give Me a Reason,p-nk--just-give-me-a-reason.jpg,iTunes: Just Give Me a Reason (feat. Nate Ruess)
 song,Rina Sawayama,Bad Friend,rina-sawayama--bad-friend.jpg,not found
 song,Roxy Dekker,Ga Daan!,roxy-dekker--ga-daan.jpg,not found
 song,Roxy Dekker,Jouw Idee,roxy-dekker--jouw-idee.jpg,not found
