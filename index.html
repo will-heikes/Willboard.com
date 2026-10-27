@@ -3227,11 +3227,21 @@ function renderSongs() {
 // ─── ASK WILLBOARD ──────────────────────────────────────────────
 // Questions about the charts in plain English, answered straight from the chart data by
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
+// Pop 10 songs that were Eurovision entries: songId -> [contest year, country, final place (0 = not checked)]
+const EUROVISION = {
+  pop_song_791: [2023, 'Sweden', 1], pop_song_792: [2023, 'Finland', 2],  // Tattoo, Cha Cha Cha
+  pop_song_941: [2025, 'Austria', 1], pop_song_939: [2025, 'Sweden', 4],  // Wasted Love, Bara Bada Bastu
+  pop_song_935: [2025, 'Albania', 0], pop_song_937: [2025, 'Finland', 0],  // Zjerm, Ich Komme
+  pop_song_936: [2025, 'Denmark', 0], pop_song_938: [2025, 'Iceland', 0],  // Hallucination, Róa
+  pop_song_1019: [2026, 'Bulgaria', 1], pop_song_1015: [2026, 'Romania', 3],  // Bangaranga, Choke Me
+  pop_song_1016: [2026, 'Finland', 6], pop_song_1018: [2026, 'Denmark', 7],  // Liekinheitin, Før vi går hjem
+  pop_song_1017: [2026, 'Albania', 13], pop_song_1020: [2026, 'Sweden', 20],  // Nân, My System
+};
 const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?', 'Who has the longest active streak?', 'Most consecutive #1 hits', 'Most consecutive top 5 hits', 'Which album has the most #1 hits?', 'Which album has the most charting songs?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?', 'Who has the longest active streak?', 'Most consecutive #1 hits', 'Most consecutive top 5 hits', 'Which album has the most #1 hits?', 'Which album has the most charting songs?', 'What is the biggest Eurovision song of all time?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
@@ -3379,6 +3389,27 @@ function askAnswer(q, chartId, f) {
   const title = s => f.artist ? `“${esc(s.name)}”` : songTitle(s);
   const kind = kindOf(t);
   const noInfo = { lead: `I don't have that detail about the artists yet.` };
+
+  // Eurovision entries that made the Pop 10, ranked like "biggest hit" elsewhere (plays and chart run, Will 2026-10-27)
+  if (/\beuro\s?vision\b/.test(t)) {
+    if (chartId !== 'pop10') return null;
+    const all = Object.values(st.songs).filter(x => EUROVISION[x.id] && S(x.id) && inSpanW(f.span, x.debut) && byArtist(S(x.id), f.artist));
+    if (!all.length) return { lead: `No Eurovision entry${who} has made the Pop 10${inYear(f.span)}.` };
+    // Will's year-end weighting: weekly plays (week_plays.json) as a share of the top entry's, plus its chart
+    // run as a share of the top entry's. Only a few pop songs are in his iTunes library, so those plays don't count
+    if (!WEEK_PLAYS) return { quiet: true, lead: 'Loading the weekly plays…' };
+    const plays = {};
+    for (const w of st.weeks) for (const e of w.entries) if (EUROVISION[e.songId]) plays[e.songId] = (plays[e.songId] || 0) + (e.wkPlays || 0);
+    const topPlays = Math.max(1, ...all.map(x => plays[x.id] || 0)), topPts = Math.max(1, ...all.map(x => S(x.id).totalPoints || 0));
+    const score = x => (plays[x.id] || 0) / topPlays + (S(x.id).totalPoints || 0) / topPts;
+    const list = all.sort((a, b) => score(b) - score(a) || a.peak - b.peak), x = list[0], [yr, land, place] = EUROVISION[x.id];
+    const ev = id => { const [y, l, p] = EUROVISION[id]; return `${l} ${y}${p ? `, ${ordinal(p)}` : ''}`; };
+    return {
+      lead: `The biggest Eurovision song on the Pop 10${inYear(f.span)} is ${songTitle(S(x.id))}, ${land}'s ${yr} entry${place === 1 ? ' and the winner that year' : place ? `, which placed ${ordinal(place)}` : ''}. It peaked at No. ${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart. ${list.length} Eurovision entries have made the Pop 10 in all.`,
+      rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}<br>${ev(x.id)}`)).join(''),
+      more: `<span class="ask-note">Ranked like Will's year-end lists: weekly plays plus how high and how long each song charted.</span>`,
+    };
+  }
 
   // The Willboard Awards: the Country show answers on the Hot 20 card, the Pop show on the Pop 10 card
   if (/\b(awards?|nominat\w*|nominees?|win rate|winning percentage)\b/.test(t) || (/\b(won|wins|winner|winners)\b/.test(t) && !NO1.test(t))) {
@@ -4203,7 +4234,7 @@ function route() {
     id = 'ask';
     const q = new URLSearchParams(query || '').get('q') || '';
     renderAsk(q);
-    if (!WEEK_PLAYS && /\bplays|played\b/i.test(q)) loadWeekPlays().then(() => { if (location.hash.startsWith('#/ask')) renderAsk(q); });
+    if (!WEEK_PLAYS && /\bplays|played|euro\s?vision\b/i.test(q)) loadWeekPlays().then(() => { if (location.hash.startsWith('#/ask')) renderAsk(q); });
   }
   else if (page === 'about')    { id = 'about'; }
   else if (page === 'news')     { id = 'news'; renderNews(new URLSearchParams(query || '').get('q') || ''); }
