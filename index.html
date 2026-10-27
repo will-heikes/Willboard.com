@@ -3227,12 +3227,12 @@ function renderSongs() {
 // ─── ASK WILLBOARD ──────────────────────────────────────────────
 // Questions about the charts in plain English, answered straight from the chart data by
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
-// Pop 10 songs that were Eurovision entries: songId -> [contest year, country, final place (0 = not checked)]
+// Pop 10 songs that were Eurovision entries: songId -> [contest year, country, grand final place]
 const EUROVISION = {
   pop_song_791: [2023, 'Sweden', 1], pop_song_792: [2023, 'Finland', 2],  // Tattoo, Cha Cha Cha
   pop_song_941: [2025, 'Austria', 1], pop_song_939: [2025, 'Sweden', 4],  // Wasted Love, Bara Bada Bastu
-  pop_song_935: [2025, 'Albania', 0], pop_song_937: [2025, 'Finland', 0],  // Zjerm, Ich Komme
-  pop_song_936: [2025, 'Denmark', 0], pop_song_938: [2025, 'Iceland', 0],  // Hallucination, Róa
+  pop_song_935: [2025, 'Albania', 8], pop_song_937: [2025, 'Finland', 11],  // Zjerm, Ich Komme
+  pop_song_936: [2025, 'Denmark', 23], pop_song_938: [2025, 'Iceland', 25],  // Hallucination, Róa
   pop_song_1019: [2026, 'Bulgaria', 1], pop_song_1015: [2026, 'Romania', 3],  // Bangaranga, Choke Me
   pop_song_1016: [2026, 'Finland', 6], pop_song_1018: [2026, 'Denmark', 7],  // Liekinheitin, Før vi går hjem
   pop_song_1017: [2026, 'Albania', 13], pop_song_1020: [2026, 'Sweden', 20],  // Nân, My System
@@ -3403,9 +3403,10 @@ function askAnswer(q, chartId, f) {
     const topPlays = Math.max(1, ...all.map(x => plays[x.id] || 0)), topPts = Math.max(1, ...all.map(x => S(x.id).totalPoints || 0));
     const score = x => (plays[x.id] || 0) / topPlays + (S(x.id).totalPoints || 0) / topPts;
     const list = all.sort((a, b) => score(b) - score(a) || a.peak - b.peak), x = list[0], [yr, land, place] = EUROVISION[x.id];
-    const ev = id => { const [y, l, p] = EUROVISION[id]; return `${l} ${y}${p ? `, ${ordinal(p)}` : ''}`; };
+    const nth = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 - 20) % 10] || ['th', 'st', 'nd', 'rd'][n % 100] || 'th');
+    const ev = id => { const [y, l, p] = EUROVISION[id]; return `${l} ${y}${p ? `, ${nth(p)}` : ''}`; };
     return {
-      lead: `The biggest Eurovision song on the Pop 10${inYear(f.span)} is ${songTitle(S(x.id))}, ${land}'s ${yr} entry${place === 1 ? ' and the winner that year' : place ? `, which placed ${ordinal(place)}` : ''}. It peaked at No. ${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart. ${list.length} Eurovision entries have made the Pop 10 in all.`,
+      lead: `The biggest Eurovision song on the Pop 10${inYear(f.span)} is ${songTitle(S(x.id))}, ${land}'s ${yr} entry${place === 1 ? ' and the winner that year' : place ? `, which placed ${nth(place)}` : ''}. It peaked at No. ${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart. ${list.length} Eurovision entries have made the Pop 10 in all.`,
       rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}<br>${ev(x.id)}`)).join(''),
       more: `<span class="ask-note">Ranked like Will's year-end lists: weekly plays plus how high and how long each song charted.</span>`,
     };
