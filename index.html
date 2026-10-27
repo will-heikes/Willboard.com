@@ -3575,13 +3575,18 @@ function askAnswer(q, chartId, f) {
     const latest = st.weeks[st.weeks.length - 1].week, unit = n === 1 ? '#1 hits' : `top ${n} hits`;
     const all = Object.values(st.songs).filter(s => S(s.id) && inSpanW(f.span, s.debut)).sort((a, b) => a.debut.localeCompare(b.debut) || a.debutPos - b.debutPos);
     const acts = {}, runs = [];
-    for (const s of all) for (const p of creditParts(S(s.id).artistName)) {
-      if (!p.id || (kind && !isKind(p.name, kind))) continue;
+    // Only the lead act's songs: a feature is someone else's song, so it neither adds to nor breaks a streak (Will)
+    for (const s of all) {
+      const p = creditParts(S(s.id).artistName)[0];
+      if (!p?.id || (kind && !isKind(p.name, kind))) continue;
       const a = acts[p.id] ||= { id: p.id, name: p.name, cur: null };
       if (s.peak <= n) {
         if (!a.cur) runs.push(a.cur = { id: p.id, name: p.name, songs: [], v: 0 });
         a.cur.songs.push(s); a.cur.v++;
-      } else if (s.weeks[s.weeks.length - 1] !== latest) a.cur = null;
+      } else if (s.weeks[s.weeks.length - 1] !== latest) {
+        if (a.cur) a.cur.broke = s;
+        a.cur = null;
+      }
     }
     for (const a of Object.values(acts)) if (a.cur) a.cur.live = true;
     let list = runs.filter(r => !f.artist || r.id === f.artist.id).sort((a, b) => b.v - a.v || a.songs[0].debut.localeCompare(b.songs[0].debut));
@@ -3590,17 +3595,18 @@ function askAnswer(q, chartId, f) {
     const r0 = list[0], k = tiedTop(list, r => r.v), nm = s => `“${esc(S(s.id).name)}”`;
     const span = r => `${nm(r.songs[0])} to ${nm(r.songs[r.songs.length - 1])}`;
     const yrs = r => { const a = r.songs[0].debut.slice(0, 4), b = r.songs[r.songs.length - 1].debut.slice(0, 4); return a === b ? a : `${a}–${b}`; };
-    const counting = r => r.live ? ', and counting' : '';
+    const counting = r => r.live ? ', and counting' : r.broke ? `. “${esc(S(r.broke.id).name)}” broke it, peaking at No. ${r.broke.peak}` : '';
+    const brokeRow = r => r.broke ? askRow('✕', S(r.broke.id), `Peak <b>${r.broke.peak}</b><br>broke it`) : '';
     if (f.artist) return {
       lead: r0.v === 1 ? `${esc(f.artist.name)} hasn't had two ${unit} in a row on the ${c.name}${inYear(f.span)}.`
         : `${esc(f.artist.name)}'s longest streak of ${unit} on the ${c.name}${inYear(f.span)} is ${r0.v} in a row, from ${span(r0)}${counting(r0)}.`,
-      rows: r0.songs.map((s, i) => askRow(i + 1, S(s.id), `Peak <b>${s.peak}</b><br>${s.debut.slice(0, 4)}`)).join(''),
+      rows: r0.songs.map((s, i) => askRow(i + 1, S(s.id), `Peak <b>${s.peak}</b><br>${s.debut.slice(0, 4)}`)).join('') + (r0.v > 1 ? brokeRow(r0) : ''),
     };
     return {
       lead: k > 1 ? `${list.slice(0, k).map(r => esc(r.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most consecutive ${unit} on the ${c.name}${inYear(f.span)}, with ${r0.v} each.`
         : `${esc(r0.name)} has the most consecutive ${unit} on the ${c.name}${inYear(f.span)}: ${r0.v} in a row, from ${span(r0)}${counting(r0)}.`,
-      rows: list.map((r, i) => askArtistRow(rankIn(list, i, r => r.v), { ...r, sub: `${S(r.songs[0].id).name} to ${S(r.songs[r.songs.length - 1].id).name}` }, `<b>${r.v}</b> in a row${r.live ? '*' : ''}<br>${yrs(r)}`)).join(''),
-      more: list.some(r => r.live) ? `<span class="ask-note">* Still going.</span>` : '',
+      rows: list.map((r, i) => askArtistRow(rankIn(list, i, r => r.v), { ...r, sub: `${S(r.songs[0].id).name} to ${S(r.songs[r.songs.length - 1].id).name}${r.broke ? ` · broken by ${S(r.broke.id).name} (No. ${r.broke.peak})` : ''}` }, `<b>${r.v}</b> in a row${r.live ? '*' : ''}<br>${yrs(r)}`)).join(''),
+      more: `<span class="ask-note">Lead-artist songs only.${list.some(r => r.live) ? ' * Still going.' : ''}</span>`,
     };
   }
 
