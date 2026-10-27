@@ -1,5 +1,5 @@
 {
- "_note": "Corrections to Will's CS Era Points sheet, applied to runs.json and data.json by tools/apply_chart_fixes.py. 'charts' are full charts from Will's iTunes chart playlists (2026-10-26); 'moves' set one song's position from his Plays Pages.",
+ "_note": "Corrections to Will's CS Era Points sheet, applied to runs.json and data.json by tools/apply_chart_fixes.py. 'charts' are full charts from Will's iTunes chart playlists (2026-10-26); 'moves' set one song's position from his Plays Pages. Pop 10 'charts' come from his Spotify chart playlists (2026-10-27).",
  "willboard": {
   "charts": {
    "2017-04-20": [
@@ -203,6 +203,214 @@
    "2019-05-02": {
     "Girl Goin' Nowhere": 18
    }
+  }
+ },
+ "pop": {
+  "charts": {
+   "2015-06-25": [
+    "Fight Song",
+    "Post To Be",
+    "Dear Future Husband",
+    "See You Again",
+    "Where Are U Now",
+    "Cheerleader",
+    "Bright",
+    "Worth It",
+    "Fun",
+    "The Night Is Still Young"
+   ],
+   "2015-08-20": [
+    "Bright",
+    "Lean On",
+    "Marvin Gaye",
+    "Cool For the Summer",
+    "Back Together",
+    "Like I'm Gonna Lose You",
+    "Drag Me Down",
+    "Invincible",
+    "Photograph",
+    "Fun"
+   ],
+   "2017-01-12": [
+    "That's My Girl",
+    "Shout Out to My Ex",
+    "Rockabye",
+    "Perfect Strangers",
+    "All Time Low",
+    "How Far I'll Go",
+    "Castle On the Hill",
+    "I Feel It Coming",
+    "Water Under the Bridge",
+    "In the Name of Love"
+   ],
+   "2017-02-23": [
+    "Perfect Strangers",
+    "I Don't",
+    "It Ain't Me",
+    "Ain't My Fault",
+    "Don't Leave",
+    "Paris",
+    "Chained to the Rhythm",
+    "Cold",
+    "Castle On the Hill",
+    "Bom Bidi Bom"
+   ],
+   "2017-03-09": [
+    "I Don't",
+    "Something Just Like This",
+    "Chained to the Rhythm",
+    "Cold",
+    "Issues",
+    "Perfect Strangers",
+    "It Ain't Me",
+    "Bom Bidi Bom",
+    "Make Me (Cry)",
+    "Shether"
+   ],
+   "2018-01-04": [
+    "Learn to Let Go",
+    "Tell Me You Love Me",
+    "Bad at Love",
+    "The Way Life Goes",
+    "Rockstar",
+    "Meant to Be",
+    "Don’t Take the Money",
+    "Havana",
+    "Too Much to Ask",
+    "Good Old Days"
+   ],
+   "2018-01-11": [
+    "Learn to Let Go",
+    "Tell Me You Love Me",
+    "Bad at Love",
+    "The Way Life Goes",
+    "Rockstar",
+    "Meant to Be",
+    "Don’t Take the Money",
+    "One More Light",
+    "Silence",
+    "First Time"
+   ],
+   "2018-01-18": [
+    "Tell Me You Love Me",
+    "Silence",
+    "First Time",
+    "One More Light",
+    "Bad at Love",
+    "Learn to Let Go",
+    "Rockstar",
+    "Meant to Be",
+    "Don’t Take the Money",
+    "Sick Boy"
+   ],
+   "2018-01-25": [
+    "Sick Boy",
+    "Tell Me You Love Me",
+    "First Time",
+    "Silence",
+    "One More Light",
+    "Bad at Love",
+    "Whatever It Takes",
+    "Capital Letters",
+    "Never Be the Same",
+    "Don’t Take the Money"
+   ],
+   "2018-03-01": [
+    "The Middle",
+    "Whatever It Takes",
+    "Savior",
+    "Never Be the Same",
+    "Capital Letters",
+    "You Owe Me",
+    "Sick Boy",
+    "All Falls Down",
+    "Homesick",
+    "God's Plan"
+   ],
+   "2018-03-08": [
+    "No Excuses",
+    "The Middle",
+    "Savior",
+    "Whatever It Takes",
+    "Never Be the Same",
+    "Capital Letters",
+    "You Owe Me",
+    "All Falls Down",
+    "Homesick",
+    "Heaven"
+   ],
+   "2018-04-19": [
+    "I Don't Think About You",
+    "Capital Letters",
+    "You Owe Me",
+    "Everybody Hates Me",
+    "Psycho",
+    "Chun-Li",
+    "In My Blood",
+    "Call Out My Name",
+    "Zombie",
+    "Love Lies"
+   ],
+   "2019-03-28": [
+    "Night's Like This (Feat. Ty Dolla $ign)",
+    "Shallow",
+    "Now That I Found You",
+    "Someone You Loved",
+    "Last Hurrah",
+    "Heat",
+    "All the Ways",
+    "Sally Walker",
+    "Who Do You Love",
+    "11 Minutes"
+   ],
+   "2024-12-19": [
+    "Honesty",
+    "Bed Chem",
+    "Pink Pony Club",
+    "Popular - Ariana",
+    "Runaway",
+    "Hurt You",
+    "The Emptiness Machine",
+    "The Dam",
+    "Delusional",
+    "Disease"
+   ],
+   "2025-01-30": [
+    "Juno",
+    "Honesty",
+    "Somebody Else's",
+    "Tennis Court - Chain",
+    "Red Wine Supernova",
+    "Talking to Yourself",
+    "Ga Dan",
+    "Delusional",
+    "These Walls",
+    "That's So True"
+   ],
+   "2025-04-03": [
+    "Twilight Zone",
+    "Juno",
+    "Honesty",
+    "Pink Pony Club",
+    "Like Jennie",
+    "Call Me When You Break Up",
+    "Toxic Til the End",
+    "Earthquake",
+    "Busy Woman",
+    "Messy"
+   ],
+   "2025-05-22": [
+    "Ich Komme",
+    "Zjerm",
+    "Twilight Zone",
+    "Marriage",
+    "Jouw Idee",
+    "Honesty",
+    "Hallucination",
+    "Róa",
+    "Bara Bada Bastu",
+    "Priceless"
+   ]
   }
  }
 }
