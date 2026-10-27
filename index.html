@@ -3207,7 +3207,7 @@ const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most wee
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
@@ -3561,6 +3561,37 @@ function askAnswer(q, chartId, f) {
     return n > 1 ? `${list.slice(0, n).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most ${what} on the ${c.name}${inYear(f.span)}, with ${each(list[0])} each.`
       : `${esc(list[0].name)} has the most ${what} on the ${c.name}${inYear(f.span)}, with ${each(list[0])}.`;
   };
+
+  // An act's longest unbroken run of chart weeks with at least one song on (or at #1), features
+  // included (Will). A skipped week has no chart, so it doesn't break a run
+  if (/\b(consecutive|straight|in a row|unbroken|streak|run)\b/.test(t) && /\bweeks?\b/.test(t) && (actQ || f.artist)) {
+    const top = NO1.test(t), ws = st.weeks.filter(w => inSpanW(f.span, w.week)), cur = {}, best = {};
+    ws.forEach((w, i) => {
+      const here = new Set();
+      for (const e of w.entries) {
+        if (top && e.position !== 1) continue;
+        for (const p of creditParts(S(e.songId)?.artistName)) if (p.id && (!kind || isKind(p.name, kind))) here.add(p.id + '|' + p.name);
+      }
+      for (const k of here) {
+        const r = cur[k] = cur[k]?.end === i - 1 ? { ...cur[k], end: i } : { start: i, end: i };
+        const len = r.end - r.start + 1;
+        if (!best[k] || len > best[k].v) best[k] = { v: len, from: ws[r.start].week, to: w.week };
+      }
+    });
+    let list = Object.entries(best).map(([k, b]) => ({ id: k.split('|')[0], name: k.split('|').slice(1).join('|'), ...b }));
+    if (f.artist) list = list.filter(a => a.id === f.artist.id);
+    list = list.sort((a, b) => b.v - a.v || a.from.localeCompare(b.from)).filter(ties(10, a => a.v));
+    const where = top ? ' at #1' : '', latest = st.weeks[st.weeks.length - 1].week;
+    const until = a => a.to === latest ? ` to ${fmtLong(a.to)}, and counting` : ` to ${fmtLong(a.to)}`;
+    if (!list.length) return { lead: f.artist ? `${esc(f.artist.name)} hasn't been ${top ? 'at #1' : 'on the'} ${top ? `on the ${c.name}` : c.name}${inYear(f.span)}.` : `No acts${where || ' charted'}${inYear(f.span)}.` };
+    const span = a => `${fmtShort(a.from)} – ${fmtShort(a.to)}`, n = tiedTop(list, a => a.v);
+    return {
+      lead: f.artist ? `${esc(f.artist.name)}'s longest run${where} on the ${c.name}${inYear(f.span)} is ${wk(list[0].v)} in a row, from ${fmtLong(list[0].from)}${until(list[0])}.`
+        : n > 1 ? `${list.slice(0, n).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most consecutive weeks${where} on the ${c.name}${inYear(f.span)}, with ${wk(list[0].v)} each.`
+        : `${esc(list[0].name)} has the most consecutive weeks${where} on the ${c.name}${inYear(f.span)}: ${wk(list[0].v)} in a row, from ${fmtLong(list[0].from)}${until(list[0])}.`,
+      rows: list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), a, `<b>${wk(a.v)}</b><br>${span(a)}`)).join(''),
+    };
+  }
 
   // Song length (Will's iTunes copy), for the longest and shortest songs to chart
   if (!f.songs.length && /\b(longest|shortest|long|short)(est)?\b.*\bsong\b|\bsong\b.*\b(longest|shortest)\b|\b(length|minutes|runtime|duration)\b/.test(t) && !/\b(weeks|run|charted the|charting)\b/.test(t)) {
