@@ -27,8 +27,13 @@ OUT = 'previews.json'
 PICKS = 'preview_picks.json'
 picked = {}
 SEARCH = 'https://api.deezer.com/search/track?limit=25&q={q}'
-# songId: Deezer track id, for matches the search gets wrong
-FIX = {}
+# songId: Deezer track id, for matches the search gets wrong, or a clip Will uploaded to audio/
+# "apple:<track id>" takes Apple's preview for that track, for songs Apple's search never returns
+FIX = {
+    'pop_song_763': 'audio/habit-clip.mp3',  # Habit: not in any store; 30 s from Will's copy (audio/Habit.mp3)
+    'pop_song_786': 'apple:1681178572',  # Night Air (music.apple.com/us/song/night-air/1681178572)
+}
+LOOKUP = 'https://itunes.apple.com/lookup?country=us&id={id}'
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
 ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
                  r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit|'
@@ -182,7 +187,20 @@ def main():
     for i, s in enumerate(data['songs'], 1):
         artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
         if s['id'] in FIX:
-            found[s['id']] = FIX[s['id']]
+            fix = FIX[s['id']]
+            if fix.startswith('apple:'):
+                if found.get(s['id']) and title.lower() not in redo:
+                    continue
+                try:
+                    hit = json.loads(get(LOOKUP.format(id=fix[6:]))).get('results', [{}])[0]
+                    fix = hit.get('previewUrl') or 0
+                    if fix:
+                        picked[fix] = f"{hit.get('trackName')} | {hit.get('artistName')} | {hit.get('collectionName')} (Apple)"
+                    print(f'[{i}] {artist} - {title}: Apple track {FIX[s["id"]][6:]} -> {fix or "no preview"}')
+                except Exception as e:
+                    print(f'[{i}] {artist} - {title}: Apple lookup failed: {e}')
+                    continue
+            found[s['id']] = fix
             continue
         if s['id'] in found and 'all' not in redo and title.lower() not in redo and not ('missing' in redo and not found[s['id']]):
             continue
