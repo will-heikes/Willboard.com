@@ -43,9 +43,9 @@ EDITIONS = re.compile(r"taylor'?s version|deluxe( edition| version)?|expanded ed
 ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks': 'Dixie Chicks',
          'Love & Theft': 'Love and Theft', 'David Nail & the Well Ravens': 'David Nail',
          # Will's spelling differs from the store's
-         'Shkodra Elektonike': 'Shkodra Elektronike'}
+         'Shkodra Elektonike': 'Shkodra Elektronike', 'Audrey Hobart': 'Audrey Hobert'}
 # Titles Will charted under another name: "Left or Right" is Charlie Puth's "Left and Right"
-TITLE_AS = {'Left or Right': 'Left and Right'}
+TITLE_AS = {'Left or Right': 'Left and Right', "Night's Like This (Feat. Ty Dolla $ign)": 'Nights Like This (Feat. Ty Dolla $ign)'}
 # "We Can't Be Friends (wait for your love)" is the song Will charted as "We Can't Be Friends"
 # Talk rather than the song: never played, even when it's all Deezer has
 SPOKEN = re.compile(r'\b(commentary|voice memo|interview|track by track|story behind|behind the song|spoken|radio release special|radio special)\b', re.I)
