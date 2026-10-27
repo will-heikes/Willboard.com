@@ -3565,7 +3565,8 @@ function askAnswer(q, chartId, f) {
   // An act's longest unbroken run of chart weeks with at least one song on (or at #1), features
   // included (Will). A skipped week has no chart, so it doesn't break a run
   if (/\b(consecutive|straight|in a row|unbroken|streak|run)\b/.test(t) && /\bweeks?\b/.test(t) && (actQ || f.artist)) {
-    const top = NO1.test(t), ws = st.weeks.filter(w => inSpanW(f.span, w.week)), cur = {}, best = {};
+    // Every run counts on its own, so an act can rank more than once (Will)
+    const top = NO1.test(t), ws = st.weeks.filter(w => inSpanW(f.span, w.week)), cur = {}, runs = [];
     ws.forEach((w, i) => {
       const here = new Set();
       for (const e of w.entries) {
@@ -3573,12 +3574,11 @@ function askAnswer(q, chartId, f) {
         for (const p of creditParts(S(e.songId)?.artistName)) if (p.id && (!kind || isKind(p.name, kind))) here.add(p.id + '|' + p.name);
       }
       for (const k of here) {
-        const r = cur[k] = cur[k]?.end === i - 1 ? { ...cur[k], end: i } : { start: i, end: i };
-        const len = r.end - r.start + 1;
-        if (!best[k] || len > best[k].v) best[k] = { v: len, from: ws[r.start].week, to: w.week };
+        if (cur[k]?.end === i - 1) { cur[k].end = i; cur[k].v++; cur[k].to = w.week; continue; }
+        runs.push(cur[k] = { id: k.split('|')[0], name: k.split('|').slice(1).join('|'), start: i, end: i, v: 1, from: w.week, to: w.week });
       }
     });
-    let list = Object.entries(best).map(([k, b]) => ({ id: k.split('|')[0], name: k.split('|').slice(1).join('|'), ...b }));
+    let list = runs;
     if (f.artist) list = list.filter(a => a.id === f.artist.id);
     list = list.sort((a, b) => b.v - a.v || a.from.localeCompare(b.from)).filter(ties(10, a => a.v));
     const where = top ? ' at #1' : '', latest = st.weeks[st.weeks.length - 1].week;
