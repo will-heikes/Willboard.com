@@ -109,8 +109,11 @@ def wanted(all_songs):
             if n.get('song'):
                 items.setdefault(cover_name(artist, n['song']), ('song', artist, n['song']))
     # Every album with a charted song (albums.json, from tools/import_itunes.py)
-    if os.path.exists('albums.json'):
-        for al in json.load(open('albums.json', encoding='utf-8')):
+    # and pop_albums.json (tools/build_pop_albums.py)
+    for f in ('albums.json', 'pop_albums.json'):
+        if not os.path.exists(f):
+            continue
+        for al in json.load(open(f, encoding='utf-8')):
             artist = primary_artist(al['artist'], acts)
             if artist:
                 items.setdefault(cover_name(artist, al['name'].strip()), ('album', artist, al['name'].strip()))

@@ -62,6 +62,25 @@
   "released": 2025
  },
  {
+  "name": "Short n' Sweet",
+  "artist": "Sabrina Carpenter",
+  "artistId": "art_550",
+  "plays": null,
+  "tracks": 17,
+  "songs": [
+   "pop_song_862",
+   "pop_song_869",
+   "pop_song_883",
+   "pop_song_896",
+   "pop_song_906",
+   "pop_song_924",
+   "pop_song_928"
+  ],
+  "year": 2024,
+  "chart": "pop",
+  "released": 2024
+ },
+ {
   "name": "The Rise and Fall of a Midwest Princess",
   "artist": "Chappell Roan",
   "artistId": "art_226",
@@ -96,24 +115,6 @@
   "year": 2020,
   "chart": "pop",
   "released": 2020
- },
- {
-  "name": "Short n' Sweet",
-  "artist": "Sabrina Carpenter",
-  "artistId": "art_550",
-  "plays": null,
-  "tracks": 17,
-  "songs": [
-   "pop_song_862",
-   "pop_song_869",
-   "pop_song_883",
-   "pop_song_896",
-   "pop_song_906",
-   "pop_song_928"
-  ],
-  "year": 2024,
-  "chart": "pop",
-  "released": 2024
  },
  {
   "name": "SOS",
@@ -247,6 +248,57 @@
   "released": null
  },
  {
+  "name": "eternal sunshine",
+  "artist": "Ariana Grande",
+  "artistId": "art_313",
+  "plays": null,
+  "tracks": 38,
+  "songs": [
+   "pop_song_840",
+   "pop_song_855",
+   "pop_song_870",
+   "pop_song_926"
+  ],
+  "year": 2024,
+  "chart": "pop",
+  "deluxe": {
+   "pop_song_926": "eternal sunshine deluxe: brighter days ahead (a cappella version)"
+  },
+  "released": 2024
+ },
+ {
+  "name": "Avril Lavigne",
+  "artist": "Avril Lavigne",
+  "artistId": "art_222",
+  "plays": null,
+  "tracks": 16,
+  "songs": [
+   "pop_song_102",
+   "pop_song_129",
+   "pop_song_135",
+   "pop_song_165"
+  ],
+  "year": 2013,
+  "chart": "pop",
+  "released": 2013
+ },
+ {
+  "name": "Nothing But the Beat",
+  "artist": "David Guetta",
+  "artistId": "art_237",
+  "plays": null,
+  "tracks": 14,
+  "songs": [
+   "pop_song_1",
+   "pop_song_21",
+   "pop_song_49",
+   "pop_song_89"
+  ],
+  "year": 2011,
+  "chart": "pop",
+  "released": 2011
+ },
+ {
   "name": "Demi",
   "artist": "Demi Lovato",
   "artistId": "art_82",
@@ -331,6 +383,22 @@
   "released": 2024
  },
  {
+  "name": "Pure Heroine",
+  "artist": "Lorde",
+  "artistId": "art_327",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_131",
+   "pop_song_145",
+   "pop_song_156",
+   "pop_song_174"
+  ],
+  "year": 2013,
+  "chart": "pop",
+  "released": 2013
+ },
+ {
   "name": "JORDI",
   "artist": "Maroon 5",
   "artistId": "art_249",
@@ -393,6 +461,22 @@
   "year": 2024,
   "chart": "pop",
   "released": 2024
+ },
+ {
+  "name": "Title",
+  "artist": "Meghan Trainor",
+  "artistId": "art_361",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_191",
+   "pop_song_199",
+   "pop_song_222",
+   "pop_song_247"
+  ],
+  "year": 2014,
+  "chart": "pop",
+  "released": 2015
  },
  {
   "name": "Pink Friday 2",
@@ -479,6 +563,22 @@
   "released": 2025
  },
  {
+  "name": "Memories...Do Not Open",
+  "artist": "The Chainsmokers",
+  "artistId": "art_344",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_349",
+   "pop_song_359",
+   "pop_song_368",
+   "pop_song_394"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
+ },
+ {
   "name": "World War Joy",
   "artist": "The Chainsmokers",
   "artistId": "art_344",
@@ -511,6 +611,21 @@
   "released": 2020
  },
  {
+  "name": "CUARTO AZUL",
+  "artist": "Aitana",
+  "artistId": "art_647",
+  "plays": null,
+  "tracks": 19,
+  "songs": [
+   "pop_song_955",
+   "pop_song_976",
+   "pop_song_1001"
+  ],
+  "year": 2025,
+  "chart": "pop",
+  "released": 2025
+ },
+ {
   "name": "Dangerous Woman",
   "artist": "Ariana Grande",
   "artistId": "art_313",
@@ -524,24 +639,6 @@
   "year": 2016,
   "chart": "pop",
   "released": 2016
- },
- {
-  "name": "eternal sunshine",
-  "artist": "Ariana Grande",
-  "artistId": "art_313",
-  "plays": null,
-  "tracks": 38,
-  "songs": [
-   "pop_song_840",
-   "pop_song_870",
-   "pop_song_926"
-  ],
-  "year": 2024,
-  "chart": "pop",
-  "deluxe": {
-   "pop_song_926": "eternal sunshine deluxe: brighter days ahead (a cappella version)"
-  },
-  "released": 2024
  },
  {
   "name": "Positions",
@@ -677,21 +774,6 @@
   "year": 2024,
   "chart": "pop",
   "released": 2024
- },
- {
-  "name": "Nothing But the Beat",
-  "artist": "David Guetta",
-  "artistId": "art_237",
-  "plays": null,
-  "tracks": 14,
-  "songs": [
-   "pop_song_1",
-   "pop_song_21",
-   "pop_song_49"
-  ],
-  "year": 2011,
-  "chart": "pop",
-  "released": 2011
  },
  {
   "name": "Confident",
@@ -953,21 +1035,6 @@
   "released": 2025
  },
  {
-  "name": "Pure Heroine",
-  "artist": "Lorde",
-  "artistId": "art_327",
-  "plays": null,
-  "tracks": 10,
-  "songs": [
-   "pop_song_131",
-   "pop_song_145",
-   "pop_song_156"
-  ],
-  "year": 2013,
-  "chart": "pop",
-  "released": 2013
- },
- {
   "name": "The Heist",
   "artist": "Macklemore",
   "artistId": "art_302",
@@ -983,6 +1050,21 @@
   "released": 2012
  },
  {
+  "name": "Caution",
+  "artist": "Mariah Carey",
+  "artistId": "art_315",
+  "plays": null,
+  "tracks": 10,
+  "songs": [
+   "pop_song_485",
+   "pop_song_507",
+   "pop_song_531"
+  ],
+  "year": 2018,
+  "chart": "pop",
+  "released": 2018
+ },
+ {
   "name": "Thank You",
   "artist": "Meghan Trainor",
   "artistId": "art_361",
@@ -996,21 +1078,6 @@
   "year": 2016,
   "chart": "pop",
   "released": 2016
- },
- {
-  "name": "Title",
-  "artist": "Meghan Trainor",
-  "artistId": "art_361",
-  "plays": null,
-  "tracks": 15,
-  "songs": [
-   "pop_song_199",
-   "pop_song_222",
-   "pop_song_247"
-  ],
-  "year": 2014,
-  "chart": "pop",
-  "released": 2015
  },
  {
   "name": "Bangerz",
@@ -1275,21 +1342,6 @@
   "released": 2016
  },
  {
-  "name": "Memories...Do Not Open",
-  "artist": "The Chainsmokers",
-  "artistId": "art_344",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_349",
-   "pop_song_359",
-   "pop_song_394"
-  ],
-  "year": 2017,
-  "chart": "pop",
-  "released": 2017
- },
- {
   "name": "So Far So Good",
   "artist": "The Chainsmokers",
   "artistId": "art_344",
@@ -1490,20 +1542,6 @@
   "released": 2013
  },
  {
-  "name": "Avril Lavigne",
-  "artist": "Avril Lavigne",
-  "artistId": "art_222",
-  "plays": null,
-  "tracks": 16,
-  "songs": [
-   "pop_song_135",
-   "pop_song_165"
-  ],
-  "year": 2013,
-  "chart": "pop",
-  "released": 2013
- },
- {
   "name": "Head Above Water",
   "artist": "Avril Lavigne",
   "artistId": "art_222",
@@ -1684,6 +1722,20 @@
   "year": 2022,
   "chart": "pop",
   "released": 2022
+ },
+ {
+  "name": "BRAT",
+  "artist": "Charli xcx",
+  "artistId": "art_622",
+  "plays": null,
+  "tracks": 15,
+  "songs": [
+   "pop_song_873",
+   "pop_song_880"
+  ],
+  "year": 2024,
+  "chart": "pop",
+  "released": 2024
  },
  {
   "name": "One Night in Nashville",
@@ -2092,6 +2144,20 @@
   "released": 2015
  },
  {
+  "name": "The 20/20 Experience",
+  "artist": "Justin Timberlake",
+  "artistId": "art_304",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_87",
+   "pop_song_103"
+  ],
+  "year": 2013,
+  "chart": "pop",
+  "released": 2013
+ },
+ {
   "name": "Smile",
   "artist": "Katy Perry",
   "artistId": "art_256",
@@ -2106,6 +2172,34 @@
   "released": 2020
  },
  {
+  "name": "Rainbow",
+  "artist": "Ke$ha",
+  "artistId": "art_41",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_396",
+   "pop_song_418"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
+ },
+ {
+  "name": "Warrior",
+  "artist": "Ke$ha",
+  "artistId": "art_41",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_69",
+   "pop_song_86"
+  ],
+  "year": 2012,
+  "chart": "pop",
+  "released": 2012
+ },
+ {
   "name": "chemistry",
   "artist": "Kelly Clarkson",
   "artistId": "art_62",
@@ -2114,6 +2208,20 @@
   "songs": [
    "pop_song_790",
    "pop_song_801"
+  ],
+  "year": 2023,
+  "chart": "pop",
+  "released": 2023
+ },
+ {
+  "name": "Rolling Up the Welcome Mat",
+  "artist": "Kelsea Ballerini",
+  "artistId": "art_169",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_826",
+   "pop_song_835"
   ],
   "year": 2023,
   "chart": "pop",
@@ -2250,6 +2358,20 @@
   "released": 2022
  },
  {
+  "name": "bloom",
+  "artist": "Machine Gun Kelly",
+  "artistId": "art_425",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_337",
+   "pop_song_365"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
+ },
+ {
   "name": "Whirlwind",
   "artist": "Maddie Poppe",
   "artistId": "art_518",
@@ -2332,6 +2454,20 @@
   "year": 2017,
   "chart": "pop",
   "released": 2017
+ },
+ {
+  "name": "R.E.D.",
+  "artist": "Ne-Yo",
+  "artistId": "art_289",
+  "plays": null,
+  "tracks": 18,
+  "songs": [
+   "pop_song_62",
+   "pop_song_78"
+  ],
+  "year": 2012,
+  "chart": "pop",
+  "released": 2012
  },
  {
   "name": "Perception",
@@ -2446,6 +2582,20 @@
   "released": 2018
  },
  {
+  "name": "Porcelain",
+  "artist": "Peach PRC",
+  "artistId": "art_650",
+  "plays": null,
+  "tracks": 12,
+  "songs": [
+   "pop_song_990",
+   "pop_song_1053"
+  ],
+  "year": 2025,
+  "chart": "pop",
+  "released": 2025
+ },
+ {
   "name": "Hollywood's Bleeding",
   "artist": "Post Malone",
   "artistId": "art_400",
@@ -2458,6 +2608,20 @@
   "year": 2019,
   "chart": "pop",
   "released": 2019
+ },
+ {
+  "name": "Mama I Made It",
+  "artist": "Roxy Dekker",
+  "artistId": "art_630",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_932",
+   "pop_song_952"
+  ],
+  "year": 2025,
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "I Said I Love You First",
@@ -2668,6 +2832,19 @@
   "released": 2018
  },
  {
+  "name": "DUMMY BOY (Revised)",
+  "artist": "6ix9ine",
+  "artistId": "art_493",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_476"
+  ],
+  "year": 2018,
+  "chart": "pop",
+  "released": 2018
+ },
+ {
   "name": "Is There Anybody Out There?",
   "artist": "A Great Big World",
   "artistId": "art_335",
@@ -2720,19 +2897,6 @@
   "released": 2021
  },
  {
-  "name": "CUARTO AZUL",
-  "artist": "Aitana",
-  "artistId": "art_647",
-  "plays": null,
-  "tracks": 19,
-  "songs": [
-   "pop_song_955"
-  ],
-  "year": 2025,
-  "chart": "pop",
-  "released": 2025
- },
- {
   "name": "Love & Hyperbole",
   "artist": "Alessia Cara",
   "artistId": "art_397",
@@ -2741,9 +2905,9 @@
   "songs": [
    "pop_song_695"
   ],
-  "year": null,
+  "year": 2021,
   "chart": "pop",
-  "released": null
+  "released": 2021
  },
  {
   "name": "The Pains of Growing",
@@ -3045,6 +3209,19 @@
   "released": 2019
  },
  {
+  "name": "digital druglord",
+  "artist": "BlackBear",
+  "artistId": "art_471",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_412"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
+ },
+ {
   "name": "everything means nothing",
   "artist": "Blackbear",
   "artistId": "art_526",
@@ -3186,19 +3363,6 @@
   "year": 2020,
   "chart": "pop",
   "released": 2020
- },
- {
-  "name": "BRAT",
-  "artist": "Charli xcx",
-  "artistId": "art_622",
-  "plays": null,
-  "tracks": 15,
-  "songs": [
-   "pop_song_880"
-  ],
-  "year": 2024,
-  "chart": "pop",
-  "released": 2024
  },
  {
   "name": "how i'm feeling now",
@@ -3368,6 +3532,19 @@
   "year": 2018,
   "chart": "pop",
   "released": 2018
+ },
+ {
+  "name": "SHOCK TO THE SYSTEM (PART TWO)",
+  "artist": "Daughtry",
+  "artistId": "art_328",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_967"
+  ],
+  "year": 2025,
+  "chart": "pop",
+  "released": 2025
  },
  {
   "name": "Listen",
@@ -3680,6 +3857,19 @@
   "year": 1998,
   "chart": "pop",
   "released": 1998
+ },
+ {
+  "name": "Save Rock And Roll",
+  "artist": "Fall Out Boy",
+  "artistId": "art_312",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_105"
+  ],
+  "year": 2013,
+  "chart": "pop",
+  "released": 2013
  },
  {
   "name": "Official FIFA World Cup 2026™ Album",
@@ -4455,19 +4645,6 @@
   "released": 2024
  },
  {
-  "name": "The 20/20 Experience",
-  "artist": "Justin Timberlake",
-  "artistId": "art_304",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_103"
-  ],
-  "year": 2013,
-  "chart": "pop",
-  "released": 2013
- },
- {
   "name": "Hello",
   "artist": "Karmin",
   "artistId": "art_282",
@@ -4505,6 +4682,19 @@
   "year": 1985,
   "chart": "pop",
   "released": 1985
+ },
+ {
+  "name": "Pressure",
+  "artist": "Kayla Rae",
+  "artistId": "art_533",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_611"
+  ],
+  "year": 2020,
+  "chart": "pop",
+  "released": 2020
  },
  {
   "name": "Kehlani",
@@ -4554,9 +4744,9 @@
   "songs": [
    "pop_song_334"
   ],
-  "year": null,
+  "year": 2016,
   "chart": "pop",
-  "released": null
+  "released": 2016
  },
  {
   "name": "Black Panther: The Album",
@@ -5027,6 +5217,19 @@
   "released": 2019
  },
  {
+  "name": "Tickets To My Downfall",
+  "artist": "Machine Gun Kelly",
+  "artistId": "art_425",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_676"
+  ],
+  "year": 2020,
+  "chart": "pop",
+  "released": 2020
+ },
+ {
   "name": "GEMINI",
   "artist": "Macklemore",
   "artistId": "art_302",
@@ -5092,6 +5295,19 @@
   "released": 2015
  },
  {
+  "name": "Chosen",
+  "artist": "Maneskin",
+  "artistId": "art_565",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_687"
+  ],
+  "year": 2017,
+  "chart": "pop",
+  "released": 2017
+ },
+ {
   "name": "D R E A M S I C L E",
   "artist": "Maren Morris",
   "artistId": "art_128",
@@ -5103,19 +5319,6 @@
   "year": 2024,
   "chart": "pop",
   "released": 2024
- },
- {
-  "name": "Caution",
-  "artist": "Mariah Carey",
-  "artistId": "art_315",
-  "plays": null,
-  "tracks": 10,
-  "songs": [
-   "pop_song_531"
-  ],
-  "year": 2018,
-  "chart": "pop",
-  "released": 2018
  },
  {
   "name": "Here For It All",
@@ -5365,19 +5568,6 @@
   "released": 2015
  },
  {
-  "name": "R.E.D.",
-  "artist": "Ne-Yo",
-  "artistId": "art_289",
-  "plays": null,
-  "tracks": 18,
-  "songs": [
-   "pop_song_62"
-  ],
-  "year": 2012,
-  "chart": "pop",
-  "released": 2012
- },
- {
   "name": "7",
   "artist": "Nelly Furtado",
   "artistId": "art_629",
@@ -5399,9 +5589,9 @@
   "songs": [
    "pop_song_67"
   ],
-  "year": null,
+  "year": 2012,
   "chart": "pop",
-  "released": null
+  "released": 2012
  },
  {
   "name": "Pop Psychology",
@@ -5480,9 +5670,9 @@
   "songs": [
    "pop_song_18"
   ],
-  "year": null,
+  "year": 2011,
   "chart": "pop",
-  "released": null
+  "released": 2011
  },
  {
   "name": "Black Star Elephant",
@@ -5696,19 +5886,6 @@
   "released": 2024
  },
  {
-  "name": "Porcelain",
-  "artist": "Peach PRC",
-  "artistId": "art_650",
-  "plays": null,
-  "tracks": 12,
-  "songs": [
-   "pop_song_990"
-  ],
-  "year": 2025,
-  "chart": "pop",
-  "released": 2025
- },
- {
   "name": "Perrie",
   "artist": "Perrie",
   "artistId": "art_651",
@@ -5720,6 +5897,19 @@
   "year": 2025,
   "chart": "pop",
   "released": 2025
+ },
+ {
+  "name": "Fancy Some More?",
+  "artist": "Pink Pantheress",
+  "artistId": "art_595",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_996"
+  ],
+  "year": 2026,
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "Climate Change",
@@ -5795,9 +5985,9 @@
   "songs": [
    "pop_song_272"
   ],
-  "year": null,
+  "year": 2016,
   "chart": "pop",
-  "released": null
+  "released": 2016
  },
  {
   "name": "Twelve Carat Toothache",
@@ -5904,6 +6094,19 @@
   "released": 2022
  },
  {
+  "name": "SAWAYAMA",
+  "artist": "Rina Sawayama",
+  "artistId": "art_537",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_614"
+  ],
+  "year": 2020,
+  "chart": "pop",
+  "released": 2020
+ },
+ {
   "name": "Let the Road",
   "artist": "Rixton",
   "artistId": "art_349",
@@ -5954,6 +6157,19 @@
   "year": 2024,
   "chart": "pop",
   "released": 2024
+ },
+ {
+  "name": "SUPERSTAR",
+  "artist": "Roxy Dekker",
+  "artistId": "art_630",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_1048"
+  ],
+  "year": 2026,
+  "chart": "pop",
+  "released": 2026
  },
  {
   "name": "RUDIM3NTAL",
@@ -6138,6 +6354,19 @@
   "released": 2014
  },
  {
+  "name": "WOR$T GIRL IN AMERICA",
+  "artist": "Slayyyter",
+  "artistId": "art_678",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_1035"
+  ],
+  "year": 2026,
+  "chart": "pop",
+  "released": 2026
+ },
+ {
   "name": "Mac and Devin Go to High School (Music from and Inspired By the Movie)",
   "artist": "Snoop Dogg",
   "artistId": "art_273",
@@ -6201,6 +6430,19 @@
   "year": 2022,
   "chart": "pop",
   "released": 2022
+ },
+ {
+  "name": "1989",
+  "artist": "Taylor Swift",
+  "artistId": "art_11",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_829"
+  ],
+  "year": 2023,
+  "chart": "pop",
+  "released": 2023
  },
  {
   "name": "THE ANXIETY",
@@ -6367,9 +6609,9 @@
   "songs": [
    "pop_song_450"
   ],
-  "year": null,
+  "year": 2018,
   "chart": "pop",
-  "released": null
+  "released": 2018
  },
  {
   "name": "DRIVE",

@@ -68,7 +68,12 @@ SAME_ALBUM = {
     'Tyla|TYLA +': 'TYLA',
     'Lorde|The Love Club EP': 'Pure Heroine',
     'Sabrina Carpenter|Espresso EP': "Short n' Sweet",
+    'Kelsea Ballerini|Rolling Up the Welcome Mat (For Good)': 'Rolling Up the Welcome Mat',
 }
+
+# Preview picks that are no studio album: soundtracks, compilations, DJ mix episodes, double singles
+PARENS = re.compile(r'\s*[(\[][^)\]]*[)\]]')
+NOT_ALBUM = re.compile(r'soundtrack|motion picture|\bfrom\b|episode|collection|greatest|hits|/', re.I)
 
 # Release years the track dates get wrong: a deluxe track dated later, or singles out long before the album
 RELEASED = {
@@ -80,6 +85,16 @@ RELEASED = {
     'Halsey|Manic': 2020,
     "Meghan Trainor|Takin' It Back": 2022,
     'T-Pain|Revolver': 2011,
+    # Found through song previews, which carry no dates
+    'Ke$ha|Warrior': 2012,
+    'Ke$ha|Rainbow': 2017,
+    'Fall Out Boy|Save Rock And Roll': 2013,
+    'Machine Gun Kelly|bloom': 2017,
+    'Machine Gun Kelly|Tickets To My Downfall': 2020,
+    'BlackBear|digital druglord': 2017,
+    '6ix9ine|DUMMY BOY (Revised)': 2018,
+    'Rina Sawayama|SAWAYAMA': 2020,
+    'Maneskin|Chosen': 2017,
 }
 
 
@@ -106,6 +121,26 @@ def main():
         a = m.get('albumArtist') or m['artist']
         return m['artist'] if same_artist(a, m['artist']) else by_norm.get(norm(a), a)
 
+    # The song preview lookup (tools/fetch_previews.py) often found a song the album lookup missed
+    # ("GTFO" on Caution, Will 2026-10-27): its album counts when it's one we already have for the
+    # act, or, for a song the album lookup never found, when it isn't a single, a soundtrack or a mix
+    picks = json.load(open('preview_picks.json', encoding='utf-8')) if os.path.exists('preview_picks.json') else {}
+    known = set()
+    for m in matches.values():
+        if m.get('type') in ('album', 'ep') and f"{m['artist']}|{m['title']}" not in FIX:
+            known.add((norm(m['artist']), group_key(m['album'])))
+
+    def from_preview(sid, m):
+        parts = [p.strip() for p in picks.get(sid, '').split(' | ')]
+        if len(parts) < 3:
+            return None
+        album = re.sub(r'\s*\(Apple\)$', '', parts[2]).removesuffix(' - Single').removesuffix(' - EP').strip()
+        if (norm(m['artist']), group_key(album)) in known:
+            return album
+        if 'album' in m or clean(PARENS.sub('', album)).startswith(clean(PARENS.sub('', m['title']))) or NOT_ALBUM.search(album):
+            return None
+        return album
+
     groups = defaultdict(list)
     for sid, m in matches.items():
         if sid not in songs:
@@ -117,6 +152,8 @@ def main():
                 m = {**m, 'album': None, 'albumArtist': m['artist'], 'released': None}
         else:
             name = m.get('album') if m.get('type') in ('album', 'ep') else None
+        if not name and (alt := from_preview(sid, m)):
+            name, m = alt, {**m, 'album': None, 'albumArtist': m['artist'], 'released': None}
         if not name:
             continue
         if f"{m['artist']}|{base_name(name)}" in SAME_ALBUM:
@@ -132,7 +169,8 @@ def main():
         # take the year most of the charted songs share
         years = (Counter(int(r[1]['released'][:4]) for r in rows if r[1].get('released'))
                  or Counter(int(r[1]['reissued'][:4]) for r in rows if r[1].get('reissued')))
-        year = min(years, key=lambda y: (-years[y], y)) if years else None
+        # Albums found only through a song preview carry no dates: their charted songs' debuts stand in
+        year = min(years, key=lambda y: (-years[y], y)) if years else int(songs[rows[0][0]]['debutDate'][:4])
         # The lookup saved the cover under the edition it found; the site looks for it under this name
         dest = os.path.join(COVERS, cover_name(artist, name))
         for r in rows:
@@ -153,7 +191,11 @@ def main():
         out_years = [int(r[1]['released'][:4]) for r in rows if r[1].get('released') and r[0] not in dlx]
         if out_years:
             al['released'] = max(out_years)
+        elif not years:
+            al['released'] = max(int(songs[r[0]]['debutDate'][:4]) for r in rows)
         al['released'] = RELEASED.get(f'{artist}|{name}', al.get('released'))
+        if not years:
+            al['year'] = al['released']
         al['year'] = al['year'] or al['released']
         out.append(al)
     out.sort(key=lambda a: (-len(a['songs']), a['artist'].lower(), a['name'].lower()))
