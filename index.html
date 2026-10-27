@@ -3207,7 +3207,7 @@ const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most wee
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?', 'Who has the longest active streak?', 'Most consecutive #1 hits', 'Most consecutive top 5 hits', 'Which album has the most #1 hits?', 'Which album has the most charting songs?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
@@ -3564,7 +3564,69 @@ function askAnswer(q, chartId, f) {
 
   // An act's longest unbroken run of chart weeks with at least one song on (or at #1), features
   // included (Will). A skipped week has no chart, so it doesn't break a run
-  if (/\b(consecutive|straight|in a row|unbroken|streak|run)\b/.test(t) && /\bweeks?\b/.test(t) && (actQ || f.artist)) {
+  const consec = /\b(consecutive|straight|in a row|unbroken|streak|streaks|run)\b/.test(t);
+  const active = /\b(active|current|currently|ongoing|still going)\b/.test(t);
+  // Back-to-back hits: an act's songs in debut order, each reaching #1 (or the top 5, top 10). A song
+  // still on the chart below that line hasn't broken the streak yet, so it's skipped (Will)
+  const hitsM = /\btop[\s-]*(\d{1,2}|five|ten|three)s?\b/.exec(t);
+  if (/\b(consecutive|straight|in a row|back[\s-]to[\s-]back|streak)\b/.test(t) && !/\bweeks?\b/.test(t) && (hitsM || NO1.test(t)) && /\b(hits?|songs?|singles?|#1s|ones|top[\s-]*\w+s)\b/.test(t)) {
+    const n = hitsM ? ({ three: 3, five: 5, ten: 10 }[hitsM[1]] || +hitsM[1]) : 1, max = chartId === 'pop10' ? 10 : 20;
+    if (n > max) return { quiet: true, lead: `The ${c.name} only goes to No. ${max}.` };
+    const latest = st.weeks[st.weeks.length - 1].week, unit = n === 1 ? '#1 hits' : `top ${n} hits`;
+    const all = Object.values(st.songs).filter(s => S(s.id) && inSpanW(f.span, s.debut)).sort((a, b) => a.debut.localeCompare(b.debut) || a.debutPos - b.debutPos);
+    const acts = {}, runs = [];
+    for (const s of all) for (const p of creditParts(S(s.id).artistName)) {
+      if (!p.id || (kind && !isKind(p.name, kind))) continue;
+      const a = acts[p.id] ||= { id: p.id, name: p.name, cur: null };
+      if (s.peak <= n) {
+        if (!a.cur) runs.push(a.cur = { id: p.id, name: p.name, songs: [], v: 0 });
+        a.cur.songs.push(s); a.cur.v++;
+      } else if (s.weeks[s.weeks.length - 1] !== latest) a.cur = null;
+    }
+    for (const a of Object.values(acts)) if (a.cur) a.cur.live = true;
+    let list = runs.filter(r => !f.artist || r.id === f.artist.id).sort((a, b) => b.v - a.v || a.songs[0].debut.localeCompare(b.songs[0].debut));
+    if (!list.length) return { lead: `${f.artist ? esc(f.artist.name) + " hasn't" : 'No act has'} had ${unit} on the ${c.name}${inYear(f.span)}.` };
+    list = list.filter(ties(10, r => r.v));
+    const r0 = list[0], k = tiedTop(list, r => r.v), nm = s => `“${esc(S(s.id).name)}”`;
+    const span = r => `${nm(r.songs[0])} to ${nm(r.songs[r.songs.length - 1])}`;
+    const yrs = r => { const a = r.songs[0].debut.slice(0, 4), b = r.songs[r.songs.length - 1].debut.slice(0, 4); return a === b ? a : `${a}–${b}`; };
+    const counting = r => r.live ? ', and counting' : '';
+    if (f.artist) return {
+      lead: r0.v === 1 ? `${esc(f.artist.name)} hasn't had two ${unit} in a row on the ${c.name}${inYear(f.span)}.`
+        : `${esc(f.artist.name)}'s longest streak of ${unit} on the ${c.name}${inYear(f.span)} is ${r0.v} in a row, from ${span(r0)}${counting(r0)}.`,
+      rows: r0.songs.map((s, i) => askRow(i + 1, S(s.id), `Peak <b>${s.peak}</b><br>${s.debut.slice(0, 4)}`)).join(''),
+    };
+    return {
+      lead: k > 1 ? `${list.slice(0, k).map(r => esc(r.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} tie for the most consecutive ${unit} on the ${c.name}${inYear(f.span)}, with ${r0.v} each.`
+        : `${esc(r0.name)} has the most consecutive ${unit} on the ${c.name}${inYear(f.span)}: ${r0.v} in a row, from ${span(r0)}${counting(r0)}.`,
+      rows: list.map((r, i) => askArtistRow(rankIn(list, i, r => r.v), { ...r, sub: `${S(r.songs[0].id).name} to ${S(r.songs[r.songs.length - 1].id).name}` }, `<b>${r.v}</b> in a row${r.live ? '*' : ''}<br>${yrs(r)}`)).join(''),
+      more: list.some(r => r.live) ? `<span class="ask-note">* Still going.</span>` : '',
+    };
+  }
+
+  // Albums with the most #1 hits, or the most charting songs, on this chart (features count for the album's act)
+  if (/\balbums?\b/.test(t) && /\b(most|how many|which|what)\b/.test(t) && (NO1.test(t) || /\b(charting|charted|songs|hits|singles|entries)\b/.test(t))) {
+    const top = NO1.test(t), counts = [];
+    for (const al of ALBUMS) {
+      if (f.artist && !(al.artistId === f.artist.id || byArtist({ artistName: al.artist }, f.artist))) continue;
+      if (kind && !isKind(primaryArtist(al.artist), kind)) continue;
+      const songs = al.songs.map(sid => st.songs[sid]).filter(s => s && S(s.id)?.chart === c.key && (top ? s.no1.some(w => inSpanW(f.span, w)) : s.weeks.some(w => inSpanW(f.span, w))));
+      if (songs.length) counts.push({ al, songs, v: songs.length });
+    }
+    const what = top ? '#1 hits' : 'charting songs', one = top ? '#1' : 'charting song';
+    if (!counts.length) return { lead: `No album${who} has ${top ? 'a #1 hit' : 'a charting song'} on the ${c.name}${inYear(f.span)}.` };
+    const list = counts.sort((a, b) => b.v - a.v || (a.al.year || 9999) - (b.al.year || 9999)).filter(ties(10, x => x.v)), k = tiedTop(list, x => x.v), x = list[0];
+    const albumName = x => `<i>${esc(x.al.name)}</i>${f.artist ? '' : ` by ${esc(x.al.artist)}`}`;
+    return {
+      lead: k > 1 ? `${k} albums${who} tie for the most ${what} on the ${c.name}${inYear(f.span)}, with ${x.v} each: ${list.slice(0, k).map(albumName).join(', ').replace(/, (?!.*, )/, k > 2 ? ', and ' : ' and ')}.`
+        : `${albumName(x)} has the most ${what} of any album${who} on the ${c.name}${inYear(f.span)}, with ${x.v}: ${x.songs.map(s => `“${esc(S(s.id).name)}”`).join(', ')}.`,
+      rows: list.map((x, i) => `<a class="lrow" href="#/album/${x.al.id}"><span class="rk">${rankIn(list, i, x => x.v)}</span>${albumTile(x.al)}
+        <span><div class="song">${esc(x.al.name)}</div><div class="artist">${esc(x.al.artist)}${x.al.year ? ` · ${x.al.year}` : ''}</div></span><span class="meta"><b>${x.v}</b><br>${x.v === 1 ? one : what}</span></a>`).join(''),
+    };
+  }
+
+  // An act's longest unbroken run of chart weeks (or an active one, still going on the latest chart)
+  if (consec && (/\bweeks?\b/.test(t) || active) && (actQ || f.artist || active)) {
     // Every run counts on its own, so an act can rank more than once (Will)
     const top = NO1.test(t), ws = st.weeks.filter(w => inSpanW(f.span, w.week)), cur = {}, runs = [];
     ws.forEach((w, i) => {
@@ -3580,9 +3642,19 @@ function askAnswer(q, chartId, f) {
     });
     let list = runs;
     if (f.artist) list = list.filter(a => a.id === f.artist.id);
+    if (active) list = list.filter(a => a.end === ws.length - 1 && a.to === st.weeks[st.weeks.length - 1].week);
     list = list.sort((a, b) => b.v - a.v || a.from.localeCompare(b.from)).filter(ties(10, a => a.v));
     const where = top ? ' at #1' : '', latest = st.weeks[st.weeks.length - 1].week;
     const until = a => a.to === latest ? ` to ${fmtLong(a.to)}, and counting` : ` to ${fmtLong(a.to)}`;
+    if (active && !list.length) return { lead: `${f.artist ? esc(f.artist.name) + " isn't" : 'No act is'} ${top ? 'at #1' : 'on'} the latest ${c.name}.` };
+    if (active) {
+      const k = tiedTop(list, a => a.v), who2 = k > 1 ? `${list.slice(0, k).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ')} share` : `${esc(list[0].name)} has`;
+      return {
+        lead: f.artist ? `${esc(f.artist.name)} has been ${top ? 'at #1' : 'on the chart'} ${wk(list[0].v)} in a row on the ${c.name}, since ${fmtLong(list[0].from)}.`
+          : `${who2} the longest active streak${where} on the ${c.name}: ${wk(list[0].v)} in a row${k > 1 ? '' : `, since ${fmtLong(list[0].from)}`}.`,
+        rows: list.map((a, i) => askArtistRow(rankIn(list, i, a => a.v), a, `<b>${wk(a.v)}</b><br>since ${fmtShort(a.from)}`)).join(''),
+      };
+    }
     if (!list.length) return { lead: f.artist ? `${esc(f.artist.name)} hasn't been ${top ? 'at #1' : 'on the'} ${top ? `on the ${c.name}` : c.name}${inYear(f.span)}.` : `No acts${where || ' charted'}${inYear(f.span)}.` };
     const span = a => `${fmtShort(a.from)} – ${fmtShort(a.to)}`, n = tiedTop(list, a => a.v);
     return {
