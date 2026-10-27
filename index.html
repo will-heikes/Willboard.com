@@ -236,6 +236,9 @@ button { font: inherit; color: inherit; }
 .table tr.sub-h td { background: var(--card-2); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 10px; padding-bottom: 10px; }
 .album-link { font-weight: 600; font-size: 13px; }
 .album-link:hover { color: var(--accent); text-decoration: underline; }
+.aw-artist-h { display:flex; align-items:center; gap:10px; margin:0 0 8px; font-size:14px; color:var(--muted); }
+.aw-won td { background:rgba(242,183,5,.10); }
+.aw-star { color:#B88A00; white-space:nowrap; }
 .lost-note { margin-top: 10px; font-size: 13px; font-style: italic; color: var(--muted); }
 .album-from { margin-top: 10px; font-size: 13px; color: var(--muted); }
 .album-from b { color: var(--ink); font-weight: 700; }
@@ -1179,6 +1182,10 @@ body.on-ask .ask-fab { display: none; }
     <div class="song-sec" id="artist-albums-wrap" hidden>
       <div class="sec-h"><h2>Albums</h2></div>
       <div class="more-songs" id="artist-albums"></div>
+    </div>
+    <div class="song-sec" id="artist-awards-wrap" hidden>
+      <div class="sec-h"><h2>Awards</h2></div>
+      <div id="artist-awards"></div>
     </div>
     <div class="sec-h"><h2>Songs</h2></div>
     <div class="card" style="overflow:hidden"><table class="table" id="artist-songs"></table></div>
@@ -2455,11 +2462,39 @@ function renderArtist(id) {
   $('artist-albums-wrap').hidden = !albums.length;
   $('artist-albums').innerHTML = albums.map(al => `<a href="#/album/${al.id}">${albumTile(al)}
     <div class="song">${esc(al.name)}</div><div class="meta">${al.songs.length} charted song${al.songs.length > 1 ? 's' : ''}</div>${albumCert(al)}</a>`).join('');
+  artistAwards(id, a.name);
   $('artist-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Album</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th></tr>` +
     [...songs, ...featured].sort((x, y) => x.debutDate.localeCompare(y.debutDate)).map(s => `<tr class="click${featured.has(s) ? ' feat' : ''}" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${featured.has(s) ? '<span class="feat-tag">Featured</span>' : ''}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${ALBUM_OF[s.id] ? `<span class="show-sm"> · ${esc(albumName(s))}</span>` : ''}</div></td>
       <td class="hide-sm">${ALBUM_OF[s.id] ? `<a class="album-link" href="#/album/${ALBUM_OF[s.id].id}" onclick="event.stopPropagation()">${esc(albumName(s))}</a>` : '<span class="artist">—</span>'}</td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+}
+
+// Every Willboard Awards nomination the act shares in, newest show first, categories in show order.
+// A show still waiting on its winners reads "Pending" rather than counting as a loss
+// Nominee sheet names that differ from the chart's spelling of the act
+const AW_ALIAS = { 'Lady Antebellum': 'Lady A', 'Shkodra Elektronike': 'Shkodra Elektonike' };
+function artistAwards(id, name) {
+  const mine = n => creditParts(n.artist || '').some(p => { const k = squash(AW_ALIAS[p.name] || p.name); return p.id === id || ACT_BY_KEY[k]?.id === id || k === squash(name); });
+  const html = ['country', 'pop'].filter(c => AWARDS?.[c]).map(chart => {
+    const rows = AWARDS[chart].filter(mine);
+    if (!rows.length) return '';
+    const decided = new Set(AWARDS[chart].filter(n => n.slot === 'Winner').map(n => n.year));
+    const order = c => (AW_ORDER[chart].indexOf(c) + 1) || 99;
+    rows.sort((x, y) => y.year - x.year || order(x.category) - order(y.category));
+    const wins = rows.filter(n => n.slot === 'Winner').length, pl = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+    return `<div class="aw-artist-h"><span class="tag ${chart === 'pop' ? 'pop' : 'country'}">${chart === 'pop' ? 'Pop' : 'Country'} Awards</span>
+      <span>${pl(wins, 'win')} from ${pl(rows.length, 'nomination')}</span></div>
+      <div class="card" style="overflow:hidden;margin-bottom:16px"><table class="table">
+      <tr><th>Year</th><th>Category</th><th class="hide-sm">For</th><th>Result</th></tr>` +
+      rows.map(n => `<tr class="click${n.slot === 'Winner' ? ' aw-won' : ''}" onclick="location.hash='${awHref(chart, n.year)}'">
+        <td><a href="${awHref(chart, n.year)}" onclick="event.stopPropagation()"><b>${n.year}</b></a></td>
+        <td><div class="song">${esc(n.category)}</div>${n.song || n.album ? `<div class="artist show-sm">${esc(awName(n))}</div>` : ''}</td>
+        <td class="hide-sm">${n.song || n.album ? `${esc(awName(n))}${n.artist !== name ? `<div class="artist">${esc(n.artist)}</div>` : ''}` : '<span class="artist">—</span>'}</td>
+        <td>${n.slot === 'Winner' ? '<b class="aw-star">★ Winner</b>' : decided.has(n.year) ? 'Nominee' : '<span class="artist">Pending</span>'}</td></tr>`).join('') + '</table></div>';
+  }).join('');
+  $('artist-awards-wrap').hidden = !html;
+  $('artist-awards').innerHTML = html;
 }
 
 // Every song an artist charted, Hot 20 and Pop 10 together on one weekly timeline, behind a button so it stays
