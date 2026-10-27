@@ -33,7 +33,7 @@ FIX = {
     'pop_song_763': 'audio/habit-clip.mp3',  # Habit: not in any store; 30 s from Will's copy (audio/Habit.mp3)
     'pop_song_786': 'apple:1681178572',  # Night Air (music.apple.com/us/song/night-air/1681178572)
 }
-LOOKUP = 'https://itunes.apple.com/lookup?country=us&id={id}'
+LOOKUP = 'https://itunes.apple.com/lookup?country={cc}&id={id}'
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
 ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
                  r'tribute|cover|made famous|originally performed|in the style of|piano|lullaby|8-bit|'
@@ -192,7 +192,13 @@ def main():
                 if found.get(s['id']) and title.lower() not in redo:
                     continue
                 try:
-                    hit = json.loads(get(LOOKUP.format(id=fix[6:]))).get('results', [{}])[0]
+                    # A track the US store doesn't sell can still be in another country's
+                    hit = {}
+                    for cc in ('us', 'ca', 'gb', 'au', 'nz', 'ie', 'de', 'nl', 'se', 'jp'):
+                        hit = (json.loads(get(LOOKUP.format(cc=cc, id=fix[6:]))).get('results') or [{}])[0]
+                        if hit.get('previewUrl'):
+                            break
+                        time.sleep(3)
                     fix = hit.get('previewUrl') or 0
                     if fix:
                         picked[fix] = f"{hit.get('trackName')} | {hit.get('artistName')} | {hit.get('collectionName')} (Apple)"
