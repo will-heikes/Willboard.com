@@ -1743,7 +1743,12 @@ function renderHome() {
   // Up to six articles, never the same artist's photo twice (Will). The week's chart stories
   // stand in only when there are no articles (they still run in the ticker). "last": true pins one to the end
   const seen = new Set();
+  // "pinUntil": an article Will keeps on the right side of Chart Beat, first under the lead, until that date
+  // (the Dolly Parton tribute, for a month, Will 2026-10-27)
+  const pinned = a => a.pinUntil && today() <= a.pinUntil;
   const live = ARTICLES.filter(a => !a.archived).sort((a, b) => !!a.last - !!b.last);
+  const pins = live.filter(pinned);
+  if (pins.length) live.splice(0, live.length, ...[live.find(a => !pinned(a)), ...pins, ...live.filter(a => !pinned(a)).slice(1)].filter(Boolean));
   const beat = (live.length ? live.map(articleCard) : stories)
     .filter(t => { const k = squash(primaryArtist(t.artist || '')); return !seen.has(k) && seen.add(k); }).slice(0, 6);
   const [first, ...rest] = beat;
@@ -1860,6 +1865,8 @@ function noteScore(t) {
   if (/\b(spends?|holds?|remains?|stays?)\b/i.test(t)) return 3 - orphan;
   return 6 - orphan;
 }
+// Today's date (local) as YYYY-MM-DD
+const today = () => { const d = new Date(); return iso(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
 const ARCH_SCORE = { no1: 9, leap: 7, top10: 6, double: 6, cert: 5, weeks: 4, top5: 4, debut: 3 };
 function factArtist(text) {
   // A note can start with a title whose opening quote Will left off ("Sleep at Night' spends...")
@@ -1899,6 +1906,18 @@ async function renderArchive(week) {
     if (years.has(y) || (strict && f.type !== 'no1' && kinds.has(f.type))) continue;
     picks.push(f); years.add(y); kinds.add(f.type);
   }
+  // A tribute article that's still pinned (Dolly Parton, Will 2026-10-27) puts one of that act's own
+  // moments in the archive too: the one whose date falls nearest this week, from any year
+  const trib = (ARTICLES || []).find(a => a.tribute && a.pinUntil && today() <= a.pinUntil);
+  if (trib) {
+    const day = w => { const d = parseDate(w); return (d - new Date(d.getFullYear(), 0, 1)) / 864e5; };
+    const gap = w => { const g = Math.abs(day(w) - day(week)); return Math.min(g, 365 - g); };
+    const own = ARCHIVE.filter(f => primaryArtist(f.artist || '') === trib.artist && f.week < week).sort((a, b) => gap(a.week) - gap(b.week) || (ARCH_SCORE[b.type] ?? 0) - (ARCH_SCORE[a.type] ?? 0))[0];
+    if (own && !picks.some(f => f.artist === own.artist)) {
+      const keep = picks.filter(f => f.week.slice(0, 4) !== own.week.slice(0, 4)).slice(0, 2);
+      picks.splice(0, picks.length, ...keep, { ...own, tribute: trib.tribute });
+    }
+  }
   picks.sort((a, b) => b.week.localeCompare(a.week));
   $('archive-sec').style.display = picks.length ? '' : 'none';
   $('archive').innerHTML = picks.map(f => {
@@ -1906,7 +1925,7 @@ async function renderArchive(week) {
     return `<a class="clip" href="#/${f.chart === 'pop' ? 'pop10' : 'hot20'}/${f.week}" title="See the ${chart} for this week">
       ${artTile(f.artist || '')}
       <div><div class="clip-year">${f.week.slice(0, 4)}</div><div class="clip-week">${chart} · ${ARCH_KICK[f.type]} · ${fmtShort(f.week)}</div>
-      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></a>`;
+      <p>${esc(f.text.trim().replace(/([^.!?])$/, '$1.'))}</p>${f.tribute ? `<div class="clip-by">${esc(f.tribute)}</div>` : f.note ? '<div class="clip-by">From Will\'s chart notes</div>' : ''}</div></a>`;
   }).join('');
 }
 

@@ -254,6 +254,8 @@
   },
   {
     "id": "dolly-parton-chart-legacy",
+  "pinUntil": "2026-11-27",
+  "tribute": "Remembering Dolly Parton, 1946–2026",
     "date": "2026-10-23",
     "chart": "hot20",
     "kicker": "Legacy",
