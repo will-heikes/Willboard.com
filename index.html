@@ -3136,8 +3136,16 @@ async function renderSong(id) {
   const wks1 = on.filter(w => w.pos === 1).length;
   const debut = on[0];
   const stats = [[s.peakPosition ?? '—', 'Peak'], [wks1 || '—', 'Weeks at #1'], [s.weeksOnChart ?? on.length, 'Weeks on chart'],
-                 [debut ? `#${debut.pos}` : '—', `Debut · ${fmtShort(s.debutDate)}`]];
+                 [debut ? `#${debut.pos}` : '—', 'Debut'], [fmtShort(s.debutDate) || '—', 'Debut date']];
   if (s.chart !== 'pop' && s.itunesPlays) stats.push([s.itunesPlays.toLocaleString(), 'Plays']);
+  // Pop plays come from Will's Spotify history, which starts in December 2013
+  let spotNote = '';
+  if (s.chart === 'pop') {
+    if (!SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+    const raw = SPOTIFY.songs?.[s.id];
+    if (raw) stats.push([raw.slice(1).reduce((a, b) => a + b, 0).toLocaleString(), 'Spotify plays']);
+    if (s.debutDate < (SPOTIFY.start || '2013-12-19')) spotNote = '<div class="lost-note">Spotify plays only go back to December 2013, so this song\'s count is lower than its real total.</div>';
+  }
   const hero = $('song-hero');
   hero.style.removeProperty('--tint');
   hero.innerHTML = `${artTile(s.artistName, true, undefined, s.name)}
@@ -3148,7 +3156,7 @@ async function renderSong(id) {
       ${playBtn(s.id, true)}
       ${LOST_AUDIO.has(s.id) && !PREVIEWS[s.id] ? '<div class="lost-note">A lost recording: no clip of this song survives, but its chart run lives on here.</div>' : ''}
       ${ALBUM_OF[s.id] ? `<div class="album-from">From the album <a href="#/album/${ALBUM_OF[s.id].id}"><b>${esc(albumName(s))}</b></a>${albumCert(ALBUM_OF[s.id])}</div>` : ''}
-      <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div></div>`;
+      <div class="stat-row">${stats.map(([v, l]) => `<div><b>${v}</b><small>${esc(l)}</small></div>`).join('')}</div>${spotNote}</div>`;
   heroTint(hero, $('page-song'));
 
   const last = on[on.length - 1];
