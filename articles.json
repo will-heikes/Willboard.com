@@ -1,5 +1,26 @@
 [
   {
+    "id": "maddie-font-solo-ep",
+    "date": "2026-10-28",
+    "chart": "hot20",
+    "kicker": "Real World",
+    "bucket": "relevance",
+    "artist": "Maddie Font",
+    "link": "#/artist/art_686",
+    "linkText": "Maddie Font on the Hot 20",
+    "headline": "Maddie & Tae are the most successful duo in Hot 20 history. Now Maddie Font is starting over on her own",
+    "dek": "Her first solo EP, ‘Drive Me Around,’ arrives Nov. 6, and its title track is already on the chart. Here's the record she's stepping away from.",
+    "body": [
+      "Last December, [[Maddie & Tae]] told People they would stop working as a duo after 15 years. Taylor Kerr is stepping back to focus on her family, and Maddie Font is carrying on alone, though both said they're leaving the door open to make music together again someday. Font's first solo single, ‘Drive Me Around,’ came out in September, and her debut EP of the same name follows on Nov. 6. It has four songs and is coming out independently.",
+      "<b>The duo's numbers.</b> Maddie & Tae put 24 songs on the Hot 20, and 12 of them reached No. 1. That's more than any other duo or group: [[Lady A]] is next with 10. Only [[Carrie Underwood]] (21) and [[Carly Pearce]] (18) have more No. 1s, and [[Kenny Chesney]] ties them at 12. Their songs spent 42 weeks at No. 1 and 413 weeks on the chart in all. The longest stay on top belongs to ‘Die From a Broken Heart,’ with seven weeks in 2018 and 2019.",
+      "<b>A slow start, then a streak.</b> Their first four singles all came close without reaching the top. ‘Girl In A Country Song’ peaked at No. 3 in 2014, then ‘Fly,’ ‘Shut Up and Fish’ and ‘Sierra’ all stopped at No. 2. ‘After the Storm Blows Through’ finally reached No. 1 in March 2017 and held it for four weeks. From October 2018 to November 2020, they were on the chart for 108 straight weeks, and that run produced five No. 1s, from ‘Die From a Broken Heart’ to ‘Water in His Wine Glass.’",
+      "<b>The awards shelf.</b> At the Willboard Country Awards, Maddie & Tae won Vocal Duo/Group of the Year seven times: in 2016, then every year from 2019 through 2024. They also won Entertainer of the Year twice, in 2019 and 2020. They're nominated for Vocal Duo/Group again this year, and the winners will be revealed Nov. 18, the night the CMA Awards air.",
+      "<b>The last duo hit.</b> Their final Hot 20 appearance was as guests on [[Colbie Caillat]]'s ‘Live Without,’ which reached No. 3 and left the chart after Feb. 5. That was the last time either of them was on the Hot 20 until this month, an eight-month gap.",
+      "<b>Font on her own.</b> ‘Drive Me Around,’ which she wrote with Jonathan Singleton and Brent Anderson, entered at No. 19 on Oct. 8, held there the next week, and moved to No. 18 on Oct. 22. The EP also has ‘Make It Up To Me,’ ‘All The Red In California’ and ‘When A Woman Stops Crying.’ That last song is a co-write with Anna Vaus and Taylor Kerr, so the duo's story isn't over on paper either.",
+      "Font is starting her solo career with a record that only two acts in Hot 20 history have topped. How the new songs do on the chart is up to Will's listening."
+    ]
+  },
+  {
     "id": "carly-pearce-two-longest-runs",
     "date": "2026-10-27",
     "chart": "hot20",
@@ -254,8 +275,8 @@
   },
   {
     "id": "dolly-parton-chart-legacy",
-  "pinUntil": "2026-11-27",
-  "tribute": "Remembering Dolly Parton, 1946–2026",
+    "pinUntil": "2026-11-27",
+    "tribute": "Remembering Dolly Parton, 1946–2026",
     "date": "2026-10-23",
     "chart": "hot20",
     "kicker": "Legacy",
