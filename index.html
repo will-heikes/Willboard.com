@@ -3136,7 +3136,7 @@ async function renderSong(id) {
   const wks1 = on.filter(w => w.pos === 1).length;
   const debut = on[0];
   const stats = [[s.peakPosition ?? '—', 'Peak'], [wks1 || '—', 'Weeks at #1'], [s.weeksOnChart ?? on.length, 'Weeks on chart'],
-                 [debut ? `#${debut.pos}` : '—', 'Debut'], [fmtShort(s.debutDate) || '—', 'Debut date']];
+                 [debut ? `#${debut.pos}` : '—', `Debut · ${fmtShort(s.debutDate)}`]];
   if (s.chart !== 'pop' && s.itunesPlays) stats.push([s.itunesPlays.toLocaleString(), 'Plays']);
   // Pop plays come from Will's Spotify history, which starts in December 2013
   let spotNote = '';
