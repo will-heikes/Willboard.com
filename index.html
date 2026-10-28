@@ -713,6 +713,9 @@ button { font: inherit; color: inherit; }
 .run-card svg { display: block; width: 100%; height: auto; overflow: visible; }
 .run-card .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 11.5px; padding: 5px 8px; white-space: nowrap; transform: translate(-50%, -130%); display: none; }
 .run-card .tip b { font-family: var(--f-cond); font-size: 15px; margin-right: 5px; }
+.spot-modes { margin: -4px 0 10px; }
+.spot-card .tip { transform: translate(-50%, 0); text-align: center; line-height: 1.45; }
+.spot-card .tip small { display: block; opacity: .75; }
 .run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; margin-top: 12px; }
 .run-grid > * { background: var(--card); border: 1px solid var(--line-soft); padding: 6px 4px 5px; text-align: center; color: inherit; }
 .run-grid a:hover { border-color: var(--ink-soft); }
@@ -1198,6 +1201,11 @@ body.on-ask .ask-fab { display: none; }
       <div class="sec-h"><h2>Chart Run</h2><span class="sub" id="song-run-sub"></span></div>
       <div class="card run-card"><div id="song-graph"></div></div>
       <div class="run-grid" id="song-grid"></div>
+    </div>
+    <div class="song-sec" id="song-spot-wrap" hidden>
+      <div class="sec-h"><h2>Spotify Plays</h2><span class="sub" id="song-spot-sub"></span></div>
+      <div class="pills spot-modes"><button class="pill active" data-m="run">Chart run</button><button class="pill" data-m="all">All time</button></div>
+      <div class="card run-card spot-card"><div id="song-spot"></div></div>
     </div>
     <div class="song-sec" id="song-more-wrap">
       <div class="sec-h"><h2 id="song-more-h">More from the artist</h2></div>
@@ -3168,6 +3176,8 @@ async function renderSong(id) {
     ? `<a href="#/${chartId}/${w.week}" class="${w.pos === 1 ? 'no1' : ''}" title="See the chart for ${fmtLong(w.week)}"><b>${w.pos}</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></a>`
     : `<div class="off"><b>—</b><small>${fmtShort(w.week).replace(/,? \d{4}$/, '')}</small></div>`).join('');
 
+  spotifyPlays(s, run);
+
   const more = DATA.songs.filter(o => o.artistId === s.artistId && o.id !== s.id)
     .sort((a, b) => (a.peakPosition ?? 99) - (b.peakPosition ?? 99) || b.debutDate.localeCompare(a.debutDate)).slice(0, 6);
   $('song-more-wrap').hidden = !more.length;
@@ -3175,6 +3185,113 @@ async function renderSong(id) {
   $('song-more').innerHTML = more.map(o => `<a href="#/song/${o.id}">${artTile(o.artistName, false, undefined, o.name)}
     <div class="song">${esc(o.name)}</div><div class="meta">${o.chart === 'pop' ? 'Pop 10' : 'Hot 20'} · Peak #${o.peakPosition ?? '—'} · ${o.debutDate.slice(0, 4)}</div></a>`).join('');
   window.scrollTo(0, 0);
+}
+
+// ─── SPOTIFY PLAYS (Pop 10) ─────────────────────────────────────
+// spotify_weekly.json comes from the private Willboard-Spotify repo (tools/build_site_weekly.py):
+// each Pop 10 song's Spotify plays of 30s+ per week, where a week holds the plays that fed that
+// Thursday's chart. The chart run sits above the plays on the same timeline (two panels, one axis each).
+let SPOTIFY = null;
+async function spotifyPlays(s, run) {
+  const wrap = $('song-spot-wrap');
+  wrap.hidden = true;
+  if (s.chart !== 'pop') return;
+  if (!SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+  const raw = SPOTIFY.songs?.[s.id];
+  if (!raw || location.hash !== `#/song/${s.id}`) return;
+  const [sy, sm, sd] = SPOTIFY.start.split('-').map(Number), start = Date.UTC(sy, sm - 1, sd), DAY = 864e5;
+  const weekOf = k => new Date(start + k * 7 * DAY).toISOString().slice(0, 10);
+  const plays = raw.slice(1).map((n, i) => ({ k: raw[0] + i, n }));
+  const total = plays.reduce((t, w) => t + w.n, 0);
+  const first = plays.find(w => w.n);
+  wrap.hidden = false;
+  $('song-spot-sub').textContent = `${total.toLocaleString()} plays since ${parseDate(weekOf(first.k - 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+  const pos = Object.fromEntries(run.filter(w => w.pos).map(w => [Math.round((Date.parse(w.week + 'T00:00Z') - start) / (7 * DAY)), w.pos]));
+  const charted = Object.keys(pos).map(Number);
+  const draw = mode => {
+    wrap.querySelectorAll('.spot-modes .pill').forEach(b => b.classList.toggle('active', b.dataset.m === mode));
+    // Chart run: from two months before the debut to three months after the last week on the chart
+    let lo = plays[0].k, hi = plays[plays.length - 1].k;
+    if (mode === 'run' && charted.length) { lo = Math.max(lo, Math.min(...charted) - 8); hi = Math.min(hi, Math.max(...charted) + 13); }
+    const byK = Object.fromEntries(plays.map(w => [w.k, w.n]));
+    let rows = [];
+    for (let k = lo; k <= hi; k++) rows.push({ k, from: k, n: byK[k] || 0, pos: pos[k] || null });
+    // Long spans read better a month at a time; the chart line keeps its weekly detail
+    const monthly = rows.length > 160;
+    let bars = rows;
+    if (monthly) {
+      const m = {};
+      rows.forEach(r => { const key = weekOf(r.k - 1).slice(0, 7); (m[key] ||= { key, from: r.k, to: r.k, n: 0 }); m[key].to = r.k; m[key].n += r.n; });
+      bars = Object.values(m);
+    } else bars = rows.map(r => ({ ...r, to: r.k }));
+    const host = $('song-spot');
+    host.innerHTML = spotifyGraph(rows, bars, monthly, lo, hi, weekOf, host.clientWidth);
+    const svg = host.querySelector('svg'), tip = host.querySelector('.tip'), cross = svg.querySelector('.xh');
+    const geo = JSON.parse(svg.dataset.geo);
+    const at = e => {
+      const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) * geo.W / b.width;
+      const k = Math.round(lo + (px - geo.L) / geo.step);
+      return rows.find(r => r.k === k);
+    };
+    svg.onmousemove = e => {
+      const r = at(e);
+      if (!r) { tip.style.display = 'none'; cross.style.display = 'none'; return; }
+      const bar = bars.find(b => r.k >= b.from && r.k <= b.to);
+      const xpx = geo.L + (r.k - lo) * geo.step + geo.step / 2;
+      cross.setAttribute('x1', xpx); cross.setAttribute('x2', xpx); cross.style.display = '';
+      const label = monthly ? parseDate(weekOf(bar.from - 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : `Week to ${fmtShort(weekOf(r.k))}`;
+      tip.innerHTML = `${r.pos ? `<b>#${r.pos}</b>` : ''}${bar.n.toLocaleString()} play${bar.n === 1 ? '' : 's'}<small>${label}${monthly && r.pos ? ` · #${r.pos} on ${fmtShort(weekOf(r.k))}` : ''}</small>`;
+      const b = svg.getBoundingClientRect();
+      tip.style.left = `${Math.min(Math.max(xpx * b.width / geo.W, 70), b.width - 70) + 18}px`; tip.style.top = `${Math.max(4, e.clientY - b.top - 64)}px`; tip.style.display = 'block';
+      svg.style.cursor = r.pos ? 'pointer' : 'default';
+    };
+    svg.onmouseleave = () => { tip.style.display = 'none'; cross.style.display = 'none'; };
+    svg.onclick = e => { const r = at(e); if (r?.pos) location.hash = `#/pop10/${weekOf(r.k)}`; };
+  };
+  wrap.querySelectorAll('.spot-modes .pill').forEach(b => { b.onclick = () => draw(b.dataset.m); });
+  draw('run');
+}
+function spotifyGraph(rows, bars, monthly, lo, hi, weekOf, width) {
+  const W = Math.max(320, Math.round(width || 960)), small = W < 600;
+  const L = 40, R = 12, T = 30, gapY = 42, B = 28, H1 = small ? 90 : 120, H2 = small ? 130 : 170;
+  const H = T + H1 + gapY + H2 + B, n = hi - lo + 1, step = (W - L - R) / n;
+  const xk = k => L + (k - lo) * step + step / 2;
+  // Top panel: chart position, #1 at the top
+  const y1 = p => T + (p - 1) * H1 / 9;
+  let g = `<text x="${L}" y="${T - 14}" class="pt">Pop 10 position</text>`;
+  g += `<rect x="${L}" y="${y1(1) - 5}" width="${W - L - R}" height="${y1(5) - y1(1) + 10}" fill="rgb(59 139 222 / .10)"/>`;
+  g += [1, 5, 10].map(p => `<line x1="${L}" x2="${W - R}" y1="${y1(p)}" y2="${y1(p)}" stroke="var(--line-soft)"/><text x="${L - 8}" y="${y1(p) + 4}" text-anchor="end" class="ax">${p}</text>`).join('');
+  let d = '', pen = false;
+  rows.forEach(r => { if (r.pos) { d += `${pen ? 'L' : 'M'}${xk(r.k).toFixed(1)} ${y1(r.pos).toFixed(1)}`; pen = true; } else pen = false; });
+  g += `<path d="${d}" fill="none" stroke="var(--pop)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  if (step >= 5) g += rows.filter(r => r.pos).map(r => `<circle cx="${xk(r.k)}" cy="${y1(r.pos)}" r="${r.pos === 1 ? 5 : 3.5}" class="${r.pos === 1 ? 'd1' : 'd'}"/>`).join('');
+  // Bottom panel: Spotify plays per week (or per month over long spans)
+  const top2 = T + H1 + gapY, base = top2 + H2;
+  const max = Math.max(1, ...bars.map(b => b.n));
+  const nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000].find(v => v * 4 >= max) || Math.ceil(max / 4);
+  const ymax = nice * Math.ceil(max / nice), y2 = v => base - v * H2 / ymax;
+  g += `<text x="${L}" y="${top2 - 14}" class="pt">Spotify plays per ${monthly ? 'month' : 'week'}</text>`;
+  for (let v = 0; v <= ymax; v += nice) g += `<line x1="${L}" x2="${W - R}" y1="${y2(v)}" y2="${y2(v)}" stroke="${v ? 'var(--line-soft)' : 'var(--line)'}"/><text x="${L - 8}" y="${y2(v) + 4}" text-anchor="end" class="ax">${v}</text>`;
+  g += bars.filter(b => b.n).map(b => {
+    const x0 = L + (b.from - lo) * step, w = (b.to - b.from + 1) * step, gap = w > 6 ? 2 : w > 3 ? 1 : 0;
+    const h = base - y2(b.n), rx = Math.min(4, (w - gap) / 2, h);
+    // Rounded at the top, square on the baseline
+    return `<path d="M${(x0 + gap / 2).toFixed(1)} ${base}V${(y2(b.n) + rx).toFixed(1)}q0 ${-rx} ${rx} ${-rx}H${(x0 + w - gap / 2 - rx).toFixed(1)}q${rx} 0 ${rx} ${rx}V${base}Z" fill="var(--pop)"/>`;
+  }).join('');
+  // Year (or month) labels along the bottom
+  const years = n > 60;
+  let lastLab = -1e9;
+  for (let k = lo; k <= hi; k++) {
+    const d0 = weekOf(k - 1), d1 = weekOf(k);
+    const tick = years ? d0.slice(0, 4) !== d1.slice(0, 4) || k === lo : d0.slice(0, 7) !== d1.slice(0, 7) || k === lo;
+    if (!tick || xk(k) - lastLab < (years ? 44 : 56)) continue;
+    lastLab = xk(k);
+    g += `<text x="${xk(k)}" y="${H - 8}" text-anchor="middle" class="ax">${years ? d1.slice(0, 4) : parseDate(d1).toLocaleDateString('en-US', { month: 'short' }) + (d1.slice(5, 7) === '01' || k === lo ? ` ${d1.slice(2, 4)}` : '')}</text>`;
+  }
+  g += `<line class="xh" x1="0" x2="0" y1="${T - 6}" y2="${base}" stroke="var(--ink)" stroke-opacity=".35" style="display:none"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Pop 10 chart position and Spotify plays by week" data-geo='${JSON.stringify({ W, L, step })}'>
+    <style>.ax{font:600 11px var(--f-body,Inter),sans-serif;fill:var(--muted)}.pt{font:700 11px var(--f-body,Inter),sans-serif;fill:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase}.d{fill:var(--card);stroke:var(--pop);stroke-width:2}.d1{fill:var(--pop);stroke:var(--card);stroke-width:2}</style>
+    <rect x="${L}" y="0" width="${W - L - R}" height="${H}" fill="transparent"/>${g}</svg><div class="tip"></div>`;
 }
 
 // ─── ALBUMS ─────────────────────────────────────────────────────
