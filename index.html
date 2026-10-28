@@ -713,7 +713,8 @@ button { font: inherit; color: inherit; }
 .run-card svg { display: block; width: 100%; height: auto; overflow: visible; }
 .run-card .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 11.5px; padding: 5px 8px; white-space: nowrap; transform: translate(-50%, -130%); display: none; }
 .run-card .tip b { font-family: var(--f-cond); font-size: 15px; margin-right: 5px; }
-.spot-modes { margin: -4px 0 10px; }
+.spot-toggle { margin-top: 14px; }
+.spot-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 12px 0 10px; }
 .spot-card .tip { transform: translate(-50%, 0); text-align: center; line-height: 1.45; }
 .spot-card .tip small { display: block; opacity: .75; }
 .run-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; margin-top: 12px; }
@@ -1201,11 +1202,14 @@ body.on-ask .ask-fab { display: none; }
       <div class="sec-h"><h2>Chart Run</h2><span class="sub" id="song-run-sub"></span></div>
       <div class="card run-card"><div id="song-graph"></div></div>
       <div class="run-grid" id="song-grid"></div>
-    </div>
-    <div class="song-sec" id="song-spot-wrap" hidden>
-      <div class="sec-h"><h2>Spotify Plays</h2><span class="sub" id="song-spot-sub"></span></div>
-      <div class="pills spot-modes"><button class="pill active" data-m="run">Chart run</button><button class="pill" data-m="all">All time</button></div>
-      <div class="card run-card spot-card"><div id="song-spot"></div></div>
+      <div id="song-spot-wrap" hidden>
+        <button class="pill spot-toggle" id="song-spot-btn">Show Spotify plays</button>
+        <div id="song-spot-body" hidden>
+          <div class="spot-head"><span class="sub" id="song-spot-sub"></span>
+            <div class="pills spot-modes"><button class="pill active" data-m="run">Chart run</button><button class="pill" data-m="all">All time</button></div></div>
+          <div class="card run-card spot-card"><div id="song-spot"></div></div>
+        </div>
+      </div>
     </div>
     <div class="song-sec" id="song-more-wrap">
       <div class="sec-h"><h2 id="song-more-h">More from the artist</h2></div>
@@ -3193,18 +3197,30 @@ async function renderSong(id) {
 // Thursday's chart. The chart run sits above the plays on the same timeline (two panels, one axis each).
 let SPOTIFY = null;
 async function spotifyPlays(s, run) {
-  const wrap = $('song-spot-wrap');
-  wrap.hidden = true;
+  // Folded away under the chart run until asked for (Will: the open chart was too distracting)
+  const wrap = $('song-spot-wrap'), btn = $('song-spot-btn'), body = $('song-spot-body');
+  wrap.hidden = s.chart !== 'pop';
+  body.hidden = true;
+  btn.textContent = 'Show Spotify plays';
   if (s.chart !== 'pop') return;
-  if (!SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+  btn.onclick = async () => {
+    if (!body.hidden) { body.hidden = true; btn.textContent = 'Show Spotify plays'; return; }
+    if (!SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+    body.hidden = false;
+    btn.textContent = 'Hide Spotify plays';
+    spotifyChart(s, run);
+  };
+}
+function spotifyChart(s, run) {
+  const wrap = $('song-spot-body');
   const raw = SPOTIFY.songs?.[s.id];
-  if (!raw || location.hash !== `#/song/${s.id}`) return;
+  if (!raw) { $('song-spot-sub').textContent = 'No Spotify plays for this song.'; wrap.querySelector('.spot-modes').hidden = true; $('song-spot').innerHTML = ''; return; }
+  wrap.querySelector('.spot-modes').hidden = false;
   const [sy, sm, sd] = SPOTIFY.start.split('-').map(Number), start = Date.UTC(sy, sm - 1, sd), DAY = 864e5;
   const weekOf = k => new Date(start + k * 7 * DAY).toISOString().slice(0, 10);
   const plays = raw.slice(1).map((n, i) => ({ k: raw[0] + i, n }));
   const total = plays.reduce((t, w) => t + w.n, 0);
   const first = plays.find(w => w.n);
-  wrap.hidden = false;
   $('song-spot-sub').textContent = `${total.toLocaleString()} plays since ${parseDate(weekOf(first.k - 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
   const pos = Object.fromEntries(run.filter(w => w.pos).map(w => [Math.round((Date.parse(w.week + 'T00:00Z') - start) / (7 * DAY)), w.pos]));
   const charted = Object.keys(pos).map(Number);
@@ -3258,19 +3274,19 @@ function spotifyGraph(rows, bars, monthly, lo, hi, weekOf, width) {
   const xk = k => L + (k - lo) * step + step / 2;
   // Top panel: chart position, #1 at the top
   const y1 = p => T + (p - 1) * H1 / 9;
-  let g = `<text x="${L}" y="${T - 14}" class="pt">Pop 10 position</text>`;
+  let g = `<text x="${L}" y="${T - 14}" class="spt">Pop 10 position</text>`;
   g += `<rect x="${L}" y="${y1(1) - 5}" width="${W - L - R}" height="${y1(5) - y1(1) + 10}" fill="rgb(59 139 222 / .10)"/>`;
   g += [1, 5, 10].map(p => `<line x1="${L}" x2="${W - R}" y1="${y1(p)}" y2="${y1(p)}" stroke="var(--line-soft)"/><text x="${L - 8}" y="${y1(p) + 4}" text-anchor="end" class="ax">${p}</text>`).join('');
   let d = '', pen = false;
   rows.forEach(r => { if (r.pos) { d += `${pen ? 'L' : 'M'}${xk(r.k).toFixed(1)} ${y1(r.pos).toFixed(1)}`; pen = true; } else pen = false; });
   g += `<path d="${d}" fill="none" stroke="var(--pop)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
-  if (step >= 5) g += rows.filter(r => r.pos).map(r => `<circle cx="${xk(r.k)}" cy="${y1(r.pos)}" r="${r.pos === 1 ? 5 : 3.5}" class="${r.pos === 1 ? 'd1' : 'd'}"/>`).join('');
+  if (step >= 5) g += rows.filter(r => r.pos).map(r => `<circle cx="${xk(r.k)}" cy="${y1(r.pos)}" r="${r.pos === 1 ? 5 : 3.5}" class="${r.pos === 1 ? 'sd1' : 'sd'}"/>`).join('');
   // Bottom panel: Spotify plays per week (or per month over long spans)
   const top2 = T + H1 + gapY, base = top2 + H2;
   const max = Math.max(1, ...bars.map(b => b.n));
   const nice = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000].find(v => v * 4 >= max) || Math.ceil(max / 4);
   const ymax = nice * Math.ceil(max / nice), y2 = v => base - v * H2 / ymax;
-  g += `<text x="${L}" y="${top2 - 14}" class="pt">Spotify plays per ${monthly ? 'month' : 'week'}</text>`;
+  g += `<text x="${L}" y="${top2 - 14}" class="spt">Spotify plays per ${monthly ? 'month' : 'week'}</text>`;
   for (let v = 0; v <= ymax; v += nice) g += `<line x1="${L}" x2="${W - R}" y1="${y2(v)}" y2="${y2(v)}" stroke="${v ? 'var(--line-soft)' : 'var(--line)'}"/><text x="${L - 8}" y="${y2(v) + 4}" text-anchor="end" class="ax">${v}</text>`;
   g += bars.filter(b => b.n).map(b => {
     const x0 = L + (b.from - lo) * step, w = (b.to - b.from + 1) * step, gap = w > 6 ? 2 : w > 3 ? 1 : 0;
@@ -3290,7 +3306,7 @@ function spotifyGraph(rows, bars, monthly, lo, hi, weekOf, width) {
   }
   g += `<line class="xh" x1="0" x2="0" y1="${T - 6}" y2="${base}" stroke="var(--ink)" stroke-opacity=".35" style="display:none"/>`;
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Pop 10 chart position and Spotify plays by week" data-geo='${JSON.stringify({ W, L, step })}'>
-    <style>.ax{font:600 11px var(--f-body,Inter),sans-serif;fill:var(--muted)}.pt{font:700 11px var(--f-body,Inter),sans-serif;fill:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase}.d{fill:var(--card);stroke:var(--pop);stroke-width:2}.d1{fill:var(--pop);stroke:var(--card);stroke-width:2}</style>
+    <style>.ax{font:600 11px var(--f-body,Inter),sans-serif;fill:var(--muted)}.spt{font:700 11px var(--f-body,Inter),sans-serif;fill:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase}.sd{fill:var(--card);stroke:var(--pop);stroke-width:2}.sd1{fill:var(--pop);stroke:var(--card);stroke-width:2}</style>
     <rect x="${L}" y="0" width="${W - L - R}" height="${H}" fill="transparent"/>${g}</svg><div class="tip"></div>`;
 }
 
