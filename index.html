@@ -990,22 +990,24 @@ body.on-ask .ask-fab { display: none; }
   .table .hide-sm { display: none; }
   .table .show-sm { display: inline; }
 }
-.sites { background: #0B0C0E; font-size: 12.5px; }
-.sites .wrap { display: flex; gap: 4px; align-items: center; height: 30px; }
-.sites span { color: #8B93A0; margin-right: 6px; }
-.sites a { color: #C9CFD8; text-decoration: none; padding: 3px 10px; border-radius: 999px; font-weight: 600; }
-.sites a:hover { color: #fff; background: rgb(255 255 255/.08); }
-.sites a[aria-current] { color: #fff; background: rgb(242 183 5/.2); box-shadow: inset 0 0 0 1px rgb(242 183 5/.55); }
+/* The sister site, willboardSpotify, as a small wordmark beside the menu */
+.nav a { white-space: nowrap; }
+@media (max-width: 1140px) and (min-width: 761px) { .nav { gap: 16px; } .topbar .wrap { gap: 18px; } .topbar .wm { font-size: 38px; } }
+@media (max-width: 900px) and (min-width: 761px) { .sister { display: none !important; } }
+.sister { display: flex; align-items: center; gap: 18px; font: 900 14px/1 var(--f-logo); letter-spacing: -.01em; color: rgba(255,255,255,.62); white-space: nowrap; text-decoration: none; }
+.sister::before { content: ''; width: 1px; height: 20px; background: rgba(255,255,255,.18); }
+.sister b { color: #1DB954; opacity: .8; font-weight: 900; }
+.sister:hover, .sister:hover b { color: #fff; opacity: 1; }
+.sister:hover b { color: #1DB954; }
+@media (max-width: 760px) { .sister { order: 1; margin-left: auto; } .sister::before { display: none; } .menu-btn { order: 2; } .topbar .search-btn { order: 3; } }
 .sp-link { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; padding: 5px 12px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink-soft); font-size: 13.5px; font-weight: 700; text-decoration: none; }
 .sp-link:hover { color: var(--ink); box-shadow: inset 0 0 0 1px var(--muted); }
 #artist-sp .sp-link { margin: 0 0 14px; }
 .sp-link i { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; }
-@media (max-width: 560px) { .sites span { display: none; } }
 </style>
 </head>
 <body>
 
-<nav class="sites" aria-label="Willboard sites"><div class="wrap"><span>Charts:</span><a href="./" aria-current="page">Willboard</a><a href="https://will-heikes.github.io/willboardSpotify/">willboardSpotify</a></div></nav>
 <header class="topbar">
   <div class="wrap">
     <a href="#/" class="wm" data-wm aria-label="Willboard home">willboard</a>
@@ -1022,6 +1024,7 @@ body.on-ask .ask-fab { display: none; }
       <a href="#/songs" data-nav="songs">Songs</a>
       <a href="#/news" data-nav="news">News</a>
     </nav>
+    <a class="sister" href="https://will-heikes.github.io/willboardSpotify/" title="willboardSpotify: Will's Spotify play charts"><span>willboard<b>Spotify</b></span></a>
     <a class="search-btn" href="#/songs?focus=1" aria-label="Search">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
     </a>
