@@ -1,5 +1,25 @@
 [
   {
+    "id": "entertainer-of-the-year-top-5-test",
+    "date": "2026-10-30",
+    "chart": "hot20",
+    "kicker": "Awards Analysis",
+    "bucket": "analysis",
+    "artist": "Carrie Underwood",
+    "link": "#/awards/country/2026",
+    "linkText": "See the 2026 Country Awards nominees",
+    "headline": "Weeks at No. 1 don't decide Entertainer of the Year. Weeks in the top 5 almost always do",
+    "dek": "The act with the most top 5 weeks has won 14 of the last 16 Entertainer races. The act with the most weeks at No. 1 has won only seven.",
+    "body": [
+      "Entertainer of the Year is the biggest award at the Willboard Country Awards, and the hardest to call from the chart. Is it about No. 1s, weeks on top, or just being everywhere? We went back through all 16 Entertainer races from 2010 to 2025 and compared every nominee's Hot 20 record in the 12 months before each show, from November through October. We looked at five measures: No. 1 hits, weeks at No. 1, weeks in the top 5, chart entries and total weeks on the chart. Where an act had more than one song charting, each song's weeks count separately.",
+      "<b>The headline number.</b> The nominee with the most top 5 weeks has won Entertainer 14 times in 16 years. Most No. 1 hits comes next, but only when you count ties: the winner had the most No. 1s, or shared the lead, 12 times. Weeks at No. 1, the stat that sounds the most important, is the weakest. The nominee who spent the most weeks on top has won only seven times.",
+      "<b>Wins without the most weeks on top.</b> [[Carrie Underwood]], the only three-time winner, shows the pattern best. In 2023 she won with just two weeks at No. 1, while [[Kip Moore]] had nine. What she did have was 26 top 5 weeks, the most in the field. [[Leann Rimes]] beat [[Craig Campbell]] in 2014 with 25 top 5 weeks to his 18, even though Campbell spent 12 weeks at No. 1 to her 10. In 2022, [[Carly Pearce]] led with 24 top 5 weeks and won, while [[Runaway June]] had the most weeks at No. 1 with seven. Last year [[Ella Langley]] won with only three weeks at No. 1, against Pearce's eight, because she had 35 top 5 weeks to Pearce's 29.",
+      "<b>The two exceptions.</b> In 2017, Little Big Town led the field with 18 top 5 weeks, but Miranda Lambert won with 16. She had the most weeks at No. 1 that year with 10, so she still led on another major measure. The real upset came in 2015. Rimes won with just five top 5 weeks, the fewest in the field, and one week at No. 1. Kacey Musgraves led with 17 top 5 weeks without a single No. 1, and Tyler Farr had nine weeks on top. Nothing on the chart points to Rimes that year.",
+      "<b>This year's field.</b> Here's how the 2026 nominees stack up from November 2025 through the Oct. 22 chart. Ella Langley has 38 top 5 weeks, four No. 1s and 13 weeks at No. 1. [[Megan Moroney]] has 28 top 5 weeks, two No. 1s and eight weeks on top. [[Kacey Musgraves]] has 25 top 5 weeks, two No. 1s and seven weeks on top. [[Zach Top]] has 21, two and seven. Carly Pearce has seven, one and two.",
+      "By the measure that has called 14 of the last 16 races, Langley leads the field. But the stat said the same about Musgraves in 2015, and Rimes won anyway. We'll find out on Nov. 18, the night the CMA Awards air."
+    ]
+  },
+  {
     "id": "pop-10-debuts-at-no-1",
     "date": "2026-10-29",
     "chart": "pop10",
