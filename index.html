@@ -2645,6 +2645,8 @@ function chartMovie(el, all, actName, opt = {}) {
   // A #1's chart history (opt.span = [first, last] week index, opt.focus = its song id): every song on the
   // chart in those weeks, the full Top 20 or Top 10, with the #1 drawn bold in the chart's colour
   const span = opt.span, focus = opt.focus, ones = opt.ones, wide = !!(year || span);
+  // The Every #1 video draws only the songs that reached #1 unless the viewer asks for the rest (Will)
+  let only1 = !!opt.only1;
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
@@ -2660,6 +2662,7 @@ function chartMovie(el, all, actName, opt = {}) {
         ? `<option value="0.25">1 week / 4 sec</option><option value="0.333" selected>1 week / 3 sec</option><option value="0.5">1 week / 2 sec</option>`
         : `<option value="1">1 week/sec</option><option value="2" selected>2 weeks/sec</option><option value="4">4 weeks/sec</option><option value="8">8 weeks/sec</option>`}</select>
       ${charts.length > 1 ? `<select class="which" aria-label="Chart">${charts.map(k => `<option value="${k}"${k === key ? ' selected' : ''}>${NAME[k]}</option>`).join('')}</select>` : ''}
+      ${opt.only1 ? '<button class="all1" title="Show every song on the chart, not just the #1s">All songs: Off</button>' : ''}
       <button class="mute" title="Music on or off">♪ On</button><button class="fs" title="Full screen">⛶</button></div>
     <div class="now"></div></div>`;
   const root = el.querySelector('.cmv'), stage = root.querySelector('.stage'), svg = root.querySelector('svg');
@@ -2683,6 +2686,7 @@ function chartMovie(el, all, actName, opt = {}) {
       if (span) [first, last] = span;
       else { first = weeks.findIndex(w => w.startsWith(year)); last = weeks.findLastIndex(w => w.startsWith(year)); }
       songs = songs.filter(x => x.r.slice(1).some((p, j) => p && x.r[0] + j >= first && x.r[0] + j <= last));
+      if (only1) songs = songs.filter(x => x.r.includes(1, 1));
     }
     songs.sort((a, b) => a.r[0] - b.r[0]);
     // Songs on the chart at the same time never share a colour while there are colours to go round
@@ -2983,6 +2987,13 @@ function chartMovie(el, all, actName, opt = {}) {
   function hideSummary() { ended = false; sumEl.hidden = true; sumEl.classList.remove('in'); stage.classList.remove('ended'); stage.style.minHeight = ''; }
   root.querySelector('.mute').onclick = e => { muted = !muted; e.target.textContent = muted ? '♪ Off' : '♪ On'; draw(); };
   root.querySelector('.fs').onclick = () => document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen?.();
+  const all1 = root.querySelector('.all1');
+  if (all1) all1.onclick = () => {
+    only1 = !only1; all1.textContent = `All songs: ${only1 ? 'Off' : 'On'}`;
+    const at = t, was = playing;
+    pause(); load(key); t = at; draw();
+    if (was) play();
+  };
   const which = root.querySelector('.which');
   if (which) which.onchange = () => { hideSummary(); pause(); load(which.value); };
   const ro = new ResizeObserver(() => draw());
@@ -4355,7 +4366,7 @@ async function no1Movie(c) {
   if (!R) return;
   stopChartMovie();
   $('no1-movie-sub').textContent = `The full ${c.name}, ${fmtShort(R.weeks[0])} to ${fmtShort(R.weeks[R.weeks.length - 1])}`;
-  CM = chartMovie($('no1-movie'), DATA.songs.filter(s => s.chart === k), c.name, { chart: k, span: [0, R.weeks.length - 1], ones: true });
+  CM = chartMovie($('no1-movie'), DATA.songs.filter(s => s.chart === k), c.name, { chart: k, span: [0, R.weeks.length - 1], ones: true, only1: true });
   CM.ones = k;
 }
 
