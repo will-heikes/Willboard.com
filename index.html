@@ -200,11 +200,8 @@ button { font: inherit; color: inherit; }
 .move { display: flex; justify-content: center; }
 .mk { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; font-family: var(--f-cond); font-weight: 700; font-size: 17px; line-height: 1; }
 .mk svg { fill: currentColor; }
-.mk.up, .mk.down { color: #fff; min-width: 38px; padding: 6px 6px 5px; border-radius: 7px; gap: 2px; font-size: 18px; box-shadow: 0 2px 6px rgb(0 0 0 / .18); }
-.mk.up { background: var(--up); }
-.mk.down { background: var(--down); }
-.mk.up svg, .mk.down svg { width: 18px; height: 11px; }
-@media (max-width: 600px) { .mk.up, .mk.down { min-width: 28px; padding: 4px 4px 3px; font-size: 15px; border-radius: 6px; } .mk.up svg, .mk.down svg { width: 14px; height: 8px; } }
+.mk.up { color: var(--up); }
+.mk.down { color: var(--down); }
 .mk.same { color: var(--muted); font-size: 22px; }
 .mk.new, .mk.re { font-size: 11px; letter-spacing: .06em; padding: 3px 4px 2px; }
 .mk.new { background: var(--dot-yellow); color: #14181E; }
@@ -1226,7 +1223,7 @@ body.on-ask .ask-fab { display: none; }
       <div class="run-grid" id="song-grid"></div>
     </div>
     <div class="song-sec" id="song-movie-wrap" hidden>
-      <div class="sec-h"><h2>Road to No. 1</h2><span class="sub" id="song-movie-sub"></span></div>
+      <div class="sec-h"><h2>Watch its run</h2><span class="sub" id="song-movie-sub"></span></div>
       <div class="card ah" id="song-movie"></div>
     </div>
     <div class="song-sec" id="song-more-wrap">
@@ -1320,6 +1317,8 @@ body.on-ask .ask-fab { display: none; }
   <section class="page" id="page-number-ones">
     <div class="page-head"><div><h1>Every #1</h1><div class="sub" id="no1-sub"></div></div></div>
     <div class="pills list-pills" id="no1-pills"></div>
+    <div class="song-sec no1-movie-sec"><div class="sec-h"><h2>Every #1, one after another</h2><span class="sub" id="no1-movie-sub"></span></div>
+      <div class="card ah" id="no1-movie"></div></div>
     <div class="card ask-ans" id="no1-list"></div>
   </section>
 
@@ -1677,7 +1676,7 @@ function peakUpTo(songId, c, idx) {
 
 // ─── CHART ROWS ─────────────────────────────────────────────────
 // Movement: condensed figures with a sharp chevron, the same type and colours as the rest of the site
-const CHEV = d => `<svg viewBox="0 0 12 7" width="16" height="9" aria-hidden="true"><path d="${d === 'up' ? 'M0 7 6 0 12 7z' : 'M0 0 6 7 12 0z'}"/></svg>`;
+const CHEV = d => `<svg viewBox="0 0 12 7" width="16" height="9" aria-hidden="true"><path d="${d === 'up' ? 'M0 7 6 0 12 7 9 7 6 3.5 3 7z' : 'M0 0 6 7 12 0 9 0 6 3.5 3 0z'}"/></svg>`;
 function moveCell(prev, pos, weeks) {
   if (prev === undefined) return weeks > 1 ? '<span class="mk re">RE</span>' : '<span class="mk new">NEW</span>';
   if (prev === pos) return '<span class="mk same">=</span>';
@@ -2645,14 +2644,16 @@ function chartMovie(el, all, actName, opt = {}) {
   const SIZE = { willboard: 20, pop: 10 }, NAME = { willboard: 'Hot 20', pop: 'Pop 10' }, year = opt.year;
   // A #1's chart history (opt.span = [first, last] week index, opt.focus = its song id): every song on the
   // chart in those weeks, the full Top 20 or Top 10, with the #1 drawn bold in the chart's colour
-  const span = opt.span, focus = opt.focus, wide = !!(year || span);
+  const span = opt.span, focus = opt.focus, ones = opt.ones, wide = !!(year || span);
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
   el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally"><div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div></div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
-      <select class="speed" aria-label="Speed">${span
+      <select class="speed" aria-label="Speed">${ones
+        ? `<option value="0.5">1 week / 2 sec</option><option value="1" selected>1 week / sec</option><option value="2">2 weeks / sec</option><option value="4">4 weeks / sec</option>`
+        : span
         ? `<option value="0.333">1 week / 3 sec</option><option value="0.5" selected>1 week / 2 sec</option><option value="1">1 week / sec</option>`
         : year
         // A year plays slowly: 3 seconds a week by default, never faster than 2 (Will)
@@ -2663,7 +2664,7 @@ function chartMovie(el, all, actName, opt = {}) {
     <div class="now"></div></div>`;
   const root = el.querySelector('.cmv'), stage = root.querySelector('.stage'), svg = root.querySelector('svg');
   const range = root.querySelector('input'), playB = root.querySelector('.play'), now = root.querySelector('.now');
-  let songs, weeks, first, last, t, playing = false, raf = 0, prev = 0, heads = {}, color = {}, ended = false;
+  let cue = null, songs, weeks, first, last, t, playing = false, raf = 0, prev = 0, heads = {}, color = {}, ended = false;
   const sumEl = root.querySelector('.sum');
   let muted = false, music = null;
   const A = [new Audio(), new Audio()].map(a => { a.loop = true; a.volume = 0; return a; });
@@ -2701,13 +2702,16 @@ function chartMovie(el, all, actName, opt = {}) {
     t = first; hideSummary(); heard = {};
     range.min = first; range.max = last; range.value = t;
     Object.values(heads).forEach(h => h.remove()); heads = {};
-    for (const { s, r } of songs) {
-      const h = document.createElement('div');
-      h.className = `head${s.id === focus ? ' me' : ''}`; h.style.setProperty('--c', color[s.id]); h.style.opacity = 0;
-      h.innerHTML = `${artTile(s.artistName, true, +weeks[r[0]].slice(0, 4), s.name)}<i></i><span>${esc(s.name)}</span><em hidden></em>`;
-      stage.appendChild(h); heads[s.id] = h;
-    }
+    // A whole chart's history makes each song's tip only when it first comes on screen
+    if (!ones) for (const { s, r } of songs) mkHead(s, r);
     draw();
+  }
+  function mkHead(s, r) {
+    const h = document.createElement('div');
+    h.className = `head${s.id === focus ? ' me' : ''}`; h.style.setProperty('--c', color[s.id]); h.style.opacity = 0;
+    h.innerHTML = `${artTile(s.artistName, true, +weeks[r[0]].slice(0, 4), s.name)}<i></i><span>${esc(s.name)}</span><em hidden></em>`;
+    stage.appendChild(h);
+    return heads[s.id] = h;
   }
   // Smooth, monotone curve between weeks (cubic Hermite, slopes limited so a line never overshoots a
   // spot); the path and the tip share it, drawn as short steps up to fraction u of the way
@@ -2779,9 +2783,10 @@ function chartMovie(el, all, actName, opt = {}) {
         // The music follows the highest-charting song (Will), the newer one on a tie
         if (cp && PREVIEWS[s.id] && !bad.has(s.id) && (!tune || cp < tune.p || (cp === tune.p && a > tune.a))) tune = { s, a, p: cp };
       }
-      const me = s.id === focus, dim = focus && !me ? .45 : 1;
+      // On the every-#1 video the song at #1 is drawn bold
+      const me = s.id === focus || (ones && (f < .5 ? p0 || p1 : p1 || p0) === 1), dim = focus && !me ? .45 : 1;
       if (d) g += `<path d="${d}" fill="none" stroke="${color[s.id]}" stroke-width="${me ? 5 : p0 || p1 ? 3 : 2}" stroke-opacity="${(p0 || p1 ? 1 : .35) * dim}" stroke-linejoin="round" stroke-linecap="round"/>`;
-      const h = heads[s.id];
+      const h = heads[s.id] || (hx != null ? mkHead(s, xs.r) : null);
       if (hx != null) {
         h.style.opacity = op * (focus && s.id !== focus ? .75 : 1);
         h.style.transform = `translate(${(hx - hs).toFixed(1)}px, ${(hy - hs).toFixed(1)}px)`;
@@ -2792,10 +2797,10 @@ function chartMovie(el, all, actName, opt = {}) {
         if (pb.textContent !== shown) pb.textContent = shown;
         em.hidden = !(p0 === 1);
         if (p0 === 1) em.textContent = `#1 · ${n1} wk${n1 === 1 ? '' : 's'}`;
-      } else h.style.opacity = 0;
+      } else if (h) h.style.opacity = 0;
     }
     // A #1's own history plays that song the whole way through
-    if (focus && PREVIEWS[focus] && !bad.has(focus)) tune = { s: SONGS[focus] };
+    if (focus && !ones && PREVIEWS[focus] && !bad.has(focus)) tune = { s: SONGS[focus] };
     g += '</g>';
     svg.setAttribute('width', W); svg.setAttribute('height', H);
     svg.innerHTML = g;
@@ -2883,7 +2888,7 @@ function chartMovie(el, all, actName, opt = {}) {
     cancelAnimationFrame(raf); draw();
   }
   playB.onclick = () => playing ? pause() : play();
-  root.querySelector('.restart').onclick = () => { t = first; heard = {}; hideSummary(); draw(); };
+  root.querySelector('.restart').onclick = () => { t = cue ?? first; heard = {}; hideSummary(); draw(); };
   range.oninput = () => { t = +range.value; hideSummary(); draw(); };
 
   // The end card: the career (or the year) on this chart in numbers, with the biggest hits
@@ -2939,6 +2944,7 @@ function chartMovie(el, all, actName, opt = {}) {
   }
   // The #1's end card: its run in numbers, the song it took No. 1 from and the one that ended its reign
   function runSummary() {
+    if (ones) return onesSummary();
     const me = songs.find(x => x.s.id === focus);
     if (!me) return;
     const { s, r } = me, ps = r.slice(1), on = ps.filter(Boolean), at1 = ps.map((p, j) => p === 1 ? r[0] + j : -1).filter(i => i >= 0);
@@ -2960,6 +2966,20 @@ function chartMovie(el, all, actName, opt = {}) {
     now.textContent = want.id ? `♪ ${s.name} · ${s.artistName}` : '';
     sync();
   }
+  // The every-#1 video's end card: how many #1s, the longest reigns, and the latest
+  function onesSummary() {
+    const st = songs.map(({ s, r }) => ({ s, r, n1: r.slice(1).filter(p => p === 1).length, f1: r[0] + r.slice(1).indexOf(1) })).filter(x => x.n1);
+    const longest = [...st].sort((a, b) => b.n1 - a.n1 || a.f1 - b.f1).slice(0, 3), latest = [...st].sort((a, b) => b.f1 - a.f1)[0];
+    const row = (lab, x, note) => `<a class="hl" href="#/song/${x.s.id}">${artTile(x.s.artistName, true, +weeks[x.r[0]].slice(0, 4), x.s.name)}<span><small>${lab}</small><b>${esc(x.s.name)}</b><em>${esc(x.s.artistName)} · ${note}</em></span></a>`;
+    sumEl.innerHTML = `<div class="sum-in"><div class="sum-h"><small>${NAME[key]} · ${fmtShort(weeks[first])} to ${fmtShort(weeks[last])}</small><b>${st.length} #1s</b></div>
+      <div class="hls">${longest.map((x, i) => row(i ? 'Also among the longest' : 'Longest at #1', x, `${wk(x.n1)} at #1`)).join('')}${row('Latest #1', latest, fmtShort(weeks[latest.f1]))}</div>
+      <button class="again">⟲ Watch again</button></div>`;
+    stage.style.minHeight = svg.getAttribute('height') + 'px';
+    stage.classList.add('ended');
+    sumEl.hidden = false; requestAnimationFrame(() => sumEl.classList.add('in'));
+    sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
+    ended = true;
+  }
   function hideSummary() { ended = false; sumEl.hidden = true; sumEl.classList.remove('in'); stage.classList.remove('ended'); stage.style.minHeight = ''; }
   root.querySelector('.mute').onclick = e => { muted = !muted; e.target.textContent = muted ? '♪ Off' : '♪ On'; draw(); };
   root.querySelector('.fs').onclick = () => document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen?.();
@@ -2972,6 +2992,8 @@ function chartMovie(el, all, actName, opt = {}) {
   return {
     hash: location.hash,
     pause, play,
+    // Jump to a week (the every-#1 list's Watch links start a little before a song's debut)
+    seek(i) { t = cue = Math.max(first, Math.min(last, i)); hideSummary(); draw(); },
     stop() { hideSummary(); pause(); want.id = null; sync(); A.forEach(a => a.pause()); ro.disconnect(); document.removeEventListener('fullscreenchange', draw); },
   };
 }
@@ -3257,16 +3279,17 @@ async function renderSong(id, watch) {
   if (watch) $('song-movie-wrap').scrollIntoView({ block: 'start' }); else window.scrollTo(0, 0);
 }
 
-// A #1's animated chart history: the whole Hot 20 (or Pop 10) every week from its debut to its exit,
-// the #1 in bold (Will 2026-10-30). #/song/<id>/watch scrolls to it and starts it
+// Every song page has the chart's one continuous video (the same as Every #1), cued a few weeks before
+// this song's debut with the song drawn bold, so its run plays out and the #1s keep taking over (Will
+// 2026-10-30). #/song/<id>/watch scrolls to it and starts it
 function songMovie(s, watch) {
   stopChartMovie();
   const c = RUNS?.[s.chart], r = c?.runs[s.id], wrap = $('song-movie-wrap');
-  wrap.hidden = !(r && r.slice(1).includes(1));
+  wrap.hidden = !r;
   if (wrap.hidden) { $('song-movie').innerHTML = ''; return; }
-  const span = [Math.max(0, r[0] - 1), Math.min(c.weeks.length - 1, r[0] + r.length - 1)];
-  $('song-movie-sub').textContent = `The full ${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}, every week of its run`;
-  CM = chartMovie($('song-movie'), DATA.songs.filter(o => o.chart === s.chart), s.name, { chart: s.chart, span, focus: s.id });
+  $('song-movie-sub').textContent = `The full ${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'} week by week, from just before its debut`;
+  CM = chartMovie($('song-movie'), DATA.songs.filter(o => o.chart === s.chart), s.chart === 'pop' ? 'Pop 10' : 'Country Hot 20', { chart: s.chart, span: [0, c.weeks.length - 1], ones: true, focus: s.id });
+  CM.seek(r[0] - 3);
   if (watch) { wrap.scrollIntoView({ block: 'start' }); CM.play(); }
 }
 
@@ -4309,10 +4332,31 @@ function renderNumberOnes(chartId) {
       const meta = `<b>${fmtShort(r.week)}</b><br>${r.k ? '' : `${RUN[r.run] || ordinal(r.run)} run · `}${total > r.weeks ? `${r.weeks} of ${total} weeks` : `${wk(r.weeks)} at #1`}`;
       return askRow(r.k || '', SONGS[r.id], `${meta}<br><span class="no1-watch" data-id="${r.id}" role="button" tabindex="0">▶ Watch its run</span>`, `#/${chartId}/${r.week}`);
     }).join('')}</div>`).join('');
-  $('no1-list').querySelectorAll('.no1-watch').forEach(b => b.onclick = b.onkeydown = e => {
+  no1Movie(c);
+  $('no1-list').querySelectorAll('.no1-watch').forEach(b => b.onclick = b.onkeydown = async e => {
     if (e.type === 'keydown' && e.key !== 'Enter') return;
-    e.preventDefault(); e.stopPropagation(); location.hash = `#/song/${b.dataset.id}/watch`;
+    e.preventDefault(); e.stopPropagation();
+    // Starts the every-#1 video a few weeks before the song's debut
+    await no1Movie(c);
+    const r = RUNS[c.key]?.runs[b.dataset.id];
+    if (!CM || !r) return;
+    $('no1-movie').closest('.song-sec').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    CM.seek(r[0] - 3); CM.play();
   });
+}
+
+// Every #1 on one video (Will 2026-10-30): the chart's whole history, the full Top 20 (Top 10 on the
+// Pop 10) every week, the song at #1 drawn bold, its clip playing, so each #1 takes over from the last
+async function no1Movie(c) {
+  const k = c.isWb ? 'willboard' : 'pop';
+  if (CM?.ones === k) return;
+  if (!RUNS) RUNS = await fetch('runs.json', FRESH).then(r => r.json()).catch(() => ({}));
+  const R = RUNS[k];
+  if (!R) return;
+  stopChartMovie();
+  $('no1-movie-sub').textContent = `The full ${c.name}, ${fmtShort(R.weeks[0])} to ${fmtShort(R.weeks[R.weeks.length - 1])}`;
+  CM = chartMovie($('no1-movie'), DATA.songs.filter(s => s.chart === k), c.name, { chart: k, span: [0, R.weeks.length - 1], ones: true });
+  CM.ones = k;
 }
 
 // ─── RECORDS ────────────────────────────────────────────────────
