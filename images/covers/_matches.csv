@@ -1,8 +1,5 @@
 kind,artist,title,file,result
-album,6ix9ine,DUMMY BOY (Revised),6ix9ine--dummy-boy-revised.jpg,download failed: <urlopen error [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:1081)>
-album,Alessia Cara,Love & Hyperbole,alessia-cara--love-hyperbole.jpg,Deezer: Love & Hyperbole
 album,Ashley Cooke,Running Back / Dirt On 'Em,ashley-cooke--running-back-dirt-on-em.jpg,not found
-album,BlackBear,digital druglord,blackbear--digital-druglord.jpg,Deezer: digital druglord
 album,Carly Pearce,TBD,carly-pearce--tbd.jpg,not found
 album,Carrie Underwood,Demin & Rhinestones,carrie-underwood--demin-rhinestones.jpg,not found
 album,Chappell Roan,The Rise and Fall of a Midwestern Princess,chappell-roan--the-rise-and-fall-of-a-midwestern-princess.jpg,not found
@@ -10,49 +7,33 @@ album,David Nail & the Well Ravens,Only This and Nothing More,david-nail-the-wel
 album,Didi Benami,What Becomes of the Broken Hearted- Single,didi-benami--what-becomes-of-the-broken-hearted-single.jpg,not found
 album,Dixie Chicks,Home,dixie-chicks--home.jpg,not found
 album,Dixie Chicks,Taking the Long Way,dixie-chicks--taking-the-long-way.jpg,not found
-album,Ed Sheeran,-,ed-sheeran--subtract.jpg,iTunes: - (Deluxe)
-album,Fall Out Boy,Save Rock And Roll,fall-out-boy--save-rock-and-roll.jpg,Deezer: Save Rock And Roll
 album,Garth Brooks,Gunslinger,garth-brooks--gunslinger.jpg,not found
 album,Greg Bates,Greg Bates,greg-bates--greg-bates.jpg,not found
 album,Hunter Hayes,Hunter Hayes,hunter-hayes--hunter-hayes.jpg,not found
 album,Jennifer Nettles,I Can Do Hard Things - Single,jennifer-nettles--i-can-do-hard-things-single.jpg,not found
-album,Kayla Rae,Pressure,kayla-rae--pressure.jpg,Deezer: Pressure
-album,Ke$ha,Rainbow,ke-ha--rainbow.jpg,Deezer: Rainbow
-album,Ke$ha,Warrior,ke-ha--warrior.jpg,Deezer: Warrior (Expanded Edition)
 album,Kelly Clarkson,The Hamilton Mixtape,kelly-clarkson--the-hamilton-mixtape.jpg,not found
-album,Kristen Anderson-Lopez,Frozen (Original Motion Picture Soundtrack),kristen-anderson-lopez--frozen-original-motion-picture-soundtrack.jpg,iTunes: Frozen (Original Motion Picture Soundtrack)
 album,Kristian Bush,In the Key of Summer,kristian-bush--in-the-key-of-summer.jpg,not found
 album,Kristian Bush,Southern Gravity,kristian-bush--southern-gravity.jpg,not found
 album,Leann Rimes,Lady and Gentlemen,leann-rimes--lady-and-gentlemen.jpg,not found
 album,Lee DeWyze,Falling Slowly- Single,lee-dewyze--falling-slowly-single.jpg,not found
-album,Lin-Manuel Miranda,Encanto (Original Motion Picture Soundtrack),lin-manuel-miranda--encanto-original-motion-picture-soundtrack.jpg,Deezer: Encanto (Original Motion Picture Soundtrack)
-album,Lin-Manuel Miranda,Moana,lin-manuel-miranda--moana.jpg,iTunes: Moana (Original Motion Picture Soundtrack/Deluxe Edition)
 album,Little Big Town,Every Little Thing,little-big-town--every-little-thing.jpg,not found
 album,Lori McKenna,Ella Langley,lori-mckenna--ella-langley.jpg,not found
-album,Lorne Balfe,Top Gun: Maverick (Music from the Motion Picture),lorne-balfe--top-gun-maverick-music-from-the-motion-picture.jpg,iTunes: Top Gun: Maverick (Music from the Motion Picture)
 album,Love & Theft,Love and Theft,love-theft--love-and-theft.jpg,not found
 album,Machine Gun Kelly,bloom,machine-gun-kelly--bloom.jpg,not found
 album,Machine Gun Kelly,Tickets To My Downfall,machine-gun-kelly--tickets-to-my-downfall.jpg,not found
 album,Madeline Merlo,ONE HOUSE DOWN (from the girl next door) - EP,madeline-merlo--one-house-down-from-the-girl-next-door-ep.jpg,not found
-album,Maneskin,Chosen,maneskin--chosen.jpg,Deezer: Chosen
 album,Mickey Guyton,Better Than You Left Me,mickey-guyton--better-than-you-left-me.jpg,not found
-album,Neon Trees,Picture Show,neon-trees--picture-show.jpg,Deezer: Picture Show (Deluxe Edition)
+album,Miranda Lambert,Crisco,miranda-lambert--crisco.jpg,download failed: HTTP Error 503: first byte timeout
 album,Never Enough,Parker McCollum,never-enough--parker-mccollum.jpg,not found
-album,Nickelback,Here and Now,nickelback--here-and-now.jpg,Deezer: Here and Now
 album,Pink Pantheress,Fancy Some More?,pink-pantheress--fancy-some-more.jpg,not found
-album,Post Malone,Stoney,post-malone--stoney.jpg,Deezer: Stoney (Deluxe)
 album,Randall King,Hey Moon - Single,randall-king--hey-moon-single.jpg,not found
 album,Reba McEntire,Keep on Lovin' You,reba-mcentire--keep-on-lovin-you.jpg,not found
-album,Roxy Dekker,SUPERSTAR,roxy-dekker--superstar.jpg,Deezer: SUPERSTAR
 album,Sayin' What I'm Thinkin',Lainey Wilson,sayin-what-im-thinkin--lainey-wilson.jpg,not found
-album,Slayyyter,WOR$T GIRL IN AMERICA,slayyyter--wor-t-girl-in-america.jpg,Deezer: WOR$T GIRL IN AMERICA
 album,Stereotype,Cole Swindell,stereotype--cole-swindell.jpg,not found
 album,Sugarland,Gold & Green,sugarland--gold-green.jpg,not found
 album,Sweetener,Ariana Grande,sweetener--ariana-grande.jpg,not found
-album,T-Pain,Revolver,t-pain--revolver.jpg,Deezer: Revolver (Expanded Edition)
 album,Taylor Swift,Today Was a Fairytale,taylor-swift--today-was-a-fairytale.jpg,not found
 album,The Band Perry,Glen Campbell I'll Be Me Soundtrack - EP,the-band-perry--glen-campbell-ill-be-me-soundtrack-ep.jpg,not found
-album,The Weeknd,"My Dear Melancholy,",the-weeknd--my-dear-melancholy.jpg,"Deezer: My Dear Melancholy,"
 album,Tim McGraw,Country Strong,tim-mcgraw--country-strong.jpg,not found
 album,Tim McGraw,Neon Church - Single,tim-mcgraw--neon-church-single.jpg,not found
 album,Toby Keith,The Mule,toby-keith--the-mule.jpg,not found
@@ -60,32 +41,184 @@ album,Tones and I,The Kids Are Coming,tones-and-i--the-kids-are-coming.jpg,not f
 album,Various Artists,Barbie,various-artists--barbie.jpg,not found
 album,Various Artists,Encanto,various-artists--encanto.jpg,not found
 album,Various Artists,KPop Demon Hunters,various-artists--kpop-demon-hunters.jpg,not found
+song,24k Golden,Mood,24k-golden--mood.jpg,not found
+song,6ix9ine,Fefe,6ix9ine--fefe.jpg,not found
+song,Adam Levine,Stereo Hearts,adam-levine--stereo-hearts.jpg,not found
+song,Adele,Rumor Has It,adele--rumor-has-it.jpg,not found
+song,Agnes,Ego,agnes--ego.jpg,not found
+song,Aitana,6 of Febrero,aitana--6-of-febrero.jpg,not found
+song,Aitana,Ex Ex Ex,aitana--ex-ex-ex.jpg,not found
 song,Aitana,Superestrella,aitana--superestrella.jpg,not found
+song,Alan Walker,All Falls Down,alan-walker--all-falls-down.jpg,not found
+song,Alana Springsteen,Love Me Anyway,alana-springsteen--love-me-anyway.jpg,iTunes: love me anyway
+song,Alessa,When I'm Gone,alessa--when-im-gone.jpg,not found
+song,Alexandra Căpitănescu,Choke Me,alexandra-c-pit-nescu--choke-me.jpg,not found
+song,Ariana Grade,Popular,ariana-grade--popular.jpg,not found
 song,Ariana Grande,We Can't Be Friends,ariana-grande--we-cant-be-friends.jpg,not found
+song,Ashe,Till Forever Falls Apart,ashe--till-forever-falls-apart.jpg,not found
+song,Ashley McBryde,A Light On in the Kitchen,ashley-mcbryde--a-light-on-in-the-kitchen.jpg,not found
+song,Audrey Hobart,Sue Me,audrey-hobart--sue-me.jpg,not found
+song,Ava Max,Kings and Queens,ava-max--kings-and-queens.jpg,not found
 song,Avril Lavigne,Here's to Never Growing Up,avril-lavigne--heres-to-never-growing-up.jpg,not found
+song,Avril Lavigne,Rock N Roll,avril-lavigne--rock-n-roll.jpg,not found
+song,Ayase,幽霊東京,ayase--.jpg,not found
+song,Bad Bunny,Dakiti,bad-bunny--dakiti.jpg,not found
+song,Bella Poarch,Build a Bitch,bella-poarch--build-a-bitch.jpg,not found
+song,Bizarrap,"Shakira: Bzrp Music Session, Vol. 53",bizarrap--shakira-bzrp-music-session-vol-53.jpg,not found
+song,BlackBear,Do Re Mi,blackbear--do-re-mi.jpg,not found
+song,Brit Smith,Karma's a Bitch,brit-smith--karmas-a-bitch.jpg,not found
+song,Bruno Mars,When I Was You Man,bruno-mars--when-i-was-you-man.jpg,not found
 song,Cassandra Coleman,Habit,cassandra-coleman--habit.jpg,not found
+song,Cassandra Coleman,Night Air,cassandra-coleman--night-air.jpg,not found
+song,Cassandra Coleman,Re: Love,cassandra-coleman--re-love.jpg,not found
+song,Cedric Gervais,Summertime Sadness,cedric-gervais--summertime-sadness.jpg,not found
+song,Charlie Puth,Left or Right,charlie-puth--left-or-right.jpg,not found
+song,Chloe Tang,2.0,chloe-tang--2-0.jpg,not found
+song,Chloe Tang,Worth Your Summer,chloe-tang--worth-your-summer.jpg,not found
 song,Daughtry,Antidote,daughtry--antidote.jpg,not found
+song,Daughtry,Nervous,daughtry--nervous.jpg,not found
+song,David Guetta,I'm Good,david-guetta--im-good.jpg,not found
+song,David Guetta,She Wolf (Faling to Pieces),david-guetta--she-wolf-faling-to-pieces.jpg,not found
+song,David Nail & the Well Ravens,Cheating On Me,david-nail-the-well-ravens--cheating-on-me.jpg,not found
+song,David Nail & the Well Ravens,Heavy,david-nail-the-well-ravens--heavy.jpg,not found
 song,David Nail & the Well Ravens,In My Head,david-nail-the-well-ravens--in-my-head.jpg,not found
+song,David Nail & the Well Ravens,The Gun,david-nail-the-well-ravens--the-gun.jpg,not found
+song,Dev,Make Ya Body Whistle,dev--make-ya-body-whistle.jpg,not found
+song,Didi Benami,What Becomes of the Broken Hearted,didi-benami--what-becomes-of-the-broken-hearted.jpg,not found
+song,Disco Lines,No Broke Boys,disco-lines--no-broke-boys.jpg,not found
+song,Dixie Chicks,Gaslighter,dixie-chicks--gaslighter.jpg,not found
+song,Dixie Chicks,Not Ready To Make Nice,dixie-chicks--not-ready-to-make-nice.jpg,not found
+song,Dixie Chicks,Top of the World,dixie-chicks--top-of-the-world.jpg,not found
 song,Dixie Chicks,Travelin' Soldier,dixie-chicks--travelin-soldier.jpg,not found
+song,Dixon Dallas,Beggin' For More,dixon-dallas--beggin-for-more.jpg,not found
+song,Doja Cat,Vegas,doja-cat--vegas.jpg,not found
+song,Ella Langley,Broken,ella-langley--broken.jpg,iTunes: Broken
+song,Elle King,Drunk,elle-king--drunk.jpg,not found
+song,Elle King,Ex's and Oh's,elle-king--exs-and-ohs.jpg,not found
 song,Elton John,Cold Heart,elton-john--cold-heart.jpg,not found
 song,Erika Vikman,Ich Komme,erika-vikman--ich-komme.jpg,not found
 song,Fall Out Boy,My Songs Know What You Did in the Dark,fall-out-boy--my-songs-know-what-you-did-in-the-dark.jpg,not found
+song,Flatland Cavalry,Never Coming Back,flatland-cavalry--never-coming-back.jpg,not found
+song,Garth Brooks,Ask Me How I Know,garth-brooks--ask-me-how-i-know.jpg,not found
+song,Gesstafelstein,Lost in the Fire,gesstafelstein--lost-in-the-fire.jpg,not found
+song,Gym Class Heroes,Self Back Home,gym-class-heroes--self-back-home.jpg,not found
+song,Haley Reinhart,Rolling In The Deep,haley-reinhart--rolling-in-the-deep.jpg,not found
 song,Hunter Hayes,Everybody's Got Somebody But Me,hunter-hayes--everybodys-got-somebody-but-me.jpg,not found
+song,Hunter Hayes,I Want Crazy,hunter-hayes--i-want-crazy.jpg,not found
+song,Jawsh 685,Savage Love,jawsh-685--savage-love.jpg,not found
 song,Joe Nichols,Sunny & 75,joe-nichols--sunny-75.jpg,not found
+song,John Mayer,Heartbreak Warfare,john-mayer--heartbreak-warfare.jpg,not found
+song,John Splintoff,Sing to You,john-splintoff--sing-to-you.jpg,not found
+song,Jon Bellion,All Time Low,jon-bellion--all-time-low.jpg,not found
 song,Jon Pardi,Cowboys & Plowboys,jon-pardi--cowboys-plowboys.jpg,not found
+song,Justin Biever,Intentions (Feat. Quavo),justin-biever--intentions-feat-quavo.jpg,not found
+song,Justin Biever,Peaches,justin-biever--peaches.jpg,not found
 song,Justin Timberlake,Not a Bad Thing,justin-timberlake--not-a-bad-thing.jpg,not found
+song,Justin Timberlake,Suit & Tie,justin-timberlake--suit-tie.jpg,not found
 song,Kaj,Bara Bada Bastu,kaj--bara-bada-bastu.jpg,not found
+song,Kali Uches,Moonlight,kali-uches--moonlight.jpg,not found
+song,Karol G,Bichota,karol-g--bichota.jpg,not found
+song,Karol G,Tusa (Feat. Nicki Minaj),karol-g--tusa-feat-nicki-minaj.jpg,not found
 song,Kayla Rae,Blue,kayla-rae--blue.jpg,not found
+song,Kayla Rae,It Wasn't Nothing,kayla-rae--it-wasnt-nothing.jpg,not found
+song,Kayla Rae,Post Us,kayla-rae--post-us.jpg,not found
+song,Kayla Rae,So High,kayla-rae--so-high.jpg,not found
 song,Kayla Rae,Someone New,kayla-rae--someone-new.jpg,not found
+song,Kayla Rae,Who's to Blame,kayla-rae--whos-to-blame.jpg,not found
+song,Kayla Rae,WTM,kayla-rae--wtm.jpg,not found
+song,Ke$ha,Blow,ke-ha--blow.jpg,not found
+song,Ke$ha,C'Mon,ke-ha--cmon.jpg,not found
+song,Ke$ha,Crazy Kids,ke-ha--crazy-kids.jpg,not found
+song,Ke$ha,Delusional,ke-ha--delusional.jpg,not found
+song,Ke$ha,Die Young,ke-ha--die-young.jpg,not found
+song,Ke$ha,Learn to Let Go,ke-ha--learn-to-let-go.jpg,not found
+song,Ke$ha,Praying,ke-ha--praying.jpg,not found
+song,Ke$ha,Take It Off,ke-ha--take-it-off.jpg,not found
+song,Ke$ha,We R Who We R,ke-ha--we-r-who-we-r.jpg,not found
+song,Ke$ha,Your Love Is My Drug,ke-ha--your-love-is-my-drug.jpg,not found
+song,Kehlani,Night's Like This (Feat. Ty Dolla $ign),kehlani--nights-like-this-feat-ty-dolla-ign.jpg,not found
 song,Kehlani,Night's Like This,kehlani--nights-like-this.jpg,not found
+song,Kelly Clarkson,Broken & Beautiful,kelly-clarkson--broken-beautiful.jpg,not found
 song,Kelsea Ballerini,"Blindsided (Yeah, Sure, Okay)",kelsea-ballerini--blindsided-yeah-sure-okay.jpg,not found
+song,Kelsea Ballerini,Boy Meets Girl,kelsea-ballerini--boy-meets-girl.jpg,not found
+song,Kelsea Ballerini,How Do I Do This,kelsea-ballerini--how-do-i-do-this.jpg,not found
+song,Kelsea Ballerini,If You Go Down (I'm Going Down Too),kelsea-ballerini--if-you-go-down-im-going-down-too.jpg,not found
+song,Khalid,Love Lies,khalid--love-lies.jpg,not found
+song,Kim Petras,I Like Your Look,kim-petras--i-like-your-look.jpg,not found
+song,Kim Petras,Need for Speed,kim-petras--need-for-speed.jpg,not found
+song,KuroUsa,紅一葉,kurousa--.jpg,not found
+song,Kygo,Never Really Loved Me At All,kygo--never-really-loved-me-at-all.jpg,not found
+song,Lady A,Have Yourself A Merry Little Christmas,lady-a--have-yourself-a-merry-little-christmas.jpg,not found
 song,Lee DeWyze,Falling Slowly,lee-dewyze--falling-slowly.jpg,not found
+song,Lil Nas X,Montero (Call Me Buy Your Name),lil-nas-x--montero-call-me-buy-your-name.jpg,not found
+song,Lil Nas X,Star Walkin',lil-nas-x--star-walkin.jpg,not found
+song,Linda Lampenius,Liekinheitin,linda-lampenius--liekinheitin.jpg,not found
+song,Linkin Park,The Emptiness Machine,linkin-park--the-emptiness-machine.jpg,not found
+song,Lizzie McAlpine,Ceilings,lizzie-mcalpine--ceilings.jpg,not found
+song,Lorde,Tennis Court,lorde--tennis-court.jpg,not found
+song,Love & Theft,Angel Eyes,love-theft--angel-eyes.jpg,not found
 song,Love & Theft,Whiskey on my Breath,love-theft--whiskey-on-my-breath.jpg,not found
+song,Luke Combs,When It Rains It Pours,luke-combs--when-it-rains-it-pours.jpg,not found
+song,Machine Gun Kelly,At My Best,machine-gun-kelly--at-my-best.jpg,not found
+song,Machine Gun Kelly,Bad Things,machine-gun-kelly--bad-things.jpg,not found
+song,Machine Gun Kelly,My Ex's Best Friend,machine-gun-kelly--my-exs-best-friend.jpg,not found
+song,Maddie Poppe,The One That Got Away,maddie-poppe--the-one-that-got-away.jpg,not found
 song,Mariah Carey,GTFO,mariah-carey--gtfo.jpg,not found
+song,Mariah Carey,With You,mariah-carey--with-you.jpg,not found
+song,Marshmello,Friends,marshmello--friends.jpg,not found
+song,Meghan Trainor,All About That Bass,meghan-trainor--all-about-that-bass.jpg,not found
+song,Meghan Trainor,Wave (Feat. Mike Sabath),meghan-trainor--wave-feat-mike-sabath.jpg,not found
 song,Meghan Trainor,Wave,meghan-trainor--wave.jpg,not found
+song,Miranda Lambert,Baggage Claim,miranda-lambert--baggage-claim.jpg,not found
+song,Miranda Lambert,Settling Down,miranda-lambert--settling-down.jpg,not found
+song,Miranda Lambert,Track Record,miranda-lambert--track-record.jpg,not found
+song,Miranda Lambert,Two Things Can Be True,miranda-lambert--two-things-can-be-true.jpg,iTunes: Two Things Can Be True
+song,Ne-Yo,Let Me Love You,ne-yo--let-me-love-you.jpg,not found
+song,Of Monsters & Men,Little Talks,of-monsters-men--little-talks.jpg,not found
+song,Olivia Rodrigo,Expectations,olivia-rodrigo--expectations.jpg,iTunes: expectations
+song,P!nk,Just Like Fire,p-nk--just-like-fire.jpg,not found
+song,P!nk,Try,p-nk--try.jpg,iTunes: Try
+song,P!nk,Walk Me Home,p-nk--walk-me-home.jpg,iTunes: Walk Me Home
+song,P!nk,What About Us,p-nk--what-about-us.jpg,iTunes: What About Us
+song,P!nk,Whatever You Want,p-nk--whatever-you-want.jpg,iTunes: Whatever You Want
+song,Peach PRC,Eucalyptus,peach-prc--eucalyptus.jpg,not found
+song,Pink Pantheress,Boy's a Liar Pt. 2,pink-pantheress--boys-a-liar-pt-2.jpg,not found
+song,Pink Pantheress,Stateside + Zara Larsson,pink-pantheress--stateside-zara-larsson.jpg,not found
+song,Post Malone,Sunflower,post-malone--sunflower.jpg,not found
+song,Presley & Taylor,This Phone,presley-taylor--this-phone.jpg,not found
+song,Randall King,Thinkin' 'Bout Drinkin',randall-king--thinkin-bout-drinkin.jpg,not found
+song,Remy Ma,Shether,remy-ma--shether.jpg,not found
+song,Rihanna,Friend of Mine,rihanna--friend-of-mine.jpg,not found
 song,Rina Sawayama,Bad Friend,rina-sawayama--bad-friend.jpg,not found
+song,Rosé,Toxic Til the End,ros--toxic-til-the-end.jpg,not found
+song,Roxy Dekker,Casual,roxy-dekker--casual.jpg,not found
 song,Roxy Dekker,Ga Daan!,roxy-dekker--ga-daan.jpg,not found
+song,Roxy Dekker,Ga Dan,roxy-dekker--ga-dan.jpg,not found
+song,Roxy Dekker,Hoe Het Is,roxy-dekker--hoe-het-is.jpg,not found
 song,Roxy Dekker,Jouw Idee,roxy-dekker--jouw-idee.jpg,not found
+song,Roxy Dekker,Ver Van M'n Bed,roxy-dekker--ver-van-mn-bed.jpg,not found
+song,Søren Torpegaard Lund,Før vi går hjem,s-ren-torpegaard-lund--f-r-vi-g-r-hjem.jpg,not found
+song,Sabrina Carpenter,Busy Woman,sabrina-carpenter--busy-woman.jpg,not found
+song,Selena Gomez,Come And Get It,selena-gomez--come-and-get-it.jpg,not found
+song,Shakira,Puntaria,shakira--puntaria.jpg,not found
 song,Shakira,Waka Waka (This Time for Africa),shakira--waka-waka-this-time-for-africa.jpg,not found
+song,Shawn Mendes,There's Nothing Holding Me Back,shawn-mendes--theres-nothing-holding-me-back.jpg,not found
+song,Shkodra Elektonike,Zjerm,shkodra-elektonike--zjerm.jpg,not found
+song,Slayyyter,Dance...,slayyyter--dance.jpg,not found
+song,T.I.,2 Reasons,t-i--2-reasons.jpg,not found
+song,Tate McRae,You Broke Me First,tate-mcrae--you-broke-me-first.jpg,not found
+song,Taylor Swift,All Of the Girls You've Loved Before,taylor-swift--all-of-the-girls-youve-loved-before.jpg,not found
 song,Taylor swift,I bet you think about me,taylor-swift--i-bet-you-think-about-me.jpg,not found
+song,Taylor Swift,Is It Over Now,taylor-swift--is-it-over-now.jpg,not found
+song,Taylor Swift,When Emma Falls In Love,taylor-swift--when-emma-falls-in-love.jpg,not found
 song,Taylor Swift,You All Over Me,taylor-swift--you-all-over-me.jpg,not found
+song,The 1975,Somebody Else,the-1975--somebody-else.jpg,not found
+song,The Chainsmokers,The One,the-chainsmokers--the-one.jpg,not found
+song,The Weeknd,Dancing in the Flame,the-weeknd--dancing-in-the-flame.jpg,not found
+song,Tones and I,Bad Child,tones-and-i--bad-child.jpg,not found
+song,Will.I.Am,Scream and Shout,will-i-am--scream-and-shout.jpg,not found
+song,Wiz Khalifa,We Own It,wiz-khalifa--we-own-it.jpg,not found
+song,Ylvis,The Fox,ylvis--the-fox.jpg,not found
+song,Yungblood,11 Minutes,yungblood--11-minutes.jpg,not found
+song,Zara Larsson,Midnight Sun - Remix,zara-larsson--midnight-sun-remix.jpg,not found
+song,Zayn,Dusk Til Dawn,zayn--dusk-til-dawn.jpg,not found
