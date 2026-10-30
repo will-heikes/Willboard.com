@@ -26,6 +26,25 @@ CHARTS = (  # key, file arg index, history key, id prefix, plays column header, 
     ('willboard', 0, 'wbHistory', 'song_', 'Plays', 20),
     ('pop', 1, 'popHistory', 'pop_song_', None, 10),
 )
+# Chart Fact cells that came through the sheet export garbled, fixed by hand: (week, start of the text) -> text
+FACT_FIXES = {
+    ('2020-10-29', "Bottles' spends a record 15 weeks"):
+        "Carrie Underwood's 'Spinning Bottles' spends a 15th week in the top five, tying William Michael Morgan's "
+        "'I Met a Girl' and Ingrid Andress' 'More Hearts Than Mine' among the longest top five runs in chart history",
+    ('2020-02-27', "She Mine' falling 1-11"): None,  # filled in below: the rest of the cell is fine
+}
+
+
+def fix_fact(week, text):
+    """Hand fixes first; then a fact that opens on a song title missing its opening quote gets it back."""
+    for (w, start), new in FACT_FIXES.items():
+        if w == week and text.startswith(start):
+            text = new or text.replace("She Mine'", "'She's Mine'", 1)
+    if re.match(r"^[^'‘’]{0,59}[^\s'‘’][,.!?]?' (?![‘'])", text) and not re.match(r"^[^'‘’]*s' ", text):
+        text = "'" + text
+    return text
+
+
 MONTHS = {m: i for i, m in enumerate('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(), 1)}
 WEEK_LABEL = re.compile(r'(\d{1,2})-([A-Z][a-z]{2})')
 
@@ -206,7 +225,7 @@ def main():
         # Will's written "Chart Fact" lines sit in rows of their own, one cell per week
         for r in rows:
             if r[1].strip().startswith('Chart Fact'):
-                data['facts'] += [{'week': d.isoformat(), 'chart': key, 'text': r[c].strip()}
+                data['facts'] += [{'week': d.isoformat(), 'chart': key, 'text': fix_fact(d.isoformat(), r[c].strip())}
                                   for d, c in zip(dates, cols) if r[c].strip()]
 
         songs, weekly = [], [[] for _ in cols]
