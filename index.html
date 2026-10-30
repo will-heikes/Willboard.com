@@ -637,6 +637,27 @@ button { font: inherit; color: inherit; }
 .explore { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
 .explore .tile { grid-column: span 2; }
 .explore .tile.wide { grid-column: span 3; aspect-ratio: 16/9; }
+.explore .tile.full { grid-column: span 6; aspect-ratio: 32/9; }
+.vid-presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.vid-presets a { display: flex; gap: 12px; align-items: center; background: var(--card); border-radius: 8px; padding: 12px; color: var(--ink); text-decoration: none; border: 2px solid transparent; }
+.vid-presets a:hover, .vid-presets a.on { border-color: var(--ink); }
+.vid-presets .faces { display: flex; flex: none; }
+.vid-presets .faces .art { width: 34px; height: 34px; border-radius: 50%; margin-left: -10px; box-shadow: 0 0 0 2px var(--card); font-size: 11px; }
+.vid-presets .faces .art:first-child { margin-left: 0; }
+.vid-presets b { display: block; font-size: 14px; } .vid-presets small { color: var(--muted); font-size: 12px; }
+.vid-build { padding: 14px 16px; margin-bottom: 22px; } .vid-build b { display: block; } .vid-build small { color: var(--muted); font-size: 12.5px; }
+.vid-pick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.vid-pick .search { max-width: 240px; }
+.vid-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px 4px 10px; border-radius: 999px; font: 700 12.5px var(--f-body); color: #fff; background: var(--c); }
+.vid-chip button { background: none; border: 0; color: #fff; cursor: pointer; font-size: 14px; padding: 0; }
+.vid-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 10px; font: 600 12.5px var(--f-body); }
+.cmv .vs { border-collapse: collapse; margin: 6px auto 14px; font: 600 13px var(--f-body); }
+.cmv .vs th, .cmv .vs td { padding: 6px 10px; text-align: center; border-bottom: 1px solid var(--line); }
+.cmv .vs tr > th:first-child { text-align: left; white-space: nowrap; } .cmv .vs th { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.cmv .vs tr > th:first-child { color: var(--ink); font-size: 13px; text-transform: none; letter-spacing: 0; }
+.cmv .vs th i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+.cmv .vs td.lead { font-weight: 800; color: var(--ink); background: color-mix(in srgb, var(--dot-yellow) 25%, transparent); }
+.vid-legend span { display: inline-flex; align-items: center; gap: 6px; } .vid-legend i { width: 14px; height: 4px; border-radius: 2px; background: var(--c); }
 .tile { position: relative; display: block; aspect-ratio: 4/5; overflow: hidden; background: #1a1918; color: #fff; }
 .mosaic { position: absolute; inset: 0; display: grid; gap: 2px; }
 .mosaic.m4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
@@ -907,6 +928,7 @@ body.on-ask .ask-fab { display: none; }
   .archive { grid-template-columns: 1fr; gap: 22px; }
   .explore { grid-template-columns: 1fr 1fr; }
   .explore .tile, .explore .tile.wide { grid-column: auto; aspect-ratio: 4/5; }
+  .explore .tile.full { grid-column: span 2; aspect-ratio: 16/9; }
   .explore .tile:nth-child(3) { grid-column: span 2; aspect-ratio: 16/9; }
 }
 @media (max-width: 760px) {
@@ -946,7 +968,7 @@ body.on-ask .ask-fab { display: none; }
   .beat-item .art { width: 84px; height: 64px; }
   .beat-item h4 { font-size: 16.5px; }
   .explore { grid-template-columns: 1fr; }
-  .explore .tile, .explore .tile.wide, .explore .tile:nth-child(3) { grid-column: auto; aspect-ratio: 4/3; }
+  .explore .tile, .explore .tile.wide, .explore .tile.full, .explore .tile:nth-child(3) { grid-column: auto; aspect-ratio: 4/3; }
   .years { grid-auto-columns: 140px; }
   .topbar .wrap { height: 62px; }
   .topbar .wm { font-size: 34px; }
@@ -1101,6 +1123,7 @@ body.on-ask .ask-fab { display: none; }
         <a class="tile" href="#/artists" id="tile-ar"></a>
         <a class="tile wide" href="#/number-ones/hot20" id="tile-no1"></a>
         <a class="tile wide" href="#/records/hot20" id="tile-rec"></a>
+        <a class="tile full" href="#/videos" id="tile-vid"></a>
       </div>
     </div>
 
@@ -1323,6 +1346,17 @@ body.on-ask .ask-fab { display: none; }
   </section>
 
   <!-- ── RECORDS ── -->
+  <section class="page" id="page-videos">
+    <div class="page-head"><div><h1>Chart Videos</h1><div class="sub">Animated chart histories: head-to-heads, TV show alumni and more. Pick one, or build your own.</div></div></div>
+    <div class="vid-presets" id="vid-presets"></div>
+    <div class="card vid-build"><b>Build your own</b><small>Add up to five acts to race them on one video.</small>
+      <div class="vid-pick"><input class="search" id="vid-q" list="vid-acts" placeholder="Add an artist…" autocomplete="off"><datalist id="vid-acts"></datalist>
+        <span id="vid-chips"></span><button class="pill" id="vid-go" disabled>▶ Watch</button></div></div>
+    <div class="song-sec" id="vid-player-wrap" hidden><div class="sec-h"><h2 id="vid-h"></h2><span class="sub" id="vid-sub"></span></div>
+      <div class="vid-legend" id="vid-legend"></div>
+      <div class="card ah" id="vid-player"></div></div>
+  </section>
+
   <section class="page" id="page-records">
     <div class="page-head"><div><h1>Chart Records</h1><div class="sub" id="rec-sub"></div></div></div>
     <div class="pills list-pills" id="rec-pills"></div>
@@ -1995,6 +2029,7 @@ function renderExplore() {
   // Records: the song with the most weeks at #1
   const led = Object.values(askStats('willboard').songs).filter(x => x.no1.length).sort((a, b) => b.no1.length - a.no1.length || a.no1[0].localeCompare(b.no1[0]));
   const top = led[0], tied = led.filter(x => x.no1.length === top.no1.length).length;
+  tile($('tile-vid'), 'Animated chart histories', 'Chart Videos', 'Carrie vs Miranda vs Taylor, American Idol alumni, the women of the Hot 20 and more, or race any acts you pick.', ['Carrie Underwood', 'Miranda Lambert', 'Taylor Swift', 'Kelly Clarkson', 'Scotty McCreery', 'Lauren Alaina'], 'm6');
   tile($('tile-rec'), `${top.no1.length} weeks at #1`, 'Chart<br>Records', `${tied > 1 ? `${SONGS[top.id].name} and ${tied - 1} other${tied > 2 ? 's' : ''} share` : `${SONGS[top.id].name} holds`} the Hot 20 record. See the longest runs, biggest jumps and more.`, [SONGS[top.id].artistName], 'm1');
 }
 
@@ -2693,9 +2728,11 @@ function chartMovie(el, all, actName, opt = {}) {
     const end = x => x.r[0] + x.r.length - 2;
     color = {};
     const own = key === 'pop' ? '#3B8BDE' : '#E0312C', pal = focus ? CM_COLORS.filter(c => c !== own) : CM_COLORS;
+    // A comparison colours every song by its act (opt.acts: [{ name, color, has(song) }])
+    if (opt.acts) for (const { s } of songs) color[s.id] = opt.acts.find(a => a.has(s))?.color || '#8A939E';
     if (focus) color[focus] = own;
     songs.forEach((x, i) => {
-      if (x.s.id === focus) return;
+      if (x.s.id === focus || opt.acts) return;
       const busy = new Set(songs.slice(0, i).filter(y => end(y) >= x.r[0] - 1).map(y => color[y.s.id]));
       color[x.s.id] = pal.find(c => !busy.has(c)) || pal[i % pal.length];
     });
@@ -2707,7 +2744,7 @@ function chartMovie(el, all, actName, opt = {}) {
     range.min = first; range.max = last; range.value = t;
     Object.values(heads).forEach(h => h.remove()); heads = {};
     // A whole chart's history makes each song's tip only when it first comes on screen
-    if (!ones) for (const { s, r } of songs) mkHead(s, r);
+    if (!ones && songs.length < 80) for (const { s, r } of songs) mkHead(s, r);
     draw();
   }
   function mkHead(s, r) {
@@ -2898,6 +2935,7 @@ function chartMovie(el, all, actName, opt = {}) {
   // The end card: the career (or the year) on this chart in numbers, with the biggest hits
   function summary() {
     if (span) return runSummary();
+    if (opt.acts) return actsSummary();
     const st = songs.map(({ s, r }) => {
       // Only the weeks being shown count: a whole career, or one year
       const wk = r.slice(1).map((p, j) => [r[0] + j, p]).filter(([i, p]) => p && i >= first && i <= last), ps = wk.map(w => w[1]);
@@ -2969,6 +3007,25 @@ function chartMovie(el, all, actName, opt = {}) {
     want.id = !muted && PREVIEWS[s.id] && !bad.has(s.id) ? s.id : null;
     now.textContent = want.id ? `♪ ${s.name} · ${s.artistName}` : '';
     sync();
+  }
+  // A comparison's end card: each act side by side on this chart
+  function actsSummary() {
+    const cols = opt.acts.map(a => {
+      const mine = songs.filter(x => a.has(x.s)), ps = mine.map(x => x.r.slice(1).filter(Boolean));
+      return { a, hits: mine.length, n1: ps.filter(p => p.includes(1)).length, w1: ps.flat().filter(p => p === 1).length,
+        t5: ps.filter(p => Math.min(...p) <= 5).length, wks: ps.flat().length };
+    }).filter(x => x.hits);
+    const best = k => Math.max(...cols.map(x => x[k]));
+    const cell = (x, k) => `<td${x[k] === best(k) && cols.length > 1 ? ' class="lead"' : ''}>${x[k]}</td>`;
+    sumEl.innerHTML = `<div class="sum-in"><div class="sum-h"><small>${NAME[key]}</small><b>${esc(actName || '')}</b></div>
+      <table class="vs"><tr><th></th><th>Hits</th><th>#1s</th><th>Wks at #1</th><th>Top 5s</th><th>Wks on chart</th></tr>
+      ${cols.map(x => `<tr><th><i style="--c:${x.a.color}"></i>${esc(x.a.name)}</th>${['hits', 'n1', 'w1', 't5', 'wks'].map(k => cell(x, k)).join('')}</tr>`).join('')}</table>
+      <button class="again">⟲ Watch again</button></div>`;
+    stage.style.minHeight = svg.getAttribute('height') + 'px';
+    stage.classList.add('ended');
+    sumEl.hidden = false; requestAnimationFrame(() => sumEl.classList.add('in'));
+    sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
+    ended = true;
   }
   // The every-#1 video's end card: how many #1s, the longest reigns, and the latest
   function onesSummary() {
@@ -4370,6 +4427,62 @@ async function no1Movie(c) {
   CM.ones = k;
 }
 
+// ─── CHART VIDEOS ───────────────────────────────────────────────
+// Animated chart histories beyond one artist (Will 2026-10-30): head-to-heads coloured by act, TV show
+// alumni, and whole slices of the chart (every woman, man or group), plus any acts the viewer picks.
+// #/videos/<preset>, or #/videos/custom?a=<id>,<id>
+const IDOL = ['Carrie Underwood', 'Kelly Clarkson', 'Scotty McCreery', 'Lauren Alaina', 'Gabby Barrett', 'Kellie Pickler', 'Daughtry', 'Maddie Poppe',
+  'Haley Reinhart', 'Lee DeWyze', 'Trent Harmon', 'Chayce Beckham', 'HunterGirl', 'Laci Kaye Booth'];
+const THE_VOICE = ['Cassadee Pope', 'Danielle Bradbery', 'Raelynn', 'Emily Ann Roberts', 'Melanie Martinez'];
+const leadIs = (s, test) => test(creditParts(s.artistName)[0]?.name || '');
+const VIDEO_SETS = [
+  { id: 'carrie-miranda-taylor', title: 'Carrie vs Miranda vs Taylor', sub: 'Three queens of the Hot 20', acts: ['Carrie Underwood', 'Miranda Lambert', 'Taylor Swift'] },
+  { id: 'american-idol', title: 'American Idol alumni', sub: 'Everyone who came off the show', acts: IDOL },
+  { id: 'the-voice', title: 'The Voice alumni', sub: 'Coaches\' picks who made the chart', acts: THE_VOICE },
+  { id: 'women', title: 'The women', sub: 'Every song led by a woman', faces: ['Carrie Underwood', 'Ella Langley', 'Megan Moroney'], pick: s => leadIs(s, n => isKind(n, 'woman')) },
+  { id: 'men', title: 'The men', sub: 'Every song led by a man', faces: ['Kenny Chesney', 'Kip Moore', 'Zach Top'], pick: s => leadIs(s, n => isKind(n, 'man')) },
+  { id: 'groups', title: 'Duos and groups', sub: 'Every song led by a duo or group', faces: ['Maddie & Tae', 'Lady A', 'Little Big Town'], pick: s => leadIs(s, n => isKind(n, 'group')) },
+];
+let VID_PICK = [];
+function renderVideos(which, query) {
+  stopChartMovie();
+  const custom = which === 'custom' ? (new URLSearchParams(query || '').get('a') || '').split(',').filter(id => artistStats[id]) : null;
+  if (custom) VID_PICK = custom;
+  $('vid-presets').innerHTML = VIDEO_SETS.map(v => `<a href="#/videos/${v.id}" class="${v.id === which ? 'on' : ''}"><span class="faces">${(v.faces || v.acts).slice(0, 3).map(a => artTile(a)).join('')}</span>
+    <span><b>${esc(v.title)}</b><small>${esc(v.sub)}</small></span></a>`).join('');
+  // Build your own
+  $('vid-acts').innerHTML = Object.values(artistStats).sort((a, b) => a.name.localeCompare(b.name)).map(a => `<option value="${esc(a.name)}">`).join('');
+  const chips = () => {
+    $('vid-chips').innerHTML = VID_PICK.map((id, i) => `<span class="vid-chip" style="--c:${CM_COLORS[i]}">${esc(artistStats[id].name)}<button data-i="${i}" aria-label="Remove">×</button></span>`).join('');
+    $('vid-chips').querySelectorAll('button').forEach(b => b.onclick = () => { VID_PICK.splice(+b.dataset.i, 1); chips(); });
+    $('vid-go').disabled = !VID_PICK.length;
+    $('vid-q').disabled = VID_PICK.length >= 5;
+  };
+  $('vid-q').onchange = () => {
+    const a = ACT_BY_KEY[squash($('vid-q').value)];
+    if (a && artistStats[a.id] && !VID_PICK.includes(a.id) && VID_PICK.length < 5) VID_PICK.push(a.id);
+    $('vid-q').value = ''; chips();
+  };
+  $('vid-go').onclick = () => { location.hash = `#/videos/custom?a=${VID_PICK.join(',')}`; };
+  chips();
+
+  const set = custom?.length ? { title: VID_PICK.map(id => artistStats[id].name).join(' vs '), sub: 'Your head-to-head', acts: VID_PICK.map(id => artistStats[id].name) }
+    : VIDEO_SETS.find(v => v.id === which);
+  $('vid-player-wrap').hidden = !set;
+  if (!set) return;
+  let acts = null, songs;
+  if (set.acts) {
+    const ids = set.acts.map(n => ACT_BY_KEY[squash(n)]?.id).filter(Boolean);
+    acts = ids.map((id, i) => ({ name: artistStats[id]?.name || '', color: CM_COLORS[i % CM_COLORS.length], has: s => creditParts(s.artistName).some(p => p.id === id) }));
+    songs = DATA.songs.filter(s => acts.some(a => a.has(s)));
+  } else songs = DATA.songs.filter(set.pick);
+  $('vid-h').textContent = set.title;
+  $('vid-sub').textContent = `${songs.length} songs · ${set.sub}`;
+  $('vid-legend').innerHTML = acts ? acts.map(a => `<span style="--c:${a.color}"><i></i>${esc(a.name)}</span>`).join('') : '';
+  CM = chartMovie($('vid-player'), songs, set.title, acts ? { acts } : {});
+  $('vid-player-wrap').scrollIntoView({ block: 'start' });
+}
+
 // ─── RECORDS ────────────────────────────────────────────────────
 // The top five on each record (more when tied), transitional era included on the Hot 20
 function renderRecords(chartId) {
@@ -4481,6 +4594,7 @@ function route() {
   else if (page === 'news')     { id = 'news'; renderNews(new URLSearchParams(query || '').get('q') || ''); }
   else if (page === 'number-ones') { id = 'number-ones'; renderNumberOnes(CHARTS[arg] ? arg : 'hot20'); }
   else if (page === 'records')  { id = 'records'; renderRecords(CHARTS[arg] ? arg : 'hot20'); }
+  else if (page === 'videos')   { id = 'videos'; renderVideos(arg, query); }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
   document.body.classList.toggle('on-ask', id === 'ask');
   document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === page || a.dataset.nav === page + 's'));
