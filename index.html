@@ -4437,6 +4437,8 @@ const THE_VOICE = ['Cassadee Pope', 'Danielle Bradbery', 'Raelynn', 'Emily Ann R
 const leadIs = (s, test) => test(creditParts(s.artistName)[0]?.name || '');
 const VIDEO_SETS = [
   { id: 'carrie-miranda-taylor', title: 'Carrie vs Miranda vs Taylor', sub: 'Three queens of the Hot 20', acts: ['Carrie Underwood', 'Miranda Lambert', 'Taylor Swift'] },
+  { id: 'ella-vs-megan', title: 'Ella Langley vs Megan Moroney', sub: 'The new generation, head to head', acts: ['Ella Langley', 'Megan Moroney'] },
+  { id: 'tim-vs-kenny', title: 'Tim McGraw vs Kenny Chesney', sub: 'Two veterans, one chart', acts: ['Tim McGraw', 'Kenny Chesney'] },
   { id: 'american-idol', title: 'American Idol alumni', sub: 'Everyone who came off the show', acts: IDOL },
   { id: 'the-voice', title: 'The Voice alumni', sub: 'Coaches\' picks who made the chart', acts: THE_VOICE },
   { id: 'women', title: 'The women', sub: 'Every song led by a woman', faces: ['Carrie Underwood', 'Ella Langley', 'Megan Moroney'], pick: s => leadIs(s, n => isKind(n, 'woman')) },
