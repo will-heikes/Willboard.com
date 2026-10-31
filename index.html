@@ -459,6 +459,8 @@ button { font: inherit; color: inherit; }
 .cmv.ye .head i { font-size: 10.5px; min-width: 18px; padding: 2px 3px; }
 .cmv.ye .head i::before { font-size: 8.5px; }
 .cmv.ye .head em { font-size: 9.5px; }
+.cmv .head span.has-ft { max-width: 340px; }
+.cmv .head span .ft { font-weight: 500; font-size: .82em; color: var(--muted); margin-left: 5px; }
 .cmv.fx .head.me .art { width: 26px; height: 26px; box-shadow: 0 0 0 3px var(--c), 0 2px 6px rgb(0 0 0 / .3); }
 .cmv.fx .head.me span { font-size: 12.5px; font-weight: 800; color: #fff; background: var(--c); }
 .cmv.fx .head.me i { font-size: 12px; background: var(--ink); }
@@ -2750,7 +2752,10 @@ function chartMovie(el, all, actName, opt = {}) {
   function mkHead(s, r) {
     const h = document.createElement('div');
     h.className = `head${s.id === focus ? ' me' : ''}`; h.style.setProperty('--c', color[s.id]); h.style.opacity = 0;
-    h.innerHTML = `${artTile(s.artistName, true, +weeks[r[0]].slice(0, 4), s.name)}<i></i><span>${esc(s.name)}</span><em hidden></em>`;
+    // In a comparison, a song the act is only featured on names its credit in small type (Will)
+    const act = opt.acts?.find(a => a.has(s)), parts = creditParts(s.artistName);
+    const ft = act && parts[0]?.id !== act.id ? `<small class="ft">${esc(parts[0].name)} feat. ${esc(parts.slice(1).map(p => p.name).join(', '))}</small>` : '';
+    h.innerHTML = `${artTile(s.artistName, true, +weeks[r[0]].slice(0, 4), s.name)}<i></i><span${ft ? ' class="has-ft"' : ''}>${esc(s.name)}${ft}</span><em hidden></em>`;
     stage.appendChild(h);
     return heads[s.id] = h;
   }
@@ -4475,7 +4480,7 @@ function renderVideos(which, query) {
   let acts = null, songs;
   if (set.acts) {
     const ids = set.acts.map(n => ACT_BY_KEY[squash(n)]?.id).filter(Boolean);
-    acts = ids.map((id, i) => ({ name: artistStats[id]?.name || '', color: CM_COLORS[i % CM_COLORS.length], has: s => creditParts(s.artistName).some(p => p.id === id) }));
+    acts = ids.map((id, i) => ({ id, name: artistStats[id]?.name || '', color: CM_COLORS[i % CM_COLORS.length], has: s => creditParts(s.artistName).some(p => p.id === id) }));
     songs = DATA.songs.filter(s => acts.some(a => a.has(s)));
   } else songs = DATA.songs.filter(set.pick);
   $('vid-h').textContent = set.title;
