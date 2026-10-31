@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # full history, so the newest of two uploads for one photo wins
-      - run: cd tools && python3 probe_previews.py "Charlie Puth We Don't Talk Anymore" "Sia Chandelier" "Selena Gomez Come & Get It"; exit 1
+      - run: cd tools && python3 probe_previews.py https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f0/de/66/f0de661c-299a-b7ae-80d9-4f35f79875b1/mzaf_10598240417031133475.plus.aac.p.m4a https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/0c/db/5c0cdbf6-be9c-bb77-fe07-45e06f0a43f2/mzaf_7382454857229752678.plus.aac.p.m4a https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/dc/87/fddc87b5-2883-257a-e79e-d72a8dc16401/mzaf_17790980896663750916.plus.aac.p.m4a; exit 1
       - if: github.event_name == 'workflow_dispatch' && inputs.info
         run: python3 tools/fetch_artist_info.py
       - if: github.event_name == 'workflow_dispatch' && inputs.pop_albums
