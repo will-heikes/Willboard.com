@@ -55,6 +55,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # full history, so the newest of two uploads for one photo wins
+      - run: cd tools && python3 probe_previews.py "Charlie Puth We Don't Talk Anymore" "Sia Chandelier" "Selena Gomez Come & Get It"; exit 1
       - if: github.event_name == 'workflow_dispatch' && inputs.info
         run: python3 tools/fetch_artist_info.py
       - if: github.event_name == 'workflow_dispatch' && inputs.pop_albums
