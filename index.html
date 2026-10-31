@@ -931,7 +931,7 @@ body.on-ask .ask-fab { display: none; }
   .explore { grid-template-columns: 1fr 1fr; }
   .explore .tile, .explore .tile.wide { grid-column: auto; aspect-ratio: 4/5; }
   .explore .tile.full { grid-column: span 2; aspect-ratio: 16/9; }
-  .explore .tile:nth-child(3) { grid-column: span 2; aspect-ratio: 16/9; }
+  .explore .tile:nth-child(3), .explore .tile:nth-child(6) { grid-column: span 2; aspect-ratio: 16/9; }
 }
 @media (max-width: 760px) {
   .aw-lead { grid-template-columns: 1fr; gap: 0; }
@@ -970,7 +970,7 @@ body.on-ask .ask-fab { display: none; }
   .beat-item .art { width: 84px; height: 64px; }
   .beat-item h4 { font-size: 16.5px; }
   .explore { grid-template-columns: 1fr; }
-  .explore .tile, .explore .tile.wide, .explore .tile.full, .explore .tile:nth-child(3) { grid-column: auto; aspect-ratio: 4/3; }
+  .explore .tile, .explore .tile.wide, .explore .tile.full, .explore .tile:nth-child(3), .explore .tile:nth-child(6) { grid-column: auto; aspect-ratio: 4/3; }
   .years { grid-auto-columns: 140px; }
   .topbar .wrap { height: 62px; }
   .topbar .wm { font-size: 34px; }
@@ -1123,9 +1123,9 @@ body.on-ask .ask-fab { display: none; }
         <a class="tile" href="#/year-end" id="tile-ye"></a>
         <a class="tile" href="#/awards" id="tile-aw"></a>
         <a class="tile" href="#/artists" id="tile-ar"></a>
-        <a class="tile wide" href="#/number-ones/hot20" id="tile-no1"></a>
-        <a class="tile wide" href="#/records/hot20" id="tile-rec"></a>
-        <a class="tile full" href="#/videos" id="tile-vid"></a>
+        <a class="tile" href="#/number-ones/hot20" id="tile-no1"></a>
+        <a class="tile" href="#/records/hot20" id="tile-rec"></a>
+        <a class="tile" href="#/videos" id="tile-vid"></a>
       </div>
     </div>
 
