@@ -32,6 +32,8 @@ SEARCH = 'https://api.deezer.com/search/track?limit=25&q={q}'
 FIX = {
     'pop_song_763': 'audio/habit-clip.mp3',  # Habit: not in any store; 30 s from Will's copy (audio/Habit.mp3)
     'pop_song_786': 'apple:1681178572',  # Night Air (music.apple.com/us/song/night-air/1681178572)
+    # Deezer's "We Don't Talk Anymore" credited to Charlie Puth is a 2:23 knock-off upload (Will heard it)
+    'pop_song_313': 'apple:1031416185',  # We Don't Talk Anymore (feat. Selena Gomez), Nine Track Mind
 }
 LOOKUP = 'https://itunes.apple.com/lookup?country={cc}&id={id}'
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
@@ -50,7 +52,7 @@ ALIAS = {'Lady A': 'Lady Antebellum', 'Dixie Chicks': 'The Chicks', 'The Chicks'
          # Will's spelling differs from the store's
          'Shkodra Elektonike': 'Shkodra Elektronike', 'Audrey Hobart': 'Audrey Hobert'}
 # Titles Will charted under another name: "Left or Right" is Charlie Puth's "Left and Right"
-TITLE_AS = {'Left or Right': 'Left and Right', "Night's Like This (Feat. Ty Dolla $ign)": 'Nights Like This (Feat. Ty Dolla $ign)'}
+TITLE_AS = {'Left or Right': 'Left and Right', 'Come And Get It': 'Come & Get It', "Night's Like This (Feat. Ty Dolla $ign)": 'Nights Like This (Feat. Ty Dolla $ign)'}
 # "We Can't Be Friends (wait for your love)" is the song Will charted as "We Can't Be Friends"
 # Talk rather than the song: never played, even when it's all Deezer has
 SPOKEN = re.compile(r'\b(commentary|voice memo|interview|track by track|story behind|behind the song|spoken|radio release special|radio special)\b', re.I)
