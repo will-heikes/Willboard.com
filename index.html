@@ -516,6 +516,10 @@ button { font: inherit; color: inherit; }
 .cmv .tally .tl + .tl { border-left: 1px solid var(--line); padding-left: 12px; }
 .cmv .tally b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); font-variant-numeric: tabular-nums; transform-origin: right center; }
 .cmv .tally small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+.cmv .tally.vs small i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 5px; vertical-align: 1px; }
+.cmv .tally.vs b { color: var(--c); }
+.cmv .tally.vs small span { text-transform: none; }
+@media (max-width: 600px) { .cmv .tally.vs { flex-wrap: wrap; justify-content: flex-end; max-width: 50%; gap: 2px 10px; } .cmv .tally.vs .tl { display: flex; align-items: center; } .cmv .tally.vs .tl + .tl { border-left: 0; padding-left: 0; } .cmv .tally.vs small { font-size: 0; } .cmv .tally.vs small i { margin-right: 4px; } }
 .cmv .tally b.bump { animation: cmBump .6s ease-out; }
 .cmv .date b, .cmv .date small, .cmv .tally small { white-space: nowrap; }
 @keyframes cmBump { 0% { transform: scale(1.35); color: var(--cc, var(--country)); } 100% { transform: scale(1); } }
@@ -2684,10 +2688,12 @@ function chartMovie(el, all, actName, opt = {}) {
   const span = opt.span, focus = opt.focus, ones = opt.ones, wide = !!(year || span);
   // The Every #1 video draws only the songs that reached #1 unless the viewer asks for the rest (Will)
   let only1 = !!opt.only1;
+  // A head-to-head (up to five acts) shows each act's #1 count up top instead of the overall tallies (Will)
+  const vsTally = !!opt.acts && opt.acts.length <= 5;
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
-  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally"><div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div></div><div class="sum" hidden></div></div>
+  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally${vsTally ? ' vs' : ''}">${vsTally ? opt.acts.map((a, k) => `<div class="tl" style="--c:${a.color}"><small><i></i>${esc(a.name)} <span>#1s</span></small><b class="na${k}">0</b></div>`).join('') : '<div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div>'}</div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
       <select class="speed" aria-label="Speed">${ones
@@ -2856,14 +2862,16 @@ function chartMovie(el, all, actName, opt = {}) {
     // Running totals of songs that have reached #1 and the top 5 so far (Will), counting from the
     // start of the year on a Year-End video; a new one ticks in as its badge changes
     const upTo = Math.min(last, f < .5 ? i0 : i0 + 1), from = wide ? first : 0;
+    // A versus video counts each act's own #1s instead (Will); a duet counts for both acts
     let n1 = 0, n5 = 0;
+    const na = (opt.acts || []).map(() => 0);
     for (const xs of songs) {
       let pk = 99;
       for (let i = Math.max(xs.r[0], from); i <= upTo; i++) { const p = pos(xs, i); if (p && p < pk) pk = p; }
-      if (pk === 1) n1++;
+      if (pk === 1) { n1++; if (vsTally) opt.acts.forEach((a, k) => { if (a.has(xs.s)) na[k]++; }); }
       if (pk <= 5) n5++;
     }
-    for (const [sel, n] of [['.n1', n1], ['.n5', n5]]) {
+    for (const [sel, n] of vsTally ? na.map((n, k) => ['.na' + k, n]) : [['.n1', n1], ['.n5', n5]]) {
       const b = root.querySelector('.tally ' + sel);
       if (b.textContent !== String(n)) {
         const up = n > +b.textContent;
