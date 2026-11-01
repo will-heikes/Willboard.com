@@ -188,7 +188,7 @@ def main():
         artist, title = primary_artist(s['artistName'], acts), display_title(s['name'], s['artistName'])
         if s['id'] in FIX:
             fix = FIX[s['id']]
-            if fix.startswith('apple:'):
+            if str(fix).startswith('apple:'):
                 if found.get(s['id']) and title.lower() not in redo:
                     continue
                 try:
