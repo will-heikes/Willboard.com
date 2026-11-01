@@ -30,7 +30,14 @@ MANUAL = {
     'Miguel': {'type': 'person', 'sex': 'm'}, 'Ruth B': {'type': 'person', 'sex': 'f'},
     'Steve Lacy': {'type': 'person', 'sex': 'm', 'born': '1998-05-23'}, 'Vincent Mason': {'type': 'person', 'sex': 'm'},
     'FLO': {'type': 'group'}, 'Grey': {'type': 'group'}, 'Magic': {'type': 'group'},
+    # Wikidata's namesakes: Gloriana the Italian singer, David Nail alone, a Jack U profile with no type (Will 2026-11-01)
+    'Gloriana': {'type': 'group'}, 'David Nail & the Well Ravens': {'type': 'group'}, 'Jack U': {'type': 'group'},
 }
+# Sex for groups that are all women or all men, and for people Wikidata gives none, so the Chart Videos
+# "The women" / "The men" sets can drop mixed-gender collaborations (Will 2026-11-01). Non-binary acts stay unset.
+SEX_FIX = {'Maddie & Tae': 'f', 'HAIM': 'f', 'Kehlani': 'f', 'Miley Cyrus': 'f', 'Jessica Darrow': 'f',
+           'Brothers Osborne': 'm', 'Daft Punk': 'm', '99 Percent': 'm', 'Jack & Jack': 'm', 'Bastille': 'm',
+           'Jonas Brothers': 'm', 'One Republic': 'm', "Why Don't We": 'm', 'X Ambassadors': 'm', 'Grey': 'm'}
 MUSIC = re.compile(r'singer|musician|rapper|\bband\b|\bduo\b|\btrio\b|\bgroup\b|\bDJ\b|producer|songwriter|vocalist|guitarist|composer|quartet|ensemble', re.I)
 NOT_ACT = re.compile(r'\b(song|single|album|EP|film|episode|television|tour|video game|novel|book)\b', re.I)
 GROUP = re.compile(r'\b(band|duo|trio|group|quartet|quintet|ensemble|collective|boy band|girl group|orchestra|choir)\b', re.I)
@@ -114,6 +121,9 @@ def main():
         have.pop(name, None)
         if info:
             have[name] = {**info, 'manual': True}
+    for name, sex in SEX_FIX.items():
+        if have.get(name):
+            have[name]['sex'] = sex
     json.dump(dict(sorted(have.items())), open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     open(MISSING, 'w', encoding='utf-8').write('\n'.join(missing) + '\n')
     people = sum(1 for v in have.values() if v['type'] == 'person')

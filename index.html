@@ -4448,14 +4448,18 @@ const IDOL = ['Carrie Underwood', 'Kelly Clarkson', 'Scotty McCreery', 'Lauren A
   'Haley Reinhart', 'Lee DeWyze', 'Trent Harmon', 'Chayce Beckham', 'HunterGirl', 'Laci Kaye Booth'];
 const THE_VOICE = ['Cassadee Pope', 'Danielle Bradbery', 'Raelynn', 'Emily Ann Roberts', 'Melanie Martinez'];
 const leadIs = (s, test) => test(creditParts(s.artistName)[0]?.name || '');
+// Led by a person, and every credited act is a person of that sex, or a group that is all men or all women (artist_info.json
+// "sex" on a group); an act we know nothing about counts as mixed, so it's left out (Will 2026-11-01)
+const sameSex = (s, sex) => leadIs(s, n => actInfo(n)?.type === 'person') && creditParts(s.artistName).every(p => actInfo(p.name)?.sex === sex);
 const VIDEO_SETS = [
   { id: 'carrie-miranda-taylor', title: 'Carrie vs Miranda vs Taylor', sub: 'Three queens of the Hot 20', acts: ['Carrie Underwood', 'Miranda Lambert', 'Taylor Swift'] },
   { id: 'ella-vs-megan', title: 'Ella Langley vs Megan Moroney', sub: 'The new generation, head to head', acts: ['Ella Langley', 'Megan Moroney'] },
   { id: 'tim-vs-kenny', title: 'Tim McGraw vs Kenny Chesney', sub: 'Two veterans, one chart', acts: ['Tim McGraw', 'Kenny Chesney'] },
   { id: 'american-idol', title: 'American Idol alumni', sub: 'Everyone who came off the show', acts: IDOL },
   { id: 'the-voice', title: 'The Voice alumni', sub: 'Coaches\' picks who made the chart', acts: THE_VOICE },
-  { id: 'women', title: 'The women', sub: 'Every song led by a woman', faces: ['Carrie Underwood', 'Ella Langley', 'Megan Moroney'], pick: s => leadIs(s, n => isKind(n, 'woman')) },
-  { id: 'men', title: 'The men', sub: 'Every song led by a man', faces: ['Kenny Chesney', 'Kip Moore', 'Zach Top'], pick: s => leadIs(s, n => isKind(n, 'man')) },
+  // No mixed-gender collaborations in the women's or men's videos (Will 2026-11-01)
+  { id: 'women', title: 'The women', sub: 'Every song led by a woman, leaving out duets with men', faces: ['Carrie Underwood', 'Ella Langley', 'Megan Moroney'], pick: s => sameSex(s, 'f') },
+  { id: 'men', title: 'The men', sub: 'Every song led by a man, leaving out duets with women', faces: ['Kenny Chesney', 'Kip Moore', 'Zach Top'], pick: s => sameSex(s, 'm') },
   { id: 'groups', title: 'Duos and groups', sub: 'Every song led by a duo or group', faces: ['Maddie & Tae', 'Lady A', 'Little Big Town'], pick: s => leadIs(s, n => isKind(n, 'group')) },
 ];
 let VID_PICK = [];
