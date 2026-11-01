@@ -13,6 +13,11 @@
 "born": "1992-10-22",
 "sex": "m"
 },
+"24k Golden": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "5 Seconds of Summer": {
 "type": "group",
 "wd": "Q4641147",
@@ -61,6 +66,11 @@
 "born": "2000-10-06",
 "sex": "f"
 },
+"Adela": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Adele": {
 "type": "person",
 "wd": "Q23215",
@@ -108,6 +118,11 @@
 "about": "Norwegian electronic dance music producer (born 1997)",
 "born": "1997-08-24",
 "sex": "m"
+},
+"Alana Springsteen": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Alessia Cara": {
 "type": "person",
@@ -233,6 +248,21 @@
 "about": "American country music singer-songwriter",
 "born": "1986-08-16",
 "sex": "f"
+},
+"Atlus": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
+"Aubrey Sellers": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
+"Audrey Hobart": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Auli'I Cravalho": {
 "type": "person",
@@ -457,6 +487,11 @@
 "born": "1972-10-28",
 "sex": "m"
 },
+"Bradley Cooper": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Brandi Carlile": {
 "type": "person",
 "wd": "Q164060",
@@ -625,6 +660,21 @@
 "born": "1989-08-28",
 "sex": "f"
 },
+"Cassandra Coleman": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
+"Catherine Dunn": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
+"Catie Offerman": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Caylee Hammack": {
 "type": "person",
 "wd": "Q80354323",
@@ -728,6 +778,11 @@
 "born": "1993-07-28",
 "sex": "f"
 },
+"Chloe Tang": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Chris Brown": {
 "type": "person",
 "wd": "Q115390006",
@@ -763,12 +818,21 @@
 "born": "1985-06-12",
 "sex": "m"
 },
+"Christie Huff": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Christina Aguliera": {
 "type": "person",
 "wd": "Q41594",
 "about": "American singer, songwriter and actress",
 "born": "1980-12-18",
 "sex": "f"
+},
+"Churchill": {
+"type": "group",
+"manual": true
 },
 "Chvrches": {
 "type": "group",
@@ -1185,6 +1249,10 @@
 "born": "1972-10-17",
 "sex": "m"
 },
+"Encanto Cast": {
+"type": "group",
+"manual": true
+},
 "Enrique Iglesias": {
 "type": "person",
 "wd": "Q47122",
@@ -1347,6 +1415,11 @@
 "about": "American country music singer (born 1952)",
 "born": "1952-05-18",
 "sex": "m"
+},
+"Gesstafelstein": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Ginger Minj": {
 "type": "person",
@@ -1875,6 +1948,11 @@
 "born": "1976-11-26",
 "sex": "m"
 },
+"John Baumann": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "John K": {
 "type": "person",
 "sex": "m",
@@ -1893,6 +1971,11 @@
 "about": "American musician (born 1977)",
 "born": "1977-10-16",
 "sex": "m"
+},
+"John Splintoff": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Joji": {
 "type": "person",
@@ -1977,6 +2060,11 @@
 "born": "1993-11-13",
 "sex": "f"
 },
+"Juliander": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Jung Kook": {
 "type": "person",
 "wd": "Q22338877",
@@ -2042,6 +2130,11 @@
 "type": "group",
 "wd": "Q28153804",
 "about": "Finnish music and comedy group performing in Ostrobothnian Swedish"
+},
+"Kali Uches": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Kane Brown": {
 "type": "person",
@@ -2165,6 +2258,11 @@
 "about": "South African-born British singer, songwriter, and record producer",
 "born": "1998-05-08",
 "sex": "f"
+},
+"Kevin Powers": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Khalid": {
 "type": "person",
@@ -2428,6 +2526,11 @@
 "born": "1970-02-26",
 "sex": "f"
 },
+"Lindsey Ell": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Linkin Park": {
 "type": "group",
 "wd": "Q261",
@@ -2454,6 +2557,11 @@
 "type": "group",
 "wd": "Q158419",
 "about": "English girl group"
+},
+"Lizzie McAlpine": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Lizzo": {
 "type": "person",
@@ -2734,6 +2842,11 @@
 "born": "1995-04-28",
 "sex": "f"
 },
+"Metro Boomin'": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Michael Ray": {
 "type": "person",
 "wd": "Q19664722",
@@ -2763,6 +2876,11 @@
 "about": "American musician",
 "born": "1988-02-12",
 "sex": "m"
+},
+"Mikky Echo": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Miley Cyrus": {
 "type": "person",
@@ -2947,6 +3065,10 @@
 "born": "1996-05-31",
 "sex": "f"
 },
+"Of Monsters & Men": {
+"type": "group",
+"manual": true
+},
 "Oh Wonder": {
 "type": "group",
 "wd": "Q21452721",
@@ -2980,6 +3102,11 @@
 "born": "1984-11-12",
 "sex": "m"
 },
+"Omi": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "One Direction": {
 "type": "group",
 "wd": "Q146027",
@@ -3000,6 +3127,13 @@
 "type": "group",
 "wd": "Q1934750",
 "about": "Wikimedia band discography"
+},
+"P!nk": {
+"type": "person",
+"wd": "Q160009",
+"about": "American singer, songwriter, and actress (born 1979)",
+"born": "1979-09-08",
+"sex": "f"
 },
 "Panic! At the Disco": {
 "type": "group",
@@ -3078,12 +3212,10 @@
 "born": "1994-06-05",
 "sex": "m"
 },
-"P!nk": {
+"Pheobe Ryan": {
 "type": "person",
-"wd": "Q160009",
-"about": "American singer, songwriter, and actress (born 1979)",
-"born": "1979-09-08",
-"sex": "f"
+"sex": "f",
+"manual": true
 },
 "Pink Pantheress": {
 "type": "person",
@@ -3125,6 +3257,11 @@
 "born": "1986-01-08",
 "sex": "m"
 },
+"Presley & Taylor": {
+"type": "group",
+"sex": "f",
+"manual": true
+},
 "Priscilla Block": {
 "type": "person",
 "wd": "Q105490139",
@@ -3132,12 +3269,22 @@
 "born": "1995-08-11",
 "sex": "f"
 },
+"Psy": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Quavo": {
 "type": "person",
 "wd": "Q30072039",
 "about": "American rapper",
 "born": "1991-04-02",
 "sex": "m"
+},
+"R City": {
+"type": "group",
+"sex": "m",
+"manual": true
 },
 "R Kelly": {
 "type": "person",
@@ -3164,6 +3311,11 @@
 "about": "American singer",
 "born": "1994-05-04",
 "sex": "f"
+},
+"Randall King": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Randy Houser": {
 "type": "person",
@@ -3351,12 +3503,22 @@
 "born": "1989-11-08",
 "sex": "f"
 },
+"Sabi": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Sabrina Carpenter": {
 "type": "person",
 "wd": "Q7396400",
 "about": "American singer-songwriter and actress (born 1999)",
 "born": "1999-05-11",
 "sex": "f"
+},
+"Sadie Bass": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Sage the Gemini": {
 "type": "person",
@@ -3684,6 +3846,16 @@
 "wd": "Q7739370",
 "about": "US musical group"
 },
+"The Highwomen": {
+"type": "group",
+"sex": "f",
+"manual": true
+},
+"The Janedear Girls": {
+"type": "group",
+"sex": "f",
+"manual": true
+},
 "The Kid Laroi": {
 "type": "person",
 "wd": "Q82890761",
@@ -3796,10 +3968,19 @@
 "born": "1962-01-13",
 "sex": "m"
 },
+"Track45": {
+"type": "group",
+"manual": true
+},
 "Train": {
 "type": "group",
 "wd": "Q282531",
 "about": "American rock band"
+},
+"Travis Baker": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Travis Barker": {
 "type": "person",
@@ -3828,6 +4009,11 @@
 "about": "American R&B singer, songwriter, and record producer (born 1984)",
 "born": "1984-11-28",
 "sex": "m"
+},
+"Triston Marez": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Troy Cartwright": {
 "type": "person",
