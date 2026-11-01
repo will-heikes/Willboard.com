@@ -124,12 +124,22 @@
 "sex": "f",
 "manual": true
 },
+"Alessa": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Alessia Cara": {
 "type": "person",
 "wd": "Q20090091",
 "about": "Italian-Canadian singer, songwriter and actress",
 "born": "1996-07-11",
 "sex": "f"
+},
+"Alex Chapman": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Alex Clare": {
 "type": "person",
@@ -778,6 +788,11 @@
 "born": "1993-07-28",
 "sex": "f"
 },
+"Chloe": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
 "Chloe Tang": {
 "type": "person",
 "sex": "f",
@@ -948,6 +963,11 @@
 "wd": "Q185828",
 "about": "French electronic duo",
 "sex": "m"
+},
+"Dakota": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Daniel Caesar": {
 "type": "person",
@@ -1296,6 +1316,16 @@
 "type": "group",
 "wd": "Q485811",
 "about": "American rock band"
+},
+"Felicia": {
+"type": "person",
+"sex": "f",
+"manual": true
+},
+"Feyi": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Fifth Harmony": {
 "type": "group",
@@ -2072,6 +2102,11 @@
 "born": "1997-09-01",
 "sex": "m"
 },
+"Junior Doctor": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Justin Bieber": {
 "type": "person",
 "wd": "Q34086",
@@ -2737,6 +2772,11 @@
 "wd": "Q2604214",
 "about": "Jamaican-American electronic music band"
 },
+"Malumba": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Maneskin": {
 "type": "group",
 "wd": "Q56884561",
@@ -3065,6 +3105,11 @@
 "born": "1996-05-31",
 "sex": "f"
 },
+"OCT": {
+"type": "group",
+"sex": "m",
+"manual": true
+},
 "Of Monsters & Men": {
 "type": "group",
 "manual": true
@@ -3073,6 +3118,11 @@
 "type": "group",
 "wd": "Q21452721",
 "about": "English alt-pop duo"
+},
+"Olivia": {
+"type": "person",
+"sex": "f",
+"manual": true
 },
 "Olivia Dean": {
 "type": "person",
@@ -3594,6 +3644,11 @@
 "about": "Colombian singer-songwriter (born 1977)",
 "born": "1977-02-02",
 "sex": "f"
+},
+"Shane O'Dazier": {
+"type": "person",
+"sex": "m",
+"manual": true
 },
 "Shania Twain": {
 "type": "person",
