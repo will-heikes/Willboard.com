@@ -2171,6 +2171,11 @@
 "sex": "f",
 "manual": true
 },
+"Kameron Ross": {
+"type": "person",
+"sex": "m",
+"manual": true
+},
 "Kane Brown": {
 "type": "person",
 "wd": "Q21620939",
@@ -2353,6 +2358,11 @@
 "about": "American musician",
 "born": "1970-03-14",
 "sex": "m"
+},
+"KuroUsa": {
+"type": "group",
+"sex": "f",
+"manual": true
 },
 "Kygo": {
 "type": "person",
