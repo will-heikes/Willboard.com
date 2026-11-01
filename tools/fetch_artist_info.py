@@ -25,7 +25,11 @@ SEARCH_AS = {'Ariana Grade': 'Ariana Grande', 'Justin Biever': 'Justin Bieber', 
              'Love & Theft': 'Love and Theft', 'David Nail & the Well Ravens': 'David Nail', 'Kaitlyn Butts': 'Kaitlin Butts'}
 # Acts the search matched to the wrong person (a namesake), set by hand; None leaves the act out
 MANUAL = {
-    'Alessa': None, 'Chloe': None, 'Dakota': None, 'Felicia': None, 'Olivia': None,
+    # Will 2026-11-01: "Malumba" is Maluma and "Alessa" is Alesso (spellings from his sheet); the one-name acts are women
+    'Alessa': {'type': 'person', 'sex': 'm'}, 'Malumba': {'type': 'person', 'sex': 'm'},
+    'Chloe': {'type': 'person', 'sex': 'f'}, 'Dakota': {'type': 'person', 'sex': 'f'}, 'Felicia': {'type': 'person', 'sex': 'f'}, 'Olivia': {'type': 'person', 'sex': 'f'},
+    'Alex Chapman': {'type': 'person', 'sex': 'm'}, 'Feyi': {'type': 'person', 'sex': 'f'}, 'Junior Doctor': {'type': 'person', 'sex': 'm'},
+    "Shane O'Dazier": {'type': 'person', 'sex': 'm'}, 'OCT': {'type': 'group', 'sex': 'm'},
     'Ashe': {'type': 'person', 'sex': 'f'}, 'Dev': {'type': 'person', 'sex': 'f'}, 'John K': {'type': 'person', 'sex': 'm'},
     'Miguel': {'type': 'person', 'sex': 'm'}, 'Ruth B': {'type': 'person', 'sex': 'f'},
     'Steve Lacy': {'type': 'person', 'sex': 'm', 'born': '1998-05-23'}, 'Vincent Mason': {'type': 'person', 'sex': 'm'},
