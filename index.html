@@ -45,6 +45,7 @@
 
   --dot-red:     #E0312C;
   --dot-yellow:  #F2B705;
+  --logo-yellow: #F2B705;   /* the wordmark's dot stays yellow even when the accent changes */
   --dot-blue:    #3B8BDE;
 
   --f-body:  'Inter', -apple-system, 'Segoe UI', sans-serif;
@@ -1053,6 +1054,7 @@ body.on-ask .ask-fab { display: none; }
 html.winter {
   --page: #E9F0F6; --card: #FDFEFF; --card-2: #E3EBF3; --line: #D2DDE8; --line-soft: #E0E8F0;
   --topbar: #0F1F35;
+  --dot-yellow: #A9DCF7;   /* the yellow accent turns to ice for winter (Will) */
 }
 html.winter .topbar { position: relative; background: linear-gradient(180deg, #0B1829 0%, #14294A 100%); }
 /* snow drifting along the bottom edge of the top bar */
@@ -1060,7 +1062,6 @@ html.winter .topbar::after { content: ''; position: absolute; left: 0; right: 0;
   background: radial-gradient(circle at 10px 0, #fff 9px, transparent 10px) 0 0 / 22px 10px repeat-x,
               radial-gradient(circle at 6px 0, #fff 6px, transparent 7px) 11px 0 / 17px 8px repeat-x;
   filter: drop-shadow(0 2px 1px rgba(15,31,53,.12)); }
-html.winter .nav a.active { border-bottom-color: #BFE3FF; }
 /* snow cap on the wordmark's W */
 html.winter .topbar .wm { position: relative; }
 html.winter .topbar .wm::before { content: ''; position: absolute; left: -.04em; top: -.1em; width: .62em; height: .2em; border-radius: .2em .3em .12em .12em;
@@ -1077,6 +1078,7 @@ html.winter .snowfall i { position: absolute; top: -10px; width: var(--s); heigh
 @media (prefers-reduced-motion: reduce) { html.winter .snowfall { display: none; } }
 /* holiday banner on the home page */
 .holiday { display: none; }
+html.winter .clip-year { color: #4F9FD6; }
 html.winter .holiday { display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center; position: relative; overflow: hidden;
   padding: 24px 28px; margin: 26px 0 6px; border-radius: 6px; color: #fff;
   background: radial-gradient(circle at 12% 120%, rgba(59,139,222,.45), transparent 55%), linear-gradient(135deg, #0F1F35, #1B3A63); }
@@ -1617,7 +1619,7 @@ function primaryArtist(n) {
 
 // Wordmark: colored dots sit in the counters of b, o, a, d
 function wordmark(el) {
-  const dots = { b: 'var(--dot-red)', o: 'var(--dot-yellow)', a: 'var(--dot-blue)', d: 'var(--dot-red)' };
+  const dots = { b: 'var(--dot-red)', o: 'var(--logo-yellow)', a: 'var(--dot-blue)', d: 'var(--dot-red)' };
   el.innerHTML = [...'willboard'].map(ch =>
     dots[ch] ? `<span class="dot ${ch}" style="--c:${dots[ch]}">${ch}</span>` : `<span>${ch}</span>`).join('');
 }
