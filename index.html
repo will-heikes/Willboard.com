@@ -8,6 +8,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Oswald:wght@500;600;700&family=Poppins:wght@800;900&display=swap" rel="stylesheet">
+<script>
+// Winter look (Will 2026-11-02): from Black Friday (the day after the 4th Thursday of November)
+// through New Year's Day. ?winter=1 / ?winter=0 forces it on or off for a preview
+(function () {
+  const d = new Date(), y = d.getFullYear(), m = d.getMonth(), day = d.getDate();
+  const nov1 = new Date(y, 10, 1).getDay(), thanks = 1 + ((4 - nov1 + 7) % 7) + 21;
+  let on = (m === 10 && day >= thanks + 1) || m === 11 || (m === 0 && day === 1);
+  const f = new URLSearchParams(location.search).get('winter');
+  if (f !== null) on = f !== '0';
+  if (on) document.documentElement.classList.add('winter');
+})();
+</script>
 <style>
 /* ── TOKENS ─────────────────────────────────────────────────── */
 :root {
@@ -1037,6 +1049,52 @@ body.on-ask .ask-fab { display: none; }
 .sp-link:hover { color: var(--ink); box-shadow: inset 0 0 0 1px var(--muted); }
 #artist-sp .sp-link { margin: 0 0 14px; }
 .sp-link i { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; }
+/* ── WINTER (Black Friday to New Year's Day, Will 2026-11-02) ── */
+html.winter {
+  --page: #E9F0F6; --card: #FDFEFF; --card-2: #E3EBF3; --line: #D2DDE8; --line-soft: #E0E8F0;
+  --topbar: #0F1F35;
+}
+html.winter .topbar { position: relative; background: linear-gradient(180deg, #0B1829 0%, #14294A 100%); }
+/* snow drifting along the bottom edge of the top bar */
+html.winter .topbar::after { content: ''; position: absolute; left: 0; right: 0; bottom: -7px; height: 10px; pointer-events: none; z-index: 2;
+  background: radial-gradient(circle at 10px 0, #fff 9px, transparent 10px) 0 0 / 22px 10px repeat-x,
+              radial-gradient(circle at 6px 0, #fff 6px, transparent 7px) 11px 0 / 17px 8px repeat-x;
+  filter: drop-shadow(0 2px 1px rgba(15,31,53,.12)); }
+html.winter .nav a.active { border-bottom-color: #BFE3FF; }
+/* snow cap on the wordmark's W */
+html.winter .topbar .wm { position: relative; }
+html.winter .topbar .wm::before { content: ''; position: absolute; left: -.04em; top: -.1em; width: .62em; height: .2em; border-radius: .2em .3em .12em .12em;
+  background: #fff; box-shadow: .08em .05em 0 -.03em #fff; }
+/* little snowflake after each home section title */
+html.winter .sec-head h2::after { content: '❄'; font-size: .62em; color: var(--pop-2); margin-left: .45em; vertical-align: .18em; font-weight: 400; }
+html.winter .card, html.winter .cmod { box-shadow: 0 1px 2px rgba(20,45,80,.06), 0 6px 18px rgba(20,45,80,.06); }
+/* falling snow, light and behind clicks */
+.snowfall { display: none; }
+html.winter .snowfall { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+html.winter .snowfall i { position: absolute; top: -10px; width: var(--s); height: var(--s); border-radius: 50%; background: #fff;
+  box-shadow: 0 0 3px rgba(120,160,200,.45); opacity: .85; animation: snow var(--t) linear var(--d) infinite; }
+@keyframes snow { to { transform: translate(var(--x), 105vh); } }
+@media (prefers-reduced-motion: reduce) { html.winter .snowfall { display: none; } }
+/* holiday banner on the home page */
+.holiday { display: none; }
+html.winter .holiday { display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center; position: relative; overflow: hidden;
+  padding: 24px 28px; margin: 26px 0 6px; border-radius: 6px; color: #fff;
+  background: radial-gradient(circle at 12% 120%, rgba(59,139,222,.45), transparent 55%), linear-gradient(135deg, #0F1F35, #1B3A63); }
+html.winter .holiday::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .55;
+  background: radial-gradient(circle, #fff 1.2px, transparent 1.6px) 0 0 / 34px 34px, radial-gradient(circle, #fff 1px, transparent 1.4px) 17px 19px / 46px 46px; }
+html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
+  background: radial-gradient(circle at 12px 14px, #fff 12px, transparent 13px) 0 0 / 26px 14px repeat-x; opacity: .95; }
+.holiday > * { position: relative; }
+.holiday .dec-art { display: flex; }
+.holiday .dec-art .art { width: 92px; height: 92px; font-size: 24px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.8); border: 3px solid #fff; }
+.holiday .dec-art .art + .art { margin-left: -24px; transform: rotate(5deg); }
+.holiday .kick { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #BFE3FF; }
+.holiday .ttl { font-family: var(--f-cond); font-weight: 700; font-size: 42px; line-height: 1; text-transform: uppercase; margin: 4px 0 6px; }
+.holiday .ttl span { color: var(--dot-red); }
+.holiday .sub { font-size: 13.5px; color: rgba(255,255,255,.82); max-width: 560px; }
+.holiday .go { font-family: var(--f-cond); font-weight: 700; font-size: 19px; white-space: nowrap; color: #BFE3FF; padding-bottom: 8px; }
+.holiday:hover .go { text-decoration: underline; }
+@media (max-width: 760px) { html.winter .holiday { grid-template-columns: 1fr; gap: 14px; padding: 20px 18px 26px; } .holiday .ttl { font-size: 32px; } .holiday .go { white-space: normal; } }
 </style>
 </head>
 <body>
@@ -1064,6 +1122,7 @@ body.on-ask .ask-fab { display: none; }
   </div>
 </header>
 
+<div class="snowfall" aria-hidden="true"></div>
 <main class="wrap">
   <div id="loading">Loading the charts…</div>
 
@@ -1086,6 +1145,7 @@ body.on-ask .ask-fab { display: none; }
     </div>
     <div class="ticker bleed" aria-label="This week's headlines"><div class="ticker-track" id="ticker"></div></div>
     <a class="recap" id="recap" href="#/recap"></a>
+    <a class="holiday" id="holiday" href="#/hot20"></a>
 
     <div class="sec">
       <div class="sec-head">
@@ -1786,6 +1846,31 @@ function chartRows(chartId, idx, limit, full) {
 }
 
 // ─── HOME ───────────────────────────────────────────────────────
+// ─── WINTER: holiday banner + snowfall (Will 2026-11-02) ────────
+function renderHoliday() {
+  const now = new Date(), y = now.getMonth() === 11 && now.getDate() >= 25 ? now.getFullYear() : now.getFullYear() - 1;
+  const xmas = (hist) => {
+    let best = null;
+    for (const w of hist) { const g = Math.abs(parseDate(w.week) - new Date(y, 11, 25)); if (g <= 4 * 864e5 && (!best || g < best.g)) best = { w, g }; }
+    return best && best.w;
+  };
+  const wk = xmas(DATA.willboard), pk = xmas(DATA.pop);
+  const s1 = wk && SONGS[wk.entries[0].songId], s2 = pk && SONGS[pk.entries[0].songId];
+  const arts = [s1, s2].filter(Boolean).map(s => artTile(s.artistName, true)).join('');
+  const line = s1 ? `Last Christmas, ${q(s1.name)} by ${primaryArtist(s1.artistName)} was the Hot 20’s No. 1` + (s2 ? `, and ${q(s2.name)} by ${primaryArtist(s2.artistName)} led the Pop 10.` : '.') : 'The Hot 20 and Pop 10 keep counting down all season long.';
+  $('holiday').href = wk ? `#/hot20/${wk.week}` : '#/hot20';
+  $('holiday').innerHTML = `${arts ? `<div class="dec-art">${arts}</div>` : '<div></div>'}
+    <div><div class="kick">❄ Happy holidays from Willboard</div><div class="ttl">Season’s <span>Greetings</span></div><div class="sub">${esc(line)}</div></div>
+    <div class="go">${wk ? `Christmas ${y} chart` : 'See the Hot 20'} →</div>`;
+}
+function letItSnow() {
+  const snow = document.querySelector('.snowfall');
+  if (!snow || snow.childElementCount || !document.documentElement.classList.contains('winter')) return;
+  const r = Math.random;
+  snow.innerHTML = Array.from({ length: 36 }, () =>
+    `<i style="left:${(r() * 100).toFixed(1)}%;--s:${(2 + r() * 4).toFixed(1)}px;--t:${(9 + r() * 12).toFixed(1)}s;--d:-${(r() * 20).toFixed(1)}s;--x:${(r() * 80 - 40).toFixed(0)}px"></i>`).join('');
+}
+letItSnow();
 function renderHome() {
   const wb = DATA.willboard, last = wb.length - 1, pop = DATA.pop;
   const top = wb[last].entries[0], s = SONGS[top.songId] || {};
@@ -1809,6 +1894,9 @@ function renderHome() {
     [(top.plays ?? s.itunesPlays ?? 0).toLocaleString(), 'Plays'],
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('') + (cert ? `<div>${cert}<small>Certified</small></div>` : '');
   $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at No. 1` : 'New No. 1'}</figcaption>`;
+
+  // Holiday banner (winter look only): last Christmas week's two #1s
+  if (document.documentElement.classList.contains('winter')) renderHoliday();
 
   // This week's recap in Will's style: headline and opening lines, the rest on its own page
   const rc = RECAPS[0];
