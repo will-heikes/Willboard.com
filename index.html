@@ -339,6 +339,14 @@ button { font: inherit; color: inherit; }
 .article .ph .art { width: 100%; height: 100%; border-radius: 0; font-size: 90px; }
 .article .body { font-family: var(--f-serif); font-size: 19px; line-height: 1.65; }
 .article .body p { margin: 0 0 18px; }
+/* prediction ballot inside an article */
+.article .ballot { font-family: var(--f-body); background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--pop); border-radius: var(--radius); padding: 16px 20px 14px; margin: 4px 0 24px; }
+.article .ballot-h { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+.article .ballot ul { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; font-size: 16px; line-height: 1.5; }
+.article .ballot li { break-inside: avoid; margin: 0 0 6px; font-weight: 600; }
+.article .ballot li a { font-weight: 600; }
+.article .ballot-note { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+@media (max-width: 640px) { .article .ballot ul { columns: 1; } }
 .article .body a, .article .more { text-decoration: underline; text-underline-offset: 3px; }
 .article .more { font-weight: 700; font-size: 15px; }
 .news-all { color: var(--ink); align-self: flex-end; }
@@ -4453,6 +4461,9 @@ function renderNews(q) {
   };
   draw(q);
 }
+// "ballot": a prediction piece's picks as a clear list right under the opening paragraph (Will 2026-11-04)
+const ballotBox = b => `<div class="ballot"><div class="ballot-h">${esc(b.title || 'Our predicted nominees')}</div>
+  <ul>${b.items.map(t => `<li>${articleText(t)}</li>`).join('')}</ul>${b.note ? `<div class="ballot-note">${articleText(b.note)}</div>` : ''}</div>`;
 function renderArticle(id) {
   const a = ARTICLES.find(x => x.id === id);
   $('article').innerHTML = !a ? `<div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div><h1>Story not found</h1>` : `
@@ -4462,7 +4473,7 @@ function renderArticle(id) {
     ${a.dek ? `<p class="dek">${esc(a.dek)}</p>` : ''}
     <div class="byline">${fmtLong(a.date)}</div>
     <div class="ph">${artTile(a.artist, true)}</div>
-    <div class="body">${a.body.map(p => `<p>${articleText(p)}</p>`).join('')}</div>
+    <div class="body">${a.body.map((p, i) => `<p>${articleText(p)}</p>` + (i === 0 && a.ballot ? ballotBox(a.ballot) : '')).join('')}</div>
     ${a.link ? `<a class="more" href="${a.link}">${esc(a.linkText || 'Read more')} ${arrow}</a>` : ''}`;
 }
 
