@@ -1,5 +1,41 @@
 [
   {
+    "id": "album-of-the-year-nomination-predictions",
+    "date": "2026-11-05",
+    "chart": "pop",
+    "kicker": "Awards Predictions",
+    "bucket": "analysis",
+    "artist": "Demi Lovato",
+    "link": "#/awards/pop",
+    "linkText": "See every Pop Awards show",
+    "headline": "Four albums have earned a second Album of the Year nomination. Demi Lovato's could be the fifth",
+    "dek": "Our third nomination-predictions piece for the 2027 Pop Awards covers what puts an album in the field, the records that look safe, and who's fighting for the last two spots.",
+    "body": [
+      "Album of the Year goes to a body of work, but on the Willboard Pop Awards that body of work is judged by how it charted. The 2027 nominees come out on November 16, and these are our predictions for the eight slots. They are predictions only. Will picks the nominees, and we haven't seen them.",
+      "<b>What it takes.</b> We can match 48 of the 56 nominees since the field grew to eight in 2020 to their Pop 10 songs. Two-thirds of them had a No. 1 in their eligibility year, and two-thirds had at least two hits. One huge single can be enough: 14 nominees got in on a single hit, among them [[Nelly Furtado]]'s <i>7</i> last year, carried by ‘Honesty.’ Release year doesn't matter much either. [[Gwen Stefani]]'s <i>Bouquet</i>, last year's winner, came out in 2024 and won on the strength of two No. 1s in 2025.",
+      "<b>Second chances.</b> An album can be nominated in two different years, as long as it hasn't won. Four have: [[Maroon 5]]'s <i>Overexposed</i>, [[Demi Lovato]]'s <i>Confident</i>, [[Dua Lipa]]'s <i>Future Nostalgia</i> and [[Meghan Trainor]]'s <i>Takin' It Back</i>. All four lost both times. This year's best candidate for a second nomination is Lovato's <i>It's Not That Deep</i>, a 2026 nominee, which has charted six songs during this eligibility year. ‘In My Head’ spent two weeks at No. 1, ‘Here All Night’ lasted 12 weeks, and ‘Sorry to Myself’ and ‘Low Rise Jeans’ both reached No. 2. A nomination would also give Lovato six, tying Trainor for the most Album nominations.",
+      "<b>The locks.</b> [[Cassandra Coleman]], who won in 2024 with <i>Coming of Age</i>, has the strongest album of the year on paper. <i>End of Your Love</i> has five Pop 10 hits in the window, three of them No. 1s (‘Bite My Tongue,’ ‘Maggie’ and the title track), for seven weeks on top in all. [[Hilary Duff]]'s <i>luck... or something</i> has three hits, led by ‘Weather for Tennis’ and its four weeks at No. 1. Lovato's <i>It's Not That Deep</i> joins them for its sheer volume of hits.",
+      "<b>Likely.</b> [[Peach PRC]]'s <i>Porcelain</i> has ‘Out Loud,’ three weeks at No. 1, plus ‘Eucalyptus’ in the top 5. Then come the single-hit albums whose hits were too big to ignore: [[Willa Ford]]'s <i>amanda</i>, with ‘Love4Life’ (four weeks at No. 1, 13 on the chart); [[Kim Petras]]'s <i>Detour</i>, with ‘Brutalist’ (three weeks at No. 1, 14 on the chart); and [[Pink Pantheress]]'s <i>Fancy Some More?</i>, with ‘Stateside’ and [[Zara Larsson]] (two weeks at No. 1, 14 on the chart).",
+      "<b>The bubble.</b> That leaves one slot, and the cases go different ways. [[Taylor Swift]]'s <i>The Life of a Showgirl</i> has four hits this year, ‘Honey,’ ‘Opalite,’ ‘Elizabeth Taylor’ and ‘Patient Zero,’ but none got higher than No. 4. [[girlsweetvoiced]]'s <i>Lovesweet</i> has one song, ‘Cranberry,’ which spent three weeks at No. 1. Meghan Trainor's <i>Toy With Me</i> has ‘Still Don't Care’ (nine weeks, peaking at No. 2) and ‘Shimmer,’ and a nomination would be her seventh, the most of any act. [[Harry Styles]]'s <i>Kiss All The Time. Disco, Occasionally.</i> has three hits, topped by ‘Aperture’ at No. 4.",
+      "<b>Snubs-in-waiting.</b> [[Sabrina Carpenter]]'s <i>Man's Best Friend</i> was nominated last year, but it has only one song in this window, ‘Nobody's Son’ at No. 4. [[Karol G]] and [[Roxy Dekker]] both had No. 1s this fall, but each from an album with only one hit. [[Olivia Rodrigo]], [[Ariana Grande]] and [[Adela]] each have two Top 10 hits from new albums, and none of those hits went higher than No. 4.",
+      "<b>The panel.</b> Mitzi Tallyho, going by the data, takes the three locks, the four likely picks, and Swift for the last slot: “Four hits in one window is hard to leave out, even without a No. 1.” Sebastian Crescendo, going by craft, swaps Willa Ford for Harry Styles: “That's the most complete album in the group, front to back.” Bobbie Jo Rhinestone, going by heart, swaps Swift for <i>Lovesweet</i>: “‘Cranberry’ was the song of the summer, and the album deserves the credit.”"
+    ],
+    "ballot": {
+      "title": "Our predicted nominees: Album of the Year",
+      "items": [
+        "<i>End of Your Love</i> by [[Cassandra Coleman]]",
+        "<i>luck... or something</i> by [[Hilary Duff]]",
+        "<i>It's Not That Deep</i> by [[Demi Lovato]]",
+        "<i>Porcelain</i> by [[Peach PRC]]",
+        "<i>amanda</i> by [[Willa Ford]]",
+        "<i>Detour</i> by [[Kim Petras]]",
+        "<i>Fancy Some More?</i> by [[Pink Pantheress]]",
+        "<i>The Life of a Showgirl</i> by [[Taylor Swift]]"
+      ],
+      "note": "First alternate: <i>Lovesweet</i> by [[girlsweetvoiced]]. Nominees are announced November 16."
+    }
+  },
+  {
     "id": "best-new-artist-nomination-predictions",
     "date": "2026-11-04",
     "chart": "pop",
