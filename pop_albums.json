@@ -4879,25 +4879,13 @@
   "released": 2017
  },
  {
-  "name": "Extension (The Extended Mixes)",
-  "artist": "Kylie Minogue",
-  "artistId": "art_547",
-  "plays": null,
-  "tracks": 11,
-  "songs": [
-   "pop_song_794"
-  ],
-  "year": 2023,
-  "chart": "pop",
-  "released": 2023
- },
- {
   "name": "Tension",
   "artist": "Kylie Minogue",
   "artistId": "art_547",
   "plays": null,
   "tracks": 11,
   "songs": [
+   "pop_song_794",
    "pop_song_828"
   ],
   "year": 2023,
