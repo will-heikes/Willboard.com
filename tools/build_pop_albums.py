@@ -27,6 +27,7 @@ FIX = {
     'Bebe Rexha|Meant to Be': 'Expectations',
     'DNCE|Cake By the Ocean': 'DNCE',
     'Hailee Steinfeld|Let Me Go': None,
+    'Kylie Minogue|Padam Padam': 'Tension',
     'Kelly Clarkson|It\'s Quiet Uptown': 'The Hamilton Mixtape',
     'Major Lazer|Cold Water': None,
     'Marshmello|Be Kind (Feat. Halsey)': None,
