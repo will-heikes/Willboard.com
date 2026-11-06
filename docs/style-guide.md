@@ -23,7 +23,7 @@ When this guide and an instruction from Will disagree, Will wins. Add his correc
 | Album titles | *Italics* (`<i>…</i>` in articles.json) | Don't put albums in quotes, so they never get confused with songs. |
 | Artists | Plain, as the site spells them (data.json) | Link the first mention with `[[Artist]]`. Features read "X and Y's ‘Song’" or "X featuring Y". |
 | Chart moves | `8-5`, "jumps 8-5", "slips 6-7", "falls 2-4", "rebounds 6-5", "vaults 20-15" | Use a hyphen with no spaces. Use "holds at #6" for no change. |
-| Positions | `#1`, `#2`, `#10` | Use #1, not "No. 1", in all new writing. "Number One" is spelled out only in headlines. |
+| Positions | `#1`, `#2`, `#10` | Always #1, never "No. 1" (Will, 2026-11-06; all old articles converted). "Number One" is spelled out only in headlines. |
 | Tiers | Top 5, Top 10, Top 20 | Always capitalized. Write "a new peak", "a new high", "highpoint". |
 | Leaders | "six-week leader", "1-week leader", "her #3-peaking ‘Dear Future Husband’" | |
 | Awards | **Greatest Gainer** trophy | Capitalized. |

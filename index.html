@@ -1460,7 +1460,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
         <p>Hot 20 plays come from Will's own iTunes library. When a song is in the library more than once, such as a single and an album copy, the copy played most carries the count. A song's play count only ever goes up. Pop 10 plays are tracked week by week, on Last.fm from December 2017 and on stats.fm since 2023.</p>
 
         <h2>Chart points</h2>
-        <p>Every week on the chart earns a song points, based on its position. The top five spots are worth the most.</p>
+        <p>Every week on the chart earns a song points, based on its position. The Top 5 spots are worth the most.</p>
         <table class="pts">
           <tr><th>Position</th><th>Points</th></tr>
           <tr><td>#1</td><td>500</td></tr>
@@ -1867,7 +1867,7 @@ function renderHoliday() {
   const wk = xmas(DATA.willboard), pk = xmas(DATA.pop);
   const s1 = wk && SONGS[wk.entries[0].songId], s2 = pk && SONGS[pk.entries[0].songId];
   const arts = [s1, s2].filter(Boolean).map(s => artTile(s.artistName, true)).join('');
-  const line = s1 ? `Last Christmas, ${q(s1.name)} by ${primaryArtist(s1.artistName)} was the Hot 20’s No. 1` + (s2 ? `, and ${q(s2.name)} by ${primaryArtist(s2.artistName)} led the Pop 10.` : '.') : 'The Hot 20 and Pop 10 keep counting down all season long.';
+  const line = s1 ? `Last Christmas, ${q(s1.name)} by ${primaryArtist(s1.artistName)} was the Hot 20’s #1` + (s2 ? `, and ${q(s2.name)} by ${primaryArtist(s2.artistName)} led the Pop 10.` : '.') : 'The Hot 20 and Pop 10 keep counting down all season long.';
   $('holiday').href = wk ? `#/hot20/${wk.week}` : '#/hot20';
   $('holiday').innerHTML = `${arts ? `<div class="dec-art">${arts}</div>` : '<div></div>'}
     <div><div class="kick">❄ Happy holidays from Willboard</div><div class="ttl">Season’s <span>Greetings</span></div><div class="sub">${esc(line)}</div></div>
@@ -1899,11 +1899,11 @@ function renderHome() {
   const n1 = weeksAt1(top.songId, 'wbHistory', week);
   const cert = certBadge('willboard', top.plays ?? s.itunesPlays);
   $('h1-stats').innerHTML = [
-    [n1, n1 === 1 ? 'Week at No. 1' : 'Weeks at No. 1'],
+    [n1, n1 === 1 ? 'Week at #1' : 'Weeks at #1'],
     [top.weeks ?? s.weeksOnChart, 'Weeks on chart'],
     [(top.plays ?? s.itunesPlays ?? 0).toLocaleString(), 'Plays'],
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('') + (cert ? `<div>${cert}<small>Certified</small></div>` : '');
-  $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at No. 1` : 'New No. 1'}</figcaption>`;
+  $('h1-photo').innerHTML = artTile(s.artistName, true) + `<figcaption>${n1 > 1 ? `${ordinal(n1)} week at #1` : 'New #1'}</figcaption>`;
 
   // Holiday banner (winter look only): last Christmas week's two #1s
   if (document.documentElement.classList.contains('winter')) renderHoliday();
@@ -1951,7 +1951,7 @@ function chartStrip(chartId, idx) {
   return weeks[idx].entries.slice(0, 5).map(e => {
     const s = SONGS[e.songId] || {}, p = prev[e.songId]?.position;
     const n1 = e.position === 1 ? weeksAt1(e.songId, c.hist, weeks[idx].week) : 0;
-    const mv = n1 > 1 ? `<div class="mv">${n1} weeks at No. 1</div>`
+    const mv = n1 > 1 ? `<div class="mv">${n1} weeks at #1</div>`
       : p === undefined ? `<div class="mv new">${e.weeks === 1 ? 'New this week' : 'Re-entry'}</div>`
       : p > e.position ? `<div class="mv up">▲ Up from ${p}</div>` : p < e.position ? `<div class="mv down">▼ Down from ${p}</div>` : `<div class="mv">Holds at ${p}</div>`;
     const cert = c.isWb ? certBadge('willboard', e.plays ?? (idx === weeks.length - 1 ? s.itunesPlays : null)) : certBadge('pop', pointsAsOf(e.songId, weeks, idx));
@@ -1990,7 +1990,7 @@ function no1Story(chartId, idx) {
     const hit = k === 1 ? 'a first career #1' : `a ${ordinal(k)} #1 hit`;
     headline = p ? `${q(s.name)} rises ${p.position}-1${on}, giving ${who} ${hit}` : `${q(s.name)} debuts at #1${on}, giving ${who} ${hit}`;
   }
-  return { chart: chartId === 'pop10' ? 'pop' : '', kicker: chartId === 'pop10' ? 'Pop 10 · No. 1' : 'Hot 20 · No. 1', headline, artist: s.artistName, href: `#/${chartId}` };
+  return { chart: chartId === 'pop10' ? 'pop' : '', kicker: chartId === 'pop10' ? 'Pop 10 · #1' : 'Hot 20 · #1', headline, artist: s.artistName, href: `#/${chartId}` };
 }
 function weekStories(wbIdx, popIdx) {
   const out = [no1Story('pop10', popIdx)];
@@ -2027,7 +2027,7 @@ function weekStories(wbIdx, popIdx) {
 // first top fives, certifications, debuts, milestones. What Will counts as news comes first: a song
 // reaching #1, a record, a big jump. A song merely slipping a spot or holding is left out (Will, Oct 23)
 let ARCHIVE = null;
-const ARCH_KICK = { note: 'Chart note', top5: 'Top five', top10: 'Top ten', cert: 'Certified', debut: 'Debut', leap: 'Big mover', weeks: 'Milestone', double: 'Double up', no1: 'No. 1' };
+const ARCH_KICK = { note: 'Chart note', top5: 'Top 5', top10: 'Top 10', cert: 'Certified', debut: 'Debut', leap: 'Big mover', weeks: 'Milestone', double: 'Double up', no1: '#1' };
 // How newsworthy one of Will's notes is: 0 leaves it out
 const NOT_YET = /\b(closer|follows? up|after leading|nearly|almost|just shy|short of)\b/i;
 const newNo1 = t => !NOT_YET.test(t) && /(\b\d+-1\b|\bto (#1|number one|no\. 1)\b|to the top of the chart|\breaches (#1|number one)|\b(earns?|scores?|gives?|sends?|becomes?)\b[^.]{0,30}(#1|number one)\b)/i.test(t);
@@ -2366,7 +2366,7 @@ async function renderYearEnd(span, slug) {
     // Will's own Top 10 countdown videos, made in Canva (videos/<year>-<country|pop>-top-10.mp4)
     const canva = reelKey && YE_VIDEOS[span]?.includes(reelKey) && `videos/${span}-${reelKey === 'pop' ? 'pop' : 'country'}-top-10`;
     split.innerHTML = `<div class="ye-crumbs"><a href="#/year-end/${span}">← All ${dec ? 'the ' + span : span} charts</a>
-        <div class="ye-tabs">${charts.map(c => `<a class="ye-tab ${c.cls} ${c.slug === chart.slug ? 'on' : ''}" href="#/year-end/${span}/${c.slug}">${c.rows[0].tile(false)}<span>${c.title}<small>No. 1 · ${esc(c.rows[0].name)}</small></span></a>`).join('')}</div></div>
+        <div class="ye-tabs">${charts.map(c => `<a class="ye-tab ${c.cls} ${c.slug === chart.slug ? 'on' : ''}" href="#/year-end/${span}/${c.slug}">${c.rows[0].tile(false)}<span>${c.title}<small>#1 · ${esc(c.rows[0].name)}</small></span></a>`).join('')}</div></div>
       ${canva ? `<div class="card ye-movie ye-canva ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Will's Top 10 ${reelKey === 'pop' ? 'Pop' : 'Country'} Songs of ${span}</b><small>The countdown video, #10 to #1</small></span></button><div class="m-canva" hidden><video controls playsinline preload="none" poster="${canva}.jpg" src="${canva}.mp4"></video></div></div>` : ''}
       ${reel ? `<div class="card ye-movie ye-reel ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>The ${span} Top 10 countdown</b><small>#10 to #1, with a clip of each song's video</small></span></button><div class="m-reel" hidden></div></div>` : ''}
       ${movieKey ? `<div class="card ye-movie ye-anim ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Watch ${span} on the ${movieKey === 'pop' ? 'Pop 10' : 'Hot 20'}</b><small>Every song that charted, week by week, with the music</small></span></button><div class="m-anim" hidden></div></div>` : ''}
@@ -3074,7 +3074,7 @@ function chartMovie(el, all, actName, opt = {}) {
       ? num(st.length, 'Songs') + num(top.length, top.length === 1 ? '#1' : '#1s') + num(count(x => x.fresh), 'New entries') + num(count(x => x.peak <= 5), 'Top 5s') + num(count(x => x.peak <= 10), 'Top 10s') + num(last - first + 1, 'Charts')
       : num(st.length, st.length === 1 ? 'Hit' : 'Hits') + num(top.length, top.length === 1 ? '#1' : '#1s') + num(st.reduce((n, x) => n + x.n1, 0), 'Weeks at #1') + num(count(x => x.peak <= 5), 'Top 5s') + num(count(x => x.peak <= 10), 'Top 10s') + num(new Set(songs.flatMap(({ r }) => r.slice(1).map((p, i) => p ? r[0] + i : -1).filter(i => i >= 0))).size, 'Weeks on chart');
     const hls = year
-      ? row('Year-End No. 1', yeTop, atOne(yeTop || best)) + (best === yeTop ? row('Longest run', long, `${long.wks} weeks this year`) : row('Most weeks at #1', best, atOne(best)))
+      ? row('Year-End #1', yeTop, atOne(yeTop || best)) + (best === yeTop ? row('Longest run', long, `${long.wks} weeks this year`) : row('Most weeks at #1', best, atOne(best)))
       : row('Biggest hit', big, atOne(big)) + row('Longest run', long, `${long.wks} weeks on the chart`);
     sumEl.innerHTML = `<div class="sum-in"><div class="sum-h"><small>${year ? `${NAME[key]} · ${year}` : `${NAME[key]} career${yrs[0] === yrs[1] ? ` · ${yrs[0]}` : ` · ${yrs[0]}–${yrs[1]}`}`}</small><b>${esc(actName || '')}</b></div>
       <div class="nums">${nums}</div>
@@ -3089,13 +3089,13 @@ function chartMovie(el, all, actName, opt = {}) {
     sumEl.hidden = false; requestAnimationFrame(() => sumEl.classList.add('in'));
     sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
     ended = true;
-    // The biggest hit (the year's No. 1) plays under the end card
+    // The biggest hit (the year's #1) plays under the end card
     const tuneEnd = yeTop || big;
     want.id = !muted && PREVIEWS[tuneEnd.s.id] && !bad.has(tuneEnd.s.id) ? tuneEnd.s.id : null;
     now.textContent = want.id ? `♪ ${tuneEnd.s.name} · ${tuneEnd.s.artistName}` : '';
     sync();
   }
-  // The #1's end card: its run in numbers, the song it took No. 1 from and the one that ended its reign
+  // The #1's end card: its run in numbers, the song it took #1 from and the one that ended its reign
   function runSummary() {
     if (ones) return onesSummary();
     const me = songs.find(x => x.s.id === focus);
