@@ -81,6 +81,7 @@ Will's blog set the format with "ACM Awards 2019 Winner Predictions!", where eve
 - Every prediction article has a `ballot` box (title, items with `[[Artist]]` links, optional note). It renders right under the first paragraph, so the picks aren't buried.
 - **Nomination pieces** list the full predicted field plus one alternate.
 - **Winner pieces** use three items: **Will win**, **Should win**, **Dark horse**. The ballot title is "Our picks: <Category>".
+- **Song of the Year is about the writing** (Will, 2026-11-06). Build the piece around who wrote the song, what it says, its key lines and how it's built. Research credits, artist quotes and lyrics with web search, quote only lines you've verified, and keep chart stats as background. Chart success and production belong in **Record of the Year** (pop) and **Single of the Year** (country). Country Song of the Year works the same way.
 - Explain the reasoning with history ("the Year-End #1 won 12 of 14 Record of the Year shows") and say plainly what Willboard thinks. Always note that Will picks the nominees and winners, and that we haven't seen them.
 - Never state country winners before Will adds them on show night. Never look at an unreleased show's rows in the Nominees sheet.
 
