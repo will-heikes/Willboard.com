@@ -1,5 +1,42 @@
 [
   {
+    "id": "song-of-the-year-nomination-predictions",
+    "date": "2026-11-06",
+    "chart": "pop",
+    "kicker": "Awards Predictions",
+    "bucket": "analysis",
+    "artist": "Alexandra Căpitănescu",
+    "link": "#/awards/pop",
+    "linkText": "See every Pop Awards show",
+    "headline": "Four songs share this year's longest run at #1, and Song of the Year almost never leaves that song out",
+    "dek": "Our fourth nomination-predictions piece for the 2027 Pop Awards covers the songwriter's award: how it parts ways with Record of the Year, the one-song-per-act pattern, and our eight picks.",
+    "body": [
+      "Song of the Year is the songwriter's award, and on the Willboard Pop Awards it's the category most willing to go its own way. The 2027 nominees come out on November 16, and these are our predictions for the eight slots. They are predictions only. Will picks the nominees, and we haven't seen them.",
+      "<b>What it takes.</b> A #1 still helps. Since the field grew to eight in 2020, 41 of the 56 nominees reached #1 in their eligibility year, so expect about two nominees a year that didn't. The very top of the chart matters too. In 11 of the 13 shows before Foreign Language Song arrived, a song with the year's most weeks at #1 got a nomination. The two exceptions were [[Ariana Grande]] and [[Iggy Azalea]]'s ‘Problem,’ 10 weeks at #1 before the 2015 show, and [[Doja Cat]]'s ‘Say So,’ six weeks at #1 before the 2021 show.",
+      "<b>Not a copy of Record.</b> Song and Record of the Year share a lot of nominees, but not all of them. Since 2020, 34 of the 56 Song nominees were also up for Record, which leaves about three slots a year for songs Record passed over. Those songs win, too. Eight of the 14 winners weren't Record nominees, including last year's winner, [[Daughtry]]'s ‘Antidote.’ Two winners never reached #1 at all: [[The Chainsmokers]]' ‘Everybody Hates Me’ (#2, 2019 show) and [[Kayla Rae]]'s ‘Get Close,’ which took nine weeks to climb to #2 before the 2021 show.",
+      "<b>One song per act.</b> In 14 shows, no act has had two Song of the Year nominees in the same year. That matters this time, because several acts have two strong candidates. [[Kim Petras]] has ‘Brutalist’ (three weeks at #1, 14 on the chart) and ‘Need for Speed’ (three weeks at #1, four on the chart). [[Chloe Tang]] has ‘Obsexxed’ and ‘Running on Blue,’ her two-week #1 with [[Casandra]]. [[Cassandra Coleman]] has ‘End of Your Love’ and ‘Maggie.’ We expect the longer run to win out each time. Two familiar songs are out under the rules: Coleman's ‘Bite My Tongue’ and [[Demi Lovato]]'s ‘Let You Go’ were still charting this year, but both were nominated last year, and no song is nominated twice.",
+      "<b>The locks.</b> No song spent more than four weeks at #1 this year, and four songs got there: Chloe Tang's ‘Obsexxed’ (15 weeks on the chart), [[Willa Ford]]'s ‘Love4Life’ (13), [[Hilary Duff]]'s ‘Weather for Tennis’ (eight) and [[Alexandra Căpitănescu]]'s ‘Choke Me’ (six). ‘Choke Me’ has a winner's shape. It debuted at #1 and stayed four weeks, exactly how [[Kelly Clarkson]]'s ‘It's Quiet Uptown’ opened before it won at the 2017 show. Kim Petras's ‘Brutalist’ and [[Katy Perry]]'s ‘Bandaids,’ with three weeks at #1 apiece and 14 and 17 weeks on the chart, round out the locks.",
+      "<b>Likely.</b> [[girlsweetvoiced]]'s ‘Cranberry’ climbed for four weeks and then held #1 for three. Cassandra Coleman's ‘End of Your Love’ jumped 6-1 in its second week and spent three weeks on top. She won this award at the 2024 show with ‘Habit’ and was nominated again last year.",
+      "<b>The bubble.</b> That gives our list no song that missed #1, which history says is unlikely. The best candidate is Kayla Rae's ‘True,’ which spent seven weeks in the Top 3 and peaked at #2. She already has three Song nominations, tied for the most with The Chainsmokers, Kelly Clarkson, [[Halsey]] and Ariana Grande, and ‘Get Close’ won without reaching #1. Her new single, ‘It Wasn't Nothing,’ debuted at #1 on the October 29 chart, so there are two Kayla Rae songs in the running. [[Peach PRC]]'s ‘Out Loud’ (three weeks at #1) and [[Pink Pantheress]] and [[Zara Larsson]]'s ‘Stateside’ (two weeks at #1, 14 on the chart) are close behind.",
+      "<b>Snubs-in-waiting.</b> Demi Lovato's ‘In My Head’ had two weeks at #1 but only five on the chart, and [[Audrey Hobart]]'s ‘Sue Me’ had one week on top. [[Karol G]]'s ‘Alguien Que Te Amaba’ and [[Roxy Dekker]]'s ‘Ver Van M'n Bed’ reached #1 this fall, but last year, the first with Foreign Language Song, none of that category's five nominees also made Song of the Year. [[LiSA]]'s ‘Homura’ won here at the 2022 show, before the new category existed.",
+      "<b>The panel.</b> Mitzi Tallyho, going by the data, takes the six locks plus ‘Cranberry’ and ‘End of Your Love’: “Every one of them reached #1, and that's how most of this field gets built.” Sebastian Crescendo, going by craft, swaps ‘Bandaids’ for Kayla Rae's ‘True’: “This is the writer's award, and ‘True’ is the best-written song on the board.” Bobbie Jo Rhinestone, going by heart, swaps ‘End of Your Love’ for ‘Sue Me’: “I've sung that chorus at every red light since August.”"
+    ],
+    "ballot": {
+      "title": "Our predicted nominees: Song of the Year",
+      "items": [
+        "‘Obsexxed’ by [[Chloe Tang]]",
+        "‘Love4Life’ by [[Willa Ford]]",
+        "‘Weather for Tennis’ by [[Hilary Duff]]",
+        "‘Choke Me’ by [[Alexandra Căpitănescu]]",
+        "‘Brutalist’ by [[Kim Petras]]",
+        "‘Bandaids’ by [[Katy Perry]]",
+        "‘Cranberry’ by [[girlsweetvoiced]]",
+        "‘End of Your Love’ by [[Cassandra Coleman]]"
+      ],
+      "note": "First alternate: ‘True’ by [[Kayla Rae]]. Nominees are announced November 16."
+    }
+  },
+  {
     "id": "album-of-the-year-nomination-predictions",
     "date": "2026-11-05",
     "chart": "pop",
