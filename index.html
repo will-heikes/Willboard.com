@@ -2556,13 +2556,15 @@ function renderAwardYear(chart, year) {
   $('aw-grid').innerHTML = Object.entries(byCat).sort((x, y) => order(x[0]) - order(y[0])).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
-    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(win.artist || '', false, awPhotoYear(chart, year), win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
+    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(AW_ALIAS[win.artist] || win.artist || '', false, awPhotoYear(chart, year), win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).sort(byAwArtist).map(r => {
       const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
-      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, awPhotoYear(chart, year), r.song || r.album) : '<span class="mark">·</span>';
-      return `<div class="award-row${r.song || r.album ? ' has-art' : ''}">${thumb}
+      // Artist categories (Entertainer, New Artist...) show the act's photo from that show's era
+      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, awPhotoYear(chart, year), r.song || r.album)
+        : r.artist ? artTile(AW_ALIAS[r.artist] || r.artist, false, awPhotoYear(chart, year)) : '<span class="mark">·</span>';
+      return `<div class="award-row${r.song || r.album || r.artist ? ' has-art' : ''}">${thumb}
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}</div></div>`;
     }).join('') + '</div>';
   }).join('');
@@ -2643,7 +2645,7 @@ function renderArtist(id) {
 // Every Willboard Awards nomination the act shares in, newest show first, categories in show order.
 // A show still waiting on its winners reads "Pending" rather than counting as a loss
 // Nominee sheet names that differ from the chart's spelling of the act
-const AW_ALIAS = { 'Lady Antebellum': 'Lady A', 'Shkodra Elektronike': 'Shkodra Elektonike' };
+const AW_ALIAS = { 'Lady Antebellum': 'Lady A', 'Shkodra Elektronike': 'Shkodra Elektonike', 'Chlöe': 'Chloe', 'Måneskin': 'Maneskin', "Why Don't we": "Why Don't We" };
 function artistAwards(id, name) {
   const mine = n => creditParts(n.artist || '').some(p => { const k = squash(AW_ALIAS[p.name] || p.name); return p.id === id || ACT_BY_KEY[k]?.id === id || k === squash(name); });
   const html = ['country', 'pop'].filter(c => AWARDS?.[c]).map(chart => {
