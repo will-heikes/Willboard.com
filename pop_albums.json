@@ -20,13 +20,28 @@
   "released": 2018
  },
  {
+  "name": "Coming of Age",
+  "artist": "Cassandra Coleman",
+  "artistId": "art_588",
+  "plays": null,
+  "tracks": null,
+  "songs": [
+   "pop_song_763",
+   "pop_song_779",
+   "pop_song_786",
+   "pop_song_800"
+  ],
+  "year": 2023,
+  "chart": "pop",
+  "released": 2023
+ },
+ {
   "name": "End Of Your Love",
   "artist": "Cassandra Coleman",
   "artistId": "art_588",
   "plays": null,
   "tracks": 8,
   "songs": [
-   "pop_song_800",
    "pop_song_945",
    "pop_song_970",
    "pop_song_1013",
