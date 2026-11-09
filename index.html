@@ -2458,7 +2458,23 @@ const byAwArtist = (a, b) => awArtistKey(a).localeCompare(awArtistKey(b), undefi
 const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
-const popAlbumPoints = a => a.songs.reduce((t, id) => t + (SONGS[id]?.totalPoints || 0), 0);
+// A song released on two albums counts toward each only between the dates pop_albums.json gives it there
+// (Will 2026-11-09: Cassandra Coleman's 'Coming of Age' and 'Moonbeam' went to End Of Your Love from 2025)
+const inAlbumWindow = (al, sid, date) => { const w = al.dates?.[sid]; return !w || ((!w[0] || date >= w[0]) && (!w[1] || date < w[1])); };
+function albumSongPoints(al, sid) {
+  if (!al.dates?.[sid]) return SONGS[sid]?.totalPoints || 0;
+  const c = RUNS?.pop, r = c?.runs[sid];
+  if (!r) return 0;
+  return r.slice(1).reduce((t, p, j) => t + (p && inAlbumWindow(al, sid, c.weeks[r[0] + j]) ? (p <= 5 ? (6 - p) * 100 : 101 - p) : 0), 0);
+}
+// Spotify plays of a Pop 10 song while it was on this album (spotify_weekly.json weeks are dated by chart Thursday)
+function albumSongSpotify(al, sid) {
+  const raw = SPOTIFY?.songs?.[sid];
+  if (!raw) return null;
+  const t0 = Date.parse((SPOTIFY.start || '2013-12-19') + 'T12:00:00Z');
+  return raw.slice(1).reduce((t, n, j) => t + (inAlbumWindow(al, sid, new Date(t0 + (raw[0] + j) * 7 * 864e5).toISOString().slice(0, 10)) ? n : 0), 0);
+}
+const popAlbumPoints = a => a.songs.reduce((t, id) => t + albumSongPoints(a, id), 0);
 const albumCert = a => !a ? '' : a.plays != null ? certBadge('album', a.plays) : certBadge('popAlbum', popAlbumPoints(a));
 // The album a song came from, as released (a vault song names its Taylor's Version)
 const albumName = s => ALBUM_OF[s.id]?.editions?.[s.id] || ALBUM_OF[s.id]?.name || '';
@@ -3574,9 +3590,11 @@ function renderAlbums() {
     (pop.length ? col('pop', 'Pop Albums', pop, albumCert) : '');
   $('album-split').classList.toggle('one', !pop.length);
 }
-function renderAlbum(id) {
+async function renderAlbum(id) {
   const al = ALBUMS.find(a => a.id === id);
   if (!al) { location.hash = '#/albums'; return; }
+  // Pop albums list each song's Spotify plays
+  if (al.plays == null && !SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
   const songs = al.songs.map(sid => SONGS[sid]).filter(Boolean);
   const peak = Math.min(...songs.map(s => s.peakPosition ?? 99));
   const no1 = songs.filter(s => s.peakPosition === 1).length;
@@ -3596,7 +3614,7 @@ function renderAlbum(id) {
   $('album-songs').innerHTML = `<tr><th>Song</th><th class="hide-sm">Chart</th><th>Debut</th><th class="num">Peak</th><th class="num">Wks</th><th class="num">Plays</th></tr>` +
     songs.map(s => `<tr class="click" onclick="location.hash='#/song/${s.id}'"><td><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}${al.editions?.[s.id] ? ` · from ${esc(al.editions[s.id])}` : ''}</div></td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
-      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${songPlays(s)}</td></tr>`).join('') +
+      <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td><td class="num">${s.chart === 'pop' ? albumSongSpotify(al, s.id)?.toLocaleString() ?? '—' : songPlays(s)}</td></tr>`).join('') +
     // Album cuts: tracks that never charted but were played enough to count toward the album's certification.
     // Country cuts carry the Hot 20's plays-based certification; Pop certifies by chart points, so its cuts show plays only.
     (al.cuts?.length ? `<tr class="sub-h"><td colspan="6">Album cuts</td></tr>` + al.cuts.map(c => `<tr><td><div class="song">${esc(c.name)}${songs[0]?.chart === 'willboard' ? certBadge('willboard', c.plays) : ''}</div><div class="artist">Didn't chart</div></td>
@@ -4754,6 +4772,7 @@ async function init() {
       const same = ALBUMS.find(al => squash(al.artist) === squash(pa.artist) && slugify(al.name) === slugify(pa.name));
       if (same) {
         same.songs.push(...pa.songs.filter(sid => !same.songs.includes(sid)));
+        if (pa.dates) same.dates = pa.dates;
         if (pa.deluxe) same.deluxe = { ...pa.deluxe, ...same.deluxe };
       }
       else ALBUMS.push({ ...pa, cuts: [] });
@@ -4777,7 +4796,8 @@ async function init() {
       let id = `${slugify(al.artist.split(/,| & /)[0])}--${slugify(al.name)}` || 'album';
       while (ids.has(id)) id += '-2';
       ids.add(al.id = id);
-      for (const sid of al.songs) ALBUM_OF[sid] = al;
+      // A song on two albums (dates in pop_albums.json) belongs, on its own page, to the album it's on now
+      for (const sid of al.songs) if (!ALBUM_OF[sid] || !al.dates?.[sid] || !al.dates[sid][1]) ALBUM_OF[sid] = al;
     }
   } catch (e) {
     console.error(e);
