@@ -226,7 +226,8 @@ button { font: inherit; color: inherit; }
 }
 
 /* certifications: Hot 20 by running plays (300 silver, 400 gold, 500 platinum, +100 per platinum);
-   Pop 10 by running points (1250 gold, 2500 platinum, +1250 per platinum); albums by total plays
+   Pop 10 by running points (1250 gold, 2500 platinum, +1250 per platinum); pop albums by summed points
+   (2500 gold, 5000 platinum, +1000, diamond at 10000); country albums by total plays
    (500 silver, 750 gold, 1000 platinum, +1000 per platinum, 5000 diamond); Hot 20 songs are diamond at 1000 plays, Pop at 5× platinum */
 /* Each badge is a small metal plaque with a record on it, like a framed sales award */
 .cert {
@@ -1539,7 +1540,14 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
           <tr><td>Platinum</td><td>2,500, then another Platinum every 1,250</td></tr>
           <tr><td>Diamond</td><td>5× Platinum (7,500)</td></tr>
         </table>
-        <p><b>Albums</b> certify by the plays of all their tracks added together.</p>
+        <p><b>Pop albums</b> certify by the chart points of their Pop 10 songs added together.</p>
+        <table class="pts">
+          <tr><th>Award</th><th>Points</th></tr>
+          <tr><td>Gold</td><td>2,500</td></tr>
+          <tr><td>Platinum</td><td>5,000, then another Platinum every 1,000</td></tr>
+          <tr><td>Diamond</td><td>10,000</td></tr>
+        </table>
+        <p><b>Country albums</b> certify by the plays of all their tracks added together.</p>
         <table class="pts">
           <tr><th>Award</th><th>Plays</th></tr>
           <tr><td>Silver</td><td>500</td></tr>
@@ -1754,12 +1762,13 @@ function certLabel(n, steps) {
 }
 // Albums count every track's plays added together (Will's ladder: 500 silver, 750 gold, 1000 platinum,
 // +1000 per platinum, and 5,000 is Diamond); Hot 20 songs are Diamond at 1,000 plays, Pop at 5× Platinum (Will)
-const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250, 5], album: [500, 750, 1000, 1000, 5] };
+// Pop albums certify by their charted songs' points added together, Gold 2,500, Platinum 5,000 +1,000 each, Diamond 10,000 (Will)
+const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250, 5], album: [500, 750, 1000, 1000, 5], popAlbum: [null, 2500, 5000, 1000, 6] };
 function certBadge(chart, n) {
   const c = certLabel(n, CERT_STEPS[chart]);
   if (!c) return '';
   // Pop certifications come from Will's internal points, so only Hot 20 shows the number behind them
-  const title = chart === 'pop' ? c[1] : `${c[1]} · ${n.toLocaleString()} plays`;
+  const title = chart === 'pop' || chart === 'popAlbum' ? c[1] : `${c[1]} · ${n.toLocaleString()} plays`;
   return `<span class="cert ${c[0]}" title="${title}"><i></i>${c[1]}</span>`;
 }
 // All-time iTunes plays; Pop 10 songs are measured in chart points, which stay private
@@ -2447,7 +2456,8 @@ const byAwArtist = (a, b) => awArtistKey(a).localeCompare(awArtistKey(b), undefi
 const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
-const albumCert = a => a ? certBadge('album', a.plays) : '';
+const albumCert = a => !a ? '' : a.plays != null ? certBadge('album', a.plays)
+  : certBadge('popAlbum', a.songs.reduce((t, id) => t + (SONGS[id]?.totalPoints || 0), 0));
 // The album a song came from, as released (a vault song names its Taylor's Version)
 const albumName = s => ALBUM_OF[s.id]?.editions?.[s.id] || ALBUM_OF[s.id]?.name || '';
 const albumLink = (a, html) => a ? `<a href="#/album/${a.id}">${html}</a>` : html;
@@ -3558,7 +3568,7 @@ function renderAlbums() {
         <span class="meta">${meta(al)}</span></a>`).join('') : '<div class="empty">No matches.</div>') + '</div>';
   };
   $('album-split').innerHTML = col('country', 'Country Albums', country, albumCert) +
-    (pop.length ? col('pop', 'Pop Albums', pop, al => { const n = albumNo1s(al); return n ? `${n} #1${n > 1 ? 's' : ''}` : ''; }) : '');
+    (pop.length ? col('pop', 'Pop Albums', pop, al => { const n = albumNo1s(al); return (n ? `${n} #1${n > 1 ? 's' : ''}` : '') + albumCert(al); }) : '');
   $('album-split').classList.toggle('one', !pop.length);
 }
 function renderAlbum(id) {
