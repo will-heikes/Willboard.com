@@ -1545,7 +1545,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
           <tr><th>Award</th><th>Points</th></tr>
           <tr><td>Gold</td><td>2,500</td></tr>
           <tr><td>Platinum</td><td>5,000, then another Platinum every 1,000</td></tr>
-          <tr><td>Diamond</td><td>10,000</td></tr>
+          <tr><td>Diamond</td><td>10,000 (2× Diamond at 20,000)</td></tr>
         </table>
         <p><b>Country albums</b> certify by the plays of all their tracks added together.</p>
         <table class="pts">
@@ -1752,8 +1752,10 @@ function nearestWeek(hist, target) {
 function seeded(seed) { let s = seed; return () => ((s = (s * 1664525 + 1013904223) | 0) >>> 0) / 4294967296; }
 function certLabel(n, steps) {
   // steps: [silver, gold, platinum, size of each extra platinum, how many platinums make diamond]; silver may be null
-  const [silver, gold, plat, step, diamond = 10] = steps;
+  // Optional sixth value: Diamond's own threshold, so 2× Diamond means twice it (pop albums: 10,000 then 20,000)
+  const [silver, gold, plat, step, diamond = 10, diamondAt] = steps;
   if (!n || n < (silver ?? gold)) return null;
+  if (diamondAt && n >= diamondAt) { const k = Math.floor(n / diamondAt); return ['diamond', k > 1 ? `${k}× Diamond` : 'Diamond']; }
   if (n < gold) return ['silver', 'Silver'];
   if (n < plat) return ['gold', 'Gold'];
   const x = 1 + Math.floor((n - plat) / step);
@@ -1763,7 +1765,7 @@ function certLabel(n, steps) {
 // Albums count every track's plays added together (Will's ladder: 500 silver, 750 gold, 1000 platinum,
 // +1000 per platinum, and 5,000 is Diamond); Hot 20 songs are Diamond at 1,000 plays, Pop at 5× Platinum (Will)
 // Pop albums certify by their charted songs' points added together, Gold 2,500, Platinum 5,000 +1,000 each, Diamond 10,000 (Will)
-const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250, 5], album: [500, 750, 1000, 1000, 5], popAlbum: [null, 2500, 5000, 1000, 6] };
+const CERT_STEPS = { willboard: [300, 400, 500, 100, 6], pop: [null, 1250, 2500, 1250, 5], album: [500, 750, 1000, 1000, 5], popAlbum: [null, 2500, 5000, 1000, 6, 10000] };
 function certBadge(chart, n) {
   const c = certLabel(n, CERT_STEPS[chart]);
   if (!c) return '';
