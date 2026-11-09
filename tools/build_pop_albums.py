@@ -28,6 +28,11 @@ FIX = {
     'DNCE|Cake By the Ocean': 'DNCE',
     'Hailee Steinfeld|Let Me Go': None,
     'Kylie Minogue|Padam Padam': 'Tension',
+    # Will 2026-11-09: her singles before 'Coming of Age' make up the Coming of Age album
+    'Cassandra Coleman|Habit': 'Coming of Age',
+    'Cassandra Coleman|Re: Love': 'Coming of Age',
+    'Cassandra Coleman|Night Air': 'Coming of Age',
+    'Cassandra Coleman|Moonbeam': 'Coming of Age',
     'Kelly Clarkson|It\'s Quiet Uptown': 'The Hamilton Mixtape',
     'Major Lazer|Cold Water': None,
     'Marshmello|Be Kind (Feat. Halsey)': None,
@@ -78,6 +83,7 @@ NOT_ALBUM = re.compile(r'soundtrack|motion picture|\bfrom\b|episode|collection|g
 
 # Release years the track dates get wrong: a deluxe track dated later, or singles out long before the album
 RELEASED = {
+    'Cassandra Coleman|Coming of Age': 2023,
     'Dua Lipa|Future Nostalgia': 2020,
     'Sam Smith|Gloria': 2023,
     'Zara Larsson|So Good': 2017,

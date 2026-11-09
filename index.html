@@ -4758,6 +4758,12 @@ async function init() {
       }
       else ALBUMS.push({ ...pa, cuts: [] });
     }
+    // A library album holding only Pop 10 songs (Coming of Age, Avril Lavigne) is a pop album: it ranks and
+    // certifies with the pop albums by points, not by iTunes plays
+    for (const al of ALBUMS) if (al.plays != null && al.songs.length && al.songs.every(sid => sid.startsWith('pop_'))) {
+      const pa = POP_ALBUMS.find(x => squash(x.artist) === squash(al.artist) && slugify(x.name) === slugify(al.name));
+      al.plays = null; al.tracks = pa?.tracks ?? null;
+    }
     RUNS = await fetch('runs.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     PREVIEWS = await fetch('previews.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     ARTIST_INFO = await fetch('artist_info.json', FRESH).then(r => r.ok ? r.json() : null).catch(() => null);
