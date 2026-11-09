@@ -29,11 +29,22 @@
    "pop_song_763",
    "pop_song_779",
    "pop_song_786",
-   "pop_song_800"
+   "pop_song_800",
+   "pop_song_945"
   ],
   "year": 2023,
   "chart": "pop",
-  "released": 2023
+  "released": 2023,
+  "dates": {
+   "pop_song_800": [
+    null,
+    "2025-01-01"
+   ],
+   "pop_song_945": [
+    null,
+    "2025-01-01"
+   ]
+  }
  },
  {
   "name": "End Of Your Love",
@@ -42,6 +53,7 @@
   "plays": null,
   "tracks": 8,
   "songs": [
+   "pop_song_800",
    "pop_song_945",
    "pop_song_970",
    "pop_song_1013",
@@ -51,7 +63,17 @@
   ],
   "year": 2026,
   "chart": "pop",
-  "released": 2026
+  "released": 2026,
+  "dates": {
+   "pop_song_800": [
+    "2025-01-01",
+    null
+   ],
+   "pop_song_945": [
+    "2025-01-01",
+    null
+   ]
+  }
  },
  {
   "name": "It’s Not That Deep",
