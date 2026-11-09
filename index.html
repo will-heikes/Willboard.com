@@ -1337,7 +1337,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     <div class="page-head">
       <div>
         <h1>Albums</h1>
-        <div class="sub">Every album with a song on the Willboard charts. Country albums rank by plays, pop albums by charted songs.</div>
+        <div class="sub">Every album with a song on the Willboard charts. Country albums rank by plays, pop albums by certification.</div>
       </div>
       <input class="search" id="album-q" placeholder="Search albums or artists…" autocomplete="off">
     </div>
@@ -2456,8 +2456,8 @@ const byAwArtist = (a, b) => awArtistKey(a).localeCompare(awArtistKey(b), undefi
 const awWinner = (chart, year, cat) => AWARDS[chart].find(n => n.year === year && n.category === cat && n.slot === 'Winner');
 // Albums from Will's iTunes library (albums.json, tools/import_itunes.py)
 let ALBUMS = [], ALBUM_OF = {};
-const albumCert = a => !a ? '' : a.plays != null ? certBadge('album', a.plays)
-  : certBadge('popAlbum', a.songs.reduce((t, id) => t + (SONGS[id]?.totalPoints || 0), 0));
+const popAlbumPoints = a => a.songs.reduce((t, id) => t + (SONGS[id]?.totalPoints || 0), 0);
+const albumCert = a => !a ? '' : a.plays != null ? certBadge('album', a.plays) : certBadge('popAlbum', popAlbumPoints(a));
 // The album a song came from, as released (a vault song names its Taylor's Version)
 const albumName = s => ALBUM_OF[s.id]?.editions?.[s.id] || ALBUM_OF[s.id]?.name || '';
 const albumLink = (a, html) => a ? `<a href="#/album/${a.id}">${html}</a>` : html;
@@ -3559,7 +3559,8 @@ function renderAlbums() {
   const match = al => !q || al.name.toLowerCase().includes(q) || al.artist.toLowerCase().includes(q);
   const country = ALBUMS.filter(al => al.plays != null);
   const pop = ALBUMS.filter(al => al.plays == null)
-    .sort((a, b) => b.songs.length - a.songs.length || albumNo1s(b) - albumNo1s(a) || albumWeeks(b) - albumWeeks(a));
+    // Highest certification first (Will): the same summed points the badges come from
+    .sort((a, b) => popAlbumPoints(b) - popAlbumPoints(a) || b.songs.length - a.songs.length || albumNo1s(b) - albumNo1s(a));
   const col = (cls, title, list, meta) => {
     const all = list.filter(match), rows = all.slice(0, q ? 150 : 100);
     return `<div class="col ${cls}"><div class="col-h"><h2>${title}</h2><small>${q ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `Top ${Math.min(100, list.length)} of ${list.length}`}</small></div>` +
@@ -3568,7 +3569,7 @@ function renderAlbums() {
         <span class="meta">${meta(al)}</span></a>`).join('') : '<div class="empty">No matches.</div>') + '</div>';
   };
   $('album-split').innerHTML = col('country', 'Country Albums', country, albumCert) +
-    (pop.length ? col('pop', 'Pop Albums', pop, al => { const n = albumNo1s(al); return (n ? `${n} #1${n > 1 ? 's' : ''}` : '') + albumCert(al); }) : '');
+    (pop.length ? col('pop', 'Pop Albums', pop, albumCert) : '');
   $('album-split').classList.toggle('one', !pop.length);
 }
 function renderAlbum(id) {
