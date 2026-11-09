@@ -486,6 +486,9 @@ button { font: inherit; color: inherit; }
 .cmv.fx .head.me .art { width: 26px; height: 26px; box-shadow: 0 0 0 3px var(--c), 0 2px 6px rgb(0 0 0 / .3); }
 .cmv.fx .head.me span { font-size: 12.5px; font-weight: 800; color: #fff; background: var(--c); }
 .cmv.fx .head.me i { font-size: 12px; background: var(--ink); }
+.cmv.own .head.me .art { width: 34px; height: 34px; box-shadow: 0 0 0 4px var(--c), 0 3px 10px rgb(0 0 0 / .35); }
+.cmv.own .head.me span { font-size: 15px; padding: 2px 8px; box-shadow: 0 2px 8px rgb(0 0 0 / .25); }
+.cmv.own .head.me i { font-size: 14px; }
 .no1-watch { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent, var(--country)); cursor: pointer; white-space: nowrap; }
 .no1-watch:hover { text-decoration: underline; }
 .ye-movie { margin: 0 0 16px; padding: 0; overflow: hidden; }
@@ -2814,6 +2817,8 @@ function chartMovie(el, all, actName, opt = {}) {
   // A #1's chart history (opt.span = [first, last] week index, opt.focus = its song id): every song on the
   // chart in those weeks, the full Top 20 or Top 10, with the #1 drawn bold in the chart's colour
   const span = opt.span, focus = opt.focus, ones = opt.ones, wide = !!(year || span);
+  // A song page's "Watch its run" (Will 2026-11-09): slower, the song stands out, and it stops a second after the song leaves the chart
+  const own = !!opt.ownTune;
   // The Every #1 video draws only the songs that reached #1 unless the viewer asks for the rest (Will)
   let only1 = !!opt.only1;
   // A head-to-head (up to five acts) shows each act's #1 count up top instead of the overall tallies (Will)
@@ -2821,10 +2826,12 @@ function chartMovie(el, all, actName, opt = {}) {
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
-  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally${vsTally ? ' vs' : ''}">${vsTally ? opt.acts.map((a, k) => `<div class="tl" style="--c:${a.color}"><small><i></i>${esc(a.name)} <span>#1s</span></small><b class="na${k}">0</b></div>`).join('') : '<div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div>'}</div><div class="sum" hidden></div></div>
+  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}${own ? ' own' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally${vsTally ? ' vs' : ''}">${vsTally ? opt.acts.map((a, k) => `<div class="tl" style="--c:${a.color}"><small><i></i>${esc(a.name)} <span>#1s</span></small><b class="na${k}">0</b></div>`).join('') : '<div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div>'}</div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
-      <select class="speed" aria-label="Speed">${ones
+      <select class="speed" aria-label="Speed">${own
+        ? `<option value="0.333">1 week / 3 sec</option><option value="0.5" selected>1 week / 2 sec</option><option value="1">1 week / sec</option><option value="2">2 weeks / sec</option>`
+        : ones
         ? `<option value="0.5">1 week / 2 sec</option><option value="1" selected>1 week / sec</option><option value="2">2 weeks / sec</option><option value="4">4 weeks / sec</option>`
         : span
         ? `<option value="0.333">1 week / 3 sec</option><option value="0.5" selected>1 week / 2 sec</option><option value="1">1 week / sec</option>`
@@ -2964,11 +2971,11 @@ function chartMovie(el, all, actName, opt = {}) {
         if (cp && PREVIEWS[s.id] && !bad.has(s.id) && (!tune || cp < tune.p || (cp === tune.p && a > tune.a))) tune = { s, a, p: cp };
       }
       // On the every-#1 video the song at #1 is drawn bold
-      const me = s.id === focus || (ones && (f < .5 ? p0 || p1 : p1 || p0) === 1), dim = focus && !me ? .45 : 1;
-      if (d) g += `<path d="${d}" fill="none" stroke="${color[s.id]}" stroke-width="${me ? 5 : p0 || p1 ? 3 : 2}" stroke-opacity="${(p0 || p1 ? 1 : .35) * dim}" stroke-linejoin="round" stroke-linecap="round"/>`;
+      const me = s.id === focus || (ones && !own && (f < .5 ? p0 || p1 : p1 || p0) === 1), dim = focus && !me ? (own ? .25 : .45) : 1;
+      if (d) g += `<path d="${d}" fill="none" stroke="${color[s.id]}" stroke-width="${me ? (own ? 7 : 5) : p0 || p1 ? 3 : 2}" stroke-opacity="${(p0 || p1 ? 1 : .35) * dim}" stroke-linejoin="round" stroke-linecap="round"/>`;
       const h = heads[s.id] || (hx != null ? mkHead(s, xs.r) : null);
       if (hx != null) {
-        h.style.opacity = op * (focus && s.id !== focus ? .75 : 1);
+        h.style.opacity = op * (focus && s.id !== focus ? (own ? .5 : .75) : 1);
         h.style.transform = `translate(${(hx - hs).toFixed(1)}px, ${(hy - hs).toFixed(1)}px)`;
         h.style.zIndex = s.id === focus ? 200 : 100 - (p0 || p1);
         const n1 = xs.r.slice(1, i0 - a + 2).filter(p => p === 1).length, em = h.querySelector('em');
@@ -3047,17 +3054,21 @@ function chartMovie(el, all, actName, opt = {}) {
     step();
   }
 
+  // The week the song's tip finishes dropping off the chart for good, and a second after it
+  const offAt = () => { const r = RUNS[key].runs[focus]; return r[0] + r.length - 1; };
+  const stopAt = () => own ? Math.min(last, offAt() + +root.querySelector('.speed').value) : last;
   function frame(ts) {
     const dt = Math.min(.1, (ts - prev) / 1000); prev = ts;
-    if (t < last) {
+    const end = stopAt();
+    if (t < end) {
       const sp = +root.querySelector('.speed').value * (active(Math.floor(t)) ? 1 : 12);
-      t = Math.min(last, t + dt * sp);
+      t = Math.min(end, t + dt * sp);
     } else { pause(); return summary(); }
     draw();
     raf = requestAnimationFrame(frame);
   }
   function play() {
-    if (t >= last) t = first;
+    if (t >= stopAt()) t = own ? cue ?? first : first;
     hideSummary();
     PV.audio.pause(); RL?.pause();
     // Phones only let audio start inside a tap, so wake both players now, while this is one
@@ -3127,7 +3138,7 @@ function chartMovie(el, all, actName, opt = {}) {
   }
   // The #1's end card: its run in numbers, the song it took #1 from and the one that ended its reign
   function runSummary() {
-    if (ones) return onesSummary();
+    if (ones && !own) return onesSummary();
     const me = songs.find(x => x.s.id === focus);
     if (!me) return;
     const { s, r } = me, ps = r.slice(1), on = ps.filter(Boolean), at1 = ps.map((p, j) => p === 1 ? r[0] + j : -1).filter(i => i >= 0);
@@ -3137,13 +3148,13 @@ function chartMovie(el, all, actName, opt = {}) {
     const num = (v, l) => `<div class="n"><b>${v}</b><small>${l}</small></div>`;
     const row = (lab, x, note) => x ? `<a class="hl" href="#/song/${x.s.id}">${artTile(x.s.artistName, true, +weeks[x.r[0]].slice(0, 4), x.s.name)}<span><small>${lab}</small><b>${esc(x.s.name)}</b><em>${esc(x.s.artistName)}${note ? ' · ' + note : ''}</em></span></a>` : '';
     sumEl.innerHTML = `<div class="sum-in"><div class="sum-h"><small>${NAME[key]} · ${fmtShort(weeks[r[0]])} to ${fmtShort(weeks[r[0] + ps.length - 1])}</small><b>${esc(s.name)}</b></div>
-      <div class="nums">${num(`#${ps[0]}`, 'Debut') + num(climb ? wk(climb) : 'Debut', climb ? 'To reach #1' : 'At #1') + num(at1.length, at1.length === 1 ? 'Week at #1' : 'Weeks at #1') + num(on.length, 'Weeks on chart')}</div>
-      <div class="hls">${row('Took #1 from', before, fmtShort(weeks[at1[0]]))}${row('Ended its reign', after, fmtShort(weeks[at1[at1.length - 1] + 1]))}</div>
+      <div class="nums">${num(`#${ps[0]}`, 'Debut') + (at1.length ? num(climb ? wk(climb) : 'Debut', climb ? 'To reach #1' : 'At #1') + num(at1.length, at1.length === 1 ? 'Week at #1' : 'Weeks at #1') : num(`#${Math.min(...on)}`, 'Peak')) + num(on.length, 'Weeks on chart')}</div>
+      ${at1.length ? `<div class="hls">${row('Took #1 from', before, fmtShort(weeks[at1[0]]))}${row('Ended its reign', after, fmtShort(weeks[at1[at1.length - 1] + 1]))}</div>` : ''}
       <button class="again">⟲ Watch again</button></div>`;
     stage.style.minHeight = svg.getAttribute('height') + 'px';
     stage.classList.add('ended');
     sumEl.hidden = false; requestAnimationFrame(() => sumEl.classList.add('in'));
-    sumEl.querySelector('.again').onclick = () => { t = first; heard = {}; play(); };
+    sumEl.querySelector('.again').onclick = () => { t = own ? cue ?? first : first; heard = {}; play(); };
     ended = true;
     want.id = !muted && PREVIEWS[s.id] && !bad.has(s.id) ? s.id : null;
     now.textContent = want.id ? `♪ ${s.name} · ${s.artistName}` : '';
