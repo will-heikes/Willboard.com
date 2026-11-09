@@ -2979,8 +2979,8 @@ function chartMovie(el, all, actName, opt = {}) {
         if (p0 === 1) em.textContent = `#1 · ${n1} wk${n1 === 1 ? '' : 's'}`;
       } else if (h) h.style.opacity = 0;
     }
-    // A #1's own history plays that song the whole way through
-    if (focus && !ones && PREVIEWS[focus] && !bad.has(focus)) tune = { s: SONGS[focus] };
+    // A #1's own history, and a song page's "Watch its run" (Will 2026-11-09), play that song the whole way through
+    if (focus && (!ones || opt.ownTune) && PREVIEWS[focus] && !bad.has(focus)) tune = { s: SONGS[focus] };
     g += '</g>';
     svg.setAttribute('width', W); svg.setAttribute('height', H);
     svg.innerHTML = g;
@@ -3497,7 +3497,7 @@ function songMovie(s, watch) {
   wrap.hidden = !r;
   if (wrap.hidden) { $('song-movie').innerHTML = ''; return; }
   $('song-movie-sub').textContent = `The full ${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'} week by week, from just before its debut`;
-  CM = chartMovie($('song-movie'), DATA.songs.filter(o => o.chart === s.chart), s.chart === 'pop' ? 'Pop 10' : 'Country Hot 20', { chart: s.chart, span: [0, c.weeks.length - 1], ones: true, focus: s.id });
+  CM = chartMovie($('song-movie'), DATA.songs.filter(o => o.chart === s.chart), s.chart === 'pop' ? 'Pop 10' : 'Country Hot 20', { chart: s.chart, span: [0, c.weeks.length - 1], ones: true, focus: s.id, ownTune: true });
   CM.seek(r[0] - 3);
   if (watch) { wrap.scrollIntoView({ block: 'start' }); CM.play(); }
 }
