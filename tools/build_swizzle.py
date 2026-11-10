@@ -139,7 +139,7 @@ def main():
     args = ap.parse_args()
     if args.clips_only:
         out = json.load(open('swizzle.json', encoding='utf-8'))
-        add_clips(out['songs'])
+        add_clips(out['songs'], drop=True)
         with open('swizzle.json', 'w') as f:
             json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
         return
@@ -216,7 +216,7 @@ def main():
         print(f"  Swizzle {e['n']:>2}  {e['date']:<12} {len(e['songs']):>3} songs  #1 {songs[e['songs'][0][1]]['t']}  ({e['era']} era)")
 
 
-def add_clips(songs):
+def add_clips(songs, drop=False):
     """The clip tools/fetch_swizzle_previews.py chose wins: the original recording unless Will ranked the
     Taylor's Version, never acoustic or live (Will 2026-11-10)."""
     if not os.path.exists('swizzle_previews.json'):
@@ -225,6 +225,9 @@ def add_clips(songs):
     for k, s in songs.items():
         if clips.get(k):
             s['dz'] = clips[k]
+        elif drop and k in clips:
+            # --clips-only: a song with no right take loses the clip a bad match gave it before
+            s.pop('dz', None)
 
 
 def add_spotify(songs, root):
