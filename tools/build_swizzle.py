@@ -61,7 +61,7 @@ VAULT = {
 ALBUM_NAME = {'debut': 'Taylor Swift', 'folklore': 'folklore', 'evermore': 'evermore', 'reputation': 'Reputation',
               'midnights': 'Midnights', 'thetorturedpoetsdepartment': 'The Tortured Poets Department',
               'thelifeofashowgirl': 'The Life of a Showgirl'}
-# Songs the sheets file under "Other" or "N/A"
+# Non-album singles: songs released on their own, never counted with an album (even a Taylor's Version that later added them)
 OTHER = {'safeandsound': 'The Hunger Games', 'eyesopen': 'The Hunger Games', 'crazier': 'Hannah Montana: The Movie',
          'sweeterthanfiction': 'Sweeter Than Fiction', 'beautifuleyes': 'Beautiful Eyes', 'iheart': 'Beautiful Eyes',
          'ronan': 'Ronan', 'todaywasafairytale': 'Today Was a Fairytale'}
@@ -182,7 +182,11 @@ def main():
     for k, s in songs.items():
         s['t'] = TITLE.get(k) or s['t'] or s.pop('_sheet', None) or k
         s.pop('_sheet', None)
-        al = vault.get(k) or s.pop('_label', None) or OTHER.get(k) or s.get('_it')
+        # A song that came out on its own (a soundtrack or charity single) stays a non-album single even
+        # where a sheet files it under the Taylor's Version album it was later added to (Will 2026-11-10:
+        # Today Was a Fairytale is not a Fearless song)
+        label = s.pop('_label', None)
+        al = vault.get(k) or OTHER.get(k) or label or s.get('_it')
         s.pop('_label', None); s.pop('_it', None)
         s['al'] = al
 
