@@ -26,6 +26,8 @@ import fetch_previews as fp  # noqa: E402
 from fetch_artist_photos import get  # noqa: E402
 
 OUT, PICKS = 'swizzle_previews.json', 'swizzle_preview_picks.json'
+# Apple sells the debut album as "Taylor Swift (Bonus Track Version)": still the studio recording
+fp.EDITIONS = re.compile(fp.EDITIONS.pattern + r"|bonus track( version)?", re.I)
 FIX = {}
 TV = re.compile(r"taylor['’]?s version", re.I)
 TEN = re.compile(r'10 minute', re.I)
