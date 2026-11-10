@@ -67,7 +67,9 @@ OTHER = {'safeandsound': 'The Hunger Games', 'eyesopen': 'The Hunger Games', 'cr
          'ronan': 'Ronan', 'todaywasafairytale': 'Today Was a Fairytale'}
 # Spellings the sheets use that differ from the song's real title
 ALIAS = {'lwymmd': 'lookwhatyoumademedo'}
-TITLE = {'lookwhatyoumademedo': 'Look What You Made Me Do', 'saydontgo': "Say Don't Go", 'shakeitoff': 'Shake It Off',
+TITLE = {'lookwhatyoumademedo': 'Look What You Made Me Do', 'thankyoualmee': 'thanK you aIMee',
+         'myboyonlybreakshisfavouritetoys': 'My Boy Only Breaks His Favorite Toys',
+         'whosafraidofliloldme': "Who's Afraid of Little Old Me?", 'saydontgo': "Say Don't Go", 'shakeitoff': 'Shake It Off',
          'thelifeofashowgirl': 'The Life of a Showgirl', 'karmaicespice': 'Karma (feat. Ice Spice)',
          'snowonthebeachmorelanadelrey': 'Snow on the Beach (feat. More Lana Del Rey)',
          'snowonthebeach': 'Snow on the Beach', 'alltoowell10minuteversion': 'All Too Well (10 Minute Version)',

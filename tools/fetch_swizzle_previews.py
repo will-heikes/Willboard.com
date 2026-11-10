@@ -40,9 +40,24 @@ def wanted(s):
     return artist, title, album
 
 
+FEAT = re.compile(r'\((?:feat\.?|ft\.?|featuring)\s+([^)]*)\)', re.I)
+
+
 def right_cut(title, pick):
-    """The 10 Minute Version and the 5-minute song share a name once brackets go, so check which one it is."""
-    return bool(TEN.search(title)) == bool(TEN.search(pick or ''))
+    """Is the pick the take Will ranked? find() falls back to a live take or remix when nothing else turns
+    up (Long Live came back as Speak Now World Tour Live), the 10 Minute Version and the 5-minute song
+    share a name once brackets go, and so do Karma and Karma (feat. Ice Spice)."""
+    pick = pick or ''
+    if bool(TEN.search(title)) != bool(TEN.search(pick)):
+        return False
+    # Only the words around the song's name count: "Long Live" is not a live take
+    bare = fp.PARENS.sub('', title).strip()
+    rest = re.sub(re.escape(bare), '', pick, count=1, flags=re.I).replace('10 Minute Version', '')
+    tags = ' '.join(re.findall(r'[(\[]([^)\]]*)', title)).replace('10 Minute Version', '')
+    if fp.ALT.search(fp.EDITIONS.sub('', rest)) and not fp.ALT.search(tags):
+        return False
+    feat = FEAT.search(title)
+    return not feat or feat.group(1).split()[0].lower() in pick.lower()
 
 
 def main():
@@ -76,7 +91,7 @@ def main():
                 tid = fp.find(artist, title, album)
                 # The wrong length of All Too Well: ask again with the cut spelled out in full
                 if tid and not right_cut(title, fp.picked.get(tid)):
-                    print('    wrong cut, trying Apple')
+                    print('    not the take Will ranked, trying Apple')
                     tid = fp.itunes(artist, title, album, original=not TV.search(title)) or 0
                     if tid and not right_cut(title, fp.picked.get(tid)):
                         tid = 0
