@@ -4954,7 +4954,8 @@ function swzAlbums(e) {
   e.alRank = Object.fromEntries(list.map(x => [x.al, x.rank]));
   return list;
 }
-const swzAlCover = al => `images/covers/taylor-swift--${slugify(al)}.jpg`;
+// The repo's cover, or the Deezer one build_swizzle.py found for an album the repo has no image of
+const swzAlCover = al => Object.values(SWZ.songs).find(x => x.al === al && x.cv)?.cv || `images/covers/taylor-swift--${slugify(al)}.jpg`;
 const swzAlArt = (al, eager) => artTile('Taylor Swift', eager).replace(/<\/div>$/, `<img src="${swzAlCover(al)}" alt=""${eager ? '' : ' loading="lazy"'} onerror="this.remove()"></div>`);
 function swzOpen(k) {
   const e = SWZ.editions.find(x => String(x.n) === $('swz-select').value);
