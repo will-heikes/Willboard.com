@@ -924,6 +924,17 @@ body.on-ask .ask-fab { display: none; }
 .swz-mv-svg .tip .bd rect { fill: var(--ink); }
 .swz-mv-svg .tip.one .bd rect { fill: var(--swz); }
 .swz-mv-svg .tip .bd text { fill: #fff; font-family: var(--f-cond); font-weight: 700; font-size: 14px; text-anchor: middle; }
+.swz-alf { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: thin; padding: 2px 2px 8px; margin-bottom: 8px; }
+.swz-alf button { flex: none; width: 76px; background: none; border: 0; padding: 0; cursor: pointer; text-align: center; font: inherit; color: var(--ink); }
+.swz-alf .cv { width: 76px; height: 76px; border-radius: 8px; overflow: hidden; position: relative; outline: 3px solid transparent; outline-offset: 2px; transition: outline-color .15s, opacity .15s; }
+.swz-alf .cv .art { width: 100%; height: 100%; border-radius: 0; }
+.swz-alf .cv.all { background: var(--swz); color: #fff; display: grid; place-items: center; font-family: var(--f-cond); font-weight: 700; font-size: 20px; letter-spacing: .02em; }
+.swz-alf .nm { font-size: 11px; font-weight: 600; line-height: 1.25; margin-top: 6px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.swz-alf .nm i { display: block; font-style: normal; font-weight: 500; color: var(--muted); }
+.swz-alf.on button:not(.active) .cv { opacity: .45; }
+.swz-alf button:hover .cv { opacity: 1; }
+.swz-alf button.active .cv { outline-color: var(--swz); }
+@media (max-width: 640px) { .swz-alf { margin: 0 -16px 8px; padding: 2px 16px 8px; scrollbar-width: none; } .swz-alf button, .swz-alf .cv { width: 64px; } .swz-alf .cv { height: 64px; } }
 .swz-more { display: block; width: 100%; padding: 12px; border: 0; border-top: 1px solid var(--line-soft); background: none; cursor: pointer; font-weight: 700; font-size: 13px; color: var(--swz); }
 .swz-more:hover { background: var(--card-2); }
 .swz-ones { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
@@ -1522,6 +1533,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
       <div class="week-nav"><button id="swz-prev">← Older</button><select id="swz-select" aria-label="Swizzle edition"></select><button id="swz-next">Newer →</button></div></div>
     <div class="swz-hero card" id="swz-hero"></div>
     <div class="song-sec"><div class="sec-h"><h2 id="swz-h"></h2><span class="sub" id="swz-h-sub"></span></div>
+      <div class="swz-alf" id="swz-alf" role="group" aria-label="Filter by album"></div>
       <div class="card chart-card swz-list">
         <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Album</span><span class="c hide-sm">Peak</span><span class="c" title="Rank on the Swizzle before">LS</span><span class="c">Move</span></div>
         <div id="swz-rows"></div>
@@ -4835,7 +4847,7 @@ function renderRecords(chartId) {
 // Will's rankings of his favorite Taylor Swift songs (swizzle.json, tools/build_swizzle.py), one list per
 // "Swizzle" edition, oldest first. #/taylor-swift-rankings opens the newest; #/taylor-swift-rankings/<n> opens
 // Swizzle n (#/swizzle works too).
-let SWZ = null, SWZ_ALL = false;
+let SWZ = null, SWZ_ALL = false, SWZ_AL = '';
 async function loadSwizzle() {
   if (SWZ) return SWZ;
   SWZ = await fetch('swizzle.json', FRESH).then(r => r.json()).catch(() => null);
@@ -4941,6 +4953,9 @@ function swzMovie(el, k, opt = {}) {
 const SWZ_ERA = ['Taylor Swift', 'Fearless', 'Speak Now', 'Red', '1989', 'Reputation', 'Lover', 'folklore', 'evermore',
   'Midnights', 'The Tortured Poets Department', 'The Life of a Showgirl'];
 const swzBaseAlbum = al => (al || '').replace(" (Taylor's Version)", '');
+// Album filter above the list (Will 2026-11-10): studio albums, plus everything else as non-album singles
+const SWZ_SINGLES = 'Non-album singles';
+const swzGroup = k => { const al = swzBaseAlbum(SWZ.songs[k].al); return SWZ_ERA.includes(al) ? al : SWZ_SINGLES; };
 function swzAlbums(e) {
   if (e.albums) return e.albums;
   const by = {};
@@ -4959,7 +4974,8 @@ const swzAlCover = al => Object.values(SWZ.songs).find(x => x.al === al && x.cv)
 const swzAlArt = (al, eager) => artTile('Taylor Swift', eager).replace(/<\/div>$/, `<img src="${swzAlCover(al)}" alt=""${eager ? '' : ' loading="lazy"'} onerror="this.remove()"></div>`);
 function swzOpen(k) {
   const e = SWZ.editions.find(x => String(x.n) === $('swz-select').value);
-  if (!SWZ_ALL && e.rank[k] > 50) { SWZ_ALL = true; renderSwizzle(e.n).then(() => swzOpen(k)); return; }
+  if (SWZ_AL && swzGroup(k) !== SWZ_AL) { SWZ_AL = ''; renderSwizzle(e.n).then(() => swzOpen(k)); return; }
+  if (!SWZ_AL && !SWZ_ALL && e.rank[k] > 50) { SWZ_ALL = true; renderSwizzle(e.n).then(() => swzOpen(k)); return; }
   const row = $('swz-rows').querySelector(`.chart-row[data-k="${k}"]`);
   if (!row) return;
   if (!row.nextElementSibling.classList.contains('open')) row.click();
@@ -4992,16 +5008,28 @@ async function renderSwizzle(arg) {
   // The full list
   $('swz-h').textContent = `Swizzle ${e.n}`;
   $('swz-h-sub').textContent = e.note;
-  const SHOW = 50, rows = SWZ_ALL ? e.songs : e.songs.slice(0, SHOW);
-  $('swz-rows').innerHTML = rows.map(([r, k]) => {
+  const groups = {};
+  for (const [, k] of e.songs) groups[swzGroup(k)] = (groups[swzGroup(k)] || 0) + 1;
+  if (SWZ_AL && !groups[SWZ_AL]) SWZ_AL = '';
+  // Album covers across the top of the list; the singles tile wears its best-ranked song's cover
+  const topSingle = e.songs.find(([, k]) => swzGroup(k) === SWZ_SINGLES)?.[1];
+  const tile = (v, cover, label, n) => `<button class="${SWZ_AL === v ? 'active' : ''}" data-al="${esc(v)}" title="${esc(label)}" aria-pressed="${SWZ_AL === v}">${cover}<div class="nm">${esc(label)}${n ? `<i>${n} songs</i>` : ''}</div></button>`;
+  $('swz-alf').classList.toggle('on', !!SWZ_AL);
+  $('swz-alf').innerHTML = tile('', '<div class="cv all">ALL</div>', 'All songs', e.songs.length)
+    + SWZ_ERA.filter(g => groups[g]).map(g => tile(g, `<div class="cv">${swzAlArt(g)}</div>`, g, groups[g])).join('')
+    + (topSingle ? tile(SWZ_SINGLES, `<div class="cv">${swzArt(SWZ.songs[topSingle])}</div>`, SWZ_SINGLES, groups[SWZ_SINGLES]) : '');
+  $('swz-alf').querySelectorAll('button').forEach(b => b.onclick = () => { SWZ_AL = SWZ_AL === b.dataset.al ? '' : b.dataset.al; renderSwizzle(e.n); });
+  const pool = SWZ_AL ? e.songs.filter(([, k]) => swzGroup(k) === SWZ_AL) : e.songs;
+  const SHOW = 50, rows = SWZ_AL || SWZ_ALL ? pool : pool.slice(0, SHOW);
+  $('swz-rows').innerHTML = rows.map(([r, k], j) => {
     const s = SWZ.songs[k], lr = prev?.rank[k], { peak } = swzPeak(k, i);
     const re = !lr && seen.has(k);
     return `<div class="chart-row" data-k="${k}"><span class="pos">${r}</span>${swzArt(s)}
-      <span><div class="song">${esc(s.t)}${playBtn('swz:' + k)}</div><div class="artist">${s.a !== 'Taylor Swift' ? esc(s.a) + ' · ' : ''}<i>${esc(s.al || '')}</i></div></span>
+      <span><div class="song">${esc(s.t)}${playBtn('swz:' + k)}</div><div class="artist">${SWZ_AL ? `${SWZ_AL === SWZ_SINGLES ? 'Single' : 'Album'} #${j + 1} · ` : ''}${s.a !== 'Taylor Swift' ? esc(s.a) + ' · ' : ''}<i>${esc(s.al || '')}</i></div></span>
       <span class="c lw hide-sm">${peak}</span><span class="c lw">${lr || '–'}</span><span class="move">${prev ? moveCell(lr, r, re ? 2 : 1) : '<span class="mk same">–</span>'}</span></div>
       <div class="swz-hist" data-h="${k}"></div>`;
   }).join('');
-  $('swz-more').hidden = e.songs.length <= SHOW;
+  $('swz-more').hidden = !!SWZ_AL || e.songs.length <= SHOW;
   $('swz-more').textContent = SWZ_ALL ? `Show the Top ${SHOW}` : `Show all ${e.songs.length} songs`;
   $('swz-more').onclick = () => { SWZ_ALL = !SWZ_ALL; renderSwizzle(e.n); if (!SWZ_ALL) $('swz-h').scrollIntoView({ block: 'start' }); };
   $('swz-rows').querySelectorAll('.chart-row').forEach(row => row.onclick = ev => {
