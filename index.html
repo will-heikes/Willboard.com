@@ -47,6 +47,7 @@
   --dot-yellow:  #F2B705;
   --logo-yellow: #F2B705;   /* the wordmark's dot stays yellow even when the accent changes */
   --dot-blue:    #3B8BDE;
+  --swz:         #7A55C8;   /* Swizzle (Taylor Swift rankings) */
 
   --f-body:  'Inter', -apple-system, 'Segoe UI', sans-serif;
   --f-cond:  'Oswald', 'Arial Narrow', sans-serif;
@@ -885,6 +886,64 @@ body.on-ask .ask-fab { display: none; }
 .ask-note { font-size: 12px; color: var(--muted); }
 .ask-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--accent); }
 .ask-none { padding: 6px 20px; max-width: 640px; }
+/* Swizzle: Will's Taylor Swift rankings (#/swizzle). Lilac accent: Taylor's color here, never brown */
+#page-swizzle { --accent: var(--swz); }
+.swz-hero { display: grid; grid-template-columns: 220px 1fr; gap: 24px; padding: 20px; border-top: 4px solid var(--swz); margin-bottom: 30px; align-items: center; }
+.swz-hero .art { width: 220px; height: 220px; font-size: 48px; border-radius: var(--radius); }
+.swz-hero .kick { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--swz); }
+.swz-hero h2 { font-family: var(--f-cond); font-weight: 700; font-size: 46px; line-height: 1; text-transform: uppercase; margin: 6px 0 4px; }
+.swz-hero .al { color: var(--ink-soft); font-size: 14px; }
+.swz-hero p { font-size: 15px; line-height: 1.55; margin: 12px 0 0; max-width: 620px; }
+.swz-stats { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 16px; }
+.swz-stats div { font-size: 11.5px; color: var(--muted); max-width: 190px; }
+.swz-stats b { display: block; font-family: var(--f-cond); font-size: 26px; color: var(--ink); line-height: 1.1; font-weight: 700; }
+.swz-list { border-top: 4px solid var(--swz); }
+.swz-list .chart-row { cursor: pointer; }
+.swz-list .chart-row:hover { background: var(--card-2); }
+.swz-list .chart-row .pv { margin-left: 8px; vertical-align: -3px; }
+.swz-hist { display: none; padding: 4px 18px 14px 118px; border-bottom: 1px solid var(--line-soft); background: var(--card-2); }
+.swz-hist.open { display: block; }
+.swz-hist .chips { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 8px; }
+.swz-hist .chips span { font-size: 11.5px; padding: 3px 8px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); white-space: nowrap; }
+.swz-hist .chips span.top { background: var(--swz); border-color: var(--swz); color: #fff; }
+.swz-hist .chips span.off { color: var(--muted); border-style: dashed; }
+.swz-hist a { display: inline-block; margin-top: 10px; font-weight: 700; font-size: 12.5px; color: var(--swz); }
+.swz-more { display: block; width: 100%; padding: 12px; border: 0; border-top: 1px solid var(--line-soft); background: none; cursor: pointer; font-weight: 700; font-size: 13px; color: var(--swz); }
+.swz-more:hover { background: var(--card-2); }
+.swz-ones { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.swz-one { display: block; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); cursor: pointer; border: 0; padding: 0; text-align: left; }
+.swz-one .art { width: 100%; height: auto; aspect-ratio: 1; border-radius: 0; font-size: 28px; }
+.swz-one div:last-child { padding: 8px 10px 10px; }
+.swz-one small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--swz); }
+.swz-one b { display: block; font-size: 13px; line-height: 1.25; margin-top: 2px; }
+.swz-one span { font-size: 11.5px; color: var(--muted); }
+.swz-one.active { outline: 3px solid var(--swz); }
+.swz-grid-wrap { overflow-x: auto; }
+.swz-grid { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+.swz-grid th { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 10px 4px 8px; text-align: center; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.swz-grid th:first-child { text-align: left; padding-left: 16px; }
+.swz-grid td { text-align: center; padding: 5px 2px; border-bottom: 1px solid var(--line-soft); min-width: 38px; font-variant-numeric: tabular-nums; }
+.swz-grid td:first-child { text-align: left; padding-left: 16px; white-space: nowrap; min-width: 0; }
+.swz-grid td:first-child b { font-size: 13px; }
+.swz-grid td:first-child span { color: var(--muted); font-size: 11.5px; margin-left: 6px; }
+.swz-grid td i { display: inline-block; min-width: 28px; padding: 3px 0; border-radius: 4px; font-style: normal; font-weight: 700; }
+.swz-grid td i.off { color: var(--line); font-weight: 400; }
+.swz-foot { font-size: 12px; color: var(--muted); max-width: 720px; margin: 0 0 40px; }
+.swz-tile { background: #241a33; }
+.swz-tile .mosaic { grid-template-columns: repeat(6, 1fr); grid-template-rows: 1fr; }
+@media (max-width: 900px) {
+  .swz-ones { grid-template-columns: repeat(4, 1fr); }
+  .swz-tile .mosaic { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .swz-hero { grid-template-columns: 1fr; gap: 14px; }
+  .swz-hero .art { width: 100%; height: auto; aspect-ratio: 1; max-width: 260px; }
+  .swz-hero h2 { font-size: 36px; }
+  .swz-ones { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .swz-hist { padding-left: 18px; }
+  #page-swizzle .week-nav { width: 100%; }
+  #page-swizzle .week-nav select { flex: 1; min-width: 0; }
+}
 /* Every #1 and Records */
 .list-pills { margin: 4px 0 20px; }
 .no1-year { font-family: var(--f-cond); font-weight: 700; font-size: 22px; padding: 14px 18px 6px; border-top: 1px solid var(--line-soft); color: var(--accent); }
@@ -1204,6 +1263,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
         <a class="tile" href="#/number-ones/hot20" id="tile-no1"></a>
         <a class="tile" href="#/records/hot20" id="tile-rec"></a>
         <a class="tile" href="#/videos" id="tile-vid"></a>
+        <a class="tile full swz-tile" href="#/swizzle" id="tile-swz"></a>
       </div>
     </div>
 
@@ -1435,6 +1495,24 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     <div class="song-sec" id="vid-player-wrap" hidden><div class="sec-h"><h2 id="vid-h"></h2><span class="sub" id="vid-sub"></span></div>
       <div class="vid-legend" id="vid-legend"></div>
       <div class="card ah" id="vid-player"></div></div>
+  </section>
+
+  <!-- ── SWIZZLE: Will's Taylor Swift rankings ── -->
+  <section class="page" id="page-swizzle">
+    <div class="page-head"><div><h1>Swizzle</h1><div class="sub" id="swz-sub"></div></div>
+      <div class="week-nav"><button id="swz-prev">← Older</button><select id="swz-select" aria-label="Swizzle edition"></select><button id="swz-next">Newer →</button></div></div>
+    <div class="swz-hero card" id="swz-hero"></div>
+    <div class="song-sec"><div class="sec-h"><h2 id="swz-h"></h2><span class="sub" id="swz-h-sub"></span></div>
+      <div class="card chart-card swz-list">
+        <div class="chart-cols"><span class="c">#</span><span></span><span>Song / Album</span><span class="c hide-sm">Peak</span><span class="c" title="Rank on the Swizzle before">LS</span><span class="c">Move</span></div>
+        <div id="swz-rows"></div>
+        <button class="swz-more" id="swz-more" hidden></button>
+      </div></div>
+    <div class="song-sec"><div class="sec-h"><h2>Every #1</h2><span class="sub">The song at the top of each Swizzle</span></div>
+      <div class="swz-ones" id="swz-ones"></div></div>
+    <div class="song-sec"><div class="sec-h"><h2>The Top 10 through the years</h2><span class="sub">Every song that has made a Top 10, and where it ranked on each Swizzle</span></div>
+      <div class="card swz-grid-wrap"><table class="swz-grid" id="swz-grid"></table></div></div>
+    <p class="swz-foot">Rankings come from Will's Swizzle playlists in iTunes and his ranking sheets. Swizzle 10, 12 and 13 carry the dates of their sheets, and the rest are dated by the newest songs they include. Vault songs are listed under their Taylor's Version album.</p>
   </section>
 
   <section class="page" id="page-records">
@@ -2149,6 +2227,14 @@ function renderExplore() {
   const top = led[0], tied = led.filter(x => x.no1.length === top.no1.length).length;
   tile($('tile-vid'), 'Animated chart histories', 'Chart Videos', 'Carrie vs Miranda vs Taylor, American Idol alumni, the women of the Hot 20 and more, or race any acts you pick.', ['Carrie Underwood', 'Miranda Lambert', 'Taylor Swift', 'Kelly Clarkson', 'Scotty McCreery', 'Lauren Alaina'], 'm6');
   tile($('tile-rec'), `${top.no1.length} weeks at #1`, 'Chart<br>Records', `${tied > 1 ? `${SONGS[top.id].name} and ${tied - 1} other${tied > 2 ? 's' : ''} share` : `${SONGS[top.id].name} holds`} the Hot 20 record. See the longest runs, biggest jumps and more.`, [SONGS[top.id].artistName], 'm1');
+  // Swizzle: the covers of the newest list's Top 6
+  loadSwizzle().then(z => {
+    if (!z) return;
+    const e = z.editions[z.editions.length - 1], al = new Set();
+    const top = e.songs.map(([, k]) => z.songs[k]).filter(s => !al.has(s.al) && al.add(s.al)).slice(0, 6);  // one per album
+    $('tile-swz').innerHTML = `<div class="mosaic">${top.map(s => swzArt(s, true)).join('')}</div>
+      <div class="tile-text"><div class="kick">${z.editions.length} rankings since ${esc(z.editions[0].when.replace(/^Early /, ''))}</div><h3>Swizzle</h3><p>Will's favorite Taylor Swift songs, ranked. ${swzQ(top[0].t)} is #1 on Swizzle ${e.n}.</p></div>`;
+  });
 }
 
 // ─── THROUGH THE YEARS ──────────────────────────────────────────
@@ -4719,6 +4805,112 @@ function renderRecords(chartId) {
   <p style="margin-top:24px">${askLink('Who has the most #1s?', 'Ask Willboard for more records')}</p>`;
 }
 
+// ─── SWIZZLE ────────────────────────────────────────────────────
+// Will's rankings of his favorite Taylor Swift songs (swizzle.json, tools/build_swizzle.py), one list per
+// "Swizzle" edition, oldest first. #/swizzle opens the newest; #/swizzle/<n> opens Swizzle n.
+let SWZ = null, SWZ_ALL = false;
+async function loadSwizzle() {
+  if (SWZ) return SWZ;
+  SWZ = await fetch('swizzle.json', FRESH).then(r => r.json()).catch(() => null);
+  if (!SWZ) return null;
+  // Rank and peak lookups, and 30-second previews through the site's player
+  for (const e of SWZ.editions) e.rank = Object.fromEntries(e.songs.map(([r, k]) => [k, r]));
+  for (const [k, s] of Object.entries(SWZ.songs)) if (s.dz) PREVIEWS['swz:' + k] = s.dz;
+  return SWZ;
+}
+const swzCover = s => s.cv || (s.al ? `images/covers/taylor-swift--${slugify(s.al)}.jpg` : '');
+function swzArt(s, eager) {
+  const c = swzCover(s);
+  return artTile(s.a, eager).replace(/<\/div>$/, c ? `<img src="${c}" alt=""${eager ? '' : ' loading="lazy"'} onerror="this.remove()"></div>` : '</div>');
+}
+const swzQ = (t, p = '') => `‘${esc(t)}${p}’`;  // punctuation goes inside the quotes (style guide)
+// Best rank a song had up to and including edition i, and how many Swizzles it was #1 on by then
+function swzPeak(k, i) {
+  let peak = Infinity, ones = 0;
+  for (const e of SWZ.editions.slice(0, i + 1)) { const r = e.rank[k]; if (r) { peak = Math.min(peak, r); if (r === 1) ones++; } }
+  return { peak, ones };
+}
+// One line on the #1, in the site's chart voice
+function swzLead(i) {
+  const e = SWZ.editions[i], k = e.songs[0][1], s = SWZ.songs[k], prev = SWZ.editions[i - 1];
+  if (!prev) return `${swzQ(s.t)} tops the earliest Swizzle on record, ahead of ${swzQ(SWZ.songs[e.songs[1][1]].t)} and ${swzQ(SWZ.songs[e.songs[2][1]].t, '.')}`;
+  const was = prev.songs[0][1];
+  if (was === k) {
+    let run = 1;
+    for (let j = i - 1; j >= 0 && SWZ.editions[j].songs[0][1] === k; j--) run++;
+    return `${swzQ(s.t)} holds at #1 for a ${ordinal(run)} straight Swizzle. Underneath it, ${swzQ(SWZ.songs[e.songs[1][1]].t)} sits at #2.`;
+  }
+  const last = SWZ.editions.slice(0, i).filter(x => x.songs[0][1] === k).pop(), from = prev.rank[k];
+  const fell = e.rank[was] ? `which slips 1-${e.rank[was]}` : 'which drops off the list';
+  if (from) return `${swzQ(s.t)} jumps ${from}-1, taking the top spot from ${swzQ(SWZ.songs[was].t, ',')} ${fell}.${last ? ` It's back at #1 for the first time since Swizzle ${last.n}.` : ''}`;
+  if (last) return `${swzQ(s.t)} returns to #1 for the first time since Swizzle ${last.n}, taking the top spot from ${swzQ(SWZ.songs[was].t, ',')} ${fell}.`;
+  return `${swzQ(s.t)} debuts at #1, taking the top spot from ${swzQ(SWZ.songs[was].t, ',')} ${fell}.`;
+}
+async function renderSwizzle(arg) {
+  if (!await loadSwizzle()) { $('swz-sub').textContent = 'The rankings could not be loaded.'; return; }
+  const eds = SWZ.editions;
+  let i = eds.findIndex(e => String(e.n) === String(arg));
+  if (i < 0) i = eds.length - 1;
+  const e = eds[i], prev = eds[i - 1];
+  $('swz-sub').textContent = `Will's rankings of his favorite Taylor Swift songs, ${eds.length} lists from ${eds[0].when.toLowerCase()} to ${eds[eds.length - 1].when}.`;
+  $('swz-select').innerHTML = eds.map((x, j) => `<option value="${x.n}" ${j === i ? 'selected' : ''}>Swizzle ${x.n} · ${esc(x.when)}</option>`).reverse().join('');
+  $('swz-select').onchange = ev => { location.hash = `#/swizzle/${ev.target.value}`; };
+  $('swz-prev').disabled = i === 0;
+  $('swz-next').disabled = i === eds.length - 1;
+  $('swz-prev').onclick = () => { location.hash = `#/swizzle/${eds[i - 1].n}`; };
+  $('swz-next').onclick = () => { location.hash = `#/swizzle/${eds[i + 1].n}`; };
+
+  // Hero: the #1 and the edition's story
+  const top = SWZ.songs[e.songs[0][1]], seen = new Set(eds.slice(0, i).flatMap(x => x.songs.map(r => r[1])));
+  const debuts = e.songs.filter(([, k]) => !seen.has(k));
+  const climbs = prev ? e.songs.filter(([r, k]) => prev.rank[k]).map(([r, k]) => [prev.rank[k] - r, k, r]).sort((a, b) => b[0] - a[0]) : [];
+  const stat = (v, l) => `<div><b>${v}</b>${l}</div>`;
+  $('swz-hero').innerHTML = `${playTile(swzArt(top, true), 'swz:' + e.songs[0][1])}
+    <div><div class="kick">Swizzle ${e.n} · ${esc(e.when)} · ${esc(e.era)} era</div><h2>${esc(top.t)}</h2><div class="al">${esc(top.a)} · <i>${esc(top.al || '')}</i></div>
+    <p>${swzLead(i)}</p>
+    <div class="swz-stats">${stat(e.songs.length, 'songs ranked')}${prev && debuts.length ? stat(debuts.length, `new since Swizzle ${prev.n}`) : ''}${debuts.length && prev ? stat('#' + debuts[0][0], `top new entry: ${swzQ(SWZ.songs[debuts[0][1]].t)}`) : ''}${climbs[0]?.[0] > 0 ? stat('+' + climbs[0][0], `biggest climb: ${swzQ(SWZ.songs[climbs[0][1]].t)} (${prev.rank[climbs[0][1]]}-${climbs[0][2]})`) : ''}</div></div>`;
+
+  // The full list
+  $('swz-h').textContent = `Swizzle ${e.n}`;
+  $('swz-h-sub').textContent = e.note;
+  const SHOW = 50, rows = SWZ_ALL ? e.songs : e.songs.slice(0, SHOW);
+  $('swz-rows').innerHTML = rows.map(([r, k]) => {
+    const s = SWZ.songs[k], lr = prev?.rank[k], { peak } = swzPeak(k, i);
+    const re = !lr && seen.has(k);
+    return `<div class="chart-row" data-k="${k}"><span class="pos">${r}</span>${swzArt(s)}
+      <span><div class="song">${esc(s.t)}${playBtn('swz:' + k)}</div><div class="artist">${s.a !== 'Taylor Swift' ? esc(s.a) + ' · ' : ''}<i>${esc(s.al || '')}</i></div></span>
+      <span class="c lw hide-sm">${peak}</span><span class="c lw">${lr || '–'}</span><span class="move">${prev ? moveCell(lr, r, re ? 2 : 1) : '<span class="mk same">–</span>'}</span></div>
+      <div class="swz-hist" data-h="${k}"></div>`;
+  }).join('');
+  $('swz-more').hidden = e.songs.length <= SHOW;
+  $('swz-more').textContent = SWZ_ALL ? `Show the Top ${SHOW}` : `Show all ${e.songs.length} songs`;
+  $('swz-more').onclick = () => { SWZ_ALL = !SWZ_ALL; renderSwizzle(e.n); if (!SWZ_ALL) $('swz-h').scrollIntoView({ block: 'start' }); };
+  $('swz-rows').querySelectorAll('.chart-row').forEach(row => row.onclick = () => {
+    const k = row.dataset.k, h = row.nextElementSibling, s = SWZ.songs[k];
+    if (!h.innerHTML) h.innerHTML = `<div class="chips">${eds.map(x => x.rank[k] ? `<span class="${x.rank[k] <= 10 ? 'top' : ''}">Swizzle ${x.n}: #${x.rank[k]}</span>` : `<span class="off">Swizzle ${x.n}: unranked</span>`).join('')}</div>
+      ${s.wb && SONGS[s.wb] ? `<a href="#/song/${s.wb}">Its run on the ${SONGS[s.wb].chart === 'pop' ? 'Pop 10' : 'Hot 20'} ${arrow}</a>` : ''}`;
+    h.classList.toggle('open');
+  });
+
+  // Every #1
+  $('swz-ones').innerHTML = eds.map(x => {
+    const s = SWZ.songs[x.songs[0][1]];
+    return `<button class="swz-one${x === e ? ' active' : ''}" data-n="${x.n}">${swzArt(s)}<div><small>Swizzle ${x.n}</small><b>${esc(s.t)}</b><span>${esc(x.when)}</span></div></button>`;
+  }).join('');
+  $('swz-ones').querySelectorAll('.swz-one').forEach(b => b.onclick = () => { location.hash = `#/swizzle/${b.dataset.n}`; });
+
+  // Every song that made a Top 10, by its best rank, then how often it was there
+  const t10 = Object.keys(SWZ.songs).filter(k => eds.some(x => x.rank[k] <= 10)).map(k => {
+    const rs = eds.map(x => x.rank[k]).filter(Boolean);
+    return { k, best: Math.min(...rs), n10: eds.filter(x => x.rank[k] <= 10).length, avg: rs.reduce((a, b) => a + b, 0) / rs.length };
+  }).sort((a, b) => a.best - b.best || b.n10 - a.n10 || a.avg - b.avg);
+  const shade = r => r > 10 ? '' : `background:color-mix(in srgb, var(--swz) ${Math.round(100 - (r - 1) * 8)}%, transparent);color:${r <= 5 ? '#fff' : 'var(--ink)'}`;
+  $('swz-grid').innerHTML = `<tr><th>Song</th>${eds.map(x => `<th title="${esc(x.when)}">S${x.n}</th>`).join('')}</tr>` + t10.map(({ k }) => {
+    const s = SWZ.songs[k];
+    return `<tr><td><b>${esc(s.t)}</b><span class="hide-sm">${esc((s.al || '').replace(" (Taylor's Version)", ''))}</span></td>${eds.map(x => { const r = x.rank[k]; return `<td>${r ? `<i style="${shade(r)}">${r}</i>` : '<i class="off">·</i>'}</td>`; }).join('')}</tr>`;
+  }).join('');
+}
+
 function route() {
   if (!DATA) return;
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
@@ -4759,6 +4951,7 @@ function route() {
   else if (page === 'number-ones') { id = 'number-ones'; renderNumberOnes(CHARTS[arg] ? arg : 'hot20'); }
   else if (page === 'records')  { id = 'records'; renderRecords(CHARTS[arg] ? arg : 'hot20'); }
   else if (page === 'videos')   { id = 'videos'; renderVideos(arg, query); }
+  else if (page === 'swizzle')  { id = 'swizzle'; if (arg !== ui.swzLast) SWZ_ALL = false; ui.swzLast = arg; renderSwizzle(arg); }
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
   document.body.classList.toggle('on-ask', id === 'ask');
   document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('active', a.dataset.nav === page || a.dataset.nav === page + 's'));
