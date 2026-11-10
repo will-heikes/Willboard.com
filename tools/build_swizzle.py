@@ -130,10 +130,17 @@ def sheet_rows(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--itunes', required=True)
+    ap.add_argument('--itunes')
+    ap.add_argument('--clips-only', action='store_true', help="only refresh clips from swizzle_previews.json")
     ap.add_argument('--sheet', action='append', default=[], help='N=path.csv')
     ap.add_argument('--spotify', help='willboard-spotify checkout, for previews and missing covers')
     args = ap.parse_args()
+    if args.clips_only:
+        out = json.load(open('swizzle.json', encoding='utf-8'))
+        add_clips(out['songs'])
+        with open('swizzle.json', 'w') as f:
+            json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
+        return
 
     lib = plistlib.load(open(args.itunes, 'rb'))
     tracks = lib['Tracks']
@@ -193,6 +200,7 @@ def main():
 
     if args.spotify:
         add_spotify(songs, args.spotify)
+    add_clips(songs)
 
     out = {'editions': editions, 'songs': dict(sorted(songs.items()))}
     with open('swizzle.json', 'w') as f:
@@ -200,6 +208,17 @@ def main():
     print(f'swizzle.json: {len(editions)} editions, {len(songs)} songs')
     for e in editions:
         print(f"  Swizzle {e['n']:>2}  {e['date']:<12} {len(e['songs']):>3} songs  #1 {songs[e['songs'][0][1]]['t']}  ({e['era']} era)")
+
+
+def add_clips(songs):
+    """The clip tools/fetch_swizzle_previews.py chose wins: the original recording unless Will ranked the
+    Taylor's Version, never acoustic or live (Will 2026-11-10)."""
+    if not os.path.exists('swizzle_previews.json'):
+        return
+    clips = json.load(open('swizzle_previews.json', encoding='utf-8'))
+    for k, s in songs.items():
+        if clips.get(k):
+            s['dz'] = clips[k]
 
 
 def add_spotify(songs, root):
