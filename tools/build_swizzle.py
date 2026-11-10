@@ -26,21 +26,22 @@ import re
 import unicodedata
 from collections import Counter
 
-# When each edition was made. Will dated Swizzle 2 (early 2018); 10, 12 and 13 come from their sheets.
-# The rest are windows worked out from the newest songs each one has (and doesn't have).
+# When each edition was made: (date, estimated?, note). 10, 12 and 13 carry their sheets' dates.
+# The rest follow Will's rule (2026-11-10): Swizzle 2 in early 2018; the first Lover and evermore lists
+# 3-4 months after the album came out; the others spread evenly between those.
 EDITIONS = {
-    2: ('Early 2018', 'Will made the first Swizzle shortly after reputation.'),
-    3: ('2018', 'After reputation, before Lover.'),
-    4: ('2018 to early 2019', 'After reputation, before Lover.'),
-    5: ('2018 to early 2019', 'After reputation, before Lover.'),
-    6: ('Spring 2019', 'ME! is out, the rest of Lover isn\'t.'),
-    7: ('Late 2019 to mid 2020', 'After Lover, before folklore.'),
-    8: ('Late 2019 to mid 2020', 'After Lover, before folklore.'),
-    9: ('Late 2019 to mid 2020', 'After Lover, before folklore.'),
-    10: ('Aug 8, 2020', 'Two weeks after folklore.'),
-    11: ('Early 2021', 'After evermore, before the Fearless vault songs.'),
-    12: ('July 14, 2023', 'After Midnights (The Til Dawn Edition).'),
-    13: ('Dec 2025', 'After The Life of a Showgirl.'),
+    2: ('2018-02-10', True, 'Shortly after reputation.'),
+    3: ('2018-06-23', True, 'After reputation, before Lover.'),
+    4: ('2018-11-03', True, 'After reputation, before Lover.'),
+    5: ('2019-03-16', True, 'After reputation, before Lover.'),
+    6: ('2019-07-27', True, "ME! is out, the rest of Lover isn't."),
+    7: ('2019-12-08', True, 'The first list with all of Lover.'),
+    8: ('2020-02-27', True, 'After Lover, before folklore.'),
+    9: ('2020-05-18', True, 'After Lover, before folklore.'),
+    10: ('2020-08-08', False, 'Two weeks after folklore.'),
+    11: ('2021-03-21', True, 'The first list with evermore.'),
+    12: ('2023-07-14', False, 'After Midnights (The Til Dawn Edition).'),
+    13: ('2025-12-21', False, 'After The Life of a Showgirl.'),
 }
 ERA = ['Taylor Swift', 'Fearless', 'Speak Now', 'Red', '1989', 'Reputation', 'Lover', 'folklore', 'evermore',
        'Midnights', 'The Tortured Poets Department', 'The Life of a Showgirl']
@@ -167,8 +168,8 @@ def main():
                 if label and squash(label) not in ('na', 'other'):
                     s['_label'] = ALBUM_NAME.get(squash(label), label)  # the latest sheet wins
             ranked.append([rank, k])
-        when, note = EDITIONS.get(n, ('', ''))
-        editions.append({'n': n, 'when': when, 'note': note, 'songs': ranked})
+        date, est, note = EDITIONS[n]
+        editions.append({'n': n, 'date': date, 'est': est, 'note': note, 'songs': ranked})
 
     vault = {squash(clean_title(t)): al for al, ts in VAULT.items() for t in ts}
     for k, s in songs.items():
@@ -198,7 +199,7 @@ def main():
         json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
     print(f'swizzle.json: {len(editions)} editions, {len(songs)} songs')
     for e in editions:
-        print(f"  Swizzle {e['n']:>2}  {e['when']:<22} {len(e['songs']):>3} songs  #1 {songs[e['songs'][0][1]]['t']}  ({e['era']} era)")
+        print(f"  Swizzle {e['n']:>2}  {e['date']:<12} {len(e['songs']):>3} songs  #1 {songs[e['songs'][0][1]]['t']}  ({e['era']} era)")
 
 
 def add_spotify(songs, root):
