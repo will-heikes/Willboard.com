@@ -106,5 +106,5 @@ jobs:
           for f in artist_info.json artist_info_missing.txt pop_album_matches.json previews.json preview_picks.json swizzle.json swizzle_previews.json swizzle_preview_picks.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || git commit -m "Update artist photos and covers"
           # main may have moved during a long run
-          git pull --rebase origin main
+          git pull --rebase origin "${{ github.ref_name }}"
           git push
