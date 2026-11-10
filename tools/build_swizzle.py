@@ -40,8 +40,8 @@ EDITIONS = {
     9: ('2020-05-18', True, 'After Lover, before folklore.'),
     10: ('2020-08-08', False, 'Two weeks after folklore.'),
     11: ('2021-03-21', True, 'The first list with evermore.'),
-    12: ('2023-07-14', False, 'After Midnights (The Til Dawn Edition).'),
-    13: ('2025-12-21', False, 'After The Life of a Showgirl.'),
+    12: ('2023-07-14', False, 'After Midnights (The Til Dawn Edition). All Too Well and its 10 minute version were combined into one entry on this list, which is why the original drops off.'),
+    13: ('2025-12-21', False, 'After The Life of a Showgirl. All Too Well and its 10 minute version are split back into two entries.'),
 }
 ERA = ['Taylor Swift', 'Fearless', 'Speak Now', 'Red', '1989', 'Reputation', 'Lover', 'folklore', 'evermore',
        'Midnights', 'The Tortured Poets Department', 'The Life of a Showgirl']

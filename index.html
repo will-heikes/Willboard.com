@@ -1527,11 +1527,18 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
         <div id="swz-rows"></div>
         <button class="swz-more" id="swz-more" hidden></button>
       </div></div>
+    <div class="song-sec"><div class="sec-h"><h2>Album rankings</h2><span class="sub" id="swz-al-sub"></span></div>
+      <div class="card chart-card swz-list">
+        <div class="chart-cols"><span class="c">#</span><span></span><span>Album / Best song</span><span class="c" title="Average rank of the album's 10 best songs">Avg</span><span class="c" title="Album rank on the Swizzle before">LS</span><span class="c">Move</span></div>
+        <div id="swz-al-rows"></div>
+      </div></div>
     <div class="song-sec"><div class="sec-h"><h2>Every #1</h2><span class="sub">The song at the top of each Swizzle</span></div>
       <div class="swz-ones" id="swz-ones"></div></div>
-    <div class="song-sec"><div class="sec-h"><h2>The Top 10 through the years</h2><span class="sub">Every song that has made a Top 10, and where it ranked on each Swizzle</span></div>
+    <div class="song-sec"><div class="sec-h"><h2>The Top 10 through the years</h2><span class="sub">Every song that has made a Top 10, in Swizzle <b id="swz-grid-n"></b> order. Tap one to watch its run.</span></div>
       <div class="card swz-grid-wrap"><table class="swz-grid" id="swz-grid"></table></div></div>
-    <p class="swz-foot">Rankings come from Will's Swizzle playlists in iTunes and his ranking sheets. Swizzle 10, 12 and 13 carry the dates of their sheets. The other dates are estimates: the first lists with Lover and evermore come three to four months after those albums, and the rest are spaced evenly between. Vault songs are listed under their Taylor's Version album.</p>
+    <div class="song-sec"><div class="sec-h"><h2>Albums through the years</h2><span class="sub">Each album's rank on every Swizzle, in Swizzle <b id="swz-algrid-n"></b> order</span></div>
+      <div class="card swz-grid-wrap"><table class="swz-grid" id="swz-al-grid"></table></div></div>
+    <p class="swz-foot">Rankings come from Will's Swizzle playlists in iTunes and his ranking sheets. Swizzle 10, 12 and 13 carry the dates of their sheets. The other dates are estimates: the first lists with Lover and evermore come three to four months after those albums, and the rest are spaced evenly between. Vault songs are listed under their Taylor's Version album. Album rankings average the ranks of each album's 10 best songs on that Swizzle, counting Taylor's Version and vault songs with the original album. An album needs 10 ranked songs to be included.</p>
   </section>
 
   <section class="page" id="page-records">
@@ -4869,25 +4876,26 @@ function swzLead(i) {
 // A song's run through the Swizzles, animated (Will 2026-11-10): the line draws itself across the years with
 // the cover riding its tip and a #N badge, the song's preview playing underneath. Lower ranks sit lower
 // (log scale, so the Top 10 has room); a list the song missed breaks the line.
-function swzMovie(el, k) {
+// opt (album runs): { t, cover, rank: edition => rank, maxR, song: key whose preview plays }
+function swzMovie(el, k, opt = {}) {
   // Drawn at the panel's real width, so the labels stay readable on phones
-  const s = SWZ.songs[k], eds = SWZ.editions, W = Math.max(320, Math.round(el.clientWidth - 24) || 640), H = W < 500 ? 220 : 240, L = 34, R = 74, T = 18, B = 30;
+  const s = { ...SWZ.songs[k], ...opt }, eds = SWZ.editions, rankOf = opt.rank || (e => e.rank[k]), W = Math.max(320, Math.round(el.clientWidth - 24) || 640), H = W < 500 ? 220 : 240, L = 34, R = 74, T = 18, B = 30;
   const t0 = parseDate(eds[0].date), t1 = parseDate(eds[eds.length - 1].date);
   const x = d => L + (parseDate(d) - t0) / (t1 - t0) * (W - L - R);
-  const maxR = Math.max(10, ...eds.map(e => e.songs.length));
+  const maxR = opt.maxR || Math.max(10, ...eds.map(e => e.songs.length));
   const y = r => T + Math.log(r) / Math.log(maxR) * (H - T - B);
-  const pts = eds.map(e => ({ e, r: e.rank[k], x: x(e.date) }));
-  const ticks = [1, 5, 10, 25, 50, 100, 250].filter(r => r <= maxR);
+  const pts = eds.map(e => ({ e, r: rankOf(e), x: x(e.date) }));
+  const ticks = (maxR <= 20 ? [1, 2, 3, 5, 8, 12] : [1, 5, 10, 25, 50, 100, 250]).filter(r => r <= maxR);
   const years = []; for (let yr = t0.getFullYear() + 1; yr <= t1.getFullYear(); yr++) years.push(yr);
-  const cover = swzCover(s);
+  const cover = opt.cover ?? swzCover(s);
   el.innerHTML = `<div class="swz-mv-head"><b class="swz-mv-when"></b><button class="pill swz-mv-play">↻ Replay</button></div>
     <svg viewBox="0 0 ${W} ${H}" class="swz-mv-svg" role="img" aria-label="${esc(s.t)} on every Swizzle">
       ${ticks.map(r => `<line x1="${L}" x2="${W - R + 10}" y1="${y(r)}" y2="${y(r)}" class="g"/><text x="${L - 6}" y="${y(r) + 3.5}" class="yl">#${r}</text>`).join('')}
       ${years.map(yr => { const xx = x(`${yr}-01-01`); return `<line x1="${xx}" x2="${xx}" y1="${T}" y2="${H - B}" class="g v"/>${W >= 500 || yr % 2 === 0 ? `<text x="${xx}" y="${H - 10}" class="xl">${yr}</text>` : ''}`; }).join('')}
       ${pts.map(p => `<circle cx="${p.x}" cy="${H - B + 6}" r="2" class="ed"/>`).join('')}
       <path class="ln" d=""/><g class="dots"></g>
-      <g class="tip" opacity="0"><clipPath id="swzc-${k}"><circle r="15"/></clipPath><circle r="16.5" class="ring"/>
-        ${cover ? `<image href="${cover}" x="-15" y="-15" width="30" height="30" clip-path="url(#swzc-${k})" preserveAspectRatio="xMidYMid slice" onerror="this.remove()"/>` : ''}
+      <g class="tip" opacity="0"><clipPath id="swzc-${slugify(k)}"><circle r="15"/></clipPath><circle r="16.5" class="ring"/>
+        ${cover ? `<image href="${cover}" x="-15" y="-15" width="30" height="30" clip-path="url(#swzc-${slugify(k)})" preserveAspectRatio="xMidYMid slice" onerror="this.remove()"/>` : ''}
         <g class="bd"><rect x="20" y="-11" rx="4" width="44" height="22"/><text x="42" y="5">#1</text></g></g>
     </svg>`;
   const svg = el.querySelector('svg'), ln = svg.querySelector('.ln'), tip = svg.querySelector('.tip'), bd = tip.querySelector('.bd text');
@@ -4918,7 +4926,7 @@ function swzMovie(el, k) {
     when.textContent = cur ? `Swizzle ${cur.e.n} · ${cur.e.when}${cur.r ? ` · #${cur.r}` : ' · unranked'}` : '';
     if (f < 1) raf = requestAnimationFrame(frame);
   };
-  const id = 'swz:' + k;
+  const id = 'swz:' + (opt.song || k);
   const play = () => {
     cancelAnimationFrame(raf); start = performance.now(); raf = requestAnimationFrame(frame);
     if (PREVIEWS[id]) deezerTrack(PREVIEWS[id]).then(t => { if (!t?.preview) return; PV.audio.src = t.preview; return PV.audio.play().then(() => pvMark(id)); }).catch(() => {});
@@ -4928,6 +4936,27 @@ function swzMovie(el, k) {
   play();
   return () => { cancelAnimationFrame(raf); if (PV.id === id) PV.audio.pause(); };
 }
+// Album rankings (Will 2026-11-10): each studio album's average rank across its 10 best songs on a Swizzle.
+// Taylor's Version and vault songs count with the original album; an album needs 10 ranked songs.
+const SWZ_ERA = ['Taylor Swift', 'Fearless', 'Speak Now', 'Red', '1989', 'Reputation', 'Lover', 'folklore', 'evermore',
+  'Midnights', 'The Tortured Poets Department', 'The Life of a Showgirl'];
+const swzBaseAlbum = al => (al || '').replace(" (Taylor's Version)", '');
+function swzAlbums(e) {
+  if (e.albums) return e.albums;
+  const by = {};
+  for (const [r, k] of e.songs) { const al = swzBaseAlbum(SWZ.songs[k].al); if (SWZ_ERA.includes(al)) (by[al] ||= []).push([r, k]); }
+  const list = Object.entries(by).filter(([, rs]) => rs.length >= 10).map(([al, rs]) => {
+    const top = rs.sort((a, b) => a[0] - b[0]).slice(0, 10);
+    return { al, avg: top.reduce((t, [r]) => t + r, 0) / 10, best: top[0][1], bestR: top[0][0], n: rs.length };
+  }).sort((a, b) => a.avg - b.avg);
+  list.forEach((x, i) => x.rank = i + 1);
+  e.albums = list;
+  e.alRank = Object.fromEntries(list.map(x => [x.al, x.rank]));
+  return list;
+}
+// The repo's cover, or the Deezer one build_swizzle.py found for an album the repo has no image of
+const swzAlCover = al => Object.values(SWZ.songs).find(x => x.al === al && x.cv)?.cv || `images/covers/taylor-swift--${slugify(al)}.jpg`;
+const swzAlArt = (al, eager) => artTile('Taylor Swift', eager).replace(/<\/div>$/, `<img src="${swzAlCover(al)}" alt=""${eager ? '' : ' loading="lazy"'} onerror="this.remove()"></div>`);
 function swzOpen(k) {
   const e = SWZ.editions.find(x => String(x.n) === $('swz-select').value);
   if (!SWZ_ALL && e.rank[k] > 50) { SWZ_ALL = true; renderSwizzle(e.n).then(() => swzOpen(k)); return; }
@@ -4978,7 +5007,7 @@ async function renderSwizzle(arg) {
   $('swz-rows').querySelectorAll('.chart-row').forEach(row => row.onclick = ev => {
     if (ev.target.closest('.pv')) return;
     const k = row.dataset.k, h = row.nextElementSibling, s = SWZ.songs[k], open = !h.classList.contains('open');
-    $('swz-rows').querySelectorAll('.swz-hist.open').forEach(x => { if (x !== h) { x.classList.remove('open'); x.swzStop?.(); } });
+    document.querySelectorAll('#page-swizzle .swz-hist.open').forEach(x => { if (x !== h) { x.classList.remove('open'); x.swzStop?.(); } });
     h.classList.toggle('open', open);
     if (!open) { h.swzStop?.(); return; }
     if (!h.innerHTML) h.innerHTML = `<div class="swz-mv"></div><div class="chips">${eds.map(x => x.rank[k] ? `<span class="${x.rank[k] <= 10 ? 'top' : ''}">Swizzle ${x.n}: #${x.rank[k]}</span>` : `<span class="off">Swizzle ${x.n}: unranked</span>`).join('')}</div>
@@ -4994,10 +5023,13 @@ async function renderSwizzle(arg) {
   $('swz-ones').querySelectorAll('.swz-one').forEach(b => b.onclick = () => { location.hash = `#/taylor-swift-rankings/${b.dataset.n}`; });
 
   // Every song that made a Top 10, by its best rank, then how often it was there
+  // Ordered by the newest Swizzle (Will 2026-11-10), then songs that have dropped off by their best rank
+  const cur = eds[eds.length - 1];
+  $('swz-grid-n').textContent = cur.n;
   const t10 = Object.keys(SWZ.songs).filter(k => eds.some(x => x.rank[k] <= 10)).map(k => {
     const rs = eds.map(x => x.rank[k]).filter(Boolean);
     return { k, best: Math.min(...rs), n10: eds.filter(x => x.rank[k] <= 10).length, avg: rs.reduce((a, b) => a + b, 0) / rs.length };
-  }).sort((a, b) => a.best - b.best || b.n10 - a.n10 || a.avg - b.avg);
+  }).sort((a, b) => (cur.rank[a.k] || 1e9) - (cur.rank[b.k] || 1e9) || a.best - b.best || b.n10 - a.n10 || a.avg - b.avg);
   const shade = r => r > 10 ? '' : `background:color-mix(in srgb, var(--swz) ${Math.round(100 - (r - 1) * 8)}%, transparent);color:${r <= 5 ? '#fff' : 'var(--ink)'}`;
   $('swz-grid').innerHTML = `<tr><th>Song</th>${eds.map(x => `<th title="${esc(x.when)}">S${x.n}</th>`).join('')}</tr>` + t10.map(({ k }) => {
     const s = SWZ.songs[k];
@@ -5009,6 +5041,32 @@ async function renderSwizzle(arg) {
     if (e.rank[k]) return swzOpen(k);
     location.hash = `#/taylor-swift-rankings/${[...eds].reverse().find(x => x.rank[k]).n}?song=${k}`;
   });
+  // Album rankings for this Swizzle, with each album's run on tap
+  const albums = swzAlbums(e), prevAl = prev && (swzAlbums(prev), prev.alRank);
+  const maxAl = Math.max(...eds.map(x => swzAlbums(x).length));
+  $('swz-al-sub').textContent = `Average rank of each album's 10 best songs on Swizzle ${e.n}. Tap one to watch its run.`;
+  $('swz-al-rows').innerHTML = albums.map(a => {
+    const lr = prevAl?.[a.al], seenAl = eds.slice(0, i).some(x => swzAlbums(x).some(y => y.al === a.al));
+    return `<div class="chart-row" data-al="${esc(a.al)}"><span class="pos">${a.rank}</span>${swzAlArt(a.al)}
+      <span><div class="song"><i>${esc(a.al)}</i></div><div class="artist">${swzQ(SWZ.songs[a.best].t)} at #${a.bestR} · ${a.n} songs ranked</div></span>
+      <span class="c lw">${a.avg.toFixed(1)}</span><span class="c lw">${lr || '–'}</span><span class="move">${prev ? moveCell(lr, a.rank, seenAl ? 2 : 1) : '<span class="mk same">–</span>'}</span></div>
+      <div class="swz-hist" data-h="${esc(a.al)}"></div>`;
+  }).join('');
+  $('swz-al-rows').querySelectorAll('.chart-row').forEach(row => row.onclick = () => {
+    const al = row.dataset.al, h = row.nextElementSibling, open = !h.classList.contains('open');
+    document.querySelectorAll('#page-swizzle .swz-hist.open').forEach(x => { if (x !== h) { x.classList.remove('open'); x.swzStop?.(); } });
+    h.classList.toggle('open', open);
+    if (!open) { h.swzStop?.(); return; }
+    const rk = x => { swzAlbums(x); return x.alRank[al]; };
+    if (!h.innerHTML) h.innerHTML = `<div class="swz-mv"></div><div class="chips">${eds.map(x => rk(x) ? `<span class="${rk(x) <= 3 ? 'top' : ''}">Swizzle ${x.n}: #${rk(x)} (avg ${x.albums.find(y => y.al === al).avg.toFixed(1)})</span>` : `<span class="off">Swizzle ${x.n}: not ranked</span>`).join('')}</div>`;
+    const best = [...eds].reverse().map(x => x.albums.find(y => y.al === al)).find(Boolean)?.best;
+    h.swzStop = swzMovie(h.querySelector('.swz-mv'), 'al:' + al, { t: al, al, cover: swzAlCover(al), rank: rk, maxR: maxAl, song: best });
+  });
+  // Albums through the years, in the newest Swizzle's order
+  const alOrder = SWZ_ERA.filter(al => eds.some(x => swzAlbums(x).some(y => y.al === al)))
+    .sort((a, b) => (cur.alRank[a] || 99) - (cur.alRank[b] || 99));
+  $('swz-algrid-n').textContent = cur.n;
+  $('swz-al-grid').innerHTML = `<tr><th>Album</th>${eds.map(x => `<th title="${esc(x.when)}">S${x.n}</th>`).join('')}</tr>` + alOrder.map(al => `<tr><td><b><i>${esc(al)}</i></b></td>${eds.map(x => { const r = x.alRank[al]; return `<td>${r ? `<i style="${r > 10 ? '' : `background:color-mix(in srgb, var(--swz) ${Math.round(100 - (r - 1) * 9)}%, transparent);color:${r <= 4 ? '#fff' : 'var(--ink)'}`}">${r}</i>` : '<i class="off">·</i>'}</td>`; }).join('')}</tr>`).join('');
   const want = new URLSearchParams(location.hash.split('?')[1] || '').get('song');
   if (want && e.rank[want]) swzOpen(want);
 }
