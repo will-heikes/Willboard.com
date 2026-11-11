@@ -2823,7 +2823,8 @@ let SONG_WEIGHT = null;
 const CHECK = true;
 // All-time plays (Will 2026-11-11): Hot 20 songs use the iTunes library count; Pop 10 songs use every
 // Spotify play since Dec 2013 (spotify_weekly.json, every week, not just chart weeks)
-const allPlays = s => s.chart === 'pop' ? (SPOTIFY?.songs?.[s.id] || []).reduce((n, v) => n + v, 0) : s.itunesPlays || 0;
+// (each song's list starts with the index of its first week, so the plays are the rest of it)
+const allPlays = s => s.chart === 'pop' ? (SPOTIFY?.songs?.[s.id] || []).slice(1).reduce((n, v) => n + v, 0) : s.itunesPlays || 0;
 const chkPlays = s => allPlays(s).toLocaleString();
 function songWeights() {
   if (SONG_WEIGHT) return SONG_WEIGHT;
