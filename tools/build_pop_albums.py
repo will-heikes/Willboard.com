@@ -28,6 +28,11 @@ FIX = {
     'DNCE|Cake By the Ocean': 'DNCE',
     'Hailee Steinfeld|Let Me Go': None,
     'Kylie Minogue|Padam Padam': 'Tension',
+    # Kayla Rae's Phantom (Will 2026-11-11): its singles charted ahead of the album
+    'Kayla Rae|True': 'Phantom',
+    'Kayla Rae|Never Tell': 'Phantom',
+    "Kayla Rae|Who's to Blame": 'Phantom',
+    "Kayla Rae|It Wasn't Nothing": 'Phantom',
     # Will 2026-11-09: her singles before 'Coming of Age' make up the Coming of Age album
     'Cassandra Coleman|Habit': 'Coming of Age',
     'Cassandra Coleman|Re: Love': 'Coming of Age',
@@ -84,6 +89,7 @@ NOT_ALBUM = re.compile(r'soundtrack|motion picture|\bfrom\b|episode|collection|g
 # Release years the track dates get wrong: a deluxe track dated later, or singles out long before the album
 RELEASED = {
     'Cassandra Coleman|Coming of Age': 2023,
+    'Kayla Rae|Phantom': 2026,
     'Dua Lipa|Future Nostalgia': 2020,
     'Sam Smith|Gloria': 2023,
     'Zara Larsson|So Good': 2017,
