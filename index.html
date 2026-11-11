@@ -390,9 +390,13 @@ button { font: inherit; color: inherit; }
 .lrow.dim { opacity: .55; }
 #artist-top .lrow[hidden] { display: none; }
 #artist-top .lrow + .lrow { border-top: 1px solid var(--line-soft); }
-#artist-top .song .cert { margin-left: 8px; vertical-align: 1px; }
 #artist-top .top-all { display: block; width: 100%; padding: 11px; border: 0; border-top: 1px solid var(--line-soft); background: none; font: 700 12.5px var(--f-body); color: var(--accent, var(--ink)); cursor: pointer; }
 #artist-top .top-all:hover { background: var(--card-2); }
+.top-modes { display: inline-flex; margin-left: auto; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.top-modes:empty { display: none; }
+.top-modes button { background: var(--card); border: 0; padding: 6px 14px; font: 700 12.5px var(--f-body); cursor: pointer; color: var(--muted); }
+.top-modes button.on.hot { background: var(--country); color: #fff; }
+.top-modes button.on.pop { background: var(--pop); color: #fff; }
 .ye-nav { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 4px 0 26px; }
 .ye-nav h2 { font-family: var(--f-cond); font-weight: 700; font-size: 64px; line-height: 1; margin: 0; letter-spacing: .01em; }
 .ye-nav a, .ye-nav span.off { font-family: var(--f-cond); font-weight: 700; font-size: 22px; color: var(--muted); padding: 6px 10px; }
@@ -1401,7 +1405,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
       <div id="artist-runs" hidden></div>
     </div>
     <div class="song-sec" id="artist-top-wrap" hidden>
-      <div class="sec-h"><h2>Top Songs</h2><span class="sub">Ranked the Year-End way, by plays and chart run</span></div>
+      <div class="sec-h"><h2>Top Songs</h2><span class="sub">Ranked the Year-End way, by plays and chart run</span><div class="top-modes" id="artist-top-modes" role="tablist"></div></div>
       <div class="card" style="overflow:hidden" id="artist-top"></div>
     </div>
     <div class="song-sec" id="artist-albums-wrap" hidden>
@@ -2843,19 +2847,31 @@ async function artistTop(id, songs, featured) {
   if (location.hash !== `#/artist/${id}`) return;
   const W = songWeights();
   const score = s => (W[s.id] || []).reduce((n, [y, pp, pl]) => n + (featured.has(s) && y < 2015 ? pp / 2 : pp) + pl, 0);
-  const rows = [...songs, ...featured].filter(s => W[s.id]).map(s => ({ s, v: score(s) })).sort((a, b) => b.v - a.v);
-  if (!rows.length) return;
-  const both = new Set(rows.map(x => x.s.chart)).size > 1, TOP = 10;
+  // Hot 20 and Pop 10 are ranked apart, one list at a time (Will 2026-11-11)
+  const lists = {};
+  for (const s of [...songs, ...featured]) if (W[s.id]) (lists[s.chart] ||= []).push({ s, v: score(s) });
+  const charts = ['willboard', 'pop'].filter(k => lists[k]);
+  if (!charts.length) return;
+  charts.forEach(k => lists[k].sort((a, b) => b.v - a.v));
+  const NAME = { willboard: 'Hot 20', pop: 'Pop 10' }, TOP = 10, modes = $('artist-top-modes');
   const row = ({ s }, i) => `<a class="lrow${i >= TOP ? ' more' : ''}" href="#/song/${s.id}"${i >= TOP ? ' hidden' : ''}><span class="rk">${i + 1}</span>${artTile(s.artistName, false, undefined, s.name)}
-    <span><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></span>
-    <span class="meta">${both ? `<span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span><br>` : ''}Peak <b>${s.peakPosition ?? '—'}</b> · ${s.debutDate.slice(0, 4)}</span></a>`;
-  box.innerHTML = rows.map(row).join('') + (rows.length > TOP ? `<button class="top-all">Show all ${rows.length} songs</button>` : '');
-  const btn = box.querySelector('.top-all');
-  if (btn) btn.onclick = () => {
-    const open = btn.classList.toggle('on');
-    box.querySelectorAll('.lrow.more').forEach(a => a.hidden = !open);
-    btn.textContent = open ? 'Show top 10' : `Show all ${rows.length} songs`;
+    <span><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></span>
+    <span class="meta">Peak <b>${s.peakPosition ?? '—'}</b> · ${s.debutDate.slice(0, 4)}</span></a>`;
+  const show = k => {
+    const rows = lists[k];
+    modes.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
+    box.innerHTML = rows.map(row).join('') + (rows.length > TOP ? `<button class="top-all">Show all ${rows.length} songs</button>` : '');
+    const btn = box.querySelector('.top-all');
+    if (btn) btn.onclick = () => {
+      const open = btn.classList.toggle('on');
+      box.querySelectorAll('.lrow.more').forEach(a => a.hidden = !open);
+      btn.textContent = open ? 'Show top 10' : `Show all ${rows.length} songs`;
+    };
   };
+  modes.innerHTML = charts.length > 1 ? charts.map(k => `<button class="${k === 'pop' ? 'pop' : 'hot'}" data-k="${k}">${NAME[k]}</button>`).join('') : '';
+  modes.querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.k));
+  // Start on the chart where the act has more songs
+  show(charts.slice().sort((a, b) => lists[b].length - lists[a].length)[0]);
   wrap.hidden = false;
 }
 
