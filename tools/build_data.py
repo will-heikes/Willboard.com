@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+from collections import defaultdict
 from datetime import date, datetime, timedelta
 
 from add_week import add_to_runs, norm, points
@@ -301,12 +302,18 @@ def main():
                 if e['plays'] is not None:
                     s = by_id[e['songId']]
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, e['plays'])
+        # Title-only sources can't tell two songs of the same name apart (Miranda Lambert's Run took
+        # Sugarland's count, Will 2026-11-11), so they skip any title more than one song shares
+        title_n = defaultdict(int)
+        for x in songs:
+            title_n[norm(x['name'])] += 1
+        shared = lambda x: title_n[norm(x['name'])] > 1
         # Play counts from Will's year-end sheets (plays_history.tsv), for songs whose plays
         # the CS Era Points export no longer carries; a count only ever goes up, so keep the largest
         if key == 'willboard' and os.path.exists('plays_history.tsv'):
             hist_plays = {norm(r['song']): int(r['plays']) for r in csv.DictReader(open('plays_history.tsv', encoding='utf-8'), delimiter='\t')}
             for s in songs:
-                t = hist_plays.get(norm(s['name']))
+                t = hist_plays.get(norm(s['name'])) if not shared(s) else None
                 if t:
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         # All-time counts from Will's iTunes library (itunes_plays.tsv, from tools/import_itunes.py):
@@ -321,7 +328,7 @@ def main():
             totals = {norm(r[0]): int(r[2]) for r in csv.reader(open(plays_csv, encoding='utf-8'))
                       if len(r) > 2 and r[2].strip().isdigit()}
             for s in songs:
-                t = totals.get(norm(s['name']))
+                t = totals.get(norm(s['name'])) if not shared(s) else None
                 if t:
                     s['itunesPlays'] = max(s['itunesPlays'] or 0, t)
         data['songs'] += songs
