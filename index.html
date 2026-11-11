@@ -392,6 +392,7 @@ button { font: inherit; color: inherit; }
 #artist-top .lrow + .lrow { border-top: 1px solid var(--line-soft); }
 #artist-top .top-all { display: block; width: 100%; padding: 11px; border: 0; border-top: 1px solid var(--line-soft); background: none; font: 700 12.5px var(--f-body); color: var(--accent, var(--ink)); cursor: pointer; }
 #artist-top .top-all:hover { background: var(--card-2); }
+#artist-top .chk { display: block; font-size: 10.5px; color: var(--muted); }
 .top-modes { display: inline-flex; margin-left: auto; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
 .top-modes:empty { display: none; }
 .top-modes button { background: var(--card); border: 0; padding: 6px 14px; font: 700 12.5px var(--f-body); cursor: pointer; color: var(--muted); }
@@ -2817,6 +2818,13 @@ function renderArtist(id) {
 // the yearly Top Artists. Plays come from year_plays.json, else the song's all-time plays split by its
 // points that year, as tools/build_year_tops.py does. Only the order is shown, never the scores
 let SONG_WEIGHT = null;
+// Will's spot-check view (2026-11-11): open the site with ?check in the address to see each Top Songs
+// row's all-time plays and chart points. Visitors never see them; points stay off the public pages
+const CHECK = /[?&]check\b/.test(location.search);
+const chkPlays = s => {
+  const yr = Object.values(YEAR_PLAYS?.[s.chart] || {}).reduce((n, y) => n + (y[s.id] || 0), 0);
+  return (s.itunesPlays || yr || 0).toLocaleString();
+};
 function songWeights() {
   if (SONG_WEIGHT) return SONG_WEIGHT;
   const out = {};
@@ -2856,7 +2864,7 @@ async function artistTop(id, songs, featured) {
   const NAME = { willboard: 'Hot 20', pop: 'Pop 10' }, TOP = 10, modes = $('artist-top-modes');
   const row = ({ s }, i) => `<a class="lrow${i >= TOP ? ' more' : ''}" href="#/song/${s.id}"${i >= TOP ? ' hidden' : ''}><span class="rk">${i + 1}</span>${artTile(s.artistName, false, undefined, s.name)}
     <span><div class="song">${esc(s.name)}</div><div class="artist">${esc(s.artistName)}</div></span>
-    <span class="meta">Peak <b>${s.peakPosition ?? '—'}</b> · ${s.debutDate.slice(0, 4)}</span></a>`;
+    <span class="meta">Peak <b>${s.peakPosition ?? '—'}</b> · ${s.debutDate.slice(0, 4)}${CHECK ? `<small class="chk">${chkPlays(s)} plays · ${(s.totalPoints || 0).toLocaleString()} pts</small>` : ''}</span></a>`;
   const show = k => {
     const rows = lists[k];
     modes.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.k === k));
