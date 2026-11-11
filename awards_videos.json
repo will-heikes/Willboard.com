@@ -1,0 +1,15 @@
+{
+  "_note": "Music videos for the awards nominee reel: songId -> [YouTube video id, second the clip starts at]. A song with none, or one YouTube won't play outside its site, shows its cover over its 30-second preview instead. Picked 2026-11-11 from search results (official channel uploads); Will can swap any id or start time.",
+  "song_1053": ["iJ2sRS8FkCs", 30],
+  "song_1037": ["nUsrYVxrDwI", 30],
+  "song_1042": ["wsFf_vHcQno", 30],
+  "song_1050": ["VgWoSykpKWA", 30],
+  "song_1068": ["lQpG7gtxEpE", 30],
+  "song_1019": ["QOjXB1TrpGk", 30],
+  "pop_song_905": ["3tIw1edEVwo", 30],
+  "pop_song_937": ["cz2pnFf8eHg", 30],
+  "pop_song_926": ["t-KFBS2FIgs", 30],
+  "pop_song_893": ["GR3Liudev18", 30],
+  "pop_song_977": ["8NaxT6V4Itc", 30],
+  "pop_song_967": ["JFNx71PXRiI", 30]
+}
