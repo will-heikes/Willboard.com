@@ -2821,10 +2821,10 @@ let SONG_WEIGHT = null;
 // Each Top Songs row shows its all-time plays and chart points so Will can spot-check the order. Will
 // chose 2026-11-11 to show them to everyone: the one place outside About where points appear
 const CHECK = true;
-const chkPlays = s => {
-  const yr = Object.values(YEAR_PLAYS?.[s.chart] || {}).reduce((n, y) => n + (y[s.id] || 0), 0);
-  return (s.itunesPlays || yr || 0).toLocaleString();
-};
+// All-time plays (Will 2026-11-11): Hot 20 songs use the iTunes library count; Pop 10 songs use every
+// Spotify play since Dec 2013 (spotify_weekly.json, every week, not just chart weeks)
+const allPlays = s => s.chart === 'pop' ? (SPOTIFY?.songs?.[s.id] || []).reduce((n, v) => n + v, 0) : s.itunesPlays || 0;
+const chkPlays = s => allPlays(s).toLocaleString();
 function songWeights() {
   if (SONG_WEIGHT) return SONG_WEIGHT;
   const out = {};
@@ -2852,11 +2852,12 @@ async function artistTop(id, songs, featured) {
   wrap.hidden = true; box.innerHTML = '';
   if (!RUNS) return;
   if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
+  if (!SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
   if (location.hash !== `#/artist/${id}`) return;
   const W = songWeights();
   // Career totals (Will 2026-11-11): all-time plays as a share of the chart's most-played song plus
   // chart points as a share of its top scorer, the Biggest hit formula from the chart videos
-  const plays = x => x.itunesPlays || Object.values(YEAR_PLAYS?.[x.chart] || {}).reduce((n, y) => n + (y[x.id] || 0), 0);
+  const plays = allPlays;
   const top = {};
   for (const x of DATA.songs) { const t = top[x.chart] ||= [1, 1]; t[0] = Math.max(t[0], plays(x)); t[1] = Math.max(t[1], x.totalPoints || 0); }
   const score = s => plays(s) / top[s.chart][0] + (s.totalPoints || 0) / top[s.chart][1];
