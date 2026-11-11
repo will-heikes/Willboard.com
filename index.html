@@ -1406,7 +1406,7 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
       <div id="artist-runs" hidden></div>
     </div>
     <div class="song-sec" id="artist-top-wrap" hidden>
-      <div class="sec-h"><h2>Top Songs</h2><span class="sub">Ranked the Year-End way, by plays and chart run</span><div class="top-modes" id="artist-top-modes" role="tablist"></div></div>
+      <div class="sec-h"><h2>Top Songs</h2><span class="sub">Ranked by all-time plays and chart run</span><div class="top-modes" id="artist-top-modes" role="tablist"></div></div>
       <div class="card" style="overflow:hidden" id="artist-top"></div>
     </div>
     <div class="song-sec" id="artist-albums-wrap" hidden>
@@ -2854,7 +2854,12 @@ async function artistTop(id, songs, featured) {
   if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
   if (location.hash !== `#/artist/${id}`) return;
   const W = songWeights();
-  const score = s => (W[s.id] || []).reduce((n, [y, pp, pl]) => n + (featured.has(s) && y < 2015 ? pp / 2 : pp) + pl, 0);
+  // Career totals (Will 2026-11-11): all-time plays as a share of the chart's most-played song plus
+  // chart points as a share of its top scorer, the Biggest hit formula from the chart videos
+  const plays = x => x.itunesPlays || Object.values(YEAR_PLAYS?.[x.chart] || {}).reduce((n, y) => n + (y[x.id] || 0), 0);
+  const top = {};
+  for (const x of DATA.songs) { const t = top[x.chart] ||= [1, 1]; t[0] = Math.max(t[0], plays(x)); t[1] = Math.max(t[1], x.totalPoints || 0); }
+  const score = s => plays(s) / top[s.chart][0] + (s.totalPoints || 0) / top[s.chart][1];
   // Hot 20 and Pop 10 are ranked apart, one list at a time (Will 2026-11-11)
   const lists = {};
   for (const s of [...songs, ...featured]) if (W[s.id]) (lists[s.chart] ||= []).push({ s, v: score(s) });
