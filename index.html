@@ -388,6 +388,11 @@ button { font: inherit; color: inherit; }
 .lrow .meta { font-size: 11.5px; color: var(--muted); text-align: right; white-space: nowrap; line-height: 1.5; }
 .lrow .meta b { color: var(--ink); font-size: 13px; }
 .lrow.dim { opacity: .55; }
+#artist-top .lrow[hidden] { display: none; }
+#artist-top .lrow + .lrow { border-top: 1px solid var(--line-soft); }
+#artist-top .song .cert { margin-left: 8px; vertical-align: 1px; }
+#artist-top .top-all { display: block; width: 100%; padding: 11px; border: 0; border-top: 1px solid var(--line-soft); background: none; font: 700 12.5px var(--f-body); color: var(--accent, var(--ink)); cursor: pointer; }
+#artist-top .top-all:hover { background: var(--card-2); }
 .ye-nav { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 4px 0 26px; }
 .ye-nav h2 { font-family: var(--f-cond); font-weight: 700; font-size: 64px; line-height: 1; margin: 0; letter-spacing: .01em; }
 .ye-nav a, .ye-nav span.off { font-family: var(--f-cond); font-weight: 700; font-size: 22px; color: var(--muted); padding: 6px 10px; }
@@ -1394,6 +1399,10 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     <div class="song-sec" id="artist-runs-wrap" hidden>
       <button class="ah-toggle" id="artist-runs-btn" aria-expanded="false">Chart history, week by week <i>▾</i></button>
       <div id="artist-runs" hidden></div>
+    </div>
+    <div class="song-sec" id="artist-top-wrap" hidden>
+      <div class="sec-h"><h2>Top Songs</h2><span class="sub">Ranked the Year-End way, by plays and chart run</span></div>
+      <div class="card" style="overflow:hidden" id="artist-top"></div>
     </div>
     <div class="song-sec" id="artist-albums-wrap" hidden>
       <div class="sec-h"><h2>Albums</h2></div>
@@ -2783,6 +2792,7 @@ function renderArtist(id) {
   $('artist-sp').innerHTML = '';
   spLink('artist', id).then(h => { if (location.hash === `#/artist/${id}`) $('artist-sp').innerHTML = h; });
   artistRuns(id, [...songs, ...featured]);
+  artistTop(id, songs, featured);
   // Oldest first, by release year, then by the album's first charted song
   const albums = ALBUMS.filter(al => al.artistId === id).sort((x, y) => (x.year || 9999) - (y.year || 9999) ||
     (SONGS[x.songs[0]]?.debutDate || '').localeCompare(SONGS[y.songs[0]]?.debutDate || ''));
@@ -2795,6 +2805,58 @@ function renderArtist(id) {
       <td class="hide-sm">${ALBUM_OF[s.id] ? `<a class="album-link" href="#/album/${ALBUM_OF[s.id].id}" onclick="event.stopPropagation()">${esc(albumName(s))}</a>` : '<span class="artist">—</span>'}</td>
       <td class="hide-sm"><span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span></td>
       <td>${fmtShort(s.debutDate)}</td><td class="num"><b>${s.peakPosition ?? '—'}</b></td><td class="num">${s.weeksOnChart ?? '—'}</td></tr>`).join('');
+}
+
+// An act's biggest songs, scored the way Year-End is (Will 2026-11-11): in each year a song charted, its
+// share of that year's top chart points plus its share of the year's top plays (Pop before 2017 counts
+// points only), added up over its career. Before 2015 a featured act takes half the points share, as on
+// the yearly Top Artists. Plays come from year_plays.json, else the song's all-time plays split by its
+// points that year, as tools/build_year_tops.py does. Only the order is shown, never the scores
+let SONG_WEIGHT = null;
+function songWeights() {
+  if (SONG_WEIGHT) return SONG_WEIGHT;
+  const out = {};
+  for (const key of ['willboard', 'pop']) {
+    const c = RUNS?.[key];
+    if (!c) continue;
+    const per = {}, tot = {};
+    for (const [sid, r] of Object.entries(c.runs)) r.slice(1).forEach((p, j) => {
+      if (!p) return;
+      const y = c.weeks[r[0] + j].slice(0, 4), pt = p <= 5 ? (6 - p) * 100 : 101 - p;
+      (per[y] ||= {})[sid] = (per[y][sid] || 0) + pt;
+      tot[sid] = (tot[sid] || 0) + pt;
+    });
+    for (const y in per) {
+      const yr = per[y], ids = Object.keys(yr), given = YEAR_PLAYS?.[key]?.[y] || {};
+      const plays = Object.fromEntries(ids.map(sid => [sid, given[sid] ?? (SONGS[sid]?.itunesPlays || 0) * yr[sid] / (tot[sid] || 1)]));
+      const topPts = Math.max(1, ...Object.values(yr)), topPl = Math.max(1, ...Object.values(plays));
+      for (const sid of ids) (out[sid] ||= []).push([+y, yr[sid] / topPts, key === 'pop' && +y < 2017 ? 0 : plays[sid] / topPl]);
+    }
+  }
+  return (SONG_WEIGHT = out);
+}
+async function artistTop(id, songs, featured) {
+  const wrap = $('artist-top-wrap'), box = $('artist-top');
+  wrap.hidden = true; box.innerHTML = '';
+  if (!RUNS) return;
+  if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
+  if (location.hash !== `#/artist/${id}`) return;
+  const W = songWeights();
+  const score = s => (W[s.id] || []).reduce((n, [y, pp, pl]) => n + (featured.has(s) && y < 2015 ? pp / 2 : pp) + pl, 0);
+  const rows = [...songs, ...featured].filter(s => W[s.id]).map(s => ({ s, v: score(s) })).sort((a, b) => b.v - a.v);
+  if (!rows.length) return;
+  const both = new Set(rows.map(x => x.s.chart)).size > 1, TOP = 10;
+  const row = ({ s }, i) => `<a class="lrow${i >= TOP ? ' more' : ''}" href="#/song/${s.id}"${i >= TOP ? ' hidden' : ''}><span class="rk">${i + 1}</span>${artTile(s.artistName, false, undefined, s.name)}
+    <span><div class="song">${esc(s.name)}${songCert(s)}</div><div class="artist">${esc(s.artistName)}</div></span>
+    <span class="meta">${both ? `<span class="tag ${s.chart === 'pop' ? 'pop' : 'country'}">${s.chart === 'pop' ? 'Pop 10' : 'Hot 20'}</span><br>` : ''}Peak <b>${s.peakPosition ?? '—'}</b> · ${s.debutDate.slice(0, 4)}</span></a>`;
+  box.innerHTML = rows.map(row).join('') + (rows.length > TOP ? `<button class="top-all">Show all ${rows.length} songs</button>` : '');
+  const btn = box.querySelector('.top-all');
+  if (btn) btn.onclick = () => {
+    const open = btn.classList.toggle('on');
+    box.querySelectorAll('.lrow.more').forEach(a => a.hidden = !open);
+    btn.textContent = open ? 'Show top 10' : `Show all ${rows.length} songs`;
+  };
+  wrap.hidden = false;
 }
 
 // Every Willboard Awards nomination the act shares in, newest show first, categories in show order.
