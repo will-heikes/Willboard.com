@@ -31,6 +31,10 @@ on:
         description: 'Instead: match each song to a Deezer track for 30-second previews (previews.json)'
         type: boolean
         default: false
+      swizzle:
+        description: 'Instead: find the right clip for each Taylor Swift Rankings song (swizzle_previews.json)'
+        type: boolean
+        default: false
       info:
         description: 'Instead: look up each act on Wikidata (person or group, birth date) for the Ask page'
         type: boolean
@@ -67,7 +71,14 @@ jobs:
         run: python3 tools/fetch_previews.py --minutes 100 --redo "$REDO"
         env:
           REDO: ${{ inputs.redo }}
-      - if: github.event_name == 'workflow_dispatch' && !inputs.covers && !inputs.info && !inputs.pop_albums && !inputs.previews
+      - if: github.event_name == 'workflow_dispatch' && inputs.swizzle
+        # Then rebuild swizzle.json's clips from what it found
+        run: |
+          python3 tools/fetch_swizzle_previews.py --minutes 100 --redo "$REDO"
+          python3 tools/build_swizzle.py --clips-only
+        env:
+          REDO: ${{ inputs.redo }}
+      - if: github.event_name == 'workflow_dispatch' && !inputs.covers && !inputs.info && !inputs.pop_albums && !inputs.previews && !inputs.swizzle
         run: python3 tools/fetch_artist_photos.py --redo "$REDO" --wiki "$WIKI"
         env:
           REDO: ${{ inputs.redo }}
@@ -83,7 +94,7 @@ jobs:
           python3 tools/fetch_covers.py --tidy-only
       - name: Find faces in new photos
         # So square tiles crop around the face (images/artists/focus.json)
-        if: ${{ !inputs.covers && !inputs.info && !inputs.pop_albums && !inputs.previews }}
+        if: ${{ !inputs.covers && !inputs.info && !inputs.pop_albums && !inputs.previews && !inputs.swizzle }}
         run: |
           pip install -q "opencv-python-headless<5"
           python3 tools/find_faces.py
@@ -92,8 +103,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A images
-          for f in artist_info.json artist_info_missing.txt pop_album_matches.json previews.json preview_picks.json; do [ -f "$f" ] && git add "$f"; done
+          for f in artist_info.json artist_info_missing.txt pop_album_matches.json previews.json preview_picks.json swizzle.json swizzle_previews.json swizzle_preview_picks.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || git commit -m "Update artist photos and covers"
           # main may have moved during a long run
-          git pull --rebase origin main
+          git pull --rebase origin "${{ github.ref_name }}"
           git push

@@ -61,13 +61,15 @@ VAULT = {
 ALBUM_NAME = {'debut': 'Taylor Swift', 'folklore': 'folklore', 'evermore': 'evermore', 'reputation': 'Reputation',
               'midnights': 'Midnights', 'thetorturedpoetsdepartment': 'The Tortured Poets Department',
               'thelifeofashowgirl': 'The Life of a Showgirl'}
-# Songs the sheets file under "Other" or "N/A"
+# Non-album singles: songs released on their own, never counted with an album (even a Taylor's Version that later added them)
 OTHER = {'safeandsound': 'The Hunger Games', 'eyesopen': 'The Hunger Games', 'crazier': 'Hannah Montana: The Movie',
          'sweeterthanfiction': 'Sweeter Than Fiction', 'beautifuleyes': 'Beautiful Eyes', 'iheart': 'Beautiful Eyes',
          'ronan': 'Ronan', 'todaywasafairytale': 'Today Was a Fairytale'}
 # Spellings the sheets use that differ from the song's real title
 ALIAS = {'lwymmd': 'lookwhatyoumademedo'}
-TITLE = {'lookwhatyoumademedo': 'Look What You Made Me Do', 'saydontgo': "Say Don't Go", 'shakeitoff': 'Shake It Off',
+TITLE = {'lookwhatyoumademedo': 'Look What You Made Me Do', 'thankyoualmee': 'thanK you aIMee',
+         'myboyonlybreakshisfavouritetoys': 'My Boy Only Breaks His Favorite Toys',
+         'whosafraidofliloldme': "Who's Afraid of Little Old Me?", 'saydontgo': "Say Don't Go", 'shakeitoff': 'Shake It Off',
          'thelifeofashowgirl': 'The Life of a Showgirl', 'karmaicespice': 'Karma (feat. Ice Spice)',
          'snowonthebeachmorelanadelrey': 'Snow on the Beach (feat. More Lana Del Rey)',
          'snowonthebeach': 'Snow on the Beach', 'alltoowell10minuteversion': 'All Too Well (10 Minute Version)',
@@ -130,10 +132,17 @@ def sheet_rows(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--itunes', required=True)
+    ap.add_argument('--itunes')
+    ap.add_argument('--clips-only', action='store_true', help="only refresh clips from swizzle_previews.json")
     ap.add_argument('--sheet', action='append', default=[], help='N=path.csv')
     ap.add_argument('--spotify', help='willboard-spotify checkout, for previews and missing covers')
     args = ap.parse_args()
+    if args.clips_only:
+        out = json.load(open('swizzle.json', encoding='utf-8'))
+        add_clips(out['songs'], drop=True)
+        with open('swizzle.json', 'w') as f:
+            json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
+        return
 
     lib = plistlib.load(open(args.itunes, 'rb'))
     tracks = lib['Tracks']
@@ -175,7 +184,11 @@ def main():
     for k, s in songs.items():
         s['t'] = TITLE.get(k) or s['t'] or s.pop('_sheet', None) or k
         s.pop('_sheet', None)
-        al = vault.get(k) or s.pop('_label', None) or OTHER.get(k) or s.get('_it')
+        # A song that came out on its own (a soundtrack or charity single) stays a non-album single even
+        # where a sheet files it under the Taylor's Version album it was later added to (Will 2026-11-10:
+        # Today Was a Fairytale is not a Fearless song)
+        label = s.pop('_label', None)
+        al = vault.get(k) or OTHER.get(k) or label or s.get('_it')
         s.pop('_label', None); s.pop('_it', None)
         s['al'] = al
 
@@ -193,6 +206,7 @@ def main():
 
     if args.spotify:
         add_spotify(songs, args.spotify)
+    add_clips(songs)
 
     out = {'editions': editions, 'songs': dict(sorted(songs.items()))}
     with open('swizzle.json', 'w') as f:
@@ -200,6 +214,20 @@ def main():
     print(f'swizzle.json: {len(editions)} editions, {len(songs)} songs')
     for e in editions:
         print(f"  Swizzle {e['n']:>2}  {e['date']:<12} {len(e['songs']):>3} songs  #1 {songs[e['songs'][0][1]]['t']}  ({e['era']} era)")
+
+
+def add_clips(songs, drop=False):
+    """The clip tools/fetch_swizzle_previews.py chose wins: the original recording unless Will ranked the
+    Taylor's Version, never acoustic or live (Will 2026-11-10)."""
+    if not os.path.exists('swizzle_previews.json'):
+        return
+    clips = json.load(open('swizzle_previews.json', encoding='utf-8'))
+    for k, s in songs.items():
+        if clips.get(k):
+            s['dz'] = clips[k]
+        elif drop and k in clips:
+            # --clips-only: a song with no right take loses the clip a bad match gave it before
+            s.pop('dz', None)
 
 
 def add_spotify(songs, root):
