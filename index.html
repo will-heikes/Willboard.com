@@ -1024,6 +1024,11 @@ body.on-ask .ask-fab { display: none; }
 .ay-head { font-family: var(--f-serif); font-size: 24px; font-weight: 600; line-height: 1.25; }
 .ay-retro { font-family: var(--f-serif); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin-top: 16px; max-width: 640px; }
 .ay-retro p { margin: 0 0 14px; }
+.aw-reel { display: inline-flex; align-items: center; gap: 10px; font: 600 14px var(--f-body); color: #fff; background: var(--country); border: 0; border-radius: 999px; padding: 9px 16px 9px 12px; cursor: pointer; margin-top: 4px; max-width: 100%; text-align: left; }
+.aw-reel.pop { background: var(--pop); }
+.aw-reel svg { width: 14px; height: 14px; fill: currentColor; flex: none; }
+.aw-reel .ps, .aw-reel.on .pl { display: none; }
+.aw-reel.on .ps { display: block; }
 .ay-nav { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 .award .wp { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding-bottom: 10px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
 .award .wp .art { width: 56px; height: 56px; border-radius: 0; font-size: 16px; }
@@ -2591,7 +2596,37 @@ const AW_ORDER = {
 };
 const AW_KEY = { country: ['Single of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'],
                  pop: ['Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'] };
-let RETROS = {};
+let RETROS = {}, NOM_NOTES = {};
+// The chart song an awards nominee names (same title, same lead act), for its play button
+function awSong(chart, n) {
+  if (!n.song) return null;
+  const k = squash(n.song), who = squash(primaryArtist(n.artist)).slice(0, 6);
+  return DATA.songs.find(s => s.chart === (chart === 'pop' ? 'pop' : 'willboard') && squash(s.name) === k && squash(s.artistName).startsWith(who)) || null;
+}
+// An album nominee plays its most-played song
+const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id]).sort((a, b) => (b.itunesPlays || 0) - (a.itunesPlays || 0))[0] || null;
+// Nominee reel: plays each Single (or Record) of the Year nominee's 30-second clip in turn
+const AW_REEL = { country: 'Single of the Year', pop: 'Record of the Year' };
+const REEL = { ids: [], i: -1 };
+function reelStop() { REEL.i = -1; document.querySelectorAll('.aw-reel').forEach(b => { b.classList.remove('on'); b.querySelector('span').textContent = b.dataset.label; }); }
+async function reelPlay(i) {
+  REEL.i = i;
+  const id = REEL.ids[i], b = document.querySelector('.aw-reel');
+  if (!id || !b) return reelStop();
+  b.classList.add('on');
+  b.querySelector('span').textContent = `Now playing ${i + 1} of ${REEL.ids.length}: ${SONGS[id]?.name || ''}`;
+  const t = await deezerTrack(PREVIEWS[id]).catch(() => null);
+  if (REEL.i !== i) return;
+  if (!t?.preview) return reelPlay(i + 1);
+  PV.audio.src = t.preview;
+  PV.audio.play().then(() => pvMark(id)).catch(() => reelStop());
+}
+PV.audio.addEventListener('ended', () => { if (REEL.i >= 0) reelPlay(REEL.i + 1); });
+document.addEventListener('click', e => {
+  const b = e.target.closest('.aw-reel');
+  if (b) { e.preventDefault(); if (REEL.i >= 0) { PV.audio.pause(); reelStop(); } else reelPlay(0); return; }
+  if (e.target.closest('.pv') && REEL.i >= 0) reelStop();
+}, true);
 const awYears = chart => [...new Set(AWARDS[chart].map(n => n.year))].sort((a, b) => b - a);
 // Nominees in A to Z order by artist ("The Chainsmokers" files under C), winner kept apart (Will)
 const awArtistKey = n => (n.artist || n.album || '').replace(/^the\s+/i, '');
@@ -2712,8 +2747,16 @@ function renderAwardYear(chart, year) {
   $('ay-winners-h').textContent = top ? 'The Winners' : 'The Nominees';
   $('ay-title').textContent = `${year} ${AW_SHOW[chart]}`;
   $('ay-head').hidden = true;
-  const retro = RETROS[chart]?.[year];
+  // Will's retrospective once he writes it; before the show, a short look at the nominees (nominee_notes.json)
+  const retro = RETROS[chart]?.[year] || (!top && NOM_NOTES[chart]?.[year]);
   $('ay-retro').innerHTML = retro ? retro.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('') : awRecap(chart, year);
+  if (REEL.i >= 0) { PV.audio.pause(); reelStop(); }
+  REEL.ids = AWARDS[chart].filter(n => n.year === year && n.category === AW_REEL[chart]).sort(byAwArtist)
+    .map(n => awSong(chart, n)?.id).filter(id => id && PREVIEWS[id]);
+  if (REEL.ids.length > 1) {
+    const label = `Play the ${AW_REEL[chart]} ${top ? 'race' : 'nominees'}`;
+    $('ay-retro').insertAdjacentHTML('beforeend', `<button class="aw-reel${chart === 'pop' ? ' pop' : ''}" data-label="${esc(label)}">${PV_ICONS}<span>${esc(label)}</span></button>`);
+  }
   const i = years.indexOf(year);
   const navTab = (y, label) => `<a class="ye-tab ${chart === 'pop' ? 'pop' : ''}" href="${awHref(chart, y)}">${artTile(awFace(chart, y), false, awPhotoYear(chart, y))}
     <span>${label}<small>${esc(awTitle(chart, y))}</small></span></a>`;
@@ -2725,14 +2768,18 @@ function renderAwardYear(chart, year) {
   $('aw-grid').innerHTML = Object.entries(byCat).sort((x, y) => order(x[0]) - order(y[0])).map(([cat, rows]) => {
     const win = rows.find(r => r.slot === 'Winner');
     const wal = win?.album && findAlbum(win.album, win.artist);
-    const head = win ? `<div class="wp">${wal ? albumTile(wal) : artTile(AW_ALIAS[win.artist] || win.artist || '', false, awPhotoYear(chart, year), win.song || win.album)}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
+    const wTune = win && (win.song ? awSong(chart, win) : awAlbumSong(wal));
+    const wTile = wal ? albumTile(wal) : artTile(AW_ALIAS[win?.artist] || win?.artist || '', false, awPhotoYear(chart, year), win?.song || win?.album);
+    const head = win ? `<div class="wp">${wTune ? playTile(wTile, wTune.id) : wTile}<div><div class="nm">${win.album ? albumLink(wal, esc(awName(win))) : esc(awName(win))}</div>${win.song || win.album ? `<div class="sb">${esc(win.artist || '')}</div>` : ''}</div></div>` : '';
     return `<div class="card award"><h4>${esc(cat)}</h4>${head}` + rows.filter(r => r !== win).sort(byAwArtist).map(r => {
       const al = r.album && findAlbum(r.album, r.artist);
       const main = r.song ? `“${esc(r.song)}”` : r.album && !r.artist ? esc(r.album) : esc(r.artist || '—');
       const sub = r.song ? esc(r.artist || '') : r.album && r.artist ? albumLink(al, esc(r.album)) : '';
       // Artist categories (Entertainer, New Artist...) show the act's photo from that show's era
-      const thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, awPhotoYear(chart, year), r.song || r.album)
+      let thumb = al ? albumTile(al) : r.song || r.album ? artTile(r.artist || '', false, awPhotoYear(chart, year), r.song || r.album)
         : r.artist ? artTile(AW_ALIAS[r.artist] || r.artist, false, awPhotoYear(chart, year)) : '<span class="mark">·</span>';
+      const tune = r.song ? awSong(chart, r) : al ? awAlbumSong(al) : null;
+      if (tune) thumb = playTile(thumb, tune.id);
       return `<div class="award-row${r.song || r.album || r.artist ? ' has-art' : ''}">${thumb}
         <div><div class="nm">${main}</div>${sub ? `<div class="sb">${sub}</div>` : ''}</div></div>`;
     }).join('') + '</div>';
@@ -5248,7 +5295,7 @@ async function init() {
     const [d, a] = await Promise.all([fetch('data.json', FRESH), fetch('awards.json', FRESH)]);
     DATA = await d.json();
     AWARDS = await a.json();
-    RETROS = await fetch('retrospectives.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    [RETROS, NOM_NOTES] = await Promise.all(['retrospectives.json', 'nominee_notes.json'].map(f => fetch(f, FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
     ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
     // Pop albums (pop_albums.json, tools/build_pop_albums.py) come from Deezer and iTunes, not Will's library,
     // so they have no plays. One that's already in the library gets its pop songs added instead
