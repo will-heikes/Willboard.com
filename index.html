@@ -2818,9 +2818,9 @@ function renderArtist(id) {
 // the yearly Top Artists. Plays come from year_plays.json, else the song's all-time plays split by its
 // points that year, as tools/build_year_tops.py does. Only the order is shown, never the scores
 let SONG_WEIGHT = null;
-// Will's spot-check view (2026-11-11): open the site with ?check in the address to see each Top Songs
-// row's all-time plays and chart points. Visitors never see them; points stay off the public pages
-const CHECK = /[?&]check\b/.test(location.search);
+// Each Top Songs row shows its all-time plays and chart points so Will can spot-check the order. Will
+// chose 2026-11-11 to show them to everyone: the one place outside About where points appear
+const CHECK = true;
 const chkPlays = s => {
   const yr = Object.values(YEAR_PLAYS?.[s.chart] || {}).reduce((n, y) => n + (y[s.id] || 0), 0);
   return (s.itunesPlays || yr || 0).toLocaleString();
