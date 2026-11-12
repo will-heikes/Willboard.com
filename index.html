@@ -1024,30 +1024,6 @@ body.on-ask .ask-fab { display: none; }
 .ay-head { font-family: var(--f-serif); font-size: 24px; font-weight: 600; line-height: 1.25; }
 .ay-retro { font-family: var(--f-serif); font-size: 18px; line-height: 1.6; color: var(--ink-soft); margin-top: 16px; max-width: 640px; }
 .ay-retro p { margin: 0 0 14px; }
-.aw-reel { display: inline-flex; align-items: center; gap: 10px; font: 600 14px var(--f-body); color: #fff; background: var(--country); border: 0; border-radius: 999px; padding: 9px 16px 9px 12px; cursor: pointer; margin-top: 4px; max-width: 100%; text-align: left; }
-.aw-reel.pop { background: var(--pop); }
-.aw-reel svg { width: 14px; height: 14px; fill: currentColor; flex: none; }
-.aw-reel .ps, .aw-reel.on .pl { display: none; }
-.aw-reel.on .ps { display: block; }
-.aw-stage { margin-top: 14px; max-width: 640px; font-family: var(--f-body); }
-.aw-stage.in .frame { animation: awIn .5s ease; }
-@keyframes awIn { from { opacity: 0; transform: scale(.97); } }
-.aw-stage .frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; background: #000; }
-.aw-stage .yt { position: absolute; inset: 0; opacity: 0; transition: opacity .4s; }
-/* Taller than the frame and centred, so YouTube's title bar and logo fall outside it */
-.aw-stage .yt iframe { position: absolute; left: 0; top: -60px; width: 100%; height: calc(100% + 120px); border: 0; }
-.aw-stage .frame.vid .yt { opacity: 1; }
-.aw-stage .cov { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .4s; }
-.aw-stage .cov .art { width: 56%; aspect-ratio: 1; height: auto; border-radius: 8px; }
-.aw-stage .frame.vid .cov { opacity: 0; }
-.aw-stage .shield { position: absolute; inset: 0; }
-.aw-stage .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 2px 0; }
-.aw-stage .bar small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--country); }
-.aw-rl.pop .aw-stage .bar small { color: var(--pop); }
-.aw-stage .bar b { display: block; font-size: 17px; color: var(--ink); }
-.aw-stage .bar span { font-size: 14px; color: var(--muted); }
-.aw-stage .ctl { display: flex; gap: 6px; flex: none; }
-.aw-stage .ctl button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; font-size: 13px; }
 .an-go { display: inline-flex; align-items: center; gap: 7px; margin: -2px 0 10px; padding: 5px 11px 5px 9px; border-radius: 999px; border: 1px solid var(--country); background: transparent; color: var(--country); font: 600 12px var(--f-body); cursor: pointer; }
 .an-go.pop { border-color: var(--pop); color: var(--pop); }
 .an-go svg { width: 10px; height: 10px; fill: currentColor; }
@@ -2660,95 +2636,8 @@ function awSong(chart, n) {
 }
 // An album nominee plays its most-played song
 const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id]).sort((a, b) => (b.itunesPlays || 0) - (a.itunesPlays || 0))[0] || null;
-// Nominee reel (Will 2026-11-11): plays each Single and Song of the Year nominee in turn (pop: Record and Song),
-// a clip of its music video when awards_videos.json has one (songId -> [YouTube id, start second]), otherwise
-// its cover over the 30-second preview. Videos start on their own and run straight on to the next nominee,
-// cropped so YouTube's title bar and logo stay out of frame.
+// Music videos for "And the nominees are" (awards_videos.json: songId -> [YouTube id, start second])
 let AW_VIDEOS = {};
-const AW_REEL = { country: ['Single of the Year', 'Song of the Year'], pop: ['Record of the Year', 'Song of the Year'] };
-const REEL_LEN = 20;
-const REEL = { items: [], i: -1, el: null, player: null, ytOk: null, timer: 0, bad: new Set() };
-function reelBox(chart, year, top) {
-  const seen = new Map();
-  for (const cat of AW_REEL[chart])
-    for (const n of AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist)) {
-      const s = awSong(chart, n);
-      if (!s || !(PREVIEWS[s.id] || AW_VIDEOS[s.id])) continue;
-      if (!seen.has(s.id)) seen.set(s.id, { s, cats: [] });
-      seen.get(s.id).cats.push(cat.replace(' of the Year', ''));
-    }
-  REEL.items = [...seen.values()];
-  if (REEL.items.length < 2) return '';
-  const label = `Play the ${AW_REEL[chart].map(c => c.replace(' of the Year', '')).join(' and ')} of the Year ${top ? 'races' : 'nominees'}`;
-  return `<div class="aw-rl ${chart === 'pop' ? 'pop' : ''}"><button class="aw-reel${chart === 'pop' ? ' pop' : ''}" data-label="${esc(label)}">${PV_ICONS}<span>${esc(label)}</span></button>
-    <div class="aw-stage" hidden><div class="frame"><div class="yt"></div><div class="cov"></div><div class="shield"></div></div>
-      <div class="bar"><div><small></small><b></b><span></span></div><div class="ctl"><button class="nx" title="Next nominee">⏭</button><button class="st" title="Stop">■</button></div></div></div></div>`;
-}
-function reelHalt() {
-  clearTimeout(REEL.timer); REEL.i = -1;
-  if (REEL.player?.stopVideo) try { REEL.player.stopVideo(); } catch (e) {}
-  if (PV.id && REEL.items.some(x => x.s.id === PV.id)) PV.audio.pause();
-}
-function reelStop() {
-  reelHalt();
-  const el = REEL.el;
-  if (!el?.isConnected) return;
-  el.querySelector('.aw-stage').hidden = true;
-  const b = el.querySelector('.aw-reel'); b.classList.remove('on'); b.querySelector('span').textContent = b.dataset.label;
-}
-function reelYt() {
-  if (REEL.ytOk === false) return Promise.resolve(false);
-  if (REEL.player) return Promise.resolve(true);
-  return ytApi().then(YT => !YT ? (REEL.ytOk = false) : new Promise(ok => {
-    const box = REEL.el.querySelector('.yt');
-    REEL.player = new YT.Player(box.appendChild(document.createElement('div')), {
-      width: '100%', height: '100%',
-      playerVars: { autoplay: 1, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0 },
-      events: {
-        onReady: () => ok(REEL.ytOk = true),
-        onStateChange: e => { if (e.data === 0 && REEL.i >= 0) reelPlay(REEL.i + 1); },
-        // Embedding switched off, or the video's gone: this nominee plays its preview instead
-        onError: () => { const x = REEL.items[REEL.i]; if (x) { REEL.bad.add(x.s.id); reelAudio(REEL.i); } },
-      },
-    });
-    setTimeout(() => ok(REEL.ytOk = !!REEL.player?.loadVideoById), 8000);
-  }));
-}
-async function reelAudio(i) {
-  const x = REEL.items[i], frame = REEL.el.querySelector('.frame');
-  frame.classList.remove('vid');
-  try { REEL.player?.stopVideo?.(); } catch (e) {}
-  clearTimeout(REEL.timer);
-  REEL.timer = setTimeout(() => REEL.i === i && reelPlay(i + 1), REEL_LEN * 1000);
-  const t = PREVIEWS[x.s.id] && await deezerTrack(PREVIEWS[x.s.id]).catch(() => null);
-  if (REEL.i !== i) return;
-  // No clip to be had: the cover still gets its turn on screen
-  if (!t?.preview) return;
-  PV.audio.src = t.preview;
-  PV.audio.play().then(() => pvMark(x.s.id)).catch(() => {});
-}
-async function reelPlay(i) {
-  const el = REEL.el;
-  if (!el?.isConnected || i >= REEL.items.length) return reelStop();
-  clearTimeout(REEL.timer);
-  REEL.i = i;
-  const { s, cats } = REEL.items[i], stage = el.querySelector('.aw-stage');
-  stage.hidden = false;
-  const b = el.querySelector('.aw-reel'); b.classList.add('on');
-  b.querySelector('span').textContent = `Nominee ${i + 1} of ${REEL.items.length}`;
-  stage.querySelector('.bar small').textContent = cats.join(' · ') + ' of the Year';
-  stage.querySelector('.bar b').textContent = s.name;
-  stage.querySelector('.bar span').textContent = s.artistName;
-  stage.querySelector('.cov').innerHTML = artTile(s.artistName, true, null, s.name);
-  stage.classList.remove('in'); void stage.offsetWidth; stage.classList.add('in');
-  const v = AW_VIDEOS[s.id];
-  if (!v || REEL.bad.has(s.id) || !await reelYt() || REEL.i !== i) return REEL.i === i && reelAudio(i);
-  if (PV.id) PV.audio.pause();
-  el.querySelector('.frame').classList.add('vid');
-  REEL.player.loadVideoById({ videoId: v[0], startSeconds: v[1], endSeconds: v[1] + REEL_LEN });
-  // A video the browser won't start on its own (or that stalls) hands over to the preview
-  REEL.timer = setTimeout(() => { if (REEL.i === i && REEL.player.getPlayerState?.() !== 1) { REEL.bad.add(s.id); reelAudio(i); } }, 6000);
-}
 // "And the nominees are…" (Will 2026-11-12): each category, award-show style. A title card, then every nominee
 // in turn with its name and a 5-second clip (its video from awards_videos.json, else its preview), then the
 // winner once the show has one. Artist categories play the act's biggest song from the show's year.
@@ -2838,7 +2727,7 @@ function anShow(item, label) {
 }
 async function anRun(chart, year, cat) {
   const el = anEl(), tok = ++AN.tok;
-  anQuiet(); if (REEL.i >= 0) reelStop();
+  anQuiet();
   const rows = AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist);
   AN.items = rows.map(n => anItem(chart, year, n));
   const win = rows.findIndex(n => n.slot === 'Winner');
@@ -2884,16 +2773,7 @@ document.addEventListener('click', e => {
   anRun(b.dataset.chart, +b.dataset.year, b.dataset.cat);
 });
 window.addEventListener('hashchange', () => { if (AN.i >= 0 || !$('an')?.hidden) anClose(); });
-PV.audio.addEventListener('ended', () => { if (REEL.i >= 0 && !REEL.el?.querySelector('.frame.vid')) reelPlay(REEL.i + 1); });
-document.addEventListener('click', e => {
-  const el = e.target.closest('.aw-rl');
-  if (el) {
-    if (e.target.closest('.nx')) { e.preventDefault(); return REEL.i >= 0 && reelPlay(REEL.i + 1); }
-    if (e.target.closest('.st') || (e.target.closest('.aw-reel') && REEL.i >= 0)) { e.preventDefault(); return reelStop(); }
-    if (e.target.closest('.aw-reel')) { e.preventDefault(); return reelPlay(0); }
-  }
-  if (e.target.closest('.pv') && REEL.i >= 0) reelStop();
-}, true);
+
 const awYears = chart => [...new Set(AWARDS[chart].map(n => n.year))].sort((a, b) => b - a);
 // Nominees in A to Z order by artist ("The Chainsmokers" files under C), winner kept apart (Will)
 const awArtistKey = n => (n.artist || n.album || '').replace(/^the\s+/i, '');
@@ -3017,14 +2897,6 @@ function renderAwardYear(chart, year) {
   // Will's retrospective once he writes it; before the show, a short look at the nominees (nominee_notes.json)
   const retro = RETROS[chart]?.[year] || (!top && NOM_NOTES[chart]?.[year]);
   $('ay-retro').innerHTML = retro ? retro.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('') : awRecap(chart, year);
-  reelStop();
-  REEL.player = null; REEL.ytOk = null;
-  const reel = reelBox(chart, year, !!top);
-  if (reel) {
-    $('ay-retro').insertAdjacentHTML('beforeend', reel);
-    REEL.el = $('ay-retro').querySelector('.aw-rl');
-    if (REEL.items.some(x => AW_VIDEOS[x.s.id])) ytApi();
-  }
   const i = years.indexOf(year);
   const navTab = (y, label) => `<a class="ye-tab ${chart === 'pop' ? 'pop' : ''}" href="${awHref(chart, y)}">${artTile(awFace(chart, y), false, awPhotoYear(chart, y))}
     <span>${label}<small>${esc(awTitle(chart, y))}</small></span></a>`;
