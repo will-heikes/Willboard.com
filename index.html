@@ -1050,6 +1050,8 @@ body.an-open { overflow: hidden; }
 .an-card.won .an-frame { box-shadow: 0 0 0 4px var(--logo-yellow), 0 0 40px rgba(242, 183, 5, .35); }
 .an-tile { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .4s; }
 .an-tile .art { width: 58%; height: auto; aspect-ratio: 1; border-radius: 8px; font-size: 40px; }
+.an-frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; opacity: 0; transition: opacity .6s; }
+.an-frame video.on { opacity: 1; }
 .an-frame .shield { position: absolute; inset: 0; }
 .an-name { margin-top: 14px; }
 .an-name b { display: block; font-size: clamp(20px, 4.5vw, 28px); font-weight: 800; }
@@ -2637,7 +2639,7 @@ const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIE
 // in turn with its name and an 8-second clip of its preview, then the
 // winner once the show has one. Artist categories play the act's biggest hit of the eligibility period.
 const AN_LEN = 8;
-const AN = { items: [], i: -1, tok: 0, timer: 0, urls: {} };
+const AN = { items: [], i: -1, tok: 0, timer: 0, urls: {}, vids: {} };
 // An artist nominee plays their biggest hit of the show's eligibility period (Will 2026-11-12), scored the
 // Year-End way over those weeks: plays as a share of the top song's plus chart points as a share of the top
 // scorer's. Country runs July to June, like the CMAs (the 2026 show: July 2025 to June 2026); Pop follows the
@@ -2657,32 +2659,40 @@ function awWindowScores(chart, year) {
   for (const sid in pts) out[sid] = pts[sid] / tPts + pl[sid] / tPl;
   return (AW_WIN[id] = out);
 }
-// Every song of an act on that chart, the eligibility period's biggest first, then the rest by the all-time
-// Biggest hit score
+// Previews that open on the duet partner's part, so an artist or album nomination only plays them when the act
+// has nothing else (Will 2026-11-12). Will's own clips in videos/awards/ fix these properly
+const AN_GUEST_PART = new Set(['song_1058', 'song_1017']);  // A Life Where We Work Out (Kaitlin Butts), I Wish You Would (Midland)
+// Every song an act is credited on for that chart, best first (Will 2026-11-12): its solo songs from the
+// eligibility period, then solo songs out since (up to the show), then its duets and features from the period,
+// each by the period's Year-End score; then everything else by the all-time Biggest hit score
 function awArtistSongs(chart, name, year) {
-  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name));
-  const pool = DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k);
-  const win = awWindowScores(chart, year);
+  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(AW_ALIAS[name] || name);
+  const credits = s => creditParts(s.artistName).map(p => squash(p.name));
+  const pool = DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && credits(s).includes(k));
+  const win = awWindowScores(chart, year), to = awWindow(chart, year)[1], show = chart === 'pop' ? `${year}-02-28` : `${year}-11-30`;
   const top = [1, 1];
   for (const x of DATA.songs) if (x.chart === key) { top[0] = Math.max(top[0], allPlays(x)); top[1] = Math.max(top[1], x.totalPoints || 0); }
   const score = s => allPlays(s) / top[0] + (s.totalPoints || 0) / top[1];
-  return [...pool.filter(s => win[s.id]).sort((a, b) => win[b.id] - win[a.id]), ...pool.filter(s => !win[s.id]).sort((a, b) => score(b) - score(a))];
+  const solo = s => credits(s).length === 1;
+  const tier = s => (AN_GUEST_PART.has(s.id) ? 10 : 0) + (win[s.id] ? (solo(s) ? 0 : 2) : solo(s) && s.debutDate > to && s.debutDate <= show ? 1 : 3);
+  return pool.sort((a, b) => tier(a) - tier(b) || (win[b.id] || 0) - (win[a.id] || 0) || score(b) - score(a));
 }
-// The song each artist and album nomination plays. An act up in several categories plays a different hit in
-// each (Will 2026-11-12: Ella Langley's Entertainer, Female Vocalist and Album clips are three songs), taking
-// them in category order; an album plays its biggest track the act hasn't already used
+// The song each artist and album nomination plays. An act up in several categories plays a different song in
+// each (Will 2026-11-12). Albums choose first, from their own tracks, so an act's other categories go to songs
+// off the album where they can; then the artist categories take the act's songs in category order
 const awTuneKey = n => [n.category, n.artist, n.album].join('|');
 function awShowTunes(chart, year) {
   const id = 'tunes:' + chart + year;
   if (AW_WIN[id]) return AW_WIN[id];
   const win = awWindowScores(chart, year), out = {}, used = {};
   const order = c => (AW_ORDER[chart].indexOf(c) + 1) || 99;
-  const rows = AWARDS[chart].filter(n => n.year === year && !n.song && n.artist).sort((a, b) => order(a.category) - order(b.category));
+  const rows = AWARDS[chart].filter(n => n.year === year && !n.song && n.artist)
+    .sort((a, b) => !!b.album - !!a.album || order(a.category) - order(b.category));
   for (const n of rows) {
-    const u = used[squash(primaryArtist(AW_ALIAS[n.artist] || n.artist))] ||= new Set();
+    const u = used[squash(AW_ALIAS[n.artist] || n.artist)] ||= new Set();
     const al = n.album && findAlbum(n.album, n.artist);
     const list = n.album ? (al?.songs || []).map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id])
-      .sort((a, b) => (win[b.id] || 0) - (win[a.id] || 0) || allPlays(b) - allPlays(a)) : awArtistSongs(chart, n.artist, year);
+      .sort((a, b) => AN_GUEST_PART.has(a.id) - AN_GUEST_PART.has(b.id) || (win[b.id] || 0) - (win[a.id] || 0) || allPlays(b) - allPlays(a)) : awArtistSongs(chart, n.artist, year);
     const pick = list.find(s => !u.has(s.id)) || list[0];
     if (pick) { u.add(pick.id); out[awTuneKey(n)] = pick; }
   }
@@ -2703,7 +2713,7 @@ function anEl() {
     <button class="an-x" aria-label="Close">✕</button>
     <div class="an-head"><small class="an-show"></small><h3 class="an-cat"></h3></div>
     <div class="an-stage"><div class="an-say"></div>
-      <div class="an-card" hidden><div class="an-frame"><div class="an-tile"></div><div class="shield"></div></div>
+      <div class="an-card" hidden><div class="an-frame"><div class="an-tile"></div><video playsinline preload="auto"></video><video playsinline preload="auto"></video><div class="shield"></div></div>
         <div class="an-name"><b></b><span></span></div></div></div>
     <div class="an-dots"></div></div></div>`);
   el = $('an');
@@ -2726,11 +2736,21 @@ function anFade(a, to, ms) {
 }
 function anQuiet(ms = 300) {
   clearTimeout(AN.timer);
-  for (const a of AN_AUD) if (!a.paused) { const src = a.src; anFade(a, 0, ms).then(() => { if (a.src === src) a.pause(); }); }
+  for (const a of [...AN_AUD, ...document.querySelectorAll('#an video')]) if (!a.paused) { const src = a.src; anFade(a, 0, ms).then(() => { if (a.src === src) a.pause(); }); }
 }
 function anClose() { AN.tok++; AN.i = -1; anQuiet(); const el = $('an'); if (el) el.hidden = true; document.body.classList.remove('an-open'); }
 // Preview links, fetched for the whole category up front so each clip comes in on time
 const anUrl = id => (AN.urls[id] ||= deezerTrack(PREVIEWS[id]).then(t => t?.preview || null).catch(() => null));
+// Will's own video clips (Will 2026-11-12): videos/awards/<Artist> - <Song>.mp4, by the lead act or the full
+// credit, and played in place of the preview whenever one is there
+const anFile = x => x.replace(/[\\/:*?"<>|]/g, '').trim();
+const anVid = s => (AN.vids[s.id] ||= (async () => {
+  for (const who of new Set([primaryArtist(s.artistName), s.artistName])) {
+    const url = `videos/awards/${encodeURIComponent(anFile(`${who} - ${s.name}`))}.mp4`;
+    if (await fetch(url, { method: 'HEAD' }).then(r => r.ok).catch(() => false)) return url;
+  }
+  return null;
+})());
 // Plays a song's preview for `secs` once it's sounding, then starts it fading out and resolves
 function anClip(s, secs, tok) {
   return new Promise(async done => {
@@ -2738,9 +2758,12 @@ function anClip(s, secs, tok) {
     const finish = () => { if (fin) return; fin = true; clearTimeout(AN.timer); if (tok === AN.tok) anQuiet(AN_FADE); done(); };
     // Nothing sounding within a few seconds: the name still gets its turn, in silence
     AN.timer = setTimeout(finish, (secs + 2) * 1000);
-    const url = s && PREVIEWS[s.id] && await anUrl(s.id);
+    const vid = s && await anVid(s);
+    const url = vid || s && PREVIEWS[s.id] && await anUrl(s.id);
     if (tok !== AN.tok || fin || !url) return;
-    const a = AN_AUD[anTurn = 1 - anTurn];
+    const frame = $('an').querySelector('.an-frame'), vids = [...frame.querySelectorAll('video')];
+    const a = vid ? vids[anTurn = 1 - anTurn] : AN_AUD[anTurn = 1 - anTurn];
+    vids.forEach(v => v.classList.toggle('on', v === a));
     cancelAnimationFrame(a._f);
     a.src = url; a.volume = 0;
     a.play().then(() => {
@@ -2756,6 +2779,7 @@ function anShow(item, label) {
   el.querySelector('.an-say').textContent = label || '';
   card.hidden = false;
   el.querySelector('.an-tile').innerHTML = item.tile;
+  el.querySelectorAll('.an-frame video').forEach(v => v.classList.remove('on'));
   el.querySelector('.an-name b').textContent = item.title;
   el.querySelector('.an-name span').textContent = item.sub;
   card.classList.remove('in', 'out'); void card.offsetWidth; card.classList.add('in');
@@ -2766,7 +2790,7 @@ async function anRun(chart, year, cat) {
   if (!PV.audio.paused) PV.audio.pause();
   // Wake both players inside the button press
   for (const a of AN_AUD) if (a.paused) { a.src = AN_SILENT; a.play().catch(() => {}); }
-  AN.urls = {};
+  AN.urls = {}; AN.vids = AN.vids || {};
   const rows = AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist);
   if (rows.some(n => !n.song && !n.album)) {
     if (!WEEK_PLAYS) await loadWeekPlays();
@@ -2774,7 +2798,7 @@ async function anRun(chart, year, cat) {
   }
   if (tok !== AN.tok) return;
   AN.items = rows.map(n => anItem(chart, year, n));
-  for (const x of AN.items) if (x.s && PREVIEWS[x.s.id]) anUrl(x.s.id);
+  for (const x of AN.items) if (x.s) { anVid(x.s); if (PREVIEWS[x.s.id]) anUrl(x.s.id); }
   const win = rows.findIndex(n => n.slot === 'Winner');
   el.hidden = false; document.body.classList.add('an-open');
   el.querySelector('.an-box').className = `an-box ${chart === 'pop' ? 'pop' : ''}`;
