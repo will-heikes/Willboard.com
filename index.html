@@ -2636,23 +2636,25 @@ function awSong(chart, n) {
 }
 // An album nominee plays its most-played song
 const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id]).sort((a, b) => (b.itunesPlays || 0) - (a.itunesPlays || 0))[0] || null;
-// Music videos for "And the nominees are" (awards_videos.json: songId -> [YouTube id, start second])
-let AW_VIDEOS = {};
 // "And the nominees are…" (Will 2026-11-12): each category, award-show style. A title card, then every nominee
-// in turn with its name and a 5-second clip (its video from awards_videos.json, else its preview), then the
-// winner once the show has one. Artist categories play the act's biggest song from the show's year.
-const AN_LEN = 5;
+// in turn with its name and an 8-second clip of its preview, then the
+// winner once the show has one. Artist categories play the act's biggest hit.
+const AN_LEN = 8;
 const AN = { items: [], i: -1, tok: 0, timer: 0, player: null, ytOk: null, win: null, pending: '' };
-function awArtistSong(chart, name, year) {
-  const k = squash(primaryArtist(AW_ALIAS[name] || name)), y = awPhotoYear(chart, year);
-  const pool = DATA.songs.filter(s => s.chart === (chart === 'pop' ? 'pop' : 'willboard') && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k);
-  const near = pool.filter(s => { const d = +String(s.debutDate || '').slice(0, 4); return d >= y - 1 && d <= y; });
-  return (near.length ? near : pool).sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0))[0] || null;
+// An artist nominee plays their biggest hit on that chart (Will 2026-11-12): the Biggest hit score, all-time plays
+// as a share of the chart's most-played song plus chart points as a share of its top scorer
+function awArtistSong(chart, name) {
+  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name));
+  const top = [1, 1];
+  for (const x of DATA.songs) if (x.chart === key) { top[0] = Math.max(top[0], allPlays(x)); top[1] = Math.max(top[1], x.totalPoints || 0); }
+  const score = s => allPlays(s) / top[0] + (s.totalPoints || 0) / top[1];
+  return DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k)
+    .sort((a, b) => score(b) - score(a))[0] || null;
 }
 function anItem(chart, year, n) {
   const al = n.album && findAlbum(n.album, n.artist);
   return {
-    s: n.song ? awSong(chart, n) : al ? awAlbumSong(al) : n.artist ? awArtistSong(chart, n.artist, year) : null,
+    s: n.song ? awSong(chart, n) : al ? awAlbumSong(al) : n.artist ? awArtistSong(chart, n.artist) : null,
     tile: al ? albumTile(al) : artTile(AW_ALIAS[n.artist] || n.artist || '', true, awPhotoYear(chart, year), n.song || n.album),
     title: n.song ? `“${n.song}”` : n.album || n.artist || '', sub: n.song || n.album ? n.artist || '' : '',
   };
@@ -2678,19 +2680,7 @@ function anQuiet() {
   if (!PV.audio.paused) PV.audio.pause();
 }
 function anClose() { AN.tok++; AN.i = -1; anQuiet(); const el = $('an'); if (el) el.hidden = true; document.body.classList.remove('an-open'); }
-function anYt() {
-  if (AN.ytOk === false) return Promise.resolve(false);
-  if (AN.player) return Promise.resolve(true);
-  return ytApi().then(YT => !YT ? (AN.ytOk = false) : new Promise(ok => {
-    AN.player = new YT.Player($('an').querySelector('.an-yt').appendChild(document.createElement('div')), {
-      width: '100%', height: '100%',
-      playerVars: { autoplay: 1, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0 },
-      events: { onReady: () => ok(AN.ytOk = true), onStateChange: e => AN.onState?.(e.data), onError: () => AN.onState?.('err') },
-    });
-    setTimeout(() => ok(AN.ytOk = !!AN.player?.loadVideoById), 8000);
-  }));
-}
-// Plays a song's clip for `secs` once it's actually sounding, then resolves. Video first, then the preview
+// Plays a song's preview for `secs` once it's actually sounding, then resolves
 function anClip(s, secs, tok) {
   return new Promise(async done => {
     const el = $('an'), frame = el.querySelector('.an-frame');
@@ -2708,11 +2698,8 @@ function anClip(s, secs, tok) {
       PV.audio.src = t.preview;
       PV.audio.play().then(() => tok === AN.tok && go()).catch(() => {});
     };
-    const v = s && AW_VIDEOS[s.id];
-    if (v && await anYt() && tok === AN.tok) {
-      AN.onState = st => { if (tok !== AN.tok) return; if (st === 1) { frame.classList.add('vid'); go(); } else if (st === 'err' && !started) audio(); };
-      AN.player.loadVideoById({ videoId: v[0], startSeconds: v[1], endSeconds: v[1] + secs + 2 });
-    } else if (tok === AN.tok) audio();
+    // Audio previews only: YouTube embeds ran ads in place of the song (Will 2026-11-12)
+    if (tok === AN.tok) audio();
   });
 }
 const anWait = (ms, tok) => new Promise(ok => setTimeout(() => ok(tok === AN.tok), ms));
@@ -2729,6 +2716,9 @@ async function anRun(chart, year, cat) {
   const el = anEl(), tok = ++AN.tok;
   anQuiet();
   const rows = AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist);
+  if (chart === 'pop' && !SPOTIFY && rows.some(n => !n.song && !n.album))
+    SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+  if (tok !== AN.tok) return;
   AN.items = rows.map(n => anItem(chart, year, n));
   const win = rows.findIndex(n => n.slot === 'Winner');
   el.hidden = false; document.body.classList.add('an-open');
@@ -5436,7 +5426,7 @@ async function init() {
     const [d, a] = await Promise.all([fetch('data.json', FRESH), fetch('awards.json', FRESH)]);
     DATA = await d.json();
     AWARDS = await a.json();
-    [RETROS, NOM_NOTES, AW_VIDEOS] = await Promise.all(['retrospectives.json', 'nominee_notes.json', 'awards_videos.json'].map(f => fetch(f, FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
+    [RETROS, NOM_NOTES] = await Promise.all(['retrospectives.json', 'nominee_notes.json'].map(f => fetch(f, FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}))));
     ALBUMS = await fetch('albums.json', FRESH).then(r => r.ok ? r.json() : []).catch(() => []);
     // Pop albums (pop_albums.json, tools/build_pop_albums.py) come from Deezer and iTunes, not Will's library,
     // so they have no plays. One that's already in the library gets its pop songs added instead
