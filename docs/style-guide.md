@@ -73,7 +73,7 @@ Every article fits one of three **buckets** (the `bucket` field is internal and 
 
 Give each one a short quote with a different take.
 
-**Facts first.** Every number comes from data.json, runs.json or awards.json. Before writing "never charted" or "first since", match names loosely, ignoring punctuation and checking features in combined artist names. For example, "Stephen Wilson Jr" has no period and "Kaitlyn Butts" is spelled differently. Never mention chart points anywhere except the About page.
+**Facts first.** Every number comes from data.json, runs.json or awards.json. Before writing "never charted" or "first since", match names loosely, ignoring punctuation and checking features in combined artist names. For example, "Stephen Wilson Jr" has no period and "Kaitlyn Butts" is spelled differently. Lady A and Lady Antebellum are one act: combine them for artist totals such as chart entries, #1s and Top 10s (Will, 2026-11-12). Never mention chart points anywhere except the About page.
 
 ## 5. Awards predictions
 
