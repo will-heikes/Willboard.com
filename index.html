@@ -451,15 +451,6 @@ button { font: inherit; color: inherit; }
 /* Artist chart history: one panel per chart, every song's run on a shared timeline */
 /* Artist chart history: tucked behind a button; one lane per song on a shared weekly timeline.
    A week is a small block, darker the higher it charted; weeks at #1 are the logo's yellow. */
-.eras { padding: 16px; }
-.era-bar { display: flex; gap: 2px; height: 14px; border-radius: 3px; overflow: hidden; }
-.era-bar a { background: var(--c); min-width: 4px; }
-.era-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px 16px; margin-top: 14px; }
-.era-list a { display: flex; gap: 9px; align-items: flex-start; color: var(--ink); text-decoration: none; }
-.era-list a:hover b { text-decoration: underline; }
-.era-list i { width: 12px; height: 12px; border-radius: 3px; background: var(--c); flex: none; margin-top: 3px; }
-.era-list b { display: block; font-size: 14px; }
-.era-list small { display: block; color: var(--muted); font-size: 12px; margin-top: 1px; }
 .era-key { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 16px 10px; font: 600 12px var(--f-body); color: var(--ink-soft); }
 .era-key span { display: inline-flex; align-items: center; gap: 6px; }
 .era-key i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
@@ -571,6 +562,8 @@ button { font: inherit; color: inherit; }
 @media (max-width: 600px) { .cmv .tally.vs { flex-wrap: wrap; justify-content: flex-end; max-width: 50%; gap: 2px 10px; } .cmv .tally.vs .tl { display: flex; align-items: center; } .cmv .tally.vs .tl + .tl { border-left: 0; padding-left: 0; } .cmv .tally.vs small { font-size: 0; } .cmv .tally.vs small i { margin-right: 4px; } }
 .cmv .tally b.bump { animation: cmBump .6s ease-out; }
 .cmv .date b, .cmv .date small, .cmv .tally small { white-space: nowrap; }
+.cmv .era-now { display: inline-block; margin-top: 6px; padding: 3px 9px; border-radius: 999px; background: var(--c); color: #fff; font: 700 12px var(--f-body); white-space: nowrap; }
+.cmv .era-now.in { animation: anIn .5s ease both; }
 @keyframes cmBump { 0% { transform: scale(1.35); color: var(--cc, var(--country)); } 100% { transform: scale(1); } }
 .cmv .date b { display: block; font: 700 28px/1 var(--f-cond); color: var(--ink); letter-spacing: .5px; }
 .cmv .date small { font: 600 11px var(--f-body); color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
@@ -1449,10 +1442,6 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     </div>
     <div class="stat-row" id="artist-stats"></div>
     <div id="artist-sp"></div>
-    <div class="song-sec" id="artist-eras-wrap" hidden>
-      <div class="sec-h"><h2>Eras</h2><span class="sub">Each album's run, from its first single to the next album's</span></div>
-      <div class="card eras" id="artist-eras"></div>
-    </div>
     <div class="song-sec" id="artist-runs-wrap" hidden>
       <button class="ah-toggle" id="artist-runs-btn" aria-expanded="false">Chart history, week by week <i>▾</i></button>
       <div id="artist-runs" hidden></div>
@@ -3077,7 +3066,6 @@ function renderArtist(id) {
   $('artist-sp').innerHTML = '';
   spLink('artist', id).then(h => { if (location.hash === `#/artist/${id}`) $('artist-sp').innerHTML = h; });
   artistRuns(id, [...songs, ...featured]);
-  renderEras(id, RUNS ? artistEras(id, [...songs, ...featured]) : null);
   artistTop(id, songs, featured);
   // Oldest first, by release year, then by the album's first charted song
   const albums = ALBUMS.filter(al => al.artistId === id).sort((x, y) => (x.year || 9999) - (y.year || 9999) ||
@@ -3234,22 +3222,6 @@ function artistEras(id, list) {
   }
   return { eras: eras.filter(e => e.songs.length), of };
 }
-function renderEras(id, E) {
-  $('artist-eras-wrap').hidden = !E;
-  if (!E) return;
-  // Each era's stretch on a shared timeline, from its first song's debut to the last week any of its songs charted
-  const lastWk = s => { const c = RUNS?.[s.chart], r = c?.runs[s.id]; return r ? c.weeks[r[0] + r.length - 2] : s.debutDate; };
-  const day = d => Date.parse(d + 'T12:00:00Z');
-  const t0 = day(E.eras[0].start), t1 = Math.max(...E.eras.flatMap(e => e.songs.map(s => day(lastWk(s))))), span = Math.max(1, t1 - t0);
-  const yrs = e => { const a = e.start.slice(0, 4), b = new Date(Math.max(...e.songs.map(s => day(lastWk(s))))).getUTCFullYear(); return +a === b ? a : `${a}–${b}`; };
-  $('artist-eras').innerHTML = `<div class="era-bar">${E.eras.map((e, i) => {
-    const a = day(e.start), b = i < E.eras.length - 1 ? day(E.eras[i + 1].start) : t1;
-    return `<a href="#/album/${e.al.id}" style="--c:${e.color};flex:${Math.max(.02, (b - a) / span)}" title="${esc(e.name)} · ${yrs(e)}"></a>`;
-  }).join('')}</div><div class="era-list">${E.eras.map(e => {
-    const n1 = e.songs.filter(s => s.peakPosition === 1).length;
-    return `<a href="#/album/${e.al.id}" style="--c:${e.color}"><i></i><span><b>${esc(e.name)}</b><small>${yrs(e)} · ${e.songs.length} song${e.songs.length === 1 ? '' : 's'}${n1 ? ` · ${n1} #1${n1 === 1 ? '' : 's'}` : ''}</small></span></a>`;
-  }).join('')}</div>`;
-}
 const TRANSITIONAL = ['2010-01-28', '2011-10-20'];
 function artistRuns(id, list) {
   stopChartMovie();
@@ -3288,19 +3260,13 @@ function artistRuns(id, list) {
     if ((t1 - t0) * PX > 90) g += `<text class="et" x="${x(t0) + 4}" y="30">Transitional era</text>`;
   }
   const era = t0 <= t1;
-  // Each era's stretch as a coloured band along the top
-  if (E) E.eras.forEach((e, i) => {
-    const a = Math.max(first, cols.findIndex(d => d >= e.start)), nx = E.eras[i + 1], b = nx ? cols.findIndex(d => d >= nx.start) - 1 : last;
-    if (a >= 0 && b >= a) g += `<rect class="era-band" x="${x(a)}" y="17" width="${(b - a + 1) * PX}" height="3" fill="${e.color}"><title>${esc(e.name)}</title></rect>`;
-  });
   for (let i = first; i <= last; i++) if (i === first || cols[i].slice(0, 4) !== cols[i - 1].slice(0, 4)) {
     if (i > first) g += `<line class="yr" x1="${x(i) - .5}" x2="${x(i) - .5}" y1="4" y2="${H}"/>`;
     if (i === first || i - first > 8) g += `<text class="yt" x="${x(i) + 4}" y="14">${cols[i].slice(0, 4)}</text>`;
   }
   songs.forEach((s, k) => {
     const w = W8.get(s), y = TOP + lane[k] * ROW, size = SIZE[s.chart], cls = s.chart === 'pop' ? 'pop' : 'hot';
-    const ec = E?.of.get(s.id)?.color;
-    g += `<g class="run" data-k="${k}"><text class="nm" x="${x(w[0][0])}" y="${y + 11}"${ec ? ` style="fill:${ec}"` : ''}>${esc(s.name)}</text>`;
+    g += `<g class="run" data-k="${k}"><text class="nm" x="${x(w[0][0])}" y="${y + 11}">${esc(s.name)}</text>`;
     w.forEach(([ci, p, i]) => {
       if (!p) return;
       const op = p === 1 ? '' : ` fill-opacity="${(.25 + .75 * (size - p) / (size - 1)).toFixed(2)}"`;
@@ -3325,7 +3291,9 @@ function artistRuns(id, list) {
       // Coloured by era (Will 2026-11-12), with a key above the video
       const acts = E && E.eras.map(e => ({ id, name: e.name, color: e.color, has: s => E.of.get(s.id) === e }));
       const m = p.querySelector('.m-anim');
-      CM = chartMovie(m, songs, DATA.artists.find(a => a.id === id)?.name, acts ? { acts } : {});
+      // The era the video is in, named under the date as it plays
+      const eraOf = E && (wk => E.eras.findLast(e => e.start <= wk) || E.eras[0]);
+      CM = chartMovie(m, songs, DATA.artists.find(a => a.id === id)?.name, acts ? { acts, eraOf } : {});
       if (acts) m.insertAdjacentHTML('afterbegin', `<div class="era-key">${acts.map(a => `<span style="--c:${a.color}"><i></i>${esc(a.name)}</span>`).join('')}</div>`);
     }
     else if (!anim && CM) CM.pause();
@@ -3372,7 +3340,7 @@ function chartMovie(el, all, actName, opt = {}) {
   const charts = opt.chart ? [opt.chart] : ['willboard', 'pop'].filter(k => all.some(s => s.chart === k));
   // Start on the chart with the most songs
   let key = charts.sort((a, b) => all.filter(s => s.chart === b).length - all.filter(s => s.chart === a).length)[0];
-  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}${own ? ' own' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div></div><div class="tally${vsTally ? ' vs' : ''}">${vsTally ? opt.acts.map((a, k) => `<div class="tl" style="--c:${a.color}"><small><i></i>${esc(a.name)} <span>#1s</span></small><b class="na${k}">0</b></div>`).join('') : '<div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div>'}</div><div class="sum" hidden></div></div>
+  el.innerHTML = `<div class="cmv${wide ? ' ye' : ''}${focus ? ' fx' : ''}${own ? ' own' : ''}"><div class="stage"><svg></svg><div class="date"><div class="wk"><small></small><b></b></div>${opt.eraOf ? '<div class="era-now"></div>' : ''}</div><div class="tally${vsTally ? ' vs' : ''}">${vsTally ? opt.acts.map((a, k) => `<div class="tl" style="--c:${a.color}"><small><i></i>${esc(a.name)} <span>#1s</span></small><b class="na${k}">0</b></div>`).join('') : '<div class="tl"><small>#1 hits</small><b class="n1">0</b></div><div class="tl"><small>Top 5 hits</small><b class="n5">0</b></div>'}</div><div class="sum" hidden></div></div>
     <div class="ctl"><button class="play">▶ Play</button><button class="restart" title="Start over">⟲</button>
       <input type="range" min="0" step="0.01" aria-label="Timeline">
       <select class="speed" aria-label="Speed">${own
@@ -3538,6 +3506,10 @@ function chartMovie(el, all, actName, opt = {}) {
     svg.setAttribute('width', W); svg.setAttribute('height', H);
     svg.innerHTML = g;
     root.querySelector('.date .wk b').textContent = fmtShort(weeks[Math.min(i0, last)]);
+    if (opt.eraOf) {
+      const e = opt.eraOf(weeks[Math.min(i0, last)]), en = root.querySelector('.era-now');
+      if (en.textContent !== e.name) { en.textContent = e.name; en.style.setProperty('--c', e.color); en.classList.remove('in'); void en.offsetWidth; en.classList.add('in'); }
+    }
     root.querySelector('.date .wk small').textContent = `${NAME[key]} · week of`;
     root.style.setProperty('--cc', key === 'pop' ? 'var(--pop)' : 'var(--country)');
     // Running totals of songs that have reached #1 and the top 5 so far (Will), counting from the
