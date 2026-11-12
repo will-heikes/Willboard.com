@@ -2638,18 +2638,34 @@ function awSong(chart, n) {
 const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id]).sort((a, b) => (b.itunesPlays || 0) - (a.itunesPlays || 0))[0] || null;
 // "And the nominees are…" (Will 2026-11-12): each category, award-show style. A title card, then every nominee
 // in turn with its name and an 8-second clip of its preview, then the
-// winner once the show has one. Artist categories play the act's biggest hit of the show's year.
+// winner once the show has one. Artist categories play the act's biggest hit of the eligibility period.
 const AN_LEN = 8;
 const AN = { items: [], i: -1, tok: 0, timer: 0, player: null, ytOk: null, win: null, pending: '' };
-// An artist nominee plays their biggest hit of the show's year (Will 2026-11-12), scored as Year-End scores it:
-// the song's plays that year as a share of the top song's, plus its points that year as a share of the top
-// scorer's. A Pop show honours the year before it. An act with nothing on the chart that year plays its biggest hit
+// An artist nominee plays their biggest hit of the show's eligibility period (Will 2026-11-12), scored the
+// Year-End way over those weeks: plays as a share of the top song's plus chart points as a share of the top
+// scorer's. Country runs July to June, like the CMAs (the 2026 show: July 2025 to June 2026); Pop follows the
+// Grammys, December to November of the year before the show. An act with nothing in that window plays its
+// all-time biggest hit
+const awWindow = (chart, y) => chart === 'pop' ? [`${y - 2}-12-01`, `${y - 1}-11-30`] : [`${y - 1}-07-01`, `${y}-06-30`];
+const AW_WIN = {};
+function awWindowScores(chart, year) {
+  const id = chart + year;
+  if (AW_WIN[id]) return AW_WIN[id];
+  const key = chart === 'pop' ? 'pop' : 'willboard', [from, to] = awWindow(chart, year), pts = {}, pl = {};
+  for (const w of DATA[key]) if (w.week >= from && w.week <= to) for (const e of w.entries) {
+    pts[e.songId] = (pts[e.songId] || 0) + (e.position <= 5 ? (6 - e.position) * 100 : 101 - e.position);
+    pl[e.songId] = (pl[e.songId] || 0) + (e.wkPlays || 0);
+  }
+  const tPts = Math.max(1, ...Object.values(pts)), tPl = Math.max(1, ...Object.values(pl)), out = {};
+  for (const sid in pts) out[sid] = pts[sid] / tPts + pl[sid] / tPl;
+  return (AW_WIN[id] = out);
+}
 function awArtistSong(chart, name, year) {
-  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name)), y = awPhotoYear(chart, year);
+  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name));
   const pool = DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k);
-  const W = songWeights(), inYear = s => (W[s.id] || []).find(r => r[0] === y);
-  const that = pool.filter(inYear).map(s => { const r = inYear(s); return { s, v: r[1] + r[2] }; }).sort((a, b) => b.v - a.v);
-  if (that.length) return that[0].s;
+  const win = awWindowScores(chart, year);
+  const inWin = pool.filter(s => win[s.id]).sort((a, b) => win[b.id] - win[a.id]);
+  if (inWin.length) return inWin[0];
   const top = [1, 1];
   for (const x of DATA.songs) if (x.chart === key) { top[0] = Math.max(top[0], allPlays(x)); top[1] = Math.max(top[1], x.totalPoints || 0); }
   const score = s => allPlays(s) / top[0] + (s.totalPoints || 0) / top[1];
@@ -2721,7 +2737,7 @@ async function anRun(chart, year, cat) {
   anQuiet();
   const rows = AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist);
   if (rows.some(n => !n.song && !n.album)) {
-    if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
+    if (!WEEK_PLAYS) await loadWeekPlays();
     if (chart === 'pop' && !SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
   }
   if (tok !== AN.tok) return;
