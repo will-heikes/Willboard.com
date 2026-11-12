@@ -451,6 +451,19 @@ button { font: inherit; color: inherit; }
 /* Artist chart history: one panel per chart, every song's run on a shared timeline */
 /* Artist chart history: tucked behind a button; one lane per song on a shared weekly timeline.
    A week is a small block, darker the higher it charted; weeks at #1 are the logo's yellow. */
+.eras { padding: 16px; }
+.era-bar { display: flex; gap: 2px; height: 14px; border-radius: 3px; overflow: hidden; }
+.era-bar a { background: var(--c); min-width: 4px; }
+.era-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px 16px; margin-top: 14px; }
+.era-list a { display: flex; gap: 9px; align-items: flex-start; color: var(--ink); text-decoration: none; }
+.era-list a:hover b { text-decoration: underline; }
+.era-list i { width: 12px; height: 12px; border-radius: 3px; background: var(--c); flex: none; margin-top: 3px; }
+.era-list b { display: block; font-size: 14px; }
+.era-list small { display: block; color: var(--muted); font-size: 12px; margin-top: 1px; }
+.era-key { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 16px 10px; font: 600 12px var(--f-body); color: var(--ink-soft); }
+.era-key span { display: inline-flex; align-items: center; gap: 6px; }
+.era-key i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+#album-movie { padding-top: 14px; }
 .ah-toggle { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 3px;
   padding: 9px 14px; font: 700 13px var(--f-body); cursor: pointer; }
 .ah-toggle:hover { border-color: var(--ink); }
@@ -1436,6 +1449,10 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     </div>
     <div class="stat-row" id="artist-stats"></div>
     <div id="artist-sp"></div>
+    <div class="song-sec" id="artist-eras-wrap" hidden>
+      <div class="sec-h"><h2>Eras</h2><span class="sub">Each album's run, from its first single to the next album's</span></div>
+      <div class="card eras" id="artist-eras"></div>
+    </div>
     <div class="song-sec" id="artist-runs-wrap" hidden>
       <button class="ah-toggle" id="artist-runs-btn" aria-expanded="false">Chart history, week by week <i>▾</i></button>
       <div id="artist-runs" hidden></div>
@@ -1492,6 +1509,10 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     <div class="song-sec">
       <div class="sec-h"><h2>Songs</h2><span class="sub" id="album-songs-sub"></span></div>
       <div class="card" style="overflow:hidden"><table class="table" id="album-songs"></table></div>
+    </div>
+    <div class="song-sec" id="album-movie-wrap" hidden>
+      <div class="sec-h"><h2>Watch its singles</h2><span class="sub" id="album-movie-sub"></span></div>
+      <div class="card ah" id="album-movie"></div>
     </div>
     <div class="song-sec" id="album-more-wrap">
       <div class="sec-h"><h2 id="album-more-h">More albums</h2></div>
@@ -3056,6 +3077,7 @@ function renderArtist(id) {
   $('artist-sp').innerHTML = '';
   spLink('artist', id).then(h => { if (location.hash === `#/artist/${id}`) $('artist-sp').innerHTML = h; });
   artistRuns(id, [...songs, ...featured]);
+  renderEras(id, RUNS ? artistEras(id, [...songs, ...featured]) : null);
   artistTop(id, songs, featured);
   // Oldest first, by release year, then by the album's first charted song
   const albums = ALBUMS.filter(al => al.artistId === id).sort((x, y) => (x.year || 9999) - (y.year || 9999) ||
@@ -3193,6 +3215,41 @@ function weekCols() {
   });
   return (WEEK_COLS = { col, list });
 }
+// An act's eras (Will 2026-11-12): one per album, named for it ("Play On era") and given its own colour. An era
+// opens with the album's first charted song and runs until the next album's; a song off the album, a feature or
+// a stand-alone single, belongs to whichever era it came out in. Acts with fewer than two albums have none
+const ERA_COLORS = ['#E0312C', '#3B8BDE', '#F2B705', '#2BA84A', '#8E5BD8', '#E05AA0', '#17A2B8', '#F26B1D', '#2E4A9E', '#8CC63F', '#C2185B', '#00897B'];
+function artistEras(id, list) {
+  const first = al => al.songs.map(sid => SONGS[sid]?.debutDate).filter(Boolean).sort()[0];
+  const eras = ALBUMS.filter(al => al.artistId === id).map(al => ({ al, start: first(al), songs: [] })).filter(e => e.start)
+    .sort((a, b) => (a.al.year || 9999) - (b.al.year || 9999) || a.start.localeCompare(b.start));
+  if (eras.length < 2) return null;
+  // Albums go in release order; an older album still charting when the chart began doesn't take over from a newer one
+  eras.forEach((e, i) => { if (i && e.start < eras[i - 1].start) e.start = eras[i - 1].start; });
+  eras.forEach((e, i) => { e.name = `${e.al.name.trim()} era`; e.color = ERA_COLORS[i % ERA_COLORS.length]; });
+  const of = new Map();
+  for (const s of [...list].sort((a, b) => a.debutDate.localeCompare(b.debutDate))) {
+    const e = eras.find(e => e.al.songs.includes(s.id)) || eras.findLast(e => e.start <= s.debutDate) || eras[0];
+    e.songs.push(s); of.set(s.id, e);
+  }
+  return { eras: eras.filter(e => e.songs.length), of };
+}
+function renderEras(id, E) {
+  $('artist-eras-wrap').hidden = !E;
+  if (!E) return;
+  // Each era's stretch on a shared timeline, from its first song's debut to the last week any of its songs charted
+  const lastWk = s => { const c = RUNS?.[s.chart], r = c?.runs[s.id]; return r ? c.weeks[r[0] + r.length - 2] : s.debutDate; };
+  const day = d => Date.parse(d + 'T12:00:00Z');
+  const t0 = day(E.eras[0].start), t1 = Math.max(...E.eras.flatMap(e => e.songs.map(s => day(lastWk(s))))), span = Math.max(1, t1 - t0);
+  const yrs = e => { const a = e.start.slice(0, 4), b = new Date(Math.max(...e.songs.map(s => day(lastWk(s))))).getUTCFullYear(); return +a === b ? a : `${a}–${b}`; };
+  $('artist-eras').innerHTML = `<div class="era-bar">${E.eras.map((e, i) => {
+    const a = day(e.start), b = i < E.eras.length - 1 ? day(E.eras[i + 1].start) : t1;
+    return `<a href="#/album/${e.al.id}" style="--c:${e.color};flex:${Math.max(.02, (b - a) / span)}" title="${esc(e.name)} · ${yrs(e)}"></a>`;
+  }).join('')}</div><div class="era-list">${E.eras.map(e => {
+    const n1 = e.songs.filter(s => s.peakPosition === 1).length;
+    return `<a href="#/album/${e.al.id}" style="--c:${e.color}"><i></i><span><b>${esc(e.name)}</b><small>${yrs(e)} · ${e.songs.length} song${e.songs.length === 1 ? '' : 's'}${n1 ? ` · ${n1} #1${n1 === 1 ? '' : 's'}` : ''}</small></span></a>`;
+  }).join('')}</div>`;
+}
 const TRANSITIONAL = ['2010-01-28', '2011-10-20'];
 function artistRuns(id, list) {
   stopChartMovie();
@@ -3204,6 +3261,7 @@ function artistRuns(id, list) {
   box.hidden = true; btn.setAttribute('aria-expanded', 'false');
   btn.onclick = () => { box.hidden = !box.hidden; btn.setAttribute('aria-expanded', String(!box.hidden)); };
   if (!songs.length) { box.innerHTML = ''; return; }
+  const E = artistEras(id, list);
   const { col, list: cols } = weekCols();
   // Each song's weeks as [column, position, index in its own chart's weeks]
   const wk = s => { const c = RUNS[s.chart], r = c.runs[s.id]; return r.slice(1).map((p, j) => [col[c.weeks[r[0] + j]], p, r[0] + j]); };
@@ -3230,13 +3288,19 @@ function artistRuns(id, list) {
     if ((t1 - t0) * PX > 90) g += `<text class="et" x="${x(t0) + 4}" y="30">Transitional era</text>`;
   }
   const era = t0 <= t1;
+  // Each era's stretch as a coloured band along the top
+  if (E) E.eras.forEach((e, i) => {
+    const a = Math.max(first, cols.findIndex(d => d >= e.start)), nx = E.eras[i + 1], b = nx ? cols.findIndex(d => d >= nx.start) - 1 : last;
+    if (a >= 0 && b >= a) g += `<rect class="era-band" x="${x(a)}" y="17" width="${(b - a + 1) * PX}" height="3" fill="${e.color}"><title>${esc(e.name)}</title></rect>`;
+  });
   for (let i = first; i <= last; i++) if (i === first || cols[i].slice(0, 4) !== cols[i - 1].slice(0, 4)) {
     if (i > first) g += `<line class="yr" x1="${x(i) - .5}" x2="${x(i) - .5}" y1="4" y2="${H}"/>`;
     if (i === first || i - first > 8) g += `<text class="yt" x="${x(i) + 4}" y="14">${cols[i].slice(0, 4)}</text>`;
   }
   songs.forEach((s, k) => {
     const w = W8.get(s), y = TOP + lane[k] * ROW, size = SIZE[s.chart], cls = s.chart === 'pop' ? 'pop' : 'hot';
-    g += `<g class="run" data-k="${k}"><text class="nm" x="${x(w[0][0])}" y="${y + 11}">${esc(s.name)}</text>`;
+    const ec = E?.of.get(s.id)?.color;
+    g += `<g class="run" data-k="${k}"><text class="nm" x="${x(w[0][0])}" y="${y + 11}"${ec ? ` style="fill:${ec}"` : ''}>${esc(s.name)}</text>`;
     w.forEach(([ci, p, i]) => {
       if (!p) return;
       const op = p === 1 ? '' : ` fill-opacity="${(.25 + .75 * (size - p) / (size - 1)).toFixed(2)}"`;
@@ -3257,7 +3321,13 @@ function artistRuns(id, list) {
     const anim = b.dataset.m === 'anim';
     p.querySelector('.m-still').hidden = anim;
     p.querySelector('.m-anim').hidden = !anim;
-    if (anim && !CM) CM = chartMovie(p.querySelector('.m-anim'), songs, DATA.artists.find(a => a.id === id)?.name);
+    if (anim && !CM) {
+      // Coloured by era (Will 2026-11-12), with a key above the video
+      const acts = E && E.eras.map(e => ({ id, name: e.name, color: e.color, has: s => E.of.get(s.id) === e }));
+      const m = p.querySelector('.m-anim');
+      CM = chartMovie(m, songs, DATA.artists.find(a => a.id === id)?.name, acts ? { acts } : {});
+      if (acts) m.insertAdjacentHTML('afterbegin', `<div class="era-key">${acts.map(a => `<span style="--c:${a.color}"><i></i>${esc(a.name)}</span>`).join('')}</div>`);
+    }
     else if (!anim && CM) CM.pause();
   });
   p.querySelectorAll('.run').forEach(el => {
@@ -4106,6 +4176,12 @@ async function renderAlbum(id) {
     // Country cuts carry the Hot 20's plays-based certification; Pop certifies by chart points, so its cuts show plays only.
     (al.cuts?.length ? `<tr class="sub-h"><td colspan="6">Album cuts</td></tr>` + al.cuts.map(c => `<tr><td><div class="song">${esc(c.name)}${songs[0]?.chart === 'willboard' ? certBadge('willboard', c.plays) : ''}</div><div class="artist">Didn't chart</div></td>
       <td class="hide-sm"></td><td>—</td><td class="num">—</td><td class="num">—</td><td class="num">${c.plays.toLocaleString()}</td></tr>`).join('') : '');
+  // The album's singles rising and falling, one chart at a time (Will 2026-11-12)
+  stopChartMovie();
+  const charted = songs.filter(s => RUNS?.[s.chart]?.runs[s.id]);
+  $('album-movie-wrap').hidden = !charted.length;
+  $('album-movie-sub').textContent = charted.length ? `${charted.length} song${charted.length === 1 ? '' : 's'} from the album, week by week` : '';
+  if (charted.length) CM = chartMovie($('album-movie'), charted, al.name);
   const more = ALBUMS.filter(o => o.artistId === al.artistId && o !== al);
   $('album-more-wrap').hidden = !more.length;
   $('album-more-h').textContent = `More from ${primaryArtist(al.artist)}`;
