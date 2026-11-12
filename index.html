@@ -2638,23 +2638,27 @@ function awSong(chart, n) {
 const awAlbumSong = al => al?.songs.map(id => SONGS[id]).filter(s => s && PREVIEWS[s.id]).sort((a, b) => (b.itunesPlays || 0) - (a.itunesPlays || 0))[0] || null;
 // "And the nominees are…" (Will 2026-11-12): each category, award-show style. A title card, then every nominee
 // in turn with its name and an 8-second clip of its preview, then the
-// winner once the show has one. Artist categories play the act's biggest hit.
+// winner once the show has one. Artist categories play the act's biggest hit of the show's year.
 const AN_LEN = 8;
 const AN = { items: [], i: -1, tok: 0, timer: 0, player: null, ytOk: null, win: null, pending: '' };
-// An artist nominee plays their biggest hit on that chart (Will 2026-11-12): the Biggest hit score, all-time plays
-// as a share of the chart's most-played song plus chart points as a share of its top scorer
-function awArtistSong(chart, name) {
-  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name));
+// An artist nominee plays their biggest hit of the show's year (Will 2026-11-12), scored as Year-End scores it:
+// the song's plays that year as a share of the top song's, plus its points that year as a share of the top
+// scorer's. A Pop show honours the year before it. An act with nothing on the chart that year plays its biggest hit
+function awArtistSong(chart, name, year) {
+  const key = chart === 'pop' ? 'pop' : 'willboard', k = squash(primaryArtist(AW_ALIAS[name] || name)), y = awPhotoYear(chart, year);
+  const pool = DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k);
+  const W = songWeights(), inYear = s => (W[s.id] || []).find(r => r[0] === y);
+  const that = pool.filter(inYear).map(s => { const r = inYear(s); return { s, v: r[1] + r[2] }; }).sort((a, b) => b.v - a.v);
+  if (that.length) return that[0].s;
   const top = [1, 1];
   for (const x of DATA.songs) if (x.chart === key) { top[0] = Math.max(top[0], allPlays(x)); top[1] = Math.max(top[1], x.totalPoints || 0); }
   const score = s => allPlays(s) / top[0] + (s.totalPoints || 0) / top[1];
-  return DATA.songs.filter(s => s.chart === key && PREVIEWS[s.id] && squash(primaryArtist(s.artistName)) === k)
-    .sort((a, b) => score(b) - score(a))[0] || null;
+  return pool.sort((a, b) => score(b) - score(a))[0] || null;
 }
 function anItem(chart, year, n) {
   const al = n.album && findAlbum(n.album, n.artist);
   return {
-    s: n.song ? awSong(chart, n) : al ? awAlbumSong(al) : n.artist ? awArtistSong(chart, n.artist) : null,
+    s: n.song ? awSong(chart, n) : al ? awAlbumSong(al) : n.artist ? awArtistSong(chart, n.artist, year) : null,
     tile: al ? albumTile(al) : artTile(AW_ALIAS[n.artist] || n.artist || '', true, awPhotoYear(chart, year), n.song || n.album),
     title: n.song ? `“${n.song}”` : n.album || n.artist || '', sub: n.song || n.album ? n.artist || '' : '',
   };
@@ -2716,8 +2720,10 @@ async function anRun(chart, year, cat) {
   const el = anEl(), tok = ++AN.tok;
   anQuiet();
   const rows = AWARDS[chart].filter(n => n.year === year && n.category === cat).sort(byAwArtist);
-  if (chart === 'pop' && !SPOTIFY && rows.some(n => !n.song && !n.album))
-    SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+  if (rows.some(n => !n.song && !n.album)) {
+    if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
+    if (chart === 'pop' && !SPOTIFY) SPOTIFY = await fetch('spotify_weekly.json', FRESH).then(r => r.json()).catch(() => ({ songs: {} }));
+  }
   if (tok !== AN.tok) return;
   AN.items = rows.map(n => anItem(chart, year, n));
   const win = rows.findIndex(n => n.slot === 'Winner');
