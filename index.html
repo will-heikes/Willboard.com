@@ -380,6 +380,12 @@ button { font: inherit; color: inherit; }
 .col-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 4px solid var(--accent); padding: 10px 0 12px; }
 .col-h h2 { font-family: var(--f-cond); font-weight: 700; font-size: 26px; text-transform: uppercase; margin: 0; color: var(--accent); }
 .col-h small { font-size: 11.5px; color: var(--muted); }
+.col-h-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.ye-view .pill { padding: 4px 12px; }
+.ye-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 22px 16px; padding-top: 6px; }
+.ye-grid .ye-tile.no1 .rk { font-size: 30px; }
+.ye-grid .ye-tile.no1 .song { font-size: 14px; }
+.ye-grid .ye-tile.no1 .artist { font-size: inherit; }
 .lrow { display: grid; grid-template-columns: 34px 48px 1fr auto; align-items: center; gap: 12px; padding: 9px 12px;
   background: var(--card); border-bottom: 1px solid var(--line-soft); }
 .lrow:hover { background: var(--card-2); }
@@ -2430,6 +2436,7 @@ function decadeBanner(dec) {
 // Like Billboard's year-end hub: each year (or decade) opens on a card per chart showing its top 5,
 // and each card opens the full list at #/year-end/<year>/<chart>.
 let YEAREND = null, DECADE = null, YEAR_TOPS = null, YEAR_PLAYS = null;
+let YE_VIEW = 'list'; try { if (localStorage.getItem('wbYeView') === 'grid') YE_VIEW = 'grid'; } catch (e) {}
 const DECADES = ['2010s'];
 const n = (v, w) => `${v} ${w}${v === 1 ? '' : 's'}`;
 const wks1Text = v => v ? `<b>${v}</b> wk${v === 1 ? '' : 's'} at #1` : '';
@@ -2556,6 +2563,7 @@ async function renderYearEnd(span, slug) {
     const [top, ...rest] = chart.rows;
     // A song chart's year can play as a moving chart, like an artist's history
     const movieKey = !dec && RUNS && { 'country-songs': 'willboard', 'pop-songs': 'pop' }[chart.slug];
+    const artistChart = chart.slug.endsWith('-artists');
     // The Top 10 countdown, for years with music videos picked out (videos.json)
     const reelKey = !dec && { 'country-songs': 'willboard', 'pop-songs': 'pop' }[chart.slug];
     const reelList = reelKey && YEAREND[reelKey]?.[span]?.songs || [];
@@ -2567,8 +2575,14 @@ async function renderYearEnd(span, slug) {
       ${canva ? `<div class="card ye-movie ye-canva ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Will's Top 10 ${reelKey === 'pop' ? 'Pop' : 'Country'} Songs of ${span}</b><small>The countdown video, #10 to #1</small></span></button><div class="m-canva" hidden><video controls playsinline preload="none" poster="${canva}.jpg" src="${canva}.mp4"></video></div></div>` : ''}
       ${reel ? `<div class="card ye-movie ye-reel ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>The ${span} Top 10 countdown</b><small>#10 to #1, with a clip of each song's video</small></span></button><div class="m-reel" hidden></div></div>` : ''}
       ${movieKey ? `<div class="card ye-movie ye-anim ${chart.cls}"><button class="ye-play" aria-expanded="false"><span class="go">▶</span><span><b>Watch ${span} on the ${movieKey === 'pop' ? 'Pop 10' : 'Hot 20'}</b><small>Every song that charted, week by week, with the music</small></span></button><div class="m-anim" hidden></div></div>` : ''}
-      <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></div>
-      ${leadRow(top)}${rest.map(listRow).join('')}</div>`;
+      <div class="col ${chart.cls}"><div class="col-h"><h2>${chart.title}</h2><span class="col-h-r">${artistChart ? `<span class="pills ye-view">${['list', 'grid'].map(v => `<button class="pill${YE_VIEW === v ? ' active' : ''}" data-view="${v}" aria-pressed="${YE_VIEW === v}">${v === 'list' ? 'List' : 'Grid'}</button>`).join('')}</span>` : ''}<small>Top ${chart.rows.length} of ${dec ? 'the ' + span : span}</small></span></div>
+      ${artistChart && YE_VIEW === 'grid' ? `<div class="ye-grid">${chart.rows.map(r => `<a class="ye-tile${r.rank === 1 ? ' no1' : ''}" href="${r.href}">${r.tile(false)}<div class="rk">${r.rank}</div><div class="song">${esc(r.name)}</div><div class="artist">${esc(r.sub)}</div></a>`).join('')}</div>`
+        : `${leadRow(top)}${rest.map(listRow).join('')}`}</div>`;
+    // Artist charts: List or Grid (Will 2026-11-15), remembered on this device
+    for (const b of split.querySelectorAll('.ye-view button')) b.onclick = () => {
+      YE_VIEW = b.dataset.view; try { localStorage.setItem('wbYeView', YE_VIEW); } catch (e) {}
+      renderYearEnd(span, slug);
+    };
     const cvd = split.querySelector('.ye-canva');
     if (cvd) cvd.querySelector('.ye-play').onclick = e => {
       const box = cvd.querySelector('.m-canva'), v = box.querySelector('video'), open = box.hidden;
