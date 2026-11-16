@@ -4194,7 +4194,7 @@ function renderSongs() {
 // Questions about the charts in plain English, answered straight from the chart data by
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
 // Pop 10 songs that were Eurovision entries: songId -> [contest year, country, grand final place]
-const XMAS = /christmas|xmas|santa claus|mistletoe|jingle bell|sleigh ride|reindeer|navidad|\bnoel\b|winter wonderland|let it snow|silent night|holy night|deck the halls|holly jolly|little drummer boy|frosty the|o come all ye|joy to the world|away in a manger|silver bells/i;
+const XMAS = /christmas|xmas|santa claus|mistletoe|jingle bell|sleigh ride|reindeer|navidad|\bnoel\b|winter wonderland|let it snow|silent night|holy night|deck the halls|holly jolly|little drummer boy|frosty the|o come all ye|joy to the world|away in a manger|silver bells|under(?:neath)? the tree|cold outside|\bmerry\b(?![\s-]*go\b)|rudolph|grinch|carol of the bells|bethlehem|\bhark\b|angels we have heard|god rest ye|saint nick|marshmallow world|pretty paper|winter's night|angels in the snow|most wonderful time|mary,? did you know|nuttin' for/i;
 const EUROVISION = {
   pop_song_791: [2023, 'Sweden', 1], pop_song_792: [2023, 'Finland', 2],  // Tattoo, Cha Cha Cha
   pop_song_941: [2025, 'Austria', 1], pop_song_939: [2025, 'Sweden', 4],  // Wasted Love, Bara Bada Bastu
