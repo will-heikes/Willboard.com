@@ -906,6 +906,7 @@ body.on-ask .ask-fab { display: none; }
 .ask-rows .lrow:last-child { border-bottom: 0; }
 .ask-foot { border-top: 1px solid var(--line-soft); padding: 12px 18px; }
 .ask-note { font-size: 12px; color: var(--muted); }
+.ask-sp { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .ask-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--accent); }
 .ask-none { padding: 6px 20px; max-width: 640px; }
 /* Taylor Swift Rankings (#/taylor-swift-rankings, built from Will's "Swizzle" lists). Lilac accent: Taylor's color here, never brown */
@@ -4193,6 +4194,7 @@ function renderSongs() {
 // Questions about the charts in plain English, answered straight from the chart data by
 // pattern matching (no AI, nothing leaves the page). Never mentions points.
 // Pop 10 songs that were Eurovision entries: songId -> [contest year, country, grand final place]
+const XMAS = /christmas|xmas|santa claus|mistletoe|jingle bell|sleigh ride|reindeer|navidad|\bnoel\b|winter wonderland|let it snow|silent night|holy night|deck the halls|holly jolly|little drummer boy|frosty the|o come all ye|joy to the world|away in a manger|silver bells/i;
 const EUROVISION = {
   pop_song_791: [2023, 'Sweden', 1], pop_song_792: [2023, 'Finland', 2],  // Tattoo, Cha Cha Cha
   pop_song_941: [2025, 'Austria', 1], pop_song_939: [2025, 'Sweden', 4],  // Wasted Love, Bara Bada Bastu
@@ -4206,7 +4208,7 @@ const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most wee
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
-  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?', 'Who has the longest active streak?', 'Most consecutive #1 hits', 'Most consecutive top 5 hits', 'Which album has the most #1 hits?', 'Which album has the most charting songs?', 'What is the biggest Eurovision song of all time?'];
+  'Most weeks in the top 5', 'Who has the most top 10 hits?', 'Who has won the most awards?', 'Who has the most nominations without winning?', 'What song has the most plays?', 'Most plays in a week', 'What is the longest song to chart?', 'Which artist has the most consecutive weeks on the chart?', 'Who has the longest active streak?', 'Most consecutive #1 hits', 'Most consecutive top 5 hits', 'Which album has the most #1 hits?', 'Which album has the most charting songs?', 'What is the biggest Eurovision song of all time?', 'What are the top Christmas songs?'];
 const ASK = {};
 // artist_info.json (tools/fetch_artist_info.py, from Wikidata): person or group, birth date, gender
 let ARTIST_INFO = null;
@@ -4374,6 +4376,19 @@ function askAnswer(q, chartId, f) {
       lead: `The biggest Eurovision song on the Pop 10${inYear(f.span)} is ${songTitle(S(x.id))}, ${land}'s ${yr} entry${place === 1 ? ' and the winner that year' : place ? `, which placed ${nth(place)}` : ''}. It peaked at No. ${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart. ${list.length} Eurovision entries have made the Pop 10 in all.`,
       rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}<br>${ev(x.id)}`)).join(''),
       more: `<span class="ask-note">Ranked like Will's year-end lists: weekly plays plus how high and how long each song charted.</span>`,
+    };
+  }
+
+  // Christmas songs on the chart (Will, 2026-11-16): a Christmas word in the title, ranked by peak, then weeks on the chart
+  if (/\b(christmas|xmas|holiday|festive)\b/.test(t) && !f.date) {
+    const all = Object.values(st.songs).filter(x => S(x.id) && XMAS.test(S(x.id).name) && inSpanW(f.span, x.debut) && byArtist(S(x.id), f.artist));
+    const sp = `<a class="ask-sp" href="${SP_SITE}#/ask/${encodeURIComponent('Top Christmas songs')}">See every Christmas song Will has streamed on willboardSpotify →</a>`;
+    if (!all.length) return { lead: `No Christmas song${who} has made the ${c.name}${inYear(f.span)}.`, more: sp };
+    const list = all.sort((a, b) => a.peak - b.peak || b.weeks.length - a.weeks.length), x = list[0];
+    return {
+      lead: `The biggest Christmas song on the ${c.name}${inYear(f.span)} is ${songTitle(S(x.id))}. It peaked at #${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart.${list.length > 1 ? ` ${list.length} Christmas songs have made the ${c.name} in all.` : ` It's the only Christmas song to make the ${c.name}.`}`,
+      rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}`)).join(''),
+      more: sp,
     };
   }
 
