@@ -157,6 +157,9 @@ button { font: inherit; color: inherit; }
 .pv-pill svg { width: 11px; height: 11px; }
 .pv-pill .lb::after { content: 'Play preview'; }
 .pv-pill.on .lb::after { content: 'Pause'; }
+.recap-tune { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 6px; }
+.recap-tune .pv-pill { margin-top: 0; }
+.recap-tune span { font-size: 14px; color: var(--muted, #5b6470); }
 .pv.err { background: var(--muted); }
 
 /* ── CARDS ──────────────────────────────────────────────────── */
@@ -5025,14 +5028,23 @@ const plainText = t => t.replace(/\[\[([^\]]+)\]\]/g, '$1');
 function renderRecap(week) {
   const r = RECAPS.find(x => x.week === week) || (!week && RECAPS[0]);
   const i = RECAPS.indexOf(r);
+  // Will (2026-11-18): opening a weekly recap plays that week's Hot 20 #1. Browsers may block sound until the
+  // visitor has clicked something on the site; the play button stays there either way
+  const no1 = r && DATA.wbHistory.find(w => w.week === r.week)?.no1?.songId;
   $('article').innerHTML = !r ? `<div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div><h1>Recap not found</h1>` : `
     <div class="eyebrow"><a href="#/">← Home</a> · <a href="#/news">All news</a></div>
     <div class="kick" style="margin-top:14px">Weekly Recap</div>
     <h1>${esc(r.headline)}</h1>
     <div class="byline">Week of ${fmtLong(r.week)} · <a href="#/hot20/${r.week}" style="text-decoration:underline">Hot 20</a> · <a href="#/pop10/${r.week}" style="text-decoration:underline">Pop 10</a></div>
+    ${no1 && PREVIEWS[no1] ? `<div class="recap-tune">${playBtn(no1, true)}<span>#1 this week: ‘${esc(SONGS[no1]?.name || '')}’</span></div>` : ''}
     <div class="body">${r.body.map(p => `<p>${articleText(p)}</p>`).join('')}</div>
     <div class="ay-nav">${RECAPS[i + 1] ? `<a class="more" href="#/recap/${RECAPS[i + 1].week}">← Week of ${fmtLong(RECAPS[i + 1].week)}</a>` : ''}
       ${RECAPS[i - 1] ? `<a class="more" href="#/recap/${RECAPS[i - 1].week}">Week of ${fmtLong(RECAPS[i - 1].week)} ${arrow}</a>` : ''}</div>`;
+  const btn = no1 && $('article').querySelector(`.recap-tune .pv`);
+  if (btn && !(PV.id === no1 && !PV.audio.paused)) deezerTrack(PREVIEWS[no1]).then(x => {
+    if (!x?.preview || location.hash !== `#/recap/${week || ''}` && week) return;
+    PV.audio.src = x.preview; return PV.audio.play().then(() => pvMark(no1));
+  }).catch(() => {});
 }
 // ─── NEWS: every article and weekly recap, newest first, searchable ──
 function newsItems() {
