@@ -33,6 +33,11 @@ FIX = {
     'pop_song_763': 'audio/habit-clip.mp3',  # Habit: not in any store; 30 s from Will's copy (audio/Habit.mp3)
     'pop_song_786': 'apple:1681178572',  # Night Air (music.apple.com/us/song/night-air/1681178572)
 }
+# Songs whose Deezer clip is the intro rather than the hook: Apple's preview (usually the chorus) plays
+# instead. A run swaps any of these still on Deezer for Apple's clip (Will 2026-11-18)
+APPLE_FIRST = {
+    'pop_song_774',  # Kayla Rae - Blue
+}
 LOOKUP = 'https://itunes.apple.com/lookup?country={cc}&id={id}'
 # Live takes, remixes, commentary tracks, karaoke and covers lose to the studio recording
 ALT = re.compile(r'\b(live|remix|acoustic|instrumental|karaoke|demo|sped up|slowed|version|commentary|voice memo|'
@@ -207,6 +212,16 @@ def main():
                     print(f'[{i}] {artist} - {title}: Apple lookup failed: {e}')
                     continue
             found[s['id']] = fix
+            continue
+        if s['id'] in APPLE_FIRST and (not str(found.get(s['id'], '')).startswith('http') or title.lower() in redo):
+            try:
+                url = itunes(artist, title, album.get(s['id'], ''))
+            except Exception as e:
+                print(f'[{i}] {artist} - {title}: Apple search failed: {e}')
+                url = None
+            print(f'[{i}] {artist} - {title}: Apple first -> {url or "no Apple preview, keeping Deezer"}')
+            if url:
+                found[s['id']] = url
             continue
         if s['id'] in found and 'all' not in redo and title.lower() not in redo and not ('missing' in redo and not found[s['id']]):
             continue
