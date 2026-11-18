@@ -172,6 +172,36 @@ def itunes(artist, title, album='', original=False):
     return h['previewUrl']
 
 
+def itunes_by_artist(artist, title):
+    """Fallback for APPLE_FIRST: find the act on Apple, then look through its own songs for the title."""
+    want, match = norm(artist), named(clean(PARENS.sub('', title)) or clean(title))
+    try:
+        time.sleep(3)
+        acts = json.loads(get('https://itunes.apple.com/search?entity=musicArtist&country=us&limit=10&term='
+                              + urllib.parse.quote(artist))).get('results', [])
+    except Exception as e:
+        print(f'    apple artist search failed: {e}'); return None
+    print('    apple acts: ' + '; '.join(f"{a.get('artistName')} ({a.get('artistId')})" for a in acts[:6]))
+    for a in acts:
+        if norm(a.get('artistName', '')) != want and not same_artist(a.get('artistName', ''), artist):
+            continue
+        try:
+            time.sleep(3)
+            songs = json.loads(get(f"https://itunes.apple.com/lookup?country=us&entity=song&limit=200&id={a['artistId']}")).get('results', [])
+        except Exception as e:
+            print(f'    apple lookup failed: {e}'); continue
+        songs = [x for x in songs if x.get('wrapperType') == 'track']
+        print(f"    {a.get('artistName')} songs: " + '; '.join(f"{x.get('trackName')} | {x.get('collectionName')}" for x in songs[:30]))
+        hits = [x for x in songs if x.get('previewUrl') and match(x.get('trackName', ''))
+                and not ALT.search(EDITIONS.sub('', x.get('trackName', '') + ' ' + x.get('collectionName', '')))]
+        if hits:
+            h = hits[0]
+            picked[h['previewUrl']] = f"{h.get('trackName')} | {h.get('artistName')} | {h.get('collectionName')} (Apple)"
+            print(f"    -> {picked[h['previewUrl']]}")
+            return h['previewUrl']
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--redo', default='')
@@ -220,6 +250,8 @@ def main():
                 print(f'[{i}] {artist} - {title}: Apple search failed: {e}')
                 url = None
             print(f'[{i}] {artist} - {title}: Apple first -> {url or "no Apple preview, keeping Deezer"}')
+            if not url:
+                url = itunes_by_artist(artist, title)
             if url:
                 found[s['id']] = url
             continue
