@@ -1006,6 +1006,28 @@ body.on-ask .ask-fab { display: none; }
 .no1-year:first-child { border-top: 0; }
 .no1-year small { font-family: var(--f-body, inherit); font-weight: 500; font-size: 12.5px; color: var(--muted); margin-left: 8px; letter-spacing: 0; }
 .rec-h { font-family: var(--f-cond); font-weight: 700; font-size: 24px; text-transform: uppercase; margin: 30px 0 12px; }
+/* Award records (#/awards/records/<show>) */
+.aw-rec-links { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+@media (max-width: 760px) { .aw-rec-links { grid-template-columns: 1fr; } }
+.aw-rec { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--country); border-radius: 4px; color: var(--ink); }
+.aw-rec.pop { border-top-color: var(--pop); }
+.aw-rec .art { width: 56px; height: 56px; }
+.aw-rec b { display: block; font-family: var(--f-cond); font-size: 20px; text-transform: uppercase; }
+.aw-rec small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.aw-rec:hover b { color: var(--accent); }
+.awr-p { margin: 0 0 14px; max-width: 760px; }
+.awr-note { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; }
+.awr-none { padding: 12px 16px; color: var(--muted); margin: 0; }
+.awr-table, .awr-both { overflow-x: auto; }
+.awr-table table, .awr-both table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.awr-table th, .awr-both th { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--line); }
+.awr-table td, .awr-both td { padding: 10px 14px; border-top: 1px solid var(--line-soft); text-align: right; vertical-align: top; }
+.awr-table .l, .awr-both .l { text-align: left; }
+.awr-table .subv { display: block; font-size: 12px; color: var(--muted); font-weight: 500; }
+.awr-table a, .awr-both a, .awr-contro a { text-decoration: underline; text-underline-offset: 3px; }
+.awr-both, .awr-contro { padding: 18px 20px; }
+.awr-contro ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.dim { color: var(--muted); }
 .chart-links { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 16px; }
 .chart-links .ask-more { color: var(--ink); }
 .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; color: #fff; }
@@ -1412,6 +1434,8 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     </div>
     <div id="aw-lead"></div>
     <div class="aw-years" id="aw-list"></div>
+    <div class="sec-head"><div><h2>Records</h2></div></div>
+    <div class="aw-rec-links" id="aw-rec"></div>
   </section>
 
   <!-- ── AWARDS: ONE YEAR ── -->
@@ -1428,6 +1452,13 @@ html.winter .holiday::after { content: ''; position: absolute; left: 0; right: 0
     </div>
     <div class="sec-head"><div><h2 id="ay-winners-h">The Winners</h2></div></div>
     <div class="awards-grid" id="aw-grid"></div>
+  </section>
+
+  <!-- ── AWARDS: RECORDS ── -->
+  <section class="page" id="page-award-records">
+    <div class="page-head"><div><div class="eyebrow"><a href="#/awards">← All Willboard Awards</a></div><h1 id="awr-title">Awards Records</h1><div class="sub" id="awr-sub"></div></div></div>
+    <div class="pills list-pills" id="awr-pills"></div>
+    <div id="awr-body"></div>
   </section>
 
   <!-- ── ARTISTS ── -->
@@ -2957,6 +2988,11 @@ function renderAwards() {
     <div class="txt"><div class="kick">${top ? 'The latest show' : 'Nominations announced'}</div><h2>${esc(awTitle(chart, leadYear))}</h2>
       <ul>${items.join('')}</ul>
       <span class="btn-line">See the ${leadYear} ${top ? 'show' : 'nominees'} ${arrow}</span></div></a>`;
+  // Records (Will, 2026-11-19): milestones for each show, on their own page
+  $('aw-rec').innerHTML = ['country', 'pop'].filter(c => AWARDS[c]).map(c => {
+    const { acts } = awActs(c), lead = Object.values(acts).sort((a, b) => b.wins.length - a.wins.length)[0];
+    return `<a class="aw-rec ${c}" href="#/awards/records/${c}">${artTile(lead.name)}<span><b>${c === 'pop' ? 'Pop' : 'Country'} Awards Records</b><small>Most wins: ${esc(lead.name)}, ${lead.wins.length}. Plus big nights, sweeps, ages, streaks and upsets.</small></span>${arrow}</a>`;
+  }).join('');
   $('aw-list').innerHTML = years.filter(y => y !== leadYear).map(y => {
     const w = awWinner(chart, y, AW_TOP[chart]);
     return `<a class="aw-yr" href="${awHref(chart, y)}"><div class="ph">${artTile(awFace(chart, y), false, awPhotoYear(chart, y))}<b>${y}</b></div>
@@ -5294,6 +5330,195 @@ function renderRecords(chartId) {
   <p style="margin-top:24px">${askLink('Who has the most #1s?', 'Ask Willboard for more records')}</p>`;
 }
 
+// ─── AWARD RECORDS ──────────────────────────────────────────────
+// #/awards/records/<country|pop> (Will, 2026-11-19): the Willboard Awards' milestones, modeled on Wikipedia's
+// "Grammy Award milestones": most wins and nominations, big nights, sweeps, ages, streaks, the categories,
+// acts honored by both shows, and the upsets and snubs the charts say were surprises
+function awActs(chart) {
+  // Every act credited on a nomination, under the chart's spelling of their name (Lady Antebellum counts as Lady A)
+  const decided = new Set(AWARDS[chart].filter(n => n.slot === 'Winner').map(n => n.year)), acts = {};
+  for (const n of AWARDS[chart]) for (const p of creditParts(n.artist)) {
+    const raw = AW_ALIAS[p.name] || p.name, known = ACT_BY_KEY[squash(raw)], name = known?.name || raw, k = squash(name);
+    const a = acts[k] ||= { k, id: known?.id, name, noms: [], wins: [] };
+    if (!a.noms.includes(n)) a.noms.push(n);
+    if (n.slot === 'Winner' && !a.wins.includes(n)) a.wins.push(n);
+  }
+  return { acts, decided };
+}
+function renderAwardRecords(chart) {
+  if (!AWARDS[chart]) chart = 'country';
+  ui.awChart = chart;
+  const other = chart === 'pop' ? 'country' : 'pop', show = AW_SHOW[chart], cls = chart === 'pop' ? 'pop' : 'country';
+  const { acts, decided } = awActs(chart), all = Object.values(acts), years = awYears(chart).slice().reverse();
+  const lastDecided = Math.max(...decided);
+  $('awr-title').textContent = `${chart === 'pop' ? 'Pop' : 'Country'} Awards Records`;
+  $('awr-sub').textContent = `Milestones from every ${show} since ${years[0]}, through the ${years[years.length - 1]} ${decided.has(years[years.length - 1]) ? 'show' : 'nominations'}.`;
+  $('awr-pills').innerHTML = ['country', 'pop'].filter(c => AWARDS[c]).map(c => `<a class="pill ${c === chart ? 'active' : ''}" href="#/awards/records/${c}">${c === 'pop' ? 'Pop' : 'Country'}</a>`).join('');
+  const card = (title, lead, rows, note) => `<div class="card ask-ans ${cls}"><div class="ask-chart">${title}</div><div class="ask-lead">${lead}</div><div class="ask-rows">${rows}</div>${note ? `<div class="ask-more"><span class="ask-note">${note}</span></div>` : ''}</div>`;
+  const row = (rank, a, sub, meta) => {
+    const inner = `<span class="rk">${rank}</span>${artTile(a.name)}<span><div class="song">${esc(a.name)}</div><div class="artist">${esc(sub || '')}</div></span><span class="meta">${meta}</span>`;
+    return a.id ? `<a class="lrow" href="#/artist/${a.id}">${inner}</a>` : `<div class="lrow">${inner}</div>`;
+  };
+  const names = (list, val) => list.slice(0, tiedTop(list, val)).map(a => esc(a.name)).join(' and ').replace(/ and (?=.* and )/g, ', ');
+  const share = (list, val) => tiedTop(list, val) > 1;
+  const pl = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+  const rec = a => `${pl(a.wins.length, 'win')} from ${pl(a.noms.length, 'nomination')}`;
+  // A ranked act card: the top 10 plus ties
+  const actCard = (title, pool, val, unit, lead, sub = rec, note) => {
+    const full = pool.filter(a => val(a) > 0).sort((a, b) => val(b) - val(a) || a.name.localeCompare(b.name)).filter(ties(10, val)), list = full.slice(0, 12);
+    if (!list.length) return '';
+    if (full.length > list.length) note = (note ? note + ' ' : '') + `${full.length - list.length} more tied at ${val(full[full.length - 1])}.`;
+    return card(title, lead(list), list.map((a, i) => row(rankIn(list, i, val), a, sub(a), `<b>${val(a)}</b><br>${val(a) === 1 ? unit[0] : unit[1]}`)).join(''), note);
+  };
+  const top = AW_TOP[chart];
+
+  // ── Wins and nominations
+  const winRate = a => a.noms.filter(n => decided.has(n.year)).length >= 5 ? Math.round(100 * a.wins.length / a.noms.filter(n => decided.has(n.year)).length) : 0;
+  const s1 = `<h2 class="rec-h">Wins and nominations</h2><div class="ask-grid two">
+    ${actCard('Most wins', all, a => a.wins.length, ['win', 'wins'], l => `${names(l, a => a.wins.length)} ${share(l, a => a.wins.length) ? 'share' : 'holds'} the record with ${pl(l[0].wins.length, 'win')}${share(l, a => a.wins.length) ? ' each' : ''}.`)}
+    ${actCard('Most nominations', all, a => a.noms.length, ['nomination', 'nominations'], l => `${names(l, a => a.noms.length)} ${share(l, a => a.noms.length) ? 'share' : 'has'} the most nominations, ${l[0].noms.length}.`)}
+    ${actCard('Most nominations without a win', all.filter(a => !a.wins.length), a => a.noms.length, ['nomination', 'nominations'], l => `${names(l, a => a.noms.length)} ${share(l, a => a.noms.length) ? 'have' : 'has'} ${pl(l[0].noms.length, 'nomination')} and no wins, the most of any act.`, a => `First nominated ${Math.min(...a.noms.map(n => n.year))}`)}
+    ${actCard('Best win rate', all, winRate, ['% won', '% won'], l => `${names(l, winRate)} ${share(l, winRate) ? 'have' : 'has'} won ${winRate(l[0])}% of their nominations, the best of any act with at least five.`, rec, 'At least five nominations at shows that have named winners.')}
+  </div>`;
+
+  // ── Big nights
+  const nights = [];
+  for (const a of all) for (const y of new Set(a.noms.map(n => n.year))) {
+    const noms = a.noms.filter(n => n.year === y), wins = a.wins.filter(n => n.year === y);
+    nights.push({ ...a, y, nN: noms.length, wN: wins.length, cats: wins.map(n => n.category.replace(/ of the Year$/, '')) });
+  }
+  const nightCard = (title, pool, val, unit, lead, sub) => {
+    const full = pool.filter(x => val(x) > 0).sort((a, b) => val(b) - val(a) || a.y - b.y).filter(ties(10, val)), list = full.slice(0, 12);
+    return list.length ? card(title, lead(list), list.map((x, i) => row(rankIn(list, i, val), x, sub(x), `<b>${val(x)}</b><br>${x.y}`)).join(''), full.length > list.length ? `${full.length - list.length} more tied at ${val(full[full.length - 1])}.` : '') : '';
+  };
+  const sweeps = nights.filter(x => decided.has(x.y) && x.nN >= 3 && x.wN === x.nN);
+  const s2 = `<h2 class="rec-h">Biggest nights</h2><div class="ask-grid two">
+    ${nightCard('Most wins in one night', nights, x => x.wN, ['win', 'wins'], l => `${esc(l[0].name)} won ${l[0].wN} awards at the ${l[0].y} show${tiedTop(l, x => x.wN) > 1 ? `, a record shared with ${tiedTop(l, x => x.wN) - 1} other ${tiedTop(l, x => x.wN) > 2 ? 'nights' : 'night'}` : ', the most in one night'}.`, x => x.cats.join(', '))}
+    ${nightCard('Most nominations in one year', nights, x => x.nN, ['nomination', 'nominations'], l => `${esc(l[0].name)} had ${l[0].nN} nominations in ${l[0].y}${tiedTop(l, x => x.nN) > 1 ? `, tied for the record` : ', the most in a single year'}.`, x => decided.has(x.y) ? `Won ${x.wN}` : 'Winners to come')}
+    ${sweeps.length ? card('Clean sweeps', `${sweeps.length === 1 ? 'One act has' : `${sweeps.length} acts have`} won every award they were up for in a night with at least three nominations.`,
+      sweeps.sort((a, b) => b.wN - a.wN || a.y - b.y).map((x, i) => row(i + 1, x, x.cats.join(', '), `<b>${x.wN} for ${x.nN}</b><br>${x.y}`)).join('')) : ''}
+    ${nightCard('Most nominations in one year without a win', nights.filter(x => decided.has(x.y) && !x.wN), x => x.nN, ['nomination', 'nominations'], l => `${esc(l[0].name)} went home empty-handed in ${l[0].y} despite ${pl(l[0].nN, 'nomination')}.`, x => 'Shut out')}
+  </div>`;
+
+  // ── The big categories: pop's General Field (Record, Song, Album, New Artist), country's Single, Song and Album
+  const BIG = chart === 'pop' ? ['Record of the Year', 'Song of the Year', 'Album of the Year', 'New Artist of the Year'] : ['Single of the Year', 'Song of the Year', 'Album of the Year'];
+  const bigShort = BIG.map(c => c.replace(/ of the Year$/, ''));
+  const bigNights = nights.map(x => ({ ...x, big: a2(x).filter(n => BIG.includes(n.category)).length })).filter(x => x.big >= 2);
+  function a2(x) { return acts[x.k].wins.filter(n => n.year === x.y); }
+  const fullSweep = bigNights.filter(x => x.big === BIG.length);
+  const crowned = all.filter(a => BIG.every(c => a.wins.some(n => n.category === c)));
+  const s3 = `<h2 class="rec-h">${chart === 'pop' ? 'The General Field' : 'Single, Song and Album'}</h2>
+    <p class="awr-p">${chart === 'pop' ? `The four awards open to every genre at the Grammys, Record, Song, Album and New Artist, have their match at the Pop Awards.` : `Single, Song and Album are the country show's three awards for the music itself.`} ${fullSweep.length ? `${fullSweep.map(x => `${esc(x.name)} (${x.y})`).join(' and ')} ${fullSweep.length > 1 ? 'are the only acts' : 'is the only act'} to win all ${BIG.length === 4 ? 'four' : 'three'} in one night.` : `No act has won all ${BIG.length === 4 ? 'four' : 'three'} in one night.`}</p>
+    <div class="ask-grid two">
+    ${bigNights.length ? card(`Two or more in one night`, `${bigNights.length} times an act has taken at least two of ${bigShort.join(', ').replace(/, (?=[^,]*$)/, ' and ')} at the same show.`,
+      bigNights.sort((a, b) => b.big - a.big || a.y - b.y).map((x, i) => row(i + 1, x, a2(x).filter(n => BIG.includes(n.category)).map(n => n.category.replace(/ of the Year$/, '')).join(', '), `<b>${x.big}</b><br>${x.y}`)).join('')) : ''}
+    ${card(`Won ${BIG.length === 4 ? 'all four' : 'all three'} in a career`, crowned.length ? `${crowned.length === 1 ? 'One act has' : `${crowned.length} acts have`} won every one of ${bigShort.join(', ').replace(/, (?=[^,]*$)/, ' and ')} at some point.` : `No act has won all of ${bigShort.join(', ').replace(/, (?=[^,]*$)/, ' and ')} in a career yet.`,
+      crowned.map((a, i) => row(i + 1, a, BIG.map(c => a.wins.find(n => n.category === c).year).join(', '), `<b>${a.wins.length}</b><br>wins`)).join('') || '<p class="awr-none">Nobody yet.</p>')}
+  </div>`;
+
+  // ── Every category: most wins, and back-to-back winners
+  const cats = AW_ORDER[chart].filter(c => AWARDS[chart].some(n => n.category === c));
+  const catRows = cats.map(c => {
+    const w = {}, ys = years.filter(y => decided.has(y));
+    for (const a of all) { const n = a.wins.filter(x => x.category === c).length; if (n) w[a.k] = n; }
+    const best = Math.max(0, ...Object.values(w)), leaders = Object.keys(w).filter(k => w[k] === best).map(k => acts[k]);
+    // Longest run of consecutive shows won by the same act
+    let run = { n: 0 };
+    for (const a of all) { let cur = 0; for (const y of ys) { cur = a.wins.some(n => n.year === y && n.category === c) ? cur + 1 : 0; if (cur > run.n) run = { n: cur, a, to: y }; } }
+    const first = AWARDS[chart].filter(n => n.category === c).map(n => n.year);
+    return `<tr><td class="l"><b>${esc(c.replace(/ of the Year$/, ''))}</b><span class="subv">since ${Math.min(...first)}</span></td><td class="l">${best === 1 ? '<span class="dim">No act has won it twice</span>' : best ? `${leaders.map(a => a.id ? `<a href="#/artist/${a.id}">${esc(a.name)}</a>` : esc(a.name)).join(', ')} <span class="dim">(${best})</span>` : '—'}</td><td class="l">${run.n > 1 ? `${run.a.id ? `<a href="#/artist/${run.a.id}">${esc(run.a.name)}</a>` : esc(run.a.name)} <span class="dim">(${run.n} in a row, to ${run.to})</span>` : '<span class="dim">None</span>'}</td></tr>`;
+  }).join('');
+  const s4 = `<h2 class="rec-h">Category records</h2><div class="card awr-table"><table><thead><tr><th class="l">Category</th><th class="l">Most wins</th><th class="l">Back-to-back wins</th></tr></thead><tbody>${catRows}</tbody></table></div>`;
+
+  // ── Ages, by the year of the show (birth years from artist_info.json)
+  const ageCard = (title, young, filter) => {
+    if (!ARTIST_INFO) return '';
+    const best = {};
+    for (const a of all) {
+      const born = actInfo(a.name)?.born; if (!born) continue;
+      for (const n of a.wins.filter(filter)) { const age = n.year - +born.slice(0, 4); if (!best[a.k] || (young ? age < best[a.k].age : age > best[a.k].age)) best[a.k] = { ...a, age, n }; }
+    }
+    const list = Object.values(best).sort((x, y) => young ? x.age - y.age : y.age - x.age).filter(ties(5, x => x.age));
+    if (!list.length) return '';
+    const x = list[0];
+    return card(title, `${esc(x.name)} turned ${x.age} in ${x.n.year}, the year of their ${esc(x.n.category)} win.`, list.map((x, i) => row(rankIn(list, i, x => x.age), x, `${x.n.year} ${x.n.category}`, `<b>${x.age}</b><br>that year`)).join(''));
+  };
+  const s5 = ARTIST_INFO ? `<h2 class="rec-h">Ages</h2><div class="ask-grid two">
+    ${ageCard('Youngest winners', true, () => true)}${ageCard('Oldest winners', false, () => true)}
+    ${ageCard(`Youngest ${top.replace(/ of the Year$/, '')} winners`, true, n => n.category === top)}${ageCard(`Oldest ${top.replace(/ of the Year$/, '')} winners`, false, n => n.category === top)}
+  </div><p class="awr-note">Ages are the age an act turned in the year of the show. Groups are left out.</p>` : '';
+
+  // ── Streaks and waits
+  const streak = a => { let best = 0, cur = 0; for (const y of years) { cur = a.noms.some(n => n.year === y) ? cur + 1 : 0; best = Math.max(best, cur); } return best; };
+  const wait = a => a.wins.length ? Math.min(...a.wins.map(n => n.year)) - Math.min(...a.noms.map(n => n.year)) : 0;
+  const span = a => a.wins.length > 1 ? Math.max(...a.wins.map(n => n.year)) - Math.min(...a.wins.map(n => n.year)) : 0;
+  const s6 = `<h2 class="rec-h">Streaks and waits</h2><div class="ask-grid two">
+    ${actCard('Most years in a row nominated', all, streak, ['year', 'years'], l => `${names(l, streak)} ${share(l, streak) ? 'share the record,' : 'was'} nominated ${l[0] && streak(l[0])} years in a row.`, a => `${Math.min(...a.noms.map(n => n.year))} to ${Math.max(...a.noms.map(n => n.year))}`)}
+    ${actCard('Longest wait for a first win', all, wait, ['year', 'years'], l => `${names(l, wait)} waited ${wait(l[0])} years from a first nomination to a first win.`, a => `Nominated ${Math.min(...a.noms.map(n => n.year))}, won ${Math.min(...a.wins.map(n => n.year))}`)}
+    ${actCard('Longest span between wins', all, span, ['year', 'years'], l => `${names(l, span)} ${share(l, span) ? 'share' : 'has'} the longest gap from first win to latest, ${span(l[0])} years.`, a => `${Math.min(...a.wins.map(n => n.year))} to ${Math.max(...a.wins.map(n => n.year))}`)}
+  </div>`;
+
+  // ── Songs and albums that won the most in one night
+  const works = {};
+  for (const n of AWARDS[chart]) if (n.slot === 'Winner' && (n.song || n.album)) {
+    const k = `${n.year}|${squash(n.song || n.album)}`;
+    (works[k] ||= { y: n.year, title: awName(n), artist: n.artist, cats: [] }).cats.push(n.category.replace(/ of the Year$/, ''));
+  }
+  const multi = Object.values(works).filter(w => w.cats.length > 1).sort((a, b) => b.cats.length - a.cats.length || a.y - b.y);
+  const s7 = multi.length ? `<h2 class="rec-h">Songs and albums</h2><div class="ask-grid two">${card('Most wins for one song or album', `${esc(multi[0].title)} by ${esc(multi[0].artist)} won ${multi[0].cats.length} awards at the ${multi[0].y} show${multi.filter(w => w.cats.length === multi[0].cats.length).length > 1 ? ', tied for the most' : ', the most for any one song or album'}.`,
+    multi.slice(0, 12).map((w, i) => row(multi.findIndex(x => x.cats.length === w.cats.length) + 1, { name: w.title.replace(/[“”]/g, ''), id: ACT_BY_KEY[squash(primaryArtist(w.artist))]?.id }, `${w.artist} · ${w.cats.join(', ')}`, `<b>${w.cats.length}</b><br>${w.y}`)).join(''))}</div>` : '';
+
+  // ── Both shows
+  const { acts: oActs } = awActs(other);
+  const both = all.filter(a => oActs[a.k]).map(a => ({ ...a, o: oActs[a.k] })).sort((a, b) => (b.wins.length + b.o.wins.length) - (a.wins.length + a.o.wins.length) || (b.noms.length + b.o.noms.length) - (a.noms.length + a.o.noms.length));
+  const winBoth = both.filter(a => a.wins.length && a.o.wins.length);
+  const cName = c => c === 'pop' ? 'Pop' : 'Country';
+  const s8 = both.length ? `<h2 class="rec-h">Honored by both shows</h2><div class="card awr-both">
+    <p class="awr-p">${both.length} acts have been nominated at both the Country and the Pop Awards${winBoth.length ? `, and ${winBoth.map(a => esc(a.name)).join(', ').replace(/, (?=[^,]*$)/, ' and ')} ${winBoth.length > 1 ? 'have' : 'has'} won at both` : ', but no one has won at both yet'}.</p>
+    <table><thead><tr><th class="l">Act</th><th>${cName(chart)} wins</th><th>${cName(chart)} nominations</th><th>${cName(other)} wins</th><th>${cName(other)} nominations</th></tr></thead><tbody>
+    ${both.map(a => `<tr><td class="l">${a.id ? `<a href="#/artist/${a.id}">${esc(a.name)}</a>` : esc(a.name)}</td><td>${a.wins.length || '<span class="dim">0</span>'}</td><td>${a.noms.length}</td><td>${a.o.wins.length || '<span class="dim">0</span>'}</td><td>${a.o.noms.length}</td></tr>`).join('')}
+    </tbody></table><p class="awr-note"><a href="#/awards/records/${other}">See the ${cName(other)} Awards records ${arrow}</a></p></div>` : '';
+
+  // ── Controversies: what the chart said against what won. Each show's eligibility weeks (awWindow), weeks at #1
+  const key = chart === 'pop' ? 'pop' : 'willboard', SING = chart === 'pop' ? 'Record of the Year' : 'Single of the Year';
+  const upsets = [], snubs = [], topUpsets = [];
+  for (const y of years) {
+    const [from, to] = awWindow(chart, y), w1 = {}, aw1 = {};
+    for (const w of DATA[key]) if (w.week >= from && w.week <= to) { const e = w.entries.find(e => e.position === 1); if (e) w1[e.songId] = (w1[e.songId] || 0) + 1; }
+    const lead = Object.entries(w1).sort((a, b) => b[1] - a[1]);
+    if (!lead.length) continue;
+    const s = SONGS[lead[0][0]], wks = lead[0][1];
+    if (lead[1] && lead[1][1] === wks) continue;  // a tie at the top is no upset
+    const nom = AWARDS[chart].find(n => n.year === y && n.category === SING && awSong(chart, n)?.id === s.id);
+    if (!nom) snubs.push({ y, s, wks });
+    else if (decided.has(y) && nom.slot !== 'Winner') upsets.push({ y, s, wks, win: awWinner(chart, y, SING) });
+    // The act with the most weeks at #1 that year, against the top award
+    for (const [sid, n] of Object.entries(w1)) for (const p of creditParts(SONGS[sid].artistName)) { const k = squash(AW_ALIAS[p.name] || p.name); aw1[k] = (aw1[k] || 0) + n; }
+    const al = Object.entries(aw1).sort((a, b) => b[1] - a[1]);
+    if (decided.has(y) && al.length && (!al[1] || al[1][1] < al[0][1])) {
+      const tw = awWinner(chart, y, top), k = al[0][0], a = acts[k];
+      if (tw && !creditParts(tw.artist).some(p => squash(AW_ALIAS[p.name] || p.name) === k) && al[0][1] >= 4)
+        topUpsets.push({ y, name: a?.name || ACT_BY_KEY[k]?.name || k, wks: al[0][1], nominated: !!a?.noms.some(n => n.year === y && n.category === top), win: tw });
+    }
+  }
+  const songLine = x => `“${esc(x.s.name)}” by ${esc(x.s.artistName)}`;
+  const items = [
+    ...upsets.map(x => ({ y: x.y, t: `<b>${x.y}:</b> ${songLine(x)} spent ${wk(x.wks)} at #1 in the eligibility year, more than any other song, and lost ${SING.replace(/ of the Year$/, '')} to ${esc(awName(x.win))} by ${esc(x.win.artist)}.` })),
+    ...snubs.map(x => ({ y: x.y, t: `<b>${x.y}:</b> ${songLine(x)} led the eligibility year with ${wk(x.wks)} at #1 and wasn't nominated for ${SING.replace(/ of the Year$/, '')}.` })),
+    ...topUpsets.map(x => ({ y: x.y, t: `<b>${x.y}:</b> ${esc(x.name)} had the most weeks at #1 of any act that year, ${x.wks}, and ${x.nominated ? 'lost' : `wasn't nominated for`} ${esc(top.replace(/ of the Year$/, ''))}${x.nominated ? ` to ${esc(x.win.artist)}` : ''}.` })),
+  ].sort((a, b) => b.y - a.y);
+  const shut = nights.filter(x => decided.has(x.y) && !x.wN).sort((a, b) => b.nN - a.nN)[0];
+  const neverWon = all.filter(a => !a.wins.length).sort((a, b) => b.noms.length - a.noms.length)[0];
+  const s9 = `<h2 class="rec-h">Controversies and upsets</h2><div class="card awr-contro">
+    <p class="awr-p">Will picks every nominee and winner, and he doesn't always follow the chart. These are the years the chart said one thing and the ${show} said another.</p>
+    <ul>${items.map(x => `<li>${x.t}</li>`).join('')}
+    ${neverWon ? `<li><b>Still waiting:</b> ${esc(neverWon.name)} has ${pl(neverWon.noms.length, 'nomination')} without a win, the most of any act.</li>` : ''}
+    ${shut ? `<li><b>Shut out:</b> ${esc(shut.name)} went 0 for ${shut.nN} at the ${shut.y} show.</li>` : ''}</ul>
+    <p class="awr-note">Weeks at #1 count each show's eligibility year: ${chart === 'pop' ? 'December to November of the year before the show' : 'July to June, like the CMA Awards'}.</p></div>`;
+
+  $('awr-body').innerHTML = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8 + s9;
+}
+
 // ─── SWIZZLE ────────────────────────────────────────────────────
 // Will's rankings of his favorite Taylor Swift songs (swizzle.json, tools/build_swizzle.py), one list per
 // "Swizzle" edition, oldest first. #/taylor-swift-rankings opens the newest; #/taylor-swift-rankings/<n> opens
@@ -5568,6 +5793,7 @@ function route() {
     renderChartPage(page);
   }
   else if (page === 'year-end') { id = 'year-end'; renderYearEnd(arg, arg2); }
+  else if (page === 'awards' && arg === 'records') { id = 'award-records'; renderAwardRecords(arg2 || ui.awChart || 'country'); }
   else if (page === 'awards' && arg) { id = 'award-year'; renderAwardYear(arg, +arg2); }
   else if (page === 'awards')   { id = 'awards'; renderAwards(); }
   else if (page === 'artists')  { id = 'artists'; renderArtists(); }
