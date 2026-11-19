@@ -1,5 +1,44 @@
 [
   {
+    "id": "country-awards-2026-winners",
+    "date": "2026-11-18",
+    "chart": "hot20",
+    "kicker": "Country Awards",
+    "bucket": "relevance",
+    "artist": "Ella Langley",
+    "link": "#/awards/country/2026",
+    "linkText": "See every 2026 Country Awards winner",
+    "headline": "Ella Langley repeats as Entertainer of the Year, and Kacey Musgraves finally wins Female Vocalist",
+    "dek": "The 2026 Willboard Country Awards spread the wealth: four acts won two awards each, nobody won three, and two first-time winners took home a pair.",
+    "body": [
+      "Will has revealed the 2026 Willboard Country Awards winners, and [[Ella Langley]] is Entertainer of the Year for the second year in a row. She also won Album of the Year for <i>Dandelion</i>. The other headline belongs to [[Kacey Musgraves]], who won Female Vocalist on her sixth nomination, 13 years after her first. No act won more than two awards, and four acts won exactly two: Langley, Musgraves, [[Megan Moroney]] and [[Flatland Cavalry]]. That's the first time four acts have tied for the most wins on one night.",
+      "<b>Langley's repeat.</b> Langley is the fifth act to win Entertainer two years running, after [[Leann Rimes]], [[Maddie & Tae]], [[Carly Pearce]] and [[Carrie Underwood]]. To put this in perspective, the award has now gone in back-to-back pairs for eight straight years: Maddie & Tae in 2019 and 2020, Pearce in 2021 and 2022, Underwood in 2023 and 2024, and Langley in 2025 and 2026. Women and female duos have won the last eight. Interestingly, Langley won Entertainer without winning her vocalist award, which has happened only five times. The others were Underwood in 2016, [[Ronnie Dunn]] in 2018, Pearce in 2022 and Underwood again in 2024. Langley now has seven career Country Awards from three shows, seventh on the all-time list, one behind [[Kenny Chesney]].",
+      "<b>Musgraves, at last.</b> Musgraves lost Female Vocalist in 2013, 2015, 2016, 2019 and 2022. Five losses is the most any woman has had before her first Female Vocalist win. The previous most was two, by [[Miranda Lambert]] before 2012 and [[Jennifer Nettles]] before 2016. Musgraves also won Music Video for ‘Dry Spell,’ on her third nomination in that category. It's her first win of any kind since Song of the Year for ‘Dime Store Cowgirl’ in 2016, and she now has four career Country Awards.",
+      "<b>‘Wedding Dress’ sweeps.</b> Moroney's ‘Wedding Dress’ won Single and Song of the Year. That's the sixth time one song has won both, after 2011, 2017, 2019, 2022 and 2024. ‘Wedding Dress’ spent seven weeks at #1, the longest run by any song nominated this year, and these are Moroney's first wins since New Artist in 2023.",
+      "<b>Zach Top does it again.</b> [[Zach Top]] won Male Vocalist for the second year in a row. He's the third man to do it, after Kenny Chesney in 2011 and 2012 and [[Parker McCollum]] in 2023 and 2024. ‘South of Sanity’ and ‘When You See Me’ both spent three weeks at #1 this year, the most #1s of any Male nominee.",
+      "<b>Firsts.</b> Flatland Cavalry won their first two awards: Vocal Duo/Group, ahead of [[The Castellows]] and Maddie & Tae, and Musical Event for ‘A Life Where We Work Out’ with [[Kaitlin Butts]], her first win too. In fact, Flatland Cavalry lost New Artist on the same night. That award went to [[Mackenzie Carpenter]], also her first Country Award, in her second straight year as a New Artist nominee.",
+      "<b>How we did.</b> We called eight of the 10 categories. Our two misses were Female Vocalist, where we picked Langley, and Music Video, where we picked ‘Be Her.’ In both cases Will went with our Should win pick, Musgraves.",
+      "<b>The panel.</b> Mitzi Tallyho, our chart data editor: “Langley had the numbers, and Will gave her the big one. Eight for 10 is a good night.” Sebastian Crescendo, our senior music critic: “Kacey Musgraves, Female Vocalist of the Year. I've waited 13 years to type that.” Bobbie Jo Rhinestone, host of <i>Windows Down</i>: “Megan didn't get Entertainer, but ‘Wedding Dress’ took Single and Song. I'll take it, and I'm still crying.”",
+      "Congratulations to every winner. Next up is the 2027 Willboard Pop Awards on Grammy night, February 7."
+    ],
+    "ballot": {
+      "title": "The 2026 winners",
+      "items": [
+        "Entertainer: [[Ella Langley]]",
+        "Male Vocalist: [[Zach Top]]",
+        "Female Vocalist: [[Kacey Musgraves]]",
+        "Vocal Duo/Group: [[Flatland Cavalry]]",
+        "New Artist: [[Mackenzie Carpenter]]",
+        "Album: [[Ella Langley]], <i>Dandelion</i>",
+        "Song: [[Megan Moroney]], ‘Wedding Dress’",
+        "Single: [[Megan Moroney]], ‘Wedding Dress’",
+        "Musical Event: [[Flatland Cavalry]] and [[Kaitlin Butts]], ‘A Life Where We Work Out’",
+        "Music Video: [[Kacey Musgraves]], ‘Dry Spell’"
+      ],
+      "note": "Will picks the nominees and the winners."
+    }
+  },
+  {
     "id": "entertainer-of-the-year-winner-predictions-2026",
     "date": "2026-11-18",
     "chart": "hot20",
