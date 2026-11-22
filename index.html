@@ -4243,7 +4243,14 @@ const EUROVISION = {
   pop_song_1016: [2026, 'Finland', 6], pop_song_1018: [2026, 'Denmark', 7],  // Liekinheitin, Før vi går hjem
   pop_song_1017: [2026, 'Albania', 13], pop_song_1020: [2026, 'Sweden', 20],  // Nân, My System
 };
-const ASK_EXAMPLES = ['What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
+// Deep cuts / album cuts / non-singles all read the same list
+const DEEP_RE = /\b(deep[\s-]?cuts?|album[\s-]?(cuts?|tracks?)|non[\s-]?singles?|never (a |an official |released as a )?singles?)\b/;
+let DEEP_CUTS = null;
+async function loadDeepCuts() {
+  if (!YEAR_PLAYS) YEAR_PLAYS = await fetch('year_plays.json', FRESH).then(r => r.json()).catch(() => ({}));
+  if (!DEEP_CUTS) DEEP_CUTS = await fetch('deep_cuts.json', FRESH).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+}
+const ASK_EXAMPLES = ['What are the biggest deep cuts?', 'What was #1 on 12/3/2010?', 'What song spent the most weeks at #1 in 2012?', 'What song had the biggest jump to #1?',
   'Who has the most #1s?', 'How many #1s does Carrie Underwood have?', "What's Pink's biggest hit?", 'Which songs debuted at #1?', 'When did Over You hit #1?',
   'Longest-charting songs on the Pop 10', 'What were the #1s of 2015?', 'Biggest drop in 2020', 'What was the first #1 by a group?',
   'Who had the longest gap between #1s?', 'What is the longest gap between runs at #1?', 'Who is the youngest to hit #1?', 'Who is the oldest to hit #1?',
@@ -4415,6 +4422,22 @@ function askAnswer(q, chartId, f) {
       lead: `The biggest Eurovision song on the Pop 10${inYear(f.span)} is ${songTitle(S(x.id))}, ${land}'s ${yr} entry${place === 1 ? ' and the winner that year' : place ? `, which placed ${nth(place)}` : ''}. It peaked at No. ${x.peak}${x.no1.length ? ` with ${wk(x.no1.length)} at #1` : ''} and spent ${wk(x.weeks.length)} on the chart. ${list.length} Eurovision entries have made the Pop 10 in all.`,
       rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}<br>${ev(x.id)}`)).join(''),
       more: `<span class="ask-note">Ranked like Will's year-end lists: weekly plays plus how high and how long each song charted.</span>`,
+    };
+  }
+
+  // Deep cuts (Will, 2026-11-22): charted songs that were never official singles in real life (promo singles count),
+  // from deep_cuts.json. "Album cuts" asks the same thing. Ranked by Will's year-end score, summed over every year
+  if (DEEP_RE.test(t) && !f.date) {
+    if (!DEEP_CUTS || !YEAR_PLAYS) return { quiet: true, lead: 'Loading the deep cuts…' };
+    const W = songWeights(), score = id => (W[id] || []).reduce((n, [, a, b]) => n + a + b, 0);
+    const all = Object.values(st.songs).filter(x => DEEP_CUTS[x.id] && S(x.id) && inSpanW(f.span, x.debut) && byArtist(S(x.id), f.artist));
+    if (!all.length) return { lead: `No deep cut${who} has made the ${c.name}${inYear(f.span)}.` };
+    const list = all.sort((a, b) => score(b.id) - score(a.id) || a.peak - b.peak), x = list[0];
+    const promo = id => DEEP_CUTS[id] === 'promo' ? ' · promo single' : '';
+    return {
+      lead: `The biggest deep cut on the ${c.name}${who}${inYear(f.span)} is ${title(S(x.id))}, ${DEEP_CUTS[x.id] === 'promo' ? 'a promo single that was never worked as an official single' : 'a song that was never an official single'}. ${x.no1.length ? `It spent ${wk(x.no1.length)} at #1` : `It peaked at #${x.peak}`} and ${wk(x.weeks.length)} on the chart. ${list.length > 1 ? `${list.length} deep cuts${who} have made the ${c.name}${inYear(f.span)}.` : `It's the only one${who}.`}`,
+      rows: list.map((x, i) => askRow(i + 1, S(x.id), `Peak <b>${x.peak}</b> · ${wk(x.weeks.length)}${promo(x.id)}`)).join(''),
+      more: `<span class="ask-note">Deep cuts are songs that were never sent out as official singles (promo singles count). Ranked like Will's year-end lists: plays plus how high and how long each song charted, every year added up. <a href="#/beat/deep-cuts-history">Read the story →</a></span>`,
     };
   }
 
@@ -5810,6 +5833,7 @@ function route() {
     const q = new URLSearchParams(query || '').get('q') || '';
     renderAsk(q);
     if (!WEEK_PLAYS && /\bplays|played|euro\s?vision\b/i.test(q)) loadWeekPlays().then(() => { if (location.hash.startsWith('#/ask')) renderAsk(q); });
+    if ((!DEEP_CUTS || !YEAR_PLAYS) && DEEP_RE.test(q.toLowerCase())) loadDeepCuts().then(() => { if (location.hash.startsWith('#/ask')) renderAsk(q); });
   }
   else if (page === 'about')    { id = 'about'; }
   else if (page === 'news')     { id = 'news'; renderNews(new URLSearchParams(query || '').get('q') || ''); }
