@@ -50,6 +50,14 @@ When this guide and an instruction from Will disagree, Will wins. Add his correc
 
 The Pop 10 paragraph is shorter. It covers the #1, the Top 5, and one "In other news" note.
 
+**Lead with the stories, not the list** (Will, 2026-11-28). A recap that just walks the chart reads like a recitation. Before writing, hunt for the week's milestones and give each one real weight, with how rare it is:
+- **Firsts.** A first #1, Top 5 or Top 10, and say what kind: a first as a soloist after a group or duo (Maddie Font after Maddie & Tae), a first for a group, a first for a debut single.
+- **Multiples in a year.** A second (or third) #1 in the same calendar year, especially for a group, a duo or a newcomer. Check runs.json for how many acts of that kind have ever done it, and name them.
+- **Records and rarities.** Longest climbs, longest runs, most #1s, most Top 10s, re-entries, streaks.
+- **Droughts ending.** First #1 or Top 10 in years.
+
+Put the biggest milestone in the headline or the first sentences, not halfway down. Check every "first" against runs.json and features before writing it (for example, Flatland Cavalry's two 2026 #1s are not the first by a group: Maddie & Tae did it five times, and Lady A, Sugarland and others did it too).
+
 **Fanfare for milestones** (Will, 2026-10-30). A first #1 in years, a first Top 10, or a record gets a short chart history: how long the drought was, what charted in between, and the real-world singles and albums that didn't chart. When you give a count ("four Top 10s"), name the songs.
 
 ## 4. Chart Beat articles (articles.json)
@@ -95,5 +103,6 @@ Use the blog's format: "Single Review: Artist – ‘Song’". Cover what the so
 - [ ] It uses #1, Top 5, Hot 20 and Pop 10, with no "No. 1" or old chart names.
 - [ ] No chart points, no next-#1 guesses, and no real people quoted as the panel.
 - [ ] Every count names its songs, and every "first since" is checked against features.
+- [ ] Recaps: the week's milestones (firsts, multiples in a year, records, droughts ending) are called out with how rare they are, not just listed in chart order.
 - [ ] Prediction pieces have a ballot box.
 - [ ] No Dolly Parton photo on new articles. Her tribute article keeps `pinUntil` and `tribute`.
